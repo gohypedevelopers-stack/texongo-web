@@ -70,7 +70,7 @@ const storyProducts = [
   {
     name: "Premium Women's Wear",
     price: "From INR 1,890",
-    image: "/hero/hero-model.jpg",
+    video: "/video/7.mp4",
     alt: "Texongo premium womenswear editorial look",
     word: "Soft",
     href: "#new-collection",
@@ -79,7 +79,7 @@ const storyProducts = [
   {
     name: "Digital Print Edit",
     price: "From INR 1,650",
-    image: "/video/video-poster.jpg",
+    video: "/video/Untitled-design-1.mp4",
     alt: "Texongo studio fashion story in bold red",
     word: "Bold",
     href: "#new-collection",
@@ -138,44 +138,26 @@ function MarqueeProductCard({
 
 function CategoryCard({
   title,
-  label,
-  caption,
   tone,
   href,
-  cta,
   comingSoon,
 }: {
   title: string;
-  label: string;
-  caption: string;
   tone: string;
   href: string;
-  cta: string;
   comingSoon?: boolean;
 }) {
   return (
-    <Link href={href} className={styles.categoryCard}>
-      <div className={styles.categoryFabricBackdrop} style={{ background: tone }}>
-        <div aria-hidden className={styles.categoryFabricGlow} />
-      </div>
-
-      <div aria-hidden className={styles.categoryCardShade} />
-
-      <div className={styles.categoryCardLabel}>{label}</div>
-
-      {comingSoon ? <div className={styles.categoryCardSoon}>Coming soon</div> : null}
-
-      <div className={styles.categoryCardInfo}>
-        <div>
-          <h3 className={styles.categoryCardTitle}>{title}</h3>
-          <p className={styles.categoryCardCaption}>{caption}</p>
+    <Link href={href} className={styles.categoryCardLink}>
+      <div className={styles.categoryCardVisual}>
+        <div className={styles.categoryFabricBackdrop} style={{ background: tone }}>
+          <div aria-hidden className={styles.categoryFabricGlow} />
         </div>
-
-        <span
-          className={comingSoon ? styles.categoryCardButtonMuted : styles.categoryCardButton}
-        >
-          {cta}
-        </span>
+        <div aria-hidden className={styles.categoryCardHoverOverlay} />
+        {comingSoon ? <div className={styles.categoryCardSoon}>Coming soon</div> : null}
+      </div>
+      <div className="pt-4 px-2 sm:px-0">
+        <h3 className={styles.categoryCardTitleText}>{title}</h3>
       </div>
     </Link>
   );
@@ -184,7 +166,7 @@ function CategoryCard({
 function StoryProductCard({
   name,
   price,
-  image,
+  video,
   alt,
   word,
   href,
@@ -192,7 +174,7 @@ function StoryProductCard({
 }: {
   name: string;
   price: string;
-  image: string;
+  video: string;
   alt: string;
   word: string;
   href: string;
@@ -205,12 +187,14 @@ function StoryProductCard({
         className={styles.storyProductVisual}
         style={{ backgroundColor: tone }}
       >
-        <Image
-          src={image}
-          alt={alt}
-          fill
-          sizes="(max-width: 640px) 100vw, 50vw"
-          className={styles.storyProductImage}
+        <video
+          src={video}
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-label={alt}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
         />
         <span className={styles.storyProductWord}>{word}</span>
       </Link>
@@ -236,13 +220,14 @@ export function HomeExperience() {
           <div className={`${styles.heroPanel} relative overflow-hidden rounded-none  shadow-sm`}>
             <div aria-hidden className={styles.heroGlow} />
             <div className={styles.heroImageWrap}>
-              <Image
-                src="/hero/hero-model.jpg"
-                alt="Woman featured in the new collection campaign"
-                fill
-                priority
-                sizes="(max-width: 640px) 52vw, (max-width: 1024px) 32vw, 22rem"
+              <video
+                src="/video/Untitled-design-1-1.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
                 className={styles.heroImage}
+                style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
               />
             </div>
 
@@ -320,20 +305,20 @@ export function HomeExperience() {
         </div>
       </section>
 
-      <section id="new-collection" className="overflow-hidden bg-white py-10 sm:py-14">
+      <section
+        id="new-collection"
+        className={`${styles.arrivalsSection} overflow-hidden bg-white py-10 sm:py-14`}
+      >
         <div className="mx-auto max-w-[120rem]">
-          <div className="px-4 sm:px-6 lg:px-10">
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-black/35">
-              Newly added
-            </p>
-          </div>
-
-          <div className="relative mt-2 overflow-hidden">
+          <div className={styles.sectionBackdropIntro}>
+            <p className={styles.sectionBackdropEyebrowLight}>Newly added</p>
             <h2 className={styles.arrivalsHeading}>
               fabrics
             </h2>
+          </div>
 
-            <div className={`${styles.marqueeViewport} -mt-1 sm:-mt-3`}>
+          <div className={styles.arrivalsBackdropOverlap}>
+            <div className={styles.marqueeViewport}>
               <div className={styles.productTrack}>
                 {[...marqueeProducts, ...marqueeProducts].map((product, index) => (
                   <MarqueeProductCard
@@ -349,20 +334,20 @@ export function HomeExperience() {
         </div>
       </section>
 
-      <section id="category" className="overflow-hidden bg-[#050505] py-16 text-white sm:py-20">
-        <div className="mx-auto max-w-[120rem] px-4 sm:px-6 lg:px-10">
-          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/42">
-            Browse by
-          </p>
+      <section
+        id="category"
+        className={`${styles.categorySection} overflow-hidden bg-[#050505] py-10 text-white sm:py-14`}
+      >
+        <div className={styles.sectionBackdropIntro}>
+          <p className={styles.sectionBackdropEyebrowDark}>Browse by</p>
+          <h2 className={styles.categoryHeading}>collections</h2>
+        </div>
 
-          <div className="relative mt-4">
-            <h2 className={styles.categoryHeading}>collections</h2>
-
-            <div className={styles.categoryGrid}>
-              {categoryCards.map((card) => (
-                <CategoryCard key={card.title} {...card} />
-              ))}
-            </div>
+        <div className={styles.categoryBackdropOverlap}>
+          <div className={styles.categoryGrid}>
+            {categoryCards.map((card) => (
+              <CategoryCard key={card.title} {...card} />
+            ))}
           </div>
         </div>
       </section>
@@ -370,12 +355,14 @@ export function HomeExperience() {
       <section id="campaign" className="bg-[#09c8ef] py-0">
         <div className="mx-auto max-w-[120rem] px-0 sm:px-6 sm:py-4 lg:px-10">
           <div className={`${styles.campaignPanel} ${styles.panelShadow}`}>
-            <Image
-              src="/campaign/campaign-aqua.jpg"
-              alt="Woman relaxing on a yellow float in a blue pool for the summer campaign"
-              fill
-              sizes="100vw"
+            <video
+              src="/video/Untitled-design-1-1.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
               className={styles.campaignImage}
+              style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
             />
 
             <div aria-hidden className={styles.campaignShade} />

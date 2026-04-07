@@ -23,13 +23,13 @@
 .productTrack {
   display: flex;
   width: max-content;
-  gap: 0.9rem;
-  padding: 0 1rem;
+  gap: clamp(0.55rem, 0.9vw, 0.95rem);
+  padding: 0 clamp(0.9rem, 1.4vw, 1.9rem);
   animation: arrivalsMarquee 28s linear infinite;
 }
 
 .productCard {
-  width: clamp(15rem, 20vw, 23rem);
+  width: clamp(11rem, 16vw, 18rem);
   padding: 0.8rem;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.88),
@@ -129,32 +129,98 @@
   color: #ffffff;
 }
 
+.sectionBackdropIntro {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  padding-inline: clamp(0.9rem, 2.5vw, 2.5rem);
+  pointer-events: none;
+}
+
+.arrivalsSection {
+  --backdrop-size: clamp(5.8rem, 19vw, 19rem);
+  --backdrop-crop: calc(var(--backdrop-size) * -0.38);
+}
+
+.categorySection {
+  --backdrop-size: clamp(5rem, 16.5vw, 16rem);
+  --backdrop-crop: calc(var(--backdrop-size) * -0.38);
+}
+
+.sectionBackdropEyebrowLight,
+.sectionBackdropEyebrowDark {
+  margin: 0 0 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.sectionBackdropEyebrowLight {
+  color: rgba(17, 17, 17, 0.5);
+}
+
+.sectionBackdropEyebrowDark {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.arrivalsBackdropOverlap {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--backdrop-crop);
+}
+
+.categoryBackdropOverlap {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--backdrop-crop);
+  padding-inline: clamp(0.9rem, 1.4vw, 1.9rem);
+}
+
 .arrivalsHeading {
   pointer-events: none;
   user-select: none;
-  padding: 0 1rem;
+  position: relative;
+  left: 50%;
+  padding: 0;
+  margin: 0;
   color: #111111;
   font-family: var(--font-sans), sans-serif;
-  font-size: clamp(4.3rem, 11vw, 11rem);
-  line-height: 0.78;
-  letter-spacing: -0.07em;
-  text-wrap: balance;
-  overflow-wrap: break-word;
+  font-size: var(--backdrop-size);
+  font-weight: 800;
+  line-height: 0.76;
+  letter-spacing: -0.085em;
+  white-space: nowrap;
+  overflow: visible;
+  text-align: center;
+  display: block;
+  width: max-content;
+  max-width: none;
+  text-transform: lowercase;
+  transform: translateX(-50%);
 }
 
 .categoryHeading {
   position: relative;
   z-index: 0;
+  left: 50%;
   margin: 0;
-  max-width: 10ch;
-  font-family: var(--font-sans), sans-serif;
-  font-size: clamp(4.3rem, 14vw, 11.5rem);
-  font-weight: 700;
-  line-height: 0.82;
-  letter-spacing: -0.08em;
+  padding: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: var(--backdrop-size);
+  font-weight: 800;
+  line-height: 0.76;
+  letter-spacing: -0.085em;
   color: #ffffff;
-  text-wrap: balance;
-  overflow-wrap: break-word;
+  white-space: nowrap;
+  overflow: visible;
+  opacity: 1;
+  text-transform: lowercase;
+  display: block;
+  width: max-content;
+  max-width: none;
+  text-align: center;
+  transform: translateX(-50%);
 }
 
 .categoryGrid {
@@ -162,93 +228,47 @@
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 0.95rem;
-  margin-top: clamp(-1.5rem, -3vw, -0.5rem);
+  gap: clamp(0.25rem, 0.5vw, 0.45rem);
+  background: transparent;
 }
 
-.categoryCard {
+.categoryCardVisual {
   position: relative;
-  display: block;
-  min-height: clamp(22rem, 80vw, 39rem);
+  aspect-ratio: 7 / 9;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 0;
-  background: #161616;
-  text-decoration: none;
-  isolation: isolate;
-  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.24);
-  transition:
-    transform 260ms ease,
-    box-shadow 260ms ease,
-    border-color 260ms ease;
-}
-
-.categoryCard:hover,
-.categoryCard:focus-visible {
-  transform: translateY(-8px);
-  border-color: rgba(255, 255, 255, 0.22);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
-}
-
-.categoryCardImage {
-  object-fit: cover;
-  object-position: center top;
-  transition:
-    transform 520ms ease,
-    filter 260ms ease;
-}
-
-.categoryCard:hover .categoryCardImage,
-.categoryCard:focus-visible .categoryCardImage,
-.categoryCard:hover .categoryFabricBackdrop,
-.categoryCard:focus-visible .categoryFabricBackdrop {
-  transform: scale(1.06);
-  filter: saturate(1.05);
+  display: block;
 }
 
 .categoryFabricBackdrop {
   position: absolute;
   inset: 0;
-  transition:
-    transform 520ms ease,
-    filter 260ms ease;
+  transition: transform 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 400ms ease, brightness 400ms ease;
+}
+
+.categoryCardLink:hover .categoryFabricBackdrop,
+.categoryCardLink:focus-visible .categoryFabricBackdrop {
+  transform: scale(1.08);
+  filter: saturate(1.12) brightness(1.08);
+}
+
+.categoryCardHoverOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.55) 100%);
+  opacity: 0;
+  transition: opacity 400ms ease;
+  z-index: 1;
+}
+
+.categoryCardLink:hover .categoryCardHoverOverlay,
+.categoryCardLink:focus-visible .categoryCardHoverOverlay {
+  opacity: 1;
 }
 
 .categoryFabricGlow {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 22% 24%, rgba(255, 255, 255, 0.32), transparent 32%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.22), transparent 40%),
-    repeating-linear-gradient(145deg,
-      rgba(255, 255, 255, 0.08) 0,
-      rgba(255, 255, 255, 0.08) 10px,
-      transparent 10px,
-      transparent 22px);
-}
-
-.categoryCardShade {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.1) 36%, rgba(0, 0, 0, 0.62) 100%),
-    radial-gradient(circle at 50% 24%, rgba(255, 255, 255, 0.16), transparent 46%);
-}
-
-.categoryCardLabel {
-  position: absolute;
-  left: 1rem;
-  top: 1rem;
-  z-index: 2;
-  border-radius: 0;
-  background: rgba(255, 255, 255, 0.12);
-  padding: 0.55rem 0.8rem;
-  color: rgba(255, 255, 255, 0.84);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  backdrop-filter: blur(12px);
+  background: radial-gradient(circle at 22% 24%, rgba(255, 255, 255, 0.32), transparent 32%), linear-gradient(135deg, rgba(255, 255, 255, 0.22), transparent 40%), repeating-linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0, rgba(255, 255, 255, 0.08) 10px, transparent 10px, transparent 22px);
 }
 
 .categoryCardSoon {
@@ -257,101 +277,28 @@
   top: 50%;
   z-index: 2;
   transform: translate(-50%, -50%);
-  border-radius: 0;
-  background: rgba(255, 255, 255, 0.16);
-  padding: 0.9rem 1.2rem;
   color: #ffffff;
   font-size: clamp(1.15rem, 1.7vw, 1.8rem);
   font-weight: 600;
-  letter-spacing: -0.03em;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
 }
 
-.categoryCardInfo {
-  position: absolute;
-  left: 1rem;
-  right: 1rem;
-  bottom: 1rem;
-  z-index: 2;
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 1rem;
-  border-radius: 0;
-  background: rgba(8, 8, 8, 0.48);
-  padding: 1rem;
-  opacity: 0;
-  transform: translateY(1.25rem);
-  transition:
-    opacity 220ms ease,
-    transform 220ms ease;
-  backdrop-filter: blur(14px);
+.categoryCardLink {
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
 }
 
-.categoryCard:hover .categoryCardInfo,
-.categoryCard:focus-visible .categoryCardInfo {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.categoryCardTitle {
+.categoryCardTitleText {
   margin: 0;
   color: #ffffff;
-  font-family: var(--font-display), serif;
-  font-size: clamp(1.5rem, 2vw, 2.2rem);
-  line-height: 0.92;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+  font-weight: 500;
+  transition: letter-spacing 300ms ease;
 }
 
-.categoryCardCaption {
-  margin: 0.45rem 0 0;
-  max-width: 15rem;
-  color: rgba(255, 255, 255, 0.76);
-  font-size: 0.86rem;
-  line-height: 1.45;
-}
-
-.categoryCardButton,
-.categoryCardButtonMuted {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 8rem;
-  border-radius: 0;
-  padding: 0.88rem 1.2rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition:
-    transform 220ms ease,
-    background-color 220ms ease,
-    color 220ms ease,
-    border-color 220ms ease;
-}
-
-.categoryCardButton {
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
-  transform: translateY(0.4rem) scale(0.96);
-}
-
-.categoryCard:hover .categoryCardButton,
-.categoryCard:focus-visible .categoryCardButton {
-  transform: translateY(0) scale(1);
-}
-
-.categoryCardButton:hover {
-  background: #ffffff;
-  color: #111111;
-}
-
-.categoryCardButtonMuted {
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.78);
+.categoryCardLink:hover .categoryCardTitleText {
+  letter-spacing: 0.06em;
 }
 
 .heroPanel {
@@ -363,7 +310,7 @@
   position: relative;
   z-index: 10;
   display: flex;
-  min-height: clamp(27rem, 56vw, 39rem);
+  min-height: 100vh;
   flex-direction: column;
   padding: clamp(1rem, 2.4vw, 1.75rem) clamp(1rem, 3vw, 2.5rem);
 }
@@ -435,27 +382,20 @@
 
 .heroImageWrap {
   position: absolute;
-  left: 50%;
-  bottom: 0;
+  inset: 0;
   z-index: 1;
-  height: calc(100% - 4.75rem);
-  width: clamp(12rem, 23vw, 20rem);
   overflow: hidden;
-  transform: translateX(-8%);
+  pointer-events: none;
   border-radius: 0;
-}
-
-.heroImageWrap::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 28%;
-  background: linear-gradient(180deg, rgba(191, 222, 228, 0) 0%, #bfdee4 100%);
+  mix-blend-mode: multiply;
 }
 
 .heroImage {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: center;
+  transform: scale(1.05);
 }
 
 .heroMarqueeViewport {
@@ -1309,14 +1249,34 @@
 }
 
 @media (max-width: 640px) {
+  .sectionBackdropIntro {
+    padding-inline: 0.75rem;
+  }
+
+  .arrivalsSection {
+    --backdrop-size: clamp(4.4rem, 22vw, 7.1rem);
+  }
+
+  .categorySection {
+    --backdrop-size: clamp(3.7rem, 18vw, 5.8rem);
+  }
+
+  .sectionBackdropEyebrowLight,
+  .sectionBackdropEyebrowDark {
+    margin-bottom: 0.2rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+  }
+
+  .categoryBackdropOverlap {
+    padding-inline: 0.75rem;
+  }
+
   .arrivalsHeading {
-    padding: 0 0.75rem;
-    font-size: clamp(3.3rem, 18vw, 4.8rem);
-    line-height: 0.84;
+    line-height: 0.8;
   }
 
   .categoryGrid {
-    margin-top: 1.1rem;
     gap: 0.75rem;
   }
 
@@ -1326,9 +1286,7 @@
   }
 
   .categoryHeading {
-    max-width: 8ch;
-    font-size: clamp(3.1rem, 15vw, 4.6rem);
-    line-height: 0.9;
+    line-height: 0.8;
   }
 
   .categoryCardInfo {
@@ -1516,8 +1474,8 @@
   }
 
   .productCard {
-    width: clamp(13rem, 78vw, 15rem);
-    padding: 0.65rem;
+    width: clamp(10.5rem, 62vw, 13.5rem);
+    padding: 0.55rem;
   }
 
   .productImage {
