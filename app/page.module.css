@@ -312,7 +312,7 @@
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  padding: clamp(1rem, 2.4vw, 1.75rem) clamp(1rem, 3vw, 2.5rem);
+  padding: clamp(1rem, 2.4vw, 1.75rem) 0 clamp(1rem, 2.4vw, 1.75rem);
 }
 
 .heroHeader {
@@ -400,8 +400,9 @@
 
 .heroMarqueeViewport {
   overflow: hidden;
-  margin-left: -1.25rem;
-  margin-right: -1.25rem;
+  padding-inline: clamp(0.75rem, 1.75vw, 1.5rem);
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .heroMarqueeLink {
@@ -425,7 +426,7 @@
   display: block;
   white-space: nowrap;
   font-family: var(--font-sans), sans-serif;
-  font-size: clamp(2.8rem, 8.8vw, 8.4rem);
+  font-size: clamp(2.4rem, 7.2vw, 6.6rem);
   font-weight: 600;
   line-height: 0.82;
   letter-spacing: -0.06em;
@@ -436,7 +437,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  padding-top: clamp(3rem, 9vw, 5rem);
+  padding-top: clamp(2rem, 6vw, 3.5rem);
 }
 
 .heroGlow {
@@ -547,6 +548,55 @@
   background: rgba(27, 186, 228, 0.94);
   border-color: rgba(255, 255, 255, 0.88);
   box-shadow: 0 16px 30px rgba(8, 72, 91, 0.18);
+}
+
+.streamlineGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.streamlineVideoWrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #ffffff;
+}
+
+.streamlineVideo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  object-fit: contain;
+  object-position: center;
+}
+
+.streamlineContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(2.5rem, 6vw, 6rem) clamp(1.5rem, 5vw, 6rem);
+  background: #ffffff;
+}
+
+.streamlineHeading {
+  margin: 0 0 1.5rem;
+  color: #111111;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(2.4rem, 5vw, 5.2rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.streamlineBody {
+  margin: 0;
+  max-width: 52ch;
+  color: #555555;
+  font-size: clamp(0.95rem, 1.4vw, 1.12rem);
+  line-height: 1.72;
 }
 
 .storyIntro {
@@ -1309,7 +1359,7 @@
 
   .heroContent {
     min-height: 31rem;
-    padding: 0.95rem 0.8rem 1rem;
+    padding: 0.95rem 0 1rem;
   }
 
   .heroBrandGroup {
@@ -1342,28 +1392,28 @@
   }
 
   .heroImageWrap {
-    left: 50%;
-    right: auto;
-    height: calc(100% - 7.4rem);
-    width: min(42vw, 12.5rem);
-    min-width: 9.5rem;
-    transform: translateX(12%);
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    transform: none;
     border-radius: 0;
   }
 
   .heroMarqueeItem {
-    font-size: clamp(2.2rem, 13vw, 3.5rem);
+    font-size: clamp(2rem, 11vw, 3.2rem);
     line-height: 0.9;
   }
 
   .heroActions {
     gap: 0.6rem;
-    padding-top: 2.35rem;
+    padding-top: 1.8rem;
   }
 
   .heroMarqueeViewport {
-    margin-left: -0.75rem;
-    margin-right: -0.75rem;
+    padding-inline: 0.75rem;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .campaignPanel {
@@ -1510,6 +1560,16 @@
 }
 
 @media (min-width: 768px) {
+  .streamlineGrid {
+    grid-template-columns: 1fr 1fr;
+    min-height: 520px;
+  }
+
+  .streamlineVideoWrap {
+    aspect-ratio: unset;
+    height: 100%;
+  }
+
   .storyProductGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

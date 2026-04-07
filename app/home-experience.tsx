@@ -309,7 +309,7 @@ export function HomeExperience() {
         id="new-collection"
         className={`${styles.arrivalsSection} overflow-hidden bg-white py-10 sm:py-14`}
       >
-        <div className="mx-auto max-w-[120rem]">
+        <div className="mx-auto max-w-480">
           <div className={styles.sectionBackdropIntro}>
             <p className={styles.sectionBackdropEyebrowLight}>Newly added</p>
             <h2 className={styles.arrivalsHeading}>
@@ -353,7 +353,7 @@ export function HomeExperience() {
       </section>
 
       <section id="campaign" className="bg-[#09c8ef] py-0">
-        <div className="mx-auto max-w-[120rem] px-0 sm:px-6 sm:py-4 lg:px-10">
+        <div className="mx-auto max-w-480 px-0 sm:px-6 sm:py-4 lg:px-10">
           <div className={`${styles.campaignPanel} ${styles.panelShadow}`}>
             <video
               src="/video/Untitled-design-1-1.mp4"
@@ -390,6 +390,36 @@ export function HomeExperience() {
                 </a>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white py-0 overflow-hidden">
+        <div className={styles.streamlineGrid}>
+          <div className={styles.streamlineVideoWrap}>
+            <video
+              src="/video/efficient_en.webm"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className={styles.streamlineVideo}
+            />
+          </div>
+
+          <div className={styles.streamlineContent}>
+            <h2 className={styles.streamlineHeading}>
+              Streamline<br />Your Fabric<br />Journey
+            </h2>
+            <p className={styles.streamlineBody}>
+              With 3D fabric visualization, your samples come to life digitally—long
+              before physical production begins. Preview texture, drape, movement,
+              and even micro-texture in stunning detail, ensuring every choice is
+              made with absolute clarity. Our intuitive platform lets you compare
+              swatches side-by-side, fine-tune colors, and finalize designs with
+              confidence. Discover a smarter, faster, and more precise way to source
+              fabric—where innovation meets craftsmanship.
+            </p>
           </div>
         </div>
       </section>
