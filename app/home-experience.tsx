@@ -232,7 +232,7 @@ export function HomeExperience() {
   return (
     <main className="overflow-x-hidden bg-[#f3efe8] text-[#111111]">
       <section className="bg-[#d2e7ea]">
-        <div className="mx-auto max-w-7xl px-0 sm:px-6 sm:py-4 lg:px-10">
+        <div className="w-full">
           <div className={`${styles.heroPanel} relative overflow-hidden rounded-none  shadow-sm`}>
             <div aria-hidden className={styles.heroGlow} />
             <div className={styles.heroImageWrap}>
