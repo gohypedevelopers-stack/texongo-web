@@ -352,7 +352,7 @@ export function HomeExperience() {
         </div>
       </section>
 
-      <section id="campaign" className="bg-[#09c8ef] py-0">
+      {/* <section id="campaign" className="bg-[#09c8ef] py-0">
         <div className="mx-auto max-w-480 px-0 sm:px-6 sm:py-4 lg:px-10">
           <div className={`${styles.campaignPanel} ${styles.panelShadow}`}>
             <video
@@ -392,7 +392,7 @@ export function HomeExperience() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="bg-white py-0 overflow-hidden">
         <div className={styles.streamlineGrid}>
@@ -506,8 +506,8 @@ export function HomeExperience() {
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10">
           <div className={styles.closingVisual}>
             <Image
-              src="/hero/hero-model.jpg"
-              alt="Model featured in the closing Texongo brand panel"
+              src="/hero/hero-fabrics.jpg"
+              alt="Texongo premium fabrics featured in the brand panel"
               fill
               sizes="100vw"
               className={styles.closingVisualImage}
