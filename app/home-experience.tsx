@@ -1,68 +1,114 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
+import { CategorySlider } from "./category-slider";
+import { FaqSection } from "./faq-section";
+import { ParallaxText } from "./parallax-text";
+import { LazyVideo } from "./lazy-video";
 
 const marqueeProducts = [
   {
-    name: "AirWeave Cotton",
-    price: "From INR 380 / m",
-    tone: "linear-gradient(145deg, #202020 0%, #555555 48%, #0d0d0d 100%)",
+    name: "Cotton Spandex Interlock",
+    price: "₹650 / m",
+    href: "https://texongo.com/product/cotton-spandex-interlock/",
+    image: "/arrivals/prod-cotton-spandex-interlock.png",
   },
   {
-    name: "Drape Satin",
-    price: "From INR 520 / m",
-    tone: "linear-gradient(145deg, #8e6b52 0%, #b8926f 46%, #5c4230 100%)",
+    name: "Cotton Indigo Terry",
+    price: "₹999 / m",
+    href: "https://texongo.com/product/cotton-indigo-terry/",
+    image: "/arrivals/prod-cotton-indigo-terry.png",
   },
   {
-    name: "Digital Print Silk",
-    price: "From INR 610 / m",
-    tone: "linear-gradient(145deg, #efe8df 0%, #d4b38e 52%, #f5eee8 100%)",
+    name: "Poly Viscose Spandex S/J",
+    price: "₹700 / m",
+    href: "https://texongo.com/shop/",
+    image: "/arrivals/prod-poly-viscose-spandex.png",
   },
   {
-    name: "Heritage Twill",
-    price: "From INR 440 / m",
-    tone: "linear-gradient(145deg, #6b4b31 0%, #9b6c44 48%, #2e1c13 100%)",
+    name: "Nylon Spandex S/J",
+    price: "₹799 / m",
+    href: "https://texongo.com/shop/",
+    image: "/arrivals/prod-nylon-spandex.png",
   },
   {
-    name: "Studio Rib Knit",
-    price: "From INR 395 / m",
-    tone: "linear-gradient(145deg, #151515 0%, #3c3c3c 50%, #070707 100%)",
+    name: "Slub Melange Single Jersey",
+    price: "₹600 / m",
+    href: "https://texongo.com/shop/",
+    image: "/arrivals/prod-slub-melange.png",
+  },
+  {
+    name: "Rib Fabric",
+    price: "₹380 / m",
+    href: "https://texongo.com/product-category/knit-style/rib/",
+    image: "/category/fabric-rib.png",
+  },
+  {
+    name: "French Terry",
+    price: "₹520 / m",
+    href: "https://texongo.com/product-category/knit-style/french-terry/",
+    image: "/category/fabric-french-terry.png",
+  },
+  {
+    name: "Waffle Knit",
+    price: "₹440 / m",
+    href: "https://texongo.com/product-category/knit-style/waffle/",
+    image: "/category/fabric-waffle.png",
+  },
+  {
+    name: "Single Jersey",
+    price: "₹395 / m",
+    href: "https://texongo.com/product-category/knit-style/single-jersey/",
+    image: "/category/fabric-single-jersey.png",
+  },
+  {
+    name: "Pique",
+    price: "₹460 / m",
+    href: "https://texongo.com/product-category/knit-style/pique/",
+    image: "/category/fabric-pique.png",
   },
 ];
 
 const categoryCards = [
   {
-    title: "Women's Wear",
-    label: "Premium line",
-    caption: "Modern silhouettes designed in smooth fabrics with elevated comfort.",
-    tone: "linear-gradient(145deg, #edf2f3 0%, #b8d5da 54%, #93bfc6 100%)",
-    href: "#campaign",
-    cta: "View line",
-  },
-  {
-    title: "Baby Suits",
-    label: "Soft touch",
-    caption: "Gentle textures and breathable fabrics crafted for daily wear.",
-    tone: "linear-gradient(145deg, #f8e3df 0%, #e8b0b5 54%, #d68890 100%)",
+    title: "Rib",
+    label: "Stretch & Structure",
+    caption: "A vertically ribbed knit fabric known for its elasticity and body-hugging fit. Ideal for cuffs, collars, and fitted garments. Offers excellent recovery and a clean, classic texture.",
+    image: "/category/fabric-rib.png",
     href: "#new-collection",
-    cta: "Shop now",
+    cta: "Explore",
   },
   {
-    title: "Digital Print",
-    label: "Statement surface",
-    caption: "Bold textile stories developed for standout seasonal collections.",
-    tone: "linear-gradient(145deg, #d4f0c1 0%, #a8d45a 54%, #7f9a31 100%)",
-    href: "#campaign",
-    cta: "Notify me",
-    comingSoon: true,
-  },
-  {
-    title: "Ethnic Fabrics",
-    label: "Rich drape",
-    caption: "Heritage textures and color depth for occasion and festive wear.",
-    tone: "linear-gradient(145deg, #d9ddb6 0%, #aab05c 52%, #7b8136 100%)",
+    title: "Pique",
+    label: "Textured Weave",
+    caption: "A raised honeycomb-textured fabric commonly used in polo shirts and sportswear. Breathable, durable, and structured — it adds refined visual interest to any garment.",
+    image: "/category/fabric-pique.png",
     href: "#new-collection",
-    cta: "Discover",
+    cta: "Explore",
+  },
+  {
+    title: "French Terry",
+    label: "Soft Comfort",
+    caption: "A looped-back knit with a smooth face and a soft, absorbent interior. Perfect for loungewear, hoodies, and sweatshirts. Lightweight yet warm with excellent drape.",
+    image: "/category/fabric-french-terry.png",
+    href: "#new-collection",
+    cta: "Explore",
+  },
+  {
+    title: "Waffle",
+    label: "Grid Texture",
+    caption: "Distinctive grid-patterned thermal knit that offers superior insulation and moisture management. Popular in thermal underlayers, robes, and cozy everyday wear.",
+    image: "/category/fabric-waffle.png",
+    href: "#new-collection",
+    cta: "Explore",
+  },
+  {
+    title: "Single Jersey",
+    label: "Everyday Essential",
+    caption: "A lightweight, single-layer plain knit that is soft, smooth, and highly versatile. The go-to fabric for T-shirts and everyday basics — breathable, comfortable, and easy to print on.",
+    image: "/category/fabric-single-jersey.png",
+    href: "#new-collection",
+    cta: "Explore",
   },
 ];
 
@@ -105,63 +151,46 @@ const footerColumns = [
 function MarqueeProductCard({
   name,
   price,
-  tone,
+  href,
+  image,
 }: {
   name: string;
   price: string;
-  tone: string;
+  href: string;
+  image: string;
 }) {
   return (
-    <article
-      className={`${styles.productCard} shrink-0 rounded-none border border-black/6 bg-white`}
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`${styles.productCard} shrink-0 block`}
     >
-      <div className={`${styles.productVisual} relative overflow-hidden rounded-none bg-[#ece9e4]`}>
-        <div className={styles.fabricSwatch} style={{ background: tone }}>
-          <div aria-hidden className={styles.fabricWeave} />
-        </div>
-
+      <div className={`${styles.productVisual} relative overflow-hidden bg-[#f5f3f0]`}>
+        <img
+          src={image}
+          alt={name}
+          loading="lazy"
+          decoding="async"
+          className={styles.productImage}
+        />
         <div className={styles.productInfo}>
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h3 className="text-base font-semibold text-black">{name}</h3>
-              <p className="mt-1 text-sm text-black/62">{price}</p>
+              <h3 className="text-sm font-semibold text-black uppercase tracking-wide">{name}</h3>
+              <p className="mt-0.5 text-xs text-black/60 font-medium">{price}</p>
             </div>
-            <button className={styles.addButton} type="button">
-              Add
-            </button>
+            <span className={styles.addButton}>
+              View
+            </span>
           </div>
         </div>
       </div>
-    </article>
+    </a>
   );
 }
 
-function CategoryCard({
-  title,
-  tone,
-  href,
-  comingSoon,
-}: {
-  title: string;
-  tone: string;
-  href: string;
-  comingSoon?: boolean;
-}) {
-  return (
-    <Link href={href} className={styles.categoryCardLink}>
-      <div className={styles.categoryCardVisual}>
-        <div className={styles.categoryFabricBackdrop} style={{ background: tone }}>
-          <div aria-hidden className={styles.categoryFabricGlow} />
-        </div>
-        <div aria-hidden className={styles.categoryCardHoverOverlay} />
-        {comingSoon ? <div className={styles.categoryCardSoon}>Coming soon</div> : null}
-      </div>
-      <div className="pt-4 px-2 sm:px-0">
-        <h3 className={styles.categoryCardTitleText}>{title}</h3>
-      </div>
-    </Link>
-  );
-}
+
 
 function StoryProductCard({
   name,
@@ -187,12 +216,8 @@ function StoryProductCard({
         className={styles.storyProductVisual}
         style={{ backgroundColor: tone }}
       >
-        <video
+        <LazyVideo
           src={video}
-          autoPlay
-          loop
-          muted
-          playsInline
           aria-label={alt}
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
         />
@@ -215,106 +240,103 @@ function StoryProductCard({
 export function HomeExperience() {
   return (
     <main className="overflow-x-hidden bg-[#f3efe8] text-[#111111]">
-      <section className="bg-[#d2e7ea]">
-        <div className="w-full">
-          <div className={`${styles.heroPanel} relative overflow-hidden rounded-none  shadow-sm`}>
-            <div aria-hidden className={styles.heroGlow} />
-            <div className={styles.heroImageWrap}>
-              <video
-                src="/video/Untitled-design-1-1.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className={styles.heroImage}
-                style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
-              />
+      {/* ── HERO ─────────────────────────────────────────── */}
+      <section className={styles.heroPanel}>
+        <div aria-hidden className={styles.heroGlow} />
+        <div className={styles.heroImageWrap}>
+          <video
+            src="/video/Untitled-design-1-1.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className={styles.heroImage}
+          />
+        </div>
+
+        <div className={styles.heroContent}>
+          <header className={styles.heroHeader}>
+            <div className={styles.heroBrandGroup}>
+              <a href="#category" aria-label="Jump to category section" className={styles.heroMenuButton}>
+                <span className={styles.heroMenuLine} />
+                <span className={styles.heroMenuLine} />
+              </a>
+
+              <Link href="/" className={styles.heroBrand}>
+                TEXONGO
+              </Link>
             </div>
 
-            <div className={styles.heroContent}>
-              <header className={styles.heroHeader}>
-                <div className={styles.heroBrandGroup}>
-                  <a href="#category" aria-label="Jump to category section" className={styles.heroMenuButton}>
-                    <span className={styles.heroMenuLine} />
-                    <span className={styles.heroMenuLine} />
-                  </a>
+            <nav className={styles.heroNav} aria-label="Primary navigation">
+              <a href="#new-collection" className={styles.heroHeaderLink}>
+                Fabrics
+              </a>
+              <a href="#campaign" className={styles.heroHeaderLink}>
+                Womenswear
+              </a>
+            </nav>
 
-                  <Link href="/" className={styles.heroBrand}>
-                    TEXONGO
-                  </Link>
-                </div>
-
-                <nav className={styles.heroNav} aria-label="Primary navigation">
-                  <a href="#new-collection" className={styles.heroHeaderLink}>
-                    Fabrics
-                  </a>
-                  <a href="#campaign" className={styles.heroHeaderLink}>
-                    Womenswear
-                  </a>
-                </nav>
-
-                <div className={styles.heroMeta}>
-                  <a href="#footer" className={styles.heroHeaderLink}>
-                    Contact
-                  </a>
-                  <a href="#footer" className={styles.heroHeaderLink}>
-                    About
-                  </a>
-                  <a href="#new-collection" className={styles.heroHeaderLink}>
-                    Catalog
-                  </a>
-                </div>
-              </header>
-
-              <div className="mt-10 sm:mt-14">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/70">
-                  Texongo textile studio
-                </p>
-                <h1 className="sr-only">Fabrics that redefine style and comfort</h1>
-              </div>
-
-
-              <div className={styles.heroActions}>
-                <a
-                  href="#new-collection"
-                  className="rounded-none bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-white/90"
-                >
-                  Browse fabrics
-                </a>
-                <a
-                  href="#campaign"
-                  className="rounded-none border border-white/25 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10"
-                >
-                  View clothing line
-                </a>
-              </div>
-
-              <div className={`${styles.heroMarqueeViewport} relative z-10 mt-6 sm:mt-10 opacity-70`}>
-                <a href="#new-collection" className={styles.heroMarqueeLink}>
-                  <div className={styles.heroMarqueeTrack}>
-                    {Array.from({ length: 4 }).map((_, index) => (
-                      <span key={index} className={styles.heroMarqueeItem}>
-                        / Fabrics That Redefine Style And Comfort /
-                      </span>
-                    ))}
-                  </div>
-                </a>
-              </div>
+            <div className={styles.heroMeta}>
+              <a href="#footer" className={styles.heroHeaderLink}>
+                Contact
+              </a>
+              <a href="#footer" className={styles.heroHeaderLink}>
+                About
+              </a>
+              <a href="#new-collection" className={styles.heroHeaderLink}>
+                Catalog
+              </a>
             </div>
+          </header>
+
+          <div className="mt-10 sm:mt-14">
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/70">
+              Texongo textile studio
+            </p>
+            <h1 className="sr-only">Fabrics that redefine style and comfort</h1>
+          </div>
+
+          <div className={styles.heroActions}>
+            <a
+              href="#new-collection"
+              className="rounded-none bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-white/90"
+            >
+              Browse fabrics
+            </a>
+            <a
+              href="#campaign"
+              className="rounded-none border border-white/25 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10"
+            >
+              View clothing line
+            </a>
+          </div>
+
+          <div className={`${styles.heroMarqueeViewport} relative z-10 mt-6 sm:mt-10 opacity-70`}>
+            <a href="#new-collection" className={styles.heroMarqueeLink}>
+              <div className={styles.heroMarqueeTrack}>
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <span key={index} className={styles.heroMarqueeItem}>
+                    / Fabrics That Redefine Style And Comfort /
+                  </span>
+                ))}
+              </div>
+            </a>
           </div>
         </div>
       </section>
 
+      {/* ── NEW ARRIVALS ─────────────────────────────────── */}
+
       <section
         id="new-collection"
-        className={`${styles.arrivalsSection} overflow-hidden bg-white py-10 sm:py-14`}
+        className={`${styles.arrivalsSection} overflow-hidden bg-white pt-11 pb-5 sm:pt-[3.75rem] sm:pb-9`}
       >
-        <div className="mx-auto max-w-480">
+        <div className="w-full">
           <div className={styles.sectionBackdropIntro}>
             <p className={styles.sectionBackdropEyebrowLight}>Newly added</p>
-            <h2 className={styles.arrivalsHeading}>
+            <ParallaxText className={styles.arrivalsHeading} speed={0.4}>
               fabrics
-            </h2>
+            </ParallaxText>
           </div>
 
           <div className={styles.arrivalsBackdropOverlap}>
@@ -325,7 +347,8 @@ export function HomeExperience() {
                     key={`${product.name}-${index}`}
                     name={product.name}
                     price={product.price}
-                    tone={product.tone}
+                    href={product.href}
+                    image={product.image}
                   />
                 ))}
               </div>
@@ -336,20 +359,16 @@ export function HomeExperience() {
 
       <section
         id="category"
-        className={`${styles.categorySection} overflow-hidden bg-[#050505] py-10 text-white sm:py-14`}
+        className={`${styles.categorySection} overflow-hidden bg-[#050505] pt-11 pb-5 text-white sm:pt-[3.75rem] sm:pb-9`}
       >
         <div className={styles.sectionBackdropIntro}>
           <p className={styles.sectionBackdropEyebrowDark}>Browse by</p>
-          <h2 className={styles.categoryHeading}>collections</h2>
+          <ParallaxText className={styles.categoryHeading} speed={0.4}>
+            collections
+          </ParallaxText>
         </div>
 
-        <div className={styles.categoryBackdropOverlap}>
-          <div className={styles.categoryGrid}>
-            {categoryCards.map((card) => (
-              <CategoryCard key={card.title} {...card} />
-            ))}
-          </div>
-        </div>
+        <CategorySlider />
       </section>
 
       {/* <section id="campaign" className="bg-[#09c8ef] py-0">
@@ -397,12 +416,8 @@ export function HomeExperience() {
       <section className="bg-white py-0 overflow-hidden">
         <div className={styles.streamlineGrid}>
           <div className={styles.streamlineVideoWrap}>
-            <video
+            <LazyVideo
               src="/video/efficient_en.webm"
-              autoPlay
-              loop
-              muted
-              playsInline
               className={styles.streamlineVideo}
             />
           </div>
@@ -447,17 +462,12 @@ export function HomeExperience() {
           <div id="video-story" className={styles.videoSection}>
             <a href="#video-modal" className={styles.videoPosterLink}>
               <div className={`${styles.videoPosterFrame} ${styles.panelShadow}`}>
-                <Image
-                  src="/video/video-poster.jpg"
-                  alt="Texongo studio clothing campaign in a red set"
-                  fill
-                  sizes="100vw"
+                <LazyVideo
+                  src="/video/Veo_Prompt_—_TEXONGO_Fabrics_.mp4"
                   className={styles.videoPosterImage}
+                  style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, transform: 'scale(1.1)' }}
                 />
                 <div aria-hidden className={styles.videoPosterShade} />
-                <span aria-hidden className={styles.videoPlayButton}>
-                  <span className={styles.videoPlayTriangle} />
-                </span>
               </div>
             </a>
 
@@ -480,12 +490,10 @@ export function HomeExperience() {
               </a>
 
               <div className={styles.videoModalVisual}>
-                <Image
-                  src="/video/video-poster.jpg"
-                  alt="Texongo fabric and clothing campaign poster"
-                  fill
-                  sizes="(max-width: 1024px) 92vw, 72vw"
+                <LazyVideo
+                  src="/video/Veo_Prompt_—_TEXONGO_Fabrics_.mp4"
                   className={styles.videoModalImage}
+                  style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, transform: 'scale(1.15)', pointerEvents: 'none' }}
                 />
                 <div aria-hidden className={styles.videoModalPulse} />
               </div>
@@ -500,6 +508,16 @@ export function HomeExperience() {
             </div>
           </div>
         </div>
+      </section>
+
+      <section id="faq" className={`${styles.faqSection} overflow-hidden bg-[#f3efe8] pt-11 pb-5 sm:pt-[3.75rem] sm:pb-9`}>
+        <div className={styles.sectionBackdropIntro}>
+          <p className={styles.sectionBackdropEyebrowLight}>Need help?</p>
+          <ParallaxText className={styles.faqHeading} speed={0.4}>
+            FAQs
+          </ParallaxText>
+        </div>
+        <FaqSection />
       </section>
 
       <footer id="footer" className="bg-[#050505] text-white">

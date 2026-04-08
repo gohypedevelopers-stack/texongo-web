@@ -5,11 +5,13 @@ import "./globals.css";
 const sans = localFont({
   src: "./fonts/Bahnschrift.ttf",
   variable: "--font-sans",
+  display: "swap",
 });
 
 const display = localFont({
   src: "./fonts/Bahnschrift.ttf",
   variable: "--font-display",
+  display: "swap",
 });
 
 export const metadata: Metadata = {

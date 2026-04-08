@@ -26,24 +26,22 @@
   gap: clamp(0.55rem, 0.9vw, 0.95rem);
   padding: 0 clamp(0.9rem, 1.4vw, 1.9rem);
   animation: arrivalsMarquee 28s linear infinite;
+  will-change: transform;
 }
 
 .productCard {
   width: clamp(11rem, 16vw, 18rem);
-  padding: 0.8rem;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.88),
-    0 18px 36px rgba(17, 17, 17, 0.06);
+  padding: 0;
+  overflow: hidden;
   transition:
     transform 220ms ease,
     box-shadow 220ms ease;
+  box-shadow: 0 4px 18px rgba(17, 17, 17, 0.08);
 }
 
 .productCard:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.92),
-    0 24px 44px rgba(17, 17, 17, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(17, 17, 17, 0.14);
 }
 
 .productVisual {
@@ -71,8 +69,18 @@
 }
 
 .productImage {
-  object-fit: contain;
-  padding: 1.4rem;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 400ms ease;
+  will-change: transform;
+}
+
+.productCard:hover .productImage {
+  transform: scale(1.04);
 }
 
 .productInfo {
@@ -129,22 +137,33 @@
   color: #ffffff;
 }
 
+/* ── Backdrop section intro ── */
 .sectionBackdropIntro {
   position: relative;
   z-index: 0;
+  /* clip-path: inset(0) is the only reliable way to contain transformed children */
+  clip-path: inset(0);
   overflow: hidden;
   padding-inline: clamp(0.9rem, 2.5vw, 2.5rem);
+  /* Extra top breathing room so the backdrop text isn't clipped on scroll */
+  padding-top: clamp(1.5rem, 4vw, 3.5rem);
   pointer-events: none;
 }
 
 .arrivalsSection {
   --backdrop-size: clamp(5.8rem, 19vw, 19rem);
   --backdrop-crop: calc(var(--backdrop-size) * -0.38);
+  contain: paint;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
 }
 
 .categorySection {
   --backdrop-size: clamp(5rem, 16.5vw, 16rem);
   --backdrop-crop: calc(var(--backdrop-size) * -0.38);
+  contain: paint;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
 }
 
 .sectionBackdropEyebrowLight,
@@ -198,6 +217,7 @@
   max-width: none;
   text-transform: lowercase;
   transform: translateX(-50%);
+  will-change: transform;
 }
 
 .categoryHeading {
@@ -221,42 +241,145 @@
   max-width: none;
   text-align: center;
   transform: translateX(-50%);
+  will-change: transform;
 }
 
+/* keep old class in case referenced elsewhere */
 .categoryGrid {
+  display: none;
+}
+
+/* ── Collections Slider ── */
+.categoryBackdropOverlap {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: clamp(0.25rem, 0.5vw, 0.45rem);
-  background: transparent;
+  margin-top: calc(var(--backdrop-crop, -3.5rem));
+  padding-bottom: 1.5rem;
 }
 
+/* Outer clip — hides scroll but shows peeking next slide */
+.categorySliderWrap {
+  overflow: hidden;
+  padding-left: clamp(0.9rem, 2.5vw, 2.5rem);
+}
+
+.categorySlider {
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  gap: clamp(0.6rem, 1.2vw, 1rem);
+  cursor: grab;
+  /* Expose peek of next slide on the right */
+  padding-right: clamp(3rem, 10vw, 8rem);
+  /* hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  user-select: none;
+}
+
+.categorySlider::-webkit-scrollbar {
+  display: none;
+}
+
+.categorySlider:active {
+  cursor: grabbing;
+}
+
+.categorySlide {
+  flex: 0 0 68%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Dot indicators */
+.categoryDots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+  padding-inline: clamp(0.9rem, 2.5vw, 2.5rem);
+}
+
+.categoryDot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 220ms ease, transform 220ms ease, width 220ms ease;
+  flex-shrink: 0;
+}
+
+.categoryDotActive {
+  width: 1.4rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  transform: none;
+}
+
+/* Auto-play progress bar */
+.categoryProgress {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0.6rem clamp(0.9rem, 2.5vw, 2.5rem) 0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.categoryProgressBar {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 2px;
+  width: 0%;
+  animation: sliderProgress linear forwards;
+}
+
+.categoryProgressPaused {
+  animation-play-state: paused;
+}
+
+@keyframes sliderProgress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* Card visuals */
 .categoryCardVisual {
   position: relative;
-  aspect-ratio: 7 / 9;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
+  display: block;
+  border-radius: 2px;
+}
+
+.categoryFabricImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 400ms ease;
   display: block;
 }
 
-.categoryFabricBackdrop {
-  position: absolute;
-  inset: 0;
-  transition: transform 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 400ms ease, brightness 400ms ease;
-}
-
-.categoryCardLink:hover .categoryFabricBackdrop,
-.categoryCardLink:focus-visible .categoryFabricBackdrop {
-  transform: scale(1.08);
-  filter: saturate(1.12) brightness(1.08);
+.categoryCardLink:hover .categoryFabricImage,
+.categoryCardLink:focus-visible .categoryFabricImage {
+  transform: scale(1.07);
+  filter: saturate(1.1) brightness(0.85);
 }
 
 .categoryCardHoverOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.55) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 0.72) 100%);
   opacity: 0;
-  transition: opacity 400ms ease;
+  transition: opacity 380ms ease;
   z-index: 1;
 }
 
@@ -265,21 +388,50 @@
   opacity: 1;
 }
 
-.categoryFabricGlow {
+.categoryCardDesc {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 22% 24%, rgba(255, 255, 255, 0.32), transparent 32%), linear-gradient(135deg, rgba(255, 255, 255, 0.22), transparent 40%), repeating-linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0, rgba(255, 255, 255, 0.08) 10px, transparent 10px, transparent 22px);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 1rem 0.9rem 1rem;
+  transform: translateY(12px);
+  opacity: 0;
+  transition:
+    opacity 340ms ease,
+    transform 340ms ease;
 }
 
-.categoryCardSoon {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 2;
-  transform: translate(-50%, -50%);
-  color: #ffffff;
-  font-size: clamp(1.15rem, 1.7vw, 1.8rem);
+.categoryCardLink:hover .categoryCardDesc,
+.categoryCardLink:focus-visible .categoryCardDesc {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.categoryCardDescLabel {
+  margin: 0 0 0.3rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.categoryCardDescText {
+  margin: 0 0 0.65rem;
+  font-size: clamp(0.72rem, 1vw, 0.82rem);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.categoryCardDescCta {
+  display: inline-block;
+  font-size: 0.75rem;
   font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  padding-bottom: 1px;
 }
 
 .categoryCardLink {
@@ -290,20 +442,25 @@
 
 .categoryCardTitleText {
   margin: 0;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.9);
   font-family: var(--font-sans), sans-serif;
-  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
-  font-weight: 500;
+  font-size: clamp(0.85rem, 1.1vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   transition: letter-spacing 300ms ease;
 }
 
 .categoryCardLink:hover .categoryCardTitleText {
-  letter-spacing: 0.06em;
+  letter-spacing: 0.12em;
 }
 
 .heroPanel {
   background: linear-gradient(145deg, #cfe7ea 0%, #bfdee4 100%);
   isolation: isolate;
+  min-height: 100vh;
+  position: relative;
+  width: 100%;
 }
 
 .heroContent {
@@ -312,7 +469,7 @@
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  padding: clamp(1rem, 2.4vw, 1.75rem) 0 clamp(1rem, 2.4vw, 1.75rem);
+  padding: clamp(1rem, 2.4vw, 1.75rem) clamp(1.25rem, 3.5vw, 3rem) clamp(1rem, 2.4vw, 1.75rem);
 }
 
 .heroHeader {
@@ -321,6 +478,12 @@
   justify-content: space-between;
   gap: 1.5rem;
   flex-wrap: wrap;
+  /* Break out of heroContent horizontal + top padding to go edge-to-edge */
+  margin-left: clamp(-3rem, -3.5vw, -1.25rem);
+  margin-right: clamp(-3rem, -3.5vw, -1.25rem);
+  margin-top: clamp(-1.75rem, -2.4vw, -1rem);
+  /* Restore inner padding so content has the same visual indent */
+  padding: clamp(1rem, 2.4vw, 1.75rem) clamp(1.25rem, 3.5vw, 3rem);
 }
 
 .heroBrandGroup {
@@ -384,25 +547,46 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  overflow: hidden;
   pointer-events: none;
   border-radius: 0;
-  mix-blend-mode: multiply;
+}
+
+.heroImageWrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(180deg,
+      rgba(0, 0, 0, 0.38) 0%,
+      rgba(0, 0, 0, 0.18) 55%,
+      rgba(0, 0, 0, 0.44) 100%
+    );
+  pointer-events: none;
 }
 
 .heroImage {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transform: scale(1.05);
+  transform: scale(1.25);
+  will-change: transform;
 }
 
+/* Hero marquee breaks out of content padding to be true edge-to-edge */
 .heroMarqueeViewport {
-  overflow: hidden;
-  padding-inline: clamp(0.75rem, 1.75vw, 1.5rem);
-  margin-left: 0;
-  margin-right: 0;
+  overflow: visible;
+  padding-top: 0.1em;
+  padding-bottom: 0;
+  padding-inline: 0;
+  /* mirrors the heroContent horizontal padding (clamp(1.25rem, 3.5vw, 3rem)) */
+  margin-left: clamp(-3rem, -3.5vw, -1.25rem);
+  margin-right: clamp(-3rem, -3.5vw, -1.25rem);
+  /* Bleed off the bottom of the hero */
+  margin-bottom: clamp(-1rem, -2.4vw, -1.75rem);
 }
 
 .heroMarqueeLink {
@@ -420,6 +604,7 @@
   align-items: center;
   gap: 2rem;
   animation: heroMarquee 22s linear infinite;
+  will-change: transform;
 }
 
 .heroMarqueeItem {
@@ -428,7 +613,7 @@
   font-family: var(--font-sans), sans-serif;
   font-size: clamp(2.4rem, 7.2vw, 6.6rem);
   font-weight: 600;
-  line-height: 0.82;
+  line-height: 1.1;
   letter-spacing: -0.06em;
 }
 
@@ -441,13 +626,7 @@
 }
 
 .heroGlow {
-  position: absolute;
-  right: -8%;
-  top: -10%;
-  height: 20rem;
-  width: 20rem;
-  border-radius: 0;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.72) 0%, transparent 66%);
+  display: none;
 }
 
 .campaignPanel {
@@ -486,6 +665,7 @@
   margin-top: auto;
   margin-left: -1rem;
   margin-right: -1rem;
+  padding-bottom: 0.2em;
 }
 
 .campaignMarqueeLink {
@@ -512,7 +692,7 @@
   font-family: var(--font-sans), sans-serif;
   font-size: clamp(2.9rem, 10vw, 8.8rem);
   font-weight: 600;
-  line-height: 0.82;
+  line-height: 1.1;
   letter-spacing: -0.07em;
 }
 
@@ -601,6 +781,8 @@
 
 .storyIntro {
   max-width: 58rem;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .storyIntro p {
@@ -1300,6 +1482,7 @@
 @media (max-width: 640px) {
   .sectionBackdropIntro {
     padding-inline: 0.75rem;
+    padding-top: 1.25rem;
   }
 
   .arrivalsSection {
@@ -1354,11 +1537,15 @@
     flex-wrap: wrap;
     align-items: flex-start;
     row-gap: 0.9rem;
+    margin-left: -1.1rem;
+    margin-right: -1.1rem;
+    margin-top: -0.95rem;
+    padding: 0.95rem 1.1rem 0;
   }
 
   .heroContent {
-    min-height: 31rem;
-    padding: 0.95rem 0 1rem;
+    min-height: 100svh;
+    padding: 0.95rem 1.1rem 1rem;
   }
 
   .heroBrandGroup {
@@ -1410,9 +1597,9 @@
   }
 
   .heroMarqueeViewport {
-    padding-inline: 0.75rem;
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: -1.1rem;
+    margin-right: -1.1rem;
+    margin-bottom: -1rem;
   }
 
   .campaignPanel {
@@ -1591,8 +1778,138 @@
   }
 }
 
-@media (min-width: 1280px) {
-  .categoryGrid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+
+
+/* ── FAQ Section ───────────────────────────────────────── */
+
+.faqSection {
+  --backdrop-size: clamp(5rem, 17vw, 17rem);
+  --backdrop-crop: calc(var(--backdrop-size) * -0.38);
+  contain: paint;
+}
+
+.faqHeading {
+  pointer-events: none;
+  user-select: none;
+  position: relative;
+  left: 50%;
+  padding: 0;
+  margin: 0;
+  color: #111111;
+  font-family: var(--font-sans), sans-serif;
+  font-size: var(--backdrop-size);
+  font-weight: 800;
+  line-height: 0.76;
+  letter-spacing: -0.085em;
+  white-space: nowrap;
+  overflow: visible;
+  text-align: center;
+  display: block;
+  width: max-content;
+  max-width: none;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+  opacity: 0.06;
+}
+
+.faqBackdropOverlap {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--backdrop-crop);
+  padding-inline: clamp(0.9rem, 2.5vw, 2.5rem);
+}
+
+.faqLayout {
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.faqItem {
+  border-radius: 0;
+  border: 1px solid rgba(17, 17, 17, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  overflow: hidden;
+  transition: border-color 220ms ease, background 220ms ease, box-shadow 220ms ease;
+}
+
+.faqItemOpen {
+  border-color: rgba(17, 17, 17, 0.22);
+  background: #ffffff;
+  box-shadow: 0 8px 28px rgba(17, 17, 17, 0.07);
+}
+
+.faqQuestion {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+  font-weight: 500;
+  color: #111111;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 180ms ease;
+}
+
+.faqQuestion:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.faqIcon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 1px solid rgba(17, 17, 17, 0.15);
+  border-radius: 50%;
+  font-size: 1.15rem;
+  font-weight: 300;
+  line-height: 1;
+  color: rgba(17, 17, 17, 0.55);
+  transition: transform 260ms ease, background 220ms ease, color 220ms ease, border-color 220ms ease;
+}
+
+.faqIconOpen {
+  transform: rotate(45deg);
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+}
+
+/* closed state */
+.faqAnswer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 320ms ease;
+}
+
+/* open state via JS class */
+.faqAnswerOpen {
+  grid-template-rows: 1fr;
+}
+
+.faqAnswerInner {
+  overflow: hidden;
+}
+
+.faqAnswerInner p {
+  margin: 0;
+  padding: 0 1.25rem 1.25rem;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(0.87rem, 1.15vw, 0.98rem);
+  line-height: 1.7;
+  color: rgba(17, 17, 17, 0.65);
 }
