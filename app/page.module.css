@@ -1161,8 +1161,30 @@
   pointer-events: none;
 }
 
-.closingWordmark span:last-child {
-  margin-left: clamp(5rem, 15vw, 12rem);
+.fabricsRow {
+  display: flex;
+  align-items: flex-end; /* Align texts nicely */
+  margin-left: clamp(5rem, 15vw, 12rem); /* Keep original margin-left behavior, but applied to the row */
+}
+
+/* Base (mobile first) logic */
+.closingEyebrow {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(1.05rem, 1.4vw, 1.4rem);
+  font-weight: 500;
+  padding-top: clamp(5.5rem, 8vw, 8rem);
+  position: relative;
+  z-index: 1;
+  text-wrap: balance;
+}
+
+.closingEyebrowInline {
+  display: none;
+}
+
+.fabricsText {
+  margin-left: 0;
 }
 
 .closingFooterGrid {
@@ -1691,7 +1713,7 @@
     line-height: 0.95;
   }
 
-  .closingWordmark span:last-child {
+  .fabricsRow {
     margin-left: 0;
   }
 
@@ -1768,6 +1790,28 @@
 }
 
 @media (min-width: 1024px) {
+  .closingEyebrow {
+    visibility: hidden;
+  }
+
+  .closingEyebrowInline {
+    display: inline-block;
+    color: #ffffff;
+    font-size: clamp(1.05rem, 1.4vw, 1.4rem);
+    font-family: system-ui, -apple-system, sans-serif; /* fallback */
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: normal;
+    text-transform: none;
+    margin-right: 5px;
+    margin-bottom: 0.15em; /* To optically align with FABRICS text baseline */
+    pointer-events: auto; /* let it be hoverable/selectable if desired */
+  }
+
+  .fabricsRow {
+    align-items: baseline;
+  }
+
   .closingFooterGrid {
     grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
     align-items: end;

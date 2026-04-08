@@ -537,7 +537,10 @@ export function HomeExperience() {
 
             <div className={styles.closingWordmark}>
               <span>TEXONGO</span>
-              <span>FABRICS</span>
+              <div className={styles.fabricsRow}>
+                <span className={styles.closingEyebrowInline}>Enter the Texongo world</span>
+                <span className={styles.fabricsText}>FABRICS</span>
+              </div>
             </div>
 
             <div className={styles.closingFooterGrid}>
