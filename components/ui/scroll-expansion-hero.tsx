@@ -308,22 +308,26 @@ const ScrollExpandMedia = ({
               </div>
 
               <div
-                className={`flex items-center justify-center text-center gap-4 w-full relative z-10 transition-none flex-col ${
+                className={`absolute top-1/2 left-0 w-full -translate-y-1/2 flex items-center justify-center z-10 pointer-events-none transition-none ${
                   textBlend ? 'mix-blend-difference' : 'mix-blend-normal'
                 }`}
               >
-                <motion.h2
-                  className='text-4xl md:text-5xl lg:text-7xl font-black text-white transition-none tracking-tighter'
-                  style={{ transform: `translateX(-${textTranslateX}vw)` }}
-                >
-                  {firstWord}
-                </motion.h2>
-                <motion.h2
-                  className='text-4xl md:text-5xl lg:text-7xl font-black text-center text-white transition-none tracking-tighter'
-                  style={{ transform: `translateX(${textTranslateX}vw)` }}
-                >
-                  {restOfTitle}
-                </motion.h2>
+                <div className="flex-1 flex justify-end pr-8 md:pr-[160px]">
+                  <motion.h2
+                    className='text-4xl md:text-6xl lg:text-8xl font-black text-white transition-none tracking-tighter mb-20 md:mb-32 lg:mb-48'
+                    style={{ transform: `translateX(-${textTranslateX}vw)` }}
+                  >
+                    {firstWord}
+                  </motion.h2>
+                </div>
+                <div className="flex-1 flex justify-start pl-8 md:pl-[160px]">
+                  <motion.h2
+                    className='text-4xl md:text-6xl lg:text-8xl font-black text-white transition-none tracking-tighter mt-20 md:mt-32 lg:mt-48'
+                    style={{ transform: `translateX(${textTranslateX}vw)` }}
+                  >
+                    {restOfTitle}
+                  </motion.h2>
+                </div>
               </div>
             </div>
 

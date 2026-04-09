@@ -1,9 +1,9 @@
-import { ScrollingFeatureShowcase } from "@/components/ui/interactive-scrolling-story-component";
+import { ParallaxFeatureSection } from "@/components/ui/parallax-scroll-feature-section";
 
-export default function DemoPage() {
+export default function DemoOne() {
   return (
-    <div className="bg-white">
-      <ScrollingFeatureShowcase />
+    <div className="w-full">
+      <ParallaxFeatureSection />
     </div>
   );
 }

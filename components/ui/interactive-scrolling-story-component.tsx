@@ -59,7 +59,8 @@ export function ScrollingFeatureShowcase() {
   return (
     <div className="relative w-full h-screen overflow-hidden">
       {/* Import Serif Font for that premium look from the screenshot */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;700&display=swap');
         
         .font-serif-premium {
@@ -73,7 +74,7 @@ export function ScrollingFeatureShowcase() {
       ` }} />
 
       {/* Internal Scroll Engine */}
-      <div 
+      <div
         ref={scrollRef}
         className="absolute inset-0 overflow-y-auto hide-scroll z-50 h-full"
         style={{ scrollSnapType: 'y mandatory' }}
@@ -84,15 +85,15 @@ export function ScrollingFeatureShowcase() {
       </div>
 
       {/* Background layer */}
-      <motion.div 
+      <motion.div
         className="absolute inset-0 pointer-events-none transition-colors duration-1000"
-        style={{ 
+        style={{
           backgroundColor: slidesData[activeIndex].bgColor,
           color: slidesData[activeIndex].textColor
         }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 h-full w-full max-w-[1440px] mx-auto items-center px-8 md:px-24">
-          
+
           {/* Text Layer - Typography updated to match screenshot */}
           <div className="relative flex flex-col justify-center font-sans-clean">
             {/* Pagination Tracks */}
@@ -101,7 +102,7 @@ export function ScrollingFeatureShowcase() {
                 <motion.div
                   key={i}
                   className="h-1 rounded-full bg-current"
-                  animate={{ 
+                  animate={{
                     width: i === activeIndex ? 64 : 24,
                     opacity: i === activeIndex ? 1 : 0.2
                   }}
@@ -120,20 +121,20 @@ export function ScrollingFeatureShowcase() {
                   transition={{ duration: 0.5, ease: "easeOut" }}
                 >
                   <span className="text-[11px] font-bold uppercase tracking-[0.4em] opacity-50 mb-6 block">Texongo Story {activeIndex + 1}</span>
-                  
+
                   {/* Title: Premium Bold Serif as seen in "Trendy Fabrics" */}
                   <h2 className="text-6xl lg:text-8xl font-serif-premium leading-tight mb-8 tracking-tight">
                     {slidesData[activeIndex].title}
                   </h2>
-                  
+
                   {/* Description: Clean, elegant sans-serif */}
                   <p className="text-lg md:text-xl font-medium leading-relaxed max-w-md opacity-80">
                     {slidesData[activeIndex].description}
                   </p>
 
                   <div className="mt-14 pointer-events-auto">
-                    <a href="/shop" className="inline-flex h-12 items-center px-12 bg-current font-bold uppercase tracking-[0.2em] text-[10px] rounded-full hover:scale-105 transition-all shadow-lg shadow-black/5" 
-                       style={{ backgroundColor: slidesData[activeIndex].textColor, color: slidesData[activeIndex].bgColor }}>
+                    <a href="/shop" className="inline-flex h-12 items-center px-12 bg-current font-bold uppercase tracking-[0.2em] text-[10px] rounded-full hover:scale-105 transition-all shadow-lg shadow-black/5"
+                      style={{ backgroundColor: slidesData[activeIndex].textColor, color: slidesData[activeIndex].bgColor }}>
                       Explore More
                     </a>
                   </div>
@@ -151,16 +152,16 @@ export function ScrollingFeatureShowcase() {
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
                   exit={{ scale: 1.1, opacity: 0 }}
-                  transition={{ 
-                    duration: 0.9, 
-                    ease: [0.23, 1, 0.32, 1] 
+                  transition={{
+                    duration: 0.9,
+                    ease: [0.23, 1, 0.32, 1]
                   }}
                   className="absolute inset-0 w-full h-full"
                 >
-                  <img 
-                    src={slidesData[activeIndex].image} 
-                    alt={slidesData[activeIndex].title} 
-                    className="h-full w-full object-cover" 
+                  <img
+                    src={slidesData[activeIndex].image}
+                    alt={slidesData[activeIndex].title}
+                    className="h-full w-full object-cover"
                   />
                 </motion.div>
               </AnimatePresence>
