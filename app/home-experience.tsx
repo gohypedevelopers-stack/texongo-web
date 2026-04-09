@@ -350,7 +350,7 @@ function SustainableBlendSection() {
   return (
     <section className="py-12 md:py-24 bg-white overflow-hidden">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 md:mb-20 tracking-tight text-black">Sustainable Blend</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-12 md:mb-20 tracking-tight text-black">Sustainable Brand</h2>
 
         <div className="relative max-w-full mx-auto">
           {/* Scrollable Container with Drag intent */}
@@ -403,8 +403,8 @@ function SustainableBlendSection() {
                 scrollToLogo(i);
               }}
               className={`h-1.5 transition-all duration-500 rounded-full cursor-pointer ${activeIndex === i
-                  ? 'w-10 bg-black'
-                  : 'w-1.5 bg-[#E5E5E5] hover:bg-black/40'
+                ? 'w-10 bg-black'
+                : 'w-1.5 bg-[#E5E5E5] hover:bg-black/40'
                 }`}
               aria-label={`Go to slide ${i + 1}`}
             />
