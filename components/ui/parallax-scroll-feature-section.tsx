@@ -34,7 +34,7 @@ export const ParallaxFeatureSection = () => {
 
   return (
     <div className="bg-white text-[#111111]">
-      <div className="flex flex-col md:px-0 px-10 max-w-7xl mx-auto py-20">
+      <div className="flex flex-col gap-10 md:px-0 px-6 max-w-7xl mx-auto py-10">
         {sections.map((section, index) => (
           <SectionView key={section.id} section={section} />
         ))}
@@ -57,13 +57,13 @@ const SectionView = ({ section }: { section: Section }) => {
   return (
     <div
       ref={ref}
-      className={`min-h-[80vh] flex flex-col md:flex-row items-center justify-between md:gap-32 gap-16 py-24 ${section.reverse ? 'md:flex-row-reverse' : ''}`}
+      className={`flex flex-col md:flex-row items-center justify-between md:gap-15 gap-7 py-0 ${section.reverse ? 'md:flex-row-reverse' : ''}`}
     >
       <motion.div
         style={{ y: translateText, opacity }}
         className="flex-1"
       >
-        <h2 className="text-4xl md:text-5xl font-bold tracking-tight uppercase mb-8 leading-[1.15]">
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight uppercase mb-4 leading-[1.15]">
           {section.title}
         </h2>
         <p className="text-[#666666] text-sm md:text-base font-normal max-w-xl leading-relaxed">
@@ -73,7 +73,7 @@ const SectionView = ({ section }: { section: Section }) => {
 
       <motion.div
         style={{ opacity }}
-        className="relative flex-1 w-full aspect-square md:aspect-[4/5] overflow-hidden flex items-center justify-center p-4 text-center"
+        className="relative flex-1 w-full aspect-[4/3] md:aspect-[1/1] overflow-hidden flex items-center justify-center p-0 text-center"
       >
         <LazyVideo
           src={section.videoUrl}

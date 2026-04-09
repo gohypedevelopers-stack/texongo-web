@@ -493,7 +493,7 @@ export function HomeExperience() {
         scrollToExpand="Scroll to Explore"
         textBlend={true}
       >
-        <div className="max-w-4xl mx-auto text-center py-20">
+        <div className="max-w-4xl mx-auto text-center pb-10">
           <h2 className="text-4xl md:text-5xl font-black mb-8 uppercase tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
           <p className="text-xl text-[#475467] font-medium leading-relaxed">
             Texongo combines traditional craftsmanship with cutting-edge 3D visualization.
