@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f6f1e7;
+  --background: #F9FAFB;
   --foreground: #111111;
+  --brand-green: #57AD43;
+  --brand-green-light: #61CE70;
+  --text-secondary: #475467;
 }
 
 * {
@@ -44,4 +47,24 @@ select {
 ::selection {
   background: #111111;
   color: #f6f1e7;
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }

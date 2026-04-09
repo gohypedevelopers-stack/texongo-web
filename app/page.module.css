@@ -1,13 +1,196 @@
+:root {
+  --brand-green: #57AD43;
+  --brand-green-light: #61CE70;
+  --brand-black: #121212;
+  --brand-cream: #F9FAFB;
+  --brand-white: #ffffff;
+  --font-display: var(--font-display), sans-serif;
+  --font-sans: var(--font-sans), sans-serif;
+  --transition-smooth: 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 300ms ease;
+}
+
 .panelShadow {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.24),
     0 26px 60px rgba(17, 17, 17, 0.14);
 }
 
-.softCard {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    0 16px 36px rgba(17, 17, 17, 0.06);
+.heroPanel {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--brand-black);
+  display: flex;
+  flex-direction: column;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 5%;
+}
+
+.heroHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 4rem;
+  background: transparent;
+  transition: all var(--transition-fast);
+}
+
+.heroHeader.scrolled {
+  padding: 1.25rem 4rem;
+  background: rgba(251, 249, 244, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(18, 18, 18, 0.05);
+}
+
+.heroBrand {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: var(--brand-white);
+  transition: color var(--transition-fast);
+  text-transform: uppercase;
+}
+
+.heroBrand span {
+  color: var(--brand-green-light);
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  display: inline-flex;
+  width: 1.4rem;
+  height: 1.4rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0 2px;
+  font-size: 0.8em;
+}
+
+.heroHeader.scrolled .heroBrand {
+  color: var(--brand-black);
+}
+
+.heroNav {
+  display: flex;
+  gap: 3rem;
+}
+
+.heroHeaderLink {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all var(--transition-fast);
+}
+
+.heroHeaderLink:hover {
+  color: var(--brand-white);
+  transform: translateY(-1px);
+}
+
+.heroHeader.scrolled .heroHeaderLink {
+  color: #666;
+}
+
+.heroHeader.scrolled .heroHeaderLink:hover {
+  color: var(--brand-green);
+}
+
+.heroHeadline {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  line-height: 0.85;
+  font-weight: 900;
+  color: var(--brand-white);
+  margin-bottom: 2.5rem;
+  letter-spacing: -0.03em;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.heroSubline {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--brand-green-light);
+  margin-bottom: 1.5rem;
+}
+
+.heroActions {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.heroBtnPrimary {
+  padding: 1.25rem 3rem;
+  background: var(--brand-green);
+  color: var(--brand-white);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+  border-radius: 20px;
+}
+
+.heroBtnPrimary:hover {
+  background: var(--brand-white);
+  color: var(--brand-black);
+  transform: scale(1.05);
+}
+
+.heroBtnSecondary {
+  padding: 1.25rem 3rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  color: var(--brand-white);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(5px);
+  border-radius: 20px;
+}
+
+.heroBtnSecondary:hover {
+  border-color: var(--brand-green-light);
+  background: rgba(123, 164, 81, 0.15);
+}
+
+.heroImageWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.heroImageWrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .marqueeViewport {
@@ -344,8 +527,13 @@
 }
 
 @keyframes sliderProgress {
-  from { width: 0%; }
-  to   { width: 100%; }
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
 }
 
 /* Card visuals */
@@ -560,8 +748,7 @@
     linear-gradient(180deg,
       rgba(0, 0, 0, 0.38) 0%,
       rgba(0, 0, 0, 0.18) 55%,
-      rgba(0, 0, 0, 0.44) 100%
-    );
+      rgba(0, 0, 0, 0.44) 100%);
   pointer-events: none;
 }
 
@@ -1163,8 +1350,10 @@
 
 .fabricsRow {
   display: flex;
-  align-items: flex-end; /* Align texts nicely */
-  margin-left: clamp(5rem, 15vw, 12rem); /* Keep original margin-left behavior, but applied to the row */
+  align-items: flex-end;
+  /* Align texts nicely */
+  margin-left: clamp(5rem, 15vw, 12rem);
+  /* Keep original margin-left behavior, but applied to the row */
 }
 
 /* Base (mobile first) logic */
@@ -1798,14 +1987,17 @@
     display: inline-block;
     color: #ffffff;
     font-size: clamp(1.05rem, 1.4vw, 1.4rem);
-    font-family: system-ui, -apple-system, sans-serif; /* fallback */
+    font-family: system-ui, -apple-system, sans-serif;
+    /* fallback */
     font-weight: 500;
     line-height: normal;
     letter-spacing: normal;
     text-transform: none;
     margin-right: 5px;
-    margin-bottom: 0.15em; /* To optically align with FABRICS text baseline */
-    pointer-events: auto; /* let it be hoverable/selectable if desired */
+    margin-bottom: 0.15em;
+    /* To optically align with FABRICS text baseline */
+    pointer-events: auto;
+    /* let it be hoverable/selectable if desired */
   }
 
   .fabricsRow {
@@ -1956,4 +2148,161 @@
   font-size: clamp(0.87rem, 1.15vw, 0.98rem);
   line-height: 1.7;
   color: rgba(17, 17, 17, 0.65);
+}
+
+/* ── Parallax Hero Section ────────────────────────────── */
+
+.parallaxContainer {
+  position: relative;
+  width: 100%;
+  background-color: var(--brand-black);
+  overflow: clip;
+}
+
+.parallaxHeader {
+  position: relative;
+  z-index: 5;
+  height: 180vh; /* Increased height for longer opposite drift */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: var(--brand-black);
+}
+
+.parallaxVisuals {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: var(--brand-black); /* Ensure black space is filled */
+}
+
+.parallaxLayers {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.parallaxLayerImg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+/* Layer specific adjustments for depth */
+.parallaxStudioBg {
+  position: absolute;
+  inset: 0;
+  background-color: #e5e5e3;
+  /* Matching standard studio background tones */
+  width: 100%;
+  height: 100%;
+}
+
+.parallaxLayers [data-parallax-layer="1"] {
+  transform: scale(1.15);
+  opacity: 0.85; /* Keep it atmospheric but clear */
+}
+
+.parallaxLayers [data-parallax-layer="2"] {
+  display: none;
+  /* Removed as requested */
+}
+
+.parallaxLayers [data-parallax-layer="4"] {
+  z-index: 20;
+  opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+}
+
+.parallaxModelForeground {
+  position: absolute;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.parallaxModelImg {
+  height: 75vh; /* Adjusted height for better scale */
+  width: auto;
+  object-fit: contain;
+  /* Sharpness Optimizations + Realistic Grounding Shadow */
+  image-rendering: -webkit-optimize-contrast;
+  filter: 
+    contrast(1.05) 
+    brightness(1.02) 
+    drop-shadow(0 2px 4px rgba(0,0,0,0.2)) 
+    drop-shadow(0 15px 35px rgba(0,0,0,0.15));
+  transform-origin: bottom center;
+}
+
+.parallaxLayerTitle {
+  position: relative;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  transform: translateY(-32vh); /* Shifted up significantly to sit completely above the model */
+}
+
+.parallaxTitle {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 15vw, 16rem);
+  font-weight: 900;
+  color: #121212;
+  /* Darker for clean overlap */
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0.95;
+}
+
+.parallaxFade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20vh;
+  background: linear-gradient(to top, var(--brand-black), transparent);
+  z-index: 15;
+}
+
+.parallaxContent {
+  position: relative;
+  height: 30vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: var(--brand-black);
+  z-index: 20;
+}
+
+@media (max-width: 768px) {
+  .parallaxTitle {
+    font-size: clamp(3.5rem, 20vw, 8rem);
+  }
 }

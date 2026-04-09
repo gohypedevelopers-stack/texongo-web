@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
@@ -5,6 +8,8 @@ import { CategorySlider } from "./category-slider";
 import { FaqSection } from "./faq-section";
 import { ParallaxText } from "./parallax-text";
 import { LazyVideo } from "./lazy-video";
+import { ScrollingFeatureShowcase } from "../components/ui/interactive-scrolling-story-component";
+import ScrollExpandMedia from "../components/ui/scroll-expansion-hero";
 
 const marqueeProducts = [
   {
@@ -69,49 +74,6 @@ const marqueeProducts = [
   },
 ];
 
-const categoryCards = [
-  {
-    title: "Rib",
-    label: "Stretch & Structure",
-    caption: "A vertically ribbed knit fabric known for its elasticity and body-hugging fit. Ideal for cuffs, collars, and fitted garments. Offers excellent recovery and a clean, classic texture.",
-    image: "/category/fabric-rib.png",
-    href: "#new-collection",
-    cta: "Explore",
-  },
-  {
-    title: "Pique",
-    label: "Textured Weave",
-    caption: "A raised honeycomb-textured fabric commonly used in polo shirts and sportswear. Breathable, durable, and structured — it adds refined visual interest to any garment.",
-    image: "/category/fabric-pique.png",
-    href: "#new-collection",
-    cta: "Explore",
-  },
-  {
-    title: "French Terry",
-    label: "Soft Comfort",
-    caption: "A looped-back knit with a smooth face and a soft, absorbent interior. Perfect for loungewear, hoodies, and sweatshirts. Lightweight yet warm with excellent drape.",
-    image: "/category/fabric-french-terry.png",
-    href: "#new-collection",
-    cta: "Explore",
-  },
-  {
-    title: "Waffle",
-    label: "Grid Texture",
-    caption: "Distinctive grid-patterned thermal knit that offers superior insulation and moisture management. Popular in thermal underlayers, robes, and cozy everyday wear.",
-    image: "/category/fabric-waffle.png",
-    href: "#new-collection",
-    cta: "Explore",
-  },
-  {
-    title: "Single Jersey",
-    label: "Everyday Essential",
-    caption: "A lightweight, single-layer plain knit that is soft, smooth, and highly versatile. The go-to fabric for T-shirts and everyday basics — breathable, comfortable, and easy to print on.",
-    image: "/category/fabric-single-jersey.png",
-    href: "#new-collection",
-    cta: "Explore",
-  },
-];
-
 const storyProducts = [
   {
     name: "Premium Women's Wear",
@@ -130,21 +92,6 @@ const storyProducts = [
     word: "Bold",
     href: "#new-collection",
     tone: "#f4ddd9",
-  },
-];
-
-const footerColumns = [
-  {
-    title: "Brand",
-    links: ["Women's wear", "Digital print", "About Texongo"],
-  },
-  {
-    title: "Client service",
-    links: ["Contact", "FAQ", "Shipping and returns"],
-  },
-  {
-    title: "Follow us",
-    links: ["Instagram", "Pinterest", "WhatsApp"],
   },
 ];
 
@@ -190,8 +137,6 @@ function MarqueeProductCard({
   );
 }
 
-
-
 function StoryProductCard({
   name,
   price,
@@ -224,13 +169,14 @@ function StoryProductCard({
         <span className={styles.storyProductWord}>{word}</span>
       </Link>
 
-      <div className={styles.storyProductMeta}>
+      <div className="mt-8 flex justify-between items-end">
         <div>
           <h3 className={styles.storyProductName}>{name}</h3>
           <p className={styles.storyProductPrice}>{price}</p>
         </div>
-        <Link href={href} className={styles.storyProductButton}>
-          SHOP NOW
+        <Link href={href} className="group flex items-center gap-2 text-sm font-bold tracking-widest uppercase py-2">
+          Shop Now
+          <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
         </Link>
       </div>
     </article>
@@ -238,182 +184,45 @@ function StoryProductCard({
 }
 
 export function HomeExperience() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <main className="overflow-x-hidden bg-[#f3efe8] text-[#111111]">
+    <main className="relative overflow-x-hidden bg-[#F9FAFB] text-[#121212]">
       {/* ── HERO ─────────────────────────────────────────── */}
-      <section className={styles.heroPanel}>
-        <div aria-hidden className={styles.heroGlow} />
-        <div className={styles.heroImageWrap}>
-          <video
-            src="/video/Untitled-design-1-1.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            className={styles.heroImage}
-          />
-        </div>
-
-        <div className={styles.heroContent}>
-          <header className={styles.heroHeader}>
-            <div className={styles.heroBrandGroup}>
-              <a href="#category" aria-label="Jump to category section" className={styles.heroMenuButton}>
-                <span className={styles.heroMenuLine} />
-                <span className={styles.heroMenuLine} />
-              </a>
-
-              <Link href="/" className={styles.heroBrand}>
-                TEXONGO
-              </Link>
-            </div>
-
-            <nav className={styles.heroNav} aria-label="Primary navigation">
-              <a href="#new-collection" className={styles.heroHeaderLink}>
-                Fabrics
-              </a>
-              <a href="#campaign" className={styles.heroHeaderLink}>
-                Womenswear
-              </a>
-            </nav>
-
-            <div className={styles.heroMeta}>
-              <a href="#footer" className={styles.heroHeaderLink}>
-                Contact
-              </a>
-              <a href="#footer" className={styles.heroHeaderLink}>
-                About
-              </a>
-              <a href="#new-collection" className={styles.heroHeaderLink}>
-                Catalog
-              </a>
-            </div>
-          </header>
-
-          <div className="mt-10 sm:mt-14">
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/70">
-              Texongo textile studio
-            </p>
-            <h1 className="sr-only">Fabrics that redefine style and comfort</h1>
-          </div>
-
-          <div className={styles.heroActions}>
-            <a
-              href="#new-collection"
-              className="rounded-none bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-white/90"
-            >
-              Browse fabrics
-            </a>
-            <a
-              href="#campaign"
-              className="rounded-none border border-white/25 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10"
-            >
-              View clothing line
-            </a>
-          </div>
-
-          <div className={`${styles.heroMarqueeViewport} relative z-10 mt-6 sm:mt-10 opacity-70`}>
-            <a href="#new-collection" className={styles.heroMarqueeLink}>
-              <div className={styles.heroMarqueeTrack}>
-                {Array.from({ length: 4 }).map((_, index) => (
-                  <span key={index} className={styles.heroMarqueeItem}>
-                    / Fabrics That Redefine Style And Comfort /
-                  </span>
-                ))}
-              </div>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── NEW ARRIVALS ─────────────────────────────────── */}
-
-      <section
-        id="new-collection"
-        className={`${styles.arrivalsSection} overflow-hidden bg-white pt-11 pb-5 sm:pt-[3.75rem] sm:pb-9`}
+      <ScrollExpandMedia
+        mediaType="video"
+        mediaSrc="/video/Veo_Prompt_—_TEXONGO_Fabrics_.mp4"
+        bgImageSrc="/fabric-bg-clean.png"
+        title="PREMIUM TEXTILES"
+        date="COLLECTION 2026"
+        scrollToExpand="Scroll to Explore"
+        textBlend={true}
       >
-        <div className="w-full">
-          <div className={styles.sectionBackdropIntro}>
-            <p className={styles.sectionBackdropEyebrowLight}>Newly added</p>
-            <ParallaxText className={styles.arrivalsHeading} speed={0.4}>
-              fabrics
-            </ParallaxText>
-          </div>
-
-          <div className={styles.arrivalsBackdropOverlap}>
-            <div className={styles.marqueeViewport}>
-              <div className={styles.productTrack}>
-                {[...marqueeProducts, ...marqueeProducts].map((product, index) => (
-                  <MarqueeProductCard
-                    key={`${product.name}-${index}`}
-                    name={product.name}
-                    price={product.price}
-                    href={product.href}
-                    image={product.image}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+        <div className="max-w-4xl mx-auto text-center py-20">
+          <h2 className="text-4xl md:text-5xl font-black mb-8 uppercase tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
+          <p className="text-xl text-[#475467] font-medium leading-relaxed">
+            Texongo combines traditional craftsmanship with cutting-edge 3D visualization. 
+            Our digital-first approach allows designers to experience the texture, drape, 
+            and movement of high-performance textiles before the first thread is even woven.
+          </p>
         </div>
+      </ScrollExpandMedia>
+
+
+
+      {/* ── THE STORY ───────────────────────────────────── */}
+      <section id="collections" className="relative">
+        <ScrollingFeatureShowcase />
       </section>
 
-      <section
-        id="category"
-        className={`${styles.categorySection} overflow-hidden bg-[#050505] pt-11 pb-5 text-white sm:pt-[3.75rem] sm:pb-9`}
-      >
-        <div className={styles.sectionBackdropIntro}>
-          <p className={styles.sectionBackdropEyebrowDark}>Browse by</p>
-          <ParallaxText className={styles.categoryHeading} speed={0.4}>
-            collections
-          </ParallaxText>
-        </div>
-
-        <CategorySlider />
-      </section>
-
-      {/* <section id="campaign" className="bg-[#09c8ef] py-0">
-        <div className="mx-auto max-w-480 px-0 sm:px-6 sm:py-4 lg:px-10">
-          <div className={`${styles.campaignPanel} ${styles.panelShadow}`}>
-            <video
-              src="/video/Untitled-design-1-1.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className={styles.campaignImage}
-              style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
-            />
-
-            <div aria-hidden className={styles.campaignShade} />
-
-            <div className={styles.campaignContent}>
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/72">
-                Featured textile story
-              </p>
-
-              <div className={styles.campaignMarqueeViewport}>
-                <a href="#campaign-story" className={styles.campaignMarqueeLink}>
-                  <div className={styles.campaignMarqueeTrack}>
-                    {Array.from({ length: 4 }).map((_, index) => (
-                      <span key={index} className={styles.campaignMarqueeItem}>
-                        Womenswear / Baby Suits / Digital Print /
-                      </span>
-                    ))}
-                  </div>
-                </a>
-              </div>
-
-              <div className={styles.campaignActionRow}>
-                <a href="#campaign-story" className={styles.campaignButton}>
-                  Explore the Texongo catalog
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
-      <section className="bg-white py-0 overflow-hidden">
+      {/* ── STREAMLINE ──────────────────────────────────── */}
+      <section className="bg-white py-0 overflow-hidden border-y border-black/5">
         <div className={styles.streamlineGrid}>
           <div className={styles.streamlineVideoWrap}>
             <LazyVideo
@@ -423,33 +232,35 @@ export function HomeExperience() {
           </div>
 
           <div className={styles.streamlineContent}>
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-green mb-6 block">Innovation</span>
             <h2 className={styles.streamlineHeading}>
-              Streamline<br />Your Fabric<br />Journey
+              Streamline Your<br />Fabric Journey
             </h2>
             <p className={styles.streamlineBody}>
-              With 3D fabric visualization, your samples come to life digitally—long
-              before physical production begins. Preview texture, drape, movement,
-              and even micro-texture in stunning detail, ensuring every choice is
-              made with absolute clarity. Our intuitive platform lets you compare
-              swatches side-by-side, fine-tune colors, and finalize designs with
-              confidence. Discover a smarter, faster, and more precise way to source
-              fabric—where innovation meets craftsmanship.
+              Preview texture, drape, movement, and micro-texture in stunning detail with 3D visualization. Sourcing fabric has never been more precise—where innovation meets craftsmanship.
             </p>
+            <div className="mt-12 flex items-center gap-6">
+              <button className="h-14 px-8 bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-green transition-colors">
+                Book a Demo
+              </button>
+              <button className="text-[10px] font-black uppercase tracking-[0.2em] border-b-2 border-black/10 pb-1">
+                Learn More
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="campaign-story" className="bg-[#f7f2eb] py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-          <div className={styles.storyIntro}>
-            <p>
-              TEXONGO CREATES FABRICS AND CLOTHING THAT BRING TOGETHER
-              <span> STYLE AND COMFORT </span>FOR WOMEN&apos;S WEAR, BABY SUITS,
-              DIGITAL PRINTS, AND MODERN EVERYDAY COLLECTIONS.
+      {/* ── CAMPAIGN STORY ─────────────────────────────── */}
+      <section id="womenswear" className="bg-[#FBF9F4] py-20">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <div className="max-w-3xl mb-24">
+            <p className="text-3xl md:text-5xl font-black leading-tight tracking-tight">
+              TEXONGO CREATES FABRICS THAT BRING TOGETHER <span className="text-brand-green">STYLE AND COMFORT</span> FOR THE MODERN WOMAN.
             </p>
           </div>
 
-          <div className={styles.storyProductGrid}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             {storyProducts.map((product) => (
               <StoryProductCard key={product.name} {...product} />
             ))}
@@ -457,58 +268,7 @@ export function HomeExperience() {
         </div>
       </section>
 
-      <section className="bg-[#f5f0e8] py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-          <div id="video-story" className={styles.videoSection}>
-            <a href="#video-modal" className={styles.videoPosterLink}>
-              <div className={`${styles.videoPosterFrame} ${styles.panelShadow}`}>
-                <LazyVideo
-                  src="/video/Veo_Prompt_—_TEXONGO_Fabrics_.mp4"
-                  className={styles.videoPosterImage}
-                  style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, transform: 'scale(1.1)' }}
-                />
-                <div aria-hidden className={styles.videoPosterShade} />
-              </div>
-            </a>
 
-            <div className={styles.videoCaptionRow}>
-              <a href="#video-modal" className={styles.videoCaption}>
-                Play the Texongo studio reel
-              </a>
-            </div>
-          </div>
-
-          <div id="video-modal" className={styles.videoModal}>
-            <a
-              href="#video-story"
-              aria-label="Close video preview"
-              className={styles.videoModalBackdrop}
-            />
-            <div className={styles.videoModalPanel}>
-              <a href="#video-story" className={styles.videoModalClose}>
-                Close
-              </a>
-
-              <div className={styles.videoModalVisual}>
-                <LazyVideo
-                  src="/video/Veo_Prompt_—_TEXONGO_Fabrics_.mp4"
-                  className={styles.videoModalImage}
-                  style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, transform: 'scale(1.15)', pointerEvents: 'none' }}
-                />
-                <div aria-hidden className={styles.videoModalPulse} />
-              </div>
-
-              <div className={styles.videoModalCopy}>
-                <p className={styles.videoModalEyebrow}>Texongo fabric story</p>
-                <h3 className={styles.videoModalTitle}>Clothing and textile preview</h3>
-                <p className={styles.videoModalText}>
-                  A quick brand preview focused on fabrics, womenswear, and digital print direction.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section id="faq" className={`${styles.faqSection} overflow-hidden bg-[#f3efe8] pt-11 pb-5 sm:pt-[3.75rem] sm:pb-9`}>
         <div className={styles.sectionBackdropIntro}>
@@ -520,69 +280,100 @@ export function HomeExperience() {
         <FaqSection />
       </section>
 
-      <footer id="footer" className="bg-[#050505] text-white">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-10">
-          <div className={styles.closingVisual}>
-            <Image
-              src="/hero/hero-fabrics.jpg"
-              alt="Texongo premium fabrics featured in the brand panel"
-              fill
-              sizes="100vw"
-              className={styles.closingVisualImage}
-            />
+      {/* ── NEW ARRIVALS ─────────────────────────────────── */}
+      <section id="fabrics" className="py-24 bg-white">
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+            <div className="max-w-xl">
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-green mb-4 block">New Additions</span>
+              <h2 className="text-5xl md:text-7xl font-black leading-none tracking-tight">Newly Added Fabrics</h2>
+            </div>
+            <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-brand-green pb-2 cursor-pointer hover:text-brand-green transition-colors">
+              View All Fabrics
+            </p>
           </div>
 
-          <div className={styles.closingBody}>
-            <p className={styles.closingEyebrow}>Enter the Texongo world</p>
+          <div className="-mx-6 lg:-mx-10 overflow-hidden">
+            <div className={styles.productTrack}>
+              {[...marqueeProducts, ...marqueeProducts].map((product, index) => (
+                <MarqueeProductCard
+                  key={`${product.name}-${index}`}
+                  name={product.name}
+                  price={product.price}
+                  href={product.href}
+                  image={product.image}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
-            <div className={styles.closingWordmark}>
-              <span>TEXONGO</span>
-              <div className={styles.fabricsRow}>
-                <span className={styles.closingEyebrowInline}>Enter the Texongo world</span>
-                <span className={styles.fabricsText}>FABRICS</span>
+      <footer id="footer" className="bg-[#000000] text-white pt-32 pb-16 overflow-hidden">
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
+          <div className="relative z-10">
+            {/* ── ACTIONS & INFO ──────────────────────────── */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 pt-20 border-t border-white/10">
+              <div>
+                <p className="text-sm font-bold uppercase tracking-widest mb-10 max-w-sm leading-relaxed">
+                  Get updates on fabric drops, clothing launches, and wholesale offers.
+                </p>
+                
+                <div className="flex flex-col gap-6 max-w-md">
+                  <div className="relative">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block mb-2">Email</label>
+                    <input
+                      type="email"
+                      placeholder="YOUR@EMAIL.COM"
+                      className="w-full bg-transparent border-b border-white/20 pb-4 text-white font-bold tracking-widest focus:border-white transition-colors uppercase outline-none"
+                    />
+                  </div>
+                  <button type="button" className="w-fit px-12 py-5 border border-white/20 font-black uppercase tracking-[0.3em] text-[10px] hover:bg-white hover:text-black transition-all rounded-sm mt-4">
+                    Subscribe
+                  </button>
+                  <label className="flex items-center gap-3 cursor-pointer group mt-4">
+                    <input type="checkbox" className="w-4 h-4 accent-[#57AD43]" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 group-hover:text-white/60 transition-colors">I agree to the Texongo privacy policy.</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-12 lg:pl-10">
+                {[
+                  { title: "Brand", links: ["Women's wear", "Digital print", "About Texongo"] },
+                  { title: "Client Service", links: ["Contact", "FAQ", "Shipping and returns"] },
+                  { title: "Follow Us", links: ["Instagram", "Pinterest", "WhatsApp"] }
+                ].map((col) => (
+                  <div key={col.title}>
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-10">{col.title}</h4>
+                    <ul className="flex flex-col gap-5">
+                      {col.links.map((link) => (
+                        <li key={link}>
+                          <a href="#" className="text-sm font-bold text-white/80 hover:text-[#57AD43] transition-colors">
+                            {link}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className={styles.closingFooterGrid}>
-              <div className={styles.closingSignup}>
-                <p className={styles.closingSignupCopy}>
-                  Get updates on fabric drops, clothing launches, and wholesale offers.
-                </p>
-
-                <div className={styles.closingFormRow}>
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className={styles.closingInput}
-                    aria-label="Email address"
-                  />
-                  <button type="button" className={styles.closingButton}>
-                    Subscribe
-                  </button>
-                </div>
-
-                <label className={styles.closingConsent}>
-                  <input type="checkbox" />
-                  <span>I agree to the Texongo privacy policy.</span>
-                </label>
-              </div>
-
-              <div className={styles.closingLinksGrid}>
-                {footerColumns.map((group) => (
-                  <div key={group.title}>
-                    <p className={styles.closingLinkTitle}>{group.title}</p>
-                    <div className={styles.closingLinkList}>
-                      {group.links.map((item) => (
-                        <p key={item}>{item}</p>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+            <div className="mt-32 flex flex-col md:flex-row justify-between items-center gap-8 text-white/20">
+              <p className="text-[10px] font-black uppercase tracking-[0.4em]">
+                © {new Date().getFullYear()} TEXONGO FABRICS. All rights reserved.
+              </p>
+              <div className="flex gap-10">
+                 <a href="#" className="text-[10px] font-black uppercase tracking-widest hover:text-white">Privacy Policy</a>
+                 <a href="#" className="text-[10px] font-black uppercase tracking-widest hover:text-white">Terms of Use</a>
               </div>
             </div>
           </div>
         </div>
       </footer>
+
+
     </main>
   );
 }

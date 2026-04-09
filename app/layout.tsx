@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Montserrat, Roboto } from "next/font/google";
 import "./globals.css";
 
-const sans = localFont({
-  src: "./fonts/Bahnschrift.ttf",
+const montserrat = Montserrat({
+  subsets: ["latin"],
   variable: "--font-sans",
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const display = localFont({
-  src: "./fonts/Bahnschrift.ttf",
+const roboto = Roboto({
+  subsets: ["latin"],
   variable: "--font-display",
+  weight: ["400", "500", "700", "900"],
   display: "swap",
 });
 
@@ -25,8 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sans.variable} ${display.variable}`}>
-      <body className="min-h-screen bg-[#f6f1e7] text-[#111111] antialiased">
+    <html lang="en" className={`${montserrat.variable} ${roboto.variable}`} suppressHydrationWarning>
+      <body className="min-h-screen bg-[#F9FAFB] text-[#111111] antialiased">
         {children}
       </body>
     </html>
