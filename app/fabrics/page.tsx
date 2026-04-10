@@ -1,6 +1,5 @@
 "use client";
 
-import { Navbar } from "../../components/ui/navbar";
 import { FabricCard } from "../../components/ui/fabric-card";
 import { ChevronDown, Filter } from "lucide-react";
 
@@ -26,7 +25,6 @@ const fabricsData = [
 export default function FabricsListingPage() {
   return (
     <main className="min-h-screen bg-white">
-      <Navbar />
 
       {/* Hero Banner Section */}
       <section className="relative h-[20vh] md:h-[40vh] w-full overflow-hidden bg-gray-100 border-b border-gray-100">

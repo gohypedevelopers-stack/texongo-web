@@ -1,85 +1,42 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown } from "lucide-react";
-import { LazyVideo } from '../../app/lazy-video';
-
-interface Section {
-  id: number;
-  title: string;
-  description: string;
-  videoUrl: string;
-  reverse: boolean;
-}
+import React from "react";
+import { CardsParallax, iCardItem } from "./scroll-cards";
 
 export const ParallaxFeatureSection = () => {
-  const sections: Section[] = [
+  const cardItems: iCardItem[] = [
     {
-      id: 1,
-      title: "PREMIUM KNITS THAT INSPIRE BEAUTIFUL WOMEN’S WEAR.",
+      title: "PREMIUM KNITS",
       description: "From lightweight essentials to plush winter textures, our knit fabrics offer unmatched versatility. Create dresses, tops, co-ords, or loungewear with materials crafted to drape effortlessly and stand the test of time. With rich textures and refined finishes, every fabric reflects our commitment to exceptional craftsmanship—transforming simple ideas into stunning women's wear.",
       videoUrl: "/video/1-1.mp4",
-      reverse: false
+      tag: "Women's Collection",
+      link: "#",
+      color: "#121212",
+      textColor: "white"
     },
     {
-      id: 2,
-      title: "BOLD FABRICS FOR THE MODERN MAN",
+      title: "MODERN MAN",
       description: "From sharp office attire to effortless weekend looks, our fabrics are crafted to offer true versatility—adapting flawlessly to every mood, moment, and season. Each piece blends comfort, structure, and durability, giving today's man the confidence to move through his day with ease and unmistakable style.",
       videoUrl: '/video/2-1.mp4',
-      reverse: true
+      tag: "Men's Collection",
+      link: "#",
+      color: "#57AD43",
+      textColor: "white"
     },
-
+    // {
+    //   title: "DIGITAL INNOVATION",
+    //   description: "Experience the next generation of textile design with our high-fidelity 3D drapery simulations. See every fold, texture, and movement in stunning detail directly through your browser, where traditional craft meets futuristic technique.",
+    //   src: "https://images.unsplash.com/photo-1558584449-32dd24172e08?q=80&w=2835&auto=format&fit=crop&ixlib=rb-4.1.0",
+    //   tag: "3D Studio",
+    //   link: "#",
+    //   color: "#f3efe8",
+    //   textColor: "#121212"
+    // }
   ];
 
   return (
-    <div className="bg-white text-[#111111]">
-      <div className="flex flex-col gap-10 md:px-0 px-6 max-w-7xl mx-auto py-10">
-        {sections.map((section, index) => (
-          <SectionView key={section.id} section={section} />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const SectionView = ({ section }: { section: Section }) => {
-  const ref = useRef(null);
-
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "center start"]
-  });
-
-  const translateText = useTransform(scrollYProgress, [0, 1], [60, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
-
-  return (
-    <div
-      ref={ref}
-      className={`flex flex-col md:flex-row items-center justify-between md:gap-15 gap-7 py-0 ${section.reverse ? 'md:flex-row-reverse' : ''}`}
-    >
-      <motion.div
-        style={{ y: translateText, opacity }}
-        className="flex-1"
-      >
-        <h2 className="text-4xl md:text-5xl font-bold tracking-tight uppercase mb-4 leading-[1.15]">
-          {section.title}
-        </h2>
-        <p className="text-[#666666] text-sm md:text-base font-normal max-w-xl leading-relaxed">
-          {section.description}
-        </p>
-      </motion.div>
-
-      <motion.div
-        style={{ opacity }}
-        className="relative flex-1 w-full aspect-[4/3] md:aspect-[1/1] overflow-hidden flex items-center justify-center p-0 text-center"
-      >
-        <LazyVideo
-          src={section.videoUrl}
-          className="w-full h-full object-contain mix-blend-multiply"
-        />
-      </motion.div>
+    <div className="bg-white">
+      <CardsParallax items={cardItems} />
     </div>
   );
 };

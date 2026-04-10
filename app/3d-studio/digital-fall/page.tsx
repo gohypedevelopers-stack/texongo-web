@@ -1,6 +1,5 @@
 "use client";
 
-import { Navbar } from "../../../components/ui/navbar";
 import { motion } from "framer-motion";
 
 export default function DigitalFallPage() {
@@ -8,7 +7,6 @@ export default function DigitalFallPage() {
 
   return (
     <main className="min-h-screen bg-black text-white">
-      <Navbar />
 
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-16 text-center">
         <motion.h1 

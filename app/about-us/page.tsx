@@ -1,6 +1,5 @@
 "use client";
 
-import { Navbar } from "../../components/ui/navbar";
 import { motion } from "framer-motion";
 import { FaInstagram, FaXTwitter, FaYoutube, FaFacebookF } from "react-icons/fa6";
 
@@ -15,7 +14,6 @@ export default function AboutUsPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      <Navbar />
 
       {/* Hero Banner Section */}
       <section className="relative h-[40vh] md:h-[50vh] w-full overflow-hidden">

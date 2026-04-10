@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Montserrat, Roboto } from "next/font/google";
 import "./globals.css";
+import { Navbar } from "../components/ui/navbar";
+
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -32,8 +34,10 @@ export default function RootLayout({
         className="min-h-screen bg-[#F9FAFB] text-[#111111] antialiased"
         suppressHydrationWarning
       >
+        <Navbar />
         {children}
       </body>
+
     </html>
   );
 }

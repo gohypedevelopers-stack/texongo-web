@@ -10,7 +10,7 @@ import { FaqSection } from "./faq-section";
 import { ParallaxText } from "./parallax-text";
 import { LazyVideo } from "./lazy-video";
 import ScrollExpandMedia from "../components/ui/scroll-expansion-hero";
-import ScrollAdventure from "../components/ui/animated-scroll";
+import { ParallaxFeatureSection } from "../components/ui/parallax-scroll-feature-section";
 
 const marqueeProducts = [
   {
@@ -482,11 +482,11 @@ export function HomeExperience() {
   }, []);
 
   return (
-    <main className="relative overflow-x-hidden bg-[#F9FAFB] text-[#121212]">
+    <main className="relative overflow-clip bg-[#F9FAFB] text-[#121212]">
       {/* ── HERO ─────────────────────────────────────────── */}
       <ScrollExpandMedia
         mediaType="video"
-        mediaSrc="/video/Untitled-design-1-1.mp4"
+        mediaSrc="/video/Veo.mp4"
         bgImageSrc="/fabric-bg-clean.png"
         title="PREMIUM TEXTILES"
         date="COLLECTION 2026"
@@ -507,7 +507,7 @@ export function HomeExperience() {
 
       {/* ── THE STORY ───────────────────────────────────── */}
       <section id="collections" className="relative">
-        <ScrollAdventure />
+        <ParallaxFeatureSection />
       </section>
 
       {/* ── STREAMLINE ──────────────────────────────────── */}

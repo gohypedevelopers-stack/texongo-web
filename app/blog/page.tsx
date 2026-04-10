@@ -1,6 +1,5 @@
 "use client";
 
-import { Navbar } from "../../components/ui/navbar";
 import { BlogCard } from "../../components/ui/blog-card";
 
 const blogPosts = [
@@ -72,7 +71,6 @@ const blogPosts = [
 export default function BlogListingPage() {
   return (
     <main className="min-h-screen bg-white">
-      <Navbar />
 
       {/* Hero Banner Section (Subtitle/Breadcrumb Feel) */}
       <section className="py-20 bg-gray-50 border-b border-gray-100">

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, User, ShoppingBag, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -60,9 +61,42 @@ const navItems = [
 
 export function Navbar() {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [isHoveredTop, setIsHoveredTop] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const isVisible = !isHome || isScrolled || isHoveredTop;
 
   return (
-    <nav className="w-full bg-white border-b border-gray-100 z-[100] relative">
+    <>
+      {isHome && !isScrolled && (
+        <div 
+          className="fixed top-0 left-0 w-full h-10 z-[110]" 
+          onMouseEnter={() => setIsHoveredTop(true)}
+        />
+      )}
+
+      <motion.nav 
+        initial={false}
+        animate={{ 
+          y: isVisible ? 0 : -132, 
+          opacity: isVisible ? 1 : 0
+        }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+        onMouseLeave={() => setIsHoveredTop(false)}
+        className={`${
+          isHome ? "fixed" : "relative"
+        } top-0 left-0 w-full bg-white border-b border-gray-100 z-[100]`}
+      >
       {/* Top Bar: Logo, Search, Icons */}
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between gap-8">
         {/* Logo */}
@@ -179,6 +213,7 @@ export function Navbar() {
           ))}
         </ul>
       </div>
-    </nav>
+      </motion.nav>
+    </>
   );
 }

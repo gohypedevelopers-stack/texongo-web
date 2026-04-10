@@ -1,6 +1,5 @@
 "use client";
 
-import { Navbar } from "../../components/ui/navbar";
 import { ContactForm } from "../../components/ui/contact-form";
 import { motion } from "framer-motion";
 import { FaInstagram, FaXTwitter, FaYoutube, FaFacebookF } from "react-icons/fa6";
@@ -8,7 +7,6 @@ import { FaInstagram, FaXTwitter, FaYoutube, FaFacebookF } from "react-icons/fa6
 export default function ContactUsPage() {
   return (
     <main className="min-h-screen bg-white">
-      <Navbar />
 
       {/* Hero Banner Section */}
       <section className="relative h-[25vh] md:h-[40vh] w-full overflow-hidden">
