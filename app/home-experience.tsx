@@ -10,7 +10,7 @@ import { FaqSection } from "./faq-section";
 import { ParallaxText } from "./parallax-text";
 import { LazyVideo } from "./lazy-video";
 import ScrollExpandMedia from "../components/ui/scroll-expansion-hero";
-import { ParallaxFeatureSection } from "../components/ui/parallax-scroll-feature-section";
+import ScrollAdventure from "../components/ui/animated-scroll";
 
 const marqueeProducts = [
   {
@@ -507,7 +507,7 @@ export function HomeExperience() {
 
       {/* ── THE STORY ───────────────────────────────────── */}
       <section id="collections" className="relative">
-        <ParallaxFeatureSection />
+        <ScrollAdventure />
       </section>
 
       {/* ── STREAMLINE ──────────────────────────────────── */}
@@ -628,17 +628,17 @@ export function HomeExperience() {
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-12 lg:pl-10">
                 {[
-                  { title: "Brand", links: ["Women's wear", "Digital print", "About Texongo"] },
-                  { title: "Client Service", links: ["Contact", "FAQ", "Shipping and returns"] },
-                  { title: "Follow Us", links: ["Instagram", "Pinterest", "WhatsApp"] }
+                  { title: "Brand", links: [{ name: "Women's wear", href: "#" }, { name: "Digital print", href: "#" }, { name: "About Texongo", href: "/about-us" }] },
+                  { title: "Client Service", links: [{ name: "Contact", href: "/contact-us" }, { name: "FAQ", href: "#faq" }, { name: "Shipping and returns", href: "#" }] },
+                  { title: "Follow Us", links: [{ name: "Instagram", href: "#" }, { name: "Pinterest", href: "#" }, { name: "WhatsApp", href: "#" }] }
                 ].map((col) => (
                   <div key={col.title}>
                     <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-10">{col.title}</h4>
                     <ul className="flex flex-col gap-5">
                       {col.links.map((link) => (
-                        <li key={link}>
-                          <a href="#" className="text-sm font-bold text-white/80 hover:text-[#57AD43] transition-colors">
-                            {link}
+                        <li key={link.name}>
+                          <a href={link.href} className="text-sm font-bold text-white/80 hover:text-[#57AD43] transition-colors">
+                            {link.name}
                           </a>
                         </li>
                       ))}
