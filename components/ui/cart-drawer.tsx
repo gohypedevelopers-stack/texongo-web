@@ -84,23 +84,23 @@ export function CartDrawer() {
                     <div className="flex items-center justify-between pt-3 border-t border-gray-50">
                       <div className="flex items-center gap-4">
                         <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Quantity</span>
-                        <div className="flex items-center border border-gray-100 rounded-sm">
+                        <div className="flex items-center border border-gray-100 rounded-sm overflow-hidden">
                           <button 
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-black"
+                            className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-50 transition-colors"
                           >
                             <Minus size={10} />
                           </button>
-                          <span className="w-8 text-center text-[10px] font-bold">{item.quantity}</span>
+                          <span className="w-10 text-center text-[10px] font-bold">{item.quantity}</span>
                           <button 
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-black"
+                            className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-50 transition-colors"
                           >
                             <Plus size={10} />
                           </button>
                         </div>
                       </div>
-                      <span className="text-[10px] font-black">₹{item.price * item.quantity}.00</span>
+                      <span className="text-[10px] font-black tracking-tight">₹{(item.price * item.quantity).toLocaleString()}.00</span>
                     </div>
                   </div>
                 ))
@@ -109,29 +109,30 @@ export function CartDrawer() {
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="p-4 bg-white border-t border-gray-100 space-y-4">
-                <div className="text-center">
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#121212] mb-4">Payment Details</h3>
-                  <div className="flex justify-between items-baseline mb-4">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#121212]">Sub Total</span>
-                    <span className="text-sm font-black">₹{getTotalPrice()}.00</span>
+              <div className="p-6 bg-white border-t border-gray-100 space-y-6">
+                <div className="space-y-4">
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 text-center">Payment Details</h3>
+                  <div className="flex justify-between items-center bg-gray-50 px-4 py-3 border border-gray-100">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-black">Sub Total</span>
+                    <span className="text-sm font-black text-black">₹{getTotalPrice().toLocaleString()}.00</span>
                   </div>
                 </div>
                 
-                <div className="flex gap-2">
-                  <Link 
-                    href="/cart"
-                    onClick={() => toggleCart(false)}
-                    className="flex-1 h-10 border border-black text-black flex items-center justify-center text-[9px] font-bold uppercase tracking-[0.1em] hover:bg-gray-50 transition-all"
-                  >
-                    View cart
-                  </Link>
+                <div className="flex flex-col gap-3">
                   <Link 
                     href="/checkout"
                     onClick={() => toggleCart(false)}
-                    className="flex-1 h-10 bg-black text-white flex items-center justify-center text-[9px] font-bold uppercase tracking-[0.1em] transition-all duration-300 hover:bg-[#222222] group"
+                    className="h-14 bg-black flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-300 hover:bg-[#222222] shadow-lg shadow-black/10 active:scale-[0.98]"
                   >
-                    <span className="text-white">Checkout</span>
+                    <span className="text-white">Checkout Now</span>
+                    <ArrowRight size={14} className="text-white" />
+                  </Link>
+                  <Link 
+                    href="/cart"
+                    onClick={() => toggleCart(false)}
+                    className="h-14 border border-gray-200 text-black flex items-center justify-center text-[11px] font-black uppercase tracking-[0.2em] hover:bg-gray-50 transition-all active:scale-[0.98]"
+                  >
+                    <span>View my cart</span>
                   </Link>
                 </div>
               </div>

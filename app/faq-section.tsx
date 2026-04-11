@@ -35,8 +35,16 @@ export function FaqSection() {
   const toggle = (i: number) => setOpen((prev) => (prev === i ? null : i));
 
   return (
-    <div className={styles.faqBackdropOverlap}>
-      <div className={styles.faqLayout}>
+    <section className={styles.faqSection}>
+      <div className={styles.faqContainer}>
+        {/* Left Side: Header */}
+        <div className={styles.faqSideHeader}>
+          <span className={styles.eyebrow}>Need Help?</span>
+          <h2>Frequently<br />Asked<br />Questions</h2>
+          <p>Everything you need to know about Texongo textiles, shipping, and our digital studio services.</p>
+        </div>
+
+        {/* Right Side: Accordion */}
         <div className={styles.faqList}>
           {faqs.map((faq, i) => (
             <div
@@ -49,12 +57,10 @@ export function FaqSection() {
                 aria-expanded={open === i}
               >
                 <span>{faq.q}</span>
-                <span className={`${styles.faqIcon} ${open === i ? styles.faqIconOpen : ""}`}>
-                  +
-                </span>
+                <span className={styles.faqIcon}></span>
               </button>
 
-              <div className={`${styles.faqAnswer} ${open === i ? styles.faqAnswerOpen : ""}`}>
+              <div className={styles.faqAnswer}>
                 <div className={styles.faqAnswerInner}>
                   <p>{faq.a}</p>
                 </div>
@@ -63,6 +69,6 @@ export function FaqSection() {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

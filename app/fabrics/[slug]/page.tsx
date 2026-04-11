@@ -31,13 +31,13 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
   };
 
   return (
-    <main className="min-h-screen bg-white pb-32 pt-24">
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
+    <main className="min-h-screen bg-white pb-16 pt-20 lg:pt-28 lg:pb-32">
+      <div className="max-w-[1440px] mx-auto px-4 lg:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-          
+
           {/* Left: Image Gallery */}
-          <div className="space-y-6">
-            <div 
+          <div className="space-y-4 lg:space-y-6">
+            <div
               className="relative aspect-square w-full bg-gray-50 overflow-hidden border border-gray-100 group cursor-zoom-in"
               onMouseMove={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
@@ -57,10 +57,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 className="object-cover transition-transform duration-500 group-hover:scale-[2.5]"
               />
               <div className="absolute top-4 left-4 bg-black/80 px-2 py-1 z-10">
-                 <img src="https://texongo.com/wp-content/uploads/2025/09/Untitled-design-2-1-e1758707290987.png" alt="Logo" className="h-4" />
+                <img src="https://texongo.com/wp-content/uploads/2025/09/Untitled-design-2-1-e1758707290987.png" alt="Logo" className="h-4" />
               </div>
             </div>
-            
+
             <div className="grid grid-cols-3 gap-4">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="aspect-square relative bg-gray-50 cursor-pointer border border-gray-100 group">
@@ -74,9 +74,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               ))}
             </div>
 
-            <button 
+            <button
               onClick={() => document.getElementById('related-products')?.scrollIntoView({ behavior: 'smooth' })}
-              className="w-full bg-[#57AD43] text-white py-3 text-[11px] font-bold uppercase tracking-widest hover:bg-[#489936] transition-colors"
+              className="w-full bg-[#57AD43] text-white py-4 lg:py-3 text-[11px] font-bold uppercase tracking-widest hover:bg-[#489936] transition-colors"
             >
               View Possible Variations
             </button>
@@ -90,7 +90,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 {product.name}
               </h1>
             </div>
-            
+
             <div className="mb-8 p-4 bg-gray-50/50 border-y border-gray-100">
               <span className="text-2xl font-bold text-black">₹{product.price}.00</span>
             </div>
@@ -99,33 +99,35 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               Shipping calculated at checkout
             </Link>
 
-            <div className="flex items-center gap-6 mb-10">
-              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                20 kg in stock
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6 mb-10">
+              <div className="flex items-center justify-between sm:justify-start gap-4">
+                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                  20 kg in stock
+                </div>
+                <div className="flex items-center border border-gray-200">
+                  <button
+                    onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
+                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                  >
+                    <Minus size={12} />
+                  </button>
+                  <input
+                    type="text"
+                    value={quantity}
+                    readOnly
+                    className="w-12 h-10 text-center text-sm font-bold border-x border-gray-200 outline-none"
+                  />
+                  <button
+                    onClick={() => setQuantity(prev => prev + 1)}
+                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                  >
+                    <Plus size={12} />
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center border border-gray-200">
-                <button 
-                  onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                  className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors"
-                >
-                  <Minus size={12} />
-                </button>
-                <input 
-                  type="text" 
-                  value={quantity} 
-                  readOnly
-                  className="w-12 h-10 text-center text-sm font-bold border-x border-gray-200 outline-none" 
-                />
-                <button 
-                  onClick={() => setQuantity(prev => prev + 1)}
-                  className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors"
-                >
-                  <Plus size={12} />
-                </button>
-              </div>
-              <button 
+              <button
                 onClick={handleAddToCart}
-                className="bg-[#444444] text-white px-8 h-10 flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-colors"
+                className="flex-0.5 bg-[#444444] text-white px-8 h-16 sm:h-10 flex items-center justify-center gap-3 text-[13px] sm:text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-colors"
               >
                 <ShoppingBag size={14} />
                 Add to cart
@@ -159,21 +161,20 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
         </div>
 
         {/* Tabs Section */}
-        <div className="mt-32 border-t border-gray-100">
-          <div className="flex justify-center gap-12 -mt-px">
+        <div className="mt-20 lg:mt-32 border-t border-gray-100">
+          <div className="flex overflow-x-auto no-scrollbar justify-start lg:justify-center gap-8 lg:gap-12 -mt-px px-4 lg:px-0">
             {["Description", "Additional information", "Reviews (0)"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab.toLowerCase())}
-                className={`py-8 text-[11px] font-bold uppercase tracking-[0.2em] border-t-2 transition-all ${
-                  activeTab === tab.toLowerCase() ? "border-black text-black" : "border-transparent text-gray-400 hover:text-black"
-                }`}
+                className={`py-6 lg:py-8 text-[10px] lg:text-[11px] font-bold uppercase tracking-[0.2em] border-t-2 transition-all whitespace-nowrap ${activeTab === tab.toLowerCase() ? "border-black text-black" : "border-transparent text-gray-400 hover:text-black"
+                  }`}
               >
                 {tab}
               </button>
             ))}
           </div>
-          
+
           <div className="max-w-4xl mx-auto py-12">
             {activeTab === "description" && (
               <p className="text-sm font-medium text-gray-500 leading-relaxed italic text-center">
@@ -207,7 +208,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
                   <div className="space-y-3">
                     <label className="text-[12px] font-bold uppercase tracking-widest text-gray-700">Your review *</label>
-                    <textarea 
+                    <textarea
                       className="w-full h-48 border border-gray-200 p-4 text-sm focus:border-black outline-none transition-colors resize-none"
                     />
                   </div>
@@ -215,15 +216,15 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                       <label className="text-[12px] font-bold uppercase tracking-widest text-gray-700">Name *</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         className="w-full h-12 bg-gray-50/50 border border-gray-100 px-4 text-sm focus:bg-white focus:border-gray-200 outline-none transition-all"
                       />
                     </div>
                     <div className="space-y-3">
                       <label className="text-[12px] font-bold uppercase tracking-widest text-gray-700">Email *</label>
-                      <input 
-                        type="email" 
+                      <input
+                        type="email"
                         className="w-full h-12 bg-gray-50/50 border border-gray-100 px-4 text-sm focus:bg-white focus:border-gray-200 outline-none transition-all"
                       />
                     </div>
@@ -246,25 +247,25 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
         </div>
 
         {/* Related Products */}
-        <div id="related-products" className="mt-32">
+        <div id="related-products" className="mt-24 lg:mt-32">
           <h2 className="text-xl font-bold uppercase tracking-tight mb-12">Related products</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
             {fabricsData
               .filter(f => f.id !== product.id)
               .sort(() => (product.id.length % 2 === 0 ? 1 : -1)) // Simple stable pseudo-shuffle
               .slice(0, 4)
               .map((fabric) => (
-              <Link key={fabric.id} href={`/fabrics/${fabric.id}`} className="group cursor-pointer">
-                <div className="relative aspect-square mb-4 bg-gray-50 overflow-hidden border border-gray-100">
-                  <Image src={fabric.image} alt={fabric.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
-                  <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[8px] font-black px-2 py-0.5 z-10">
-                    GSM: {fabric.gsm} g/m²
+                <Link key={fabric.id} href={`/fabrics/${fabric.id}`} className="group cursor-pointer">
+                  <div className="relative aspect-square mb-4 bg-gray-50 overflow-hidden border border-gray-100">
+                    <Image src={fabric.image} alt={fabric.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[8px] font-black px-2 py-0.5 z-10">
+                      GSM: {fabric.gsm} g/m²
+                    </div>
                   </div>
-                </div>
-                <h3 className="text-[10px] font-bold uppercase tracking-widest text-center group-hover:text-[#57AD43] transition-colors">{fabric.name}</h3>
-                <p className="text-[10px] font-bold text-gray-400 text-center mt-1">₹{fabric.price}.00</p>
-              </Link>
-            ))}
+                  <h3 className="text-[10px] font-bold uppercase tracking-widest text-center group-hover:text-[#57AD43] transition-colors">{fabric.name}</h3>
+                  <p className="text-[10px] font-bold text-gray-400 text-center mt-1">₹{fabric.price}.00</p>
+                </Link>
+              ))}
           </div>
         </div>
       </div>
@@ -285,7 +286,7 @@ function AccordionItem({ title, content, defaultOpen = false }: { title: string,
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
     <div className="py-4">
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-3 w-full text-left"
       >

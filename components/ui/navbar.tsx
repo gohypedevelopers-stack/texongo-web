@@ -74,24 +74,43 @@ export function Navbar() {
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
+  const [isDesktop, setIsDesktop] = useState(true);
 
   useEffect(() => {
     setIsMounted(true);
+    
+    const checkIsDesktop = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+
+    // Initial check
+    checkIsDesktop();
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
+
+    window.addEventListener("resize", checkIsDesktop);
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    
+    return () => {
+      window.removeEventListener("resize", checkIsDesktop);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
-  // Update visibility logic: visible if hovered, scrolled, or mobile menu is open
-  const isVisible = isHoveredTop || isScrolled || isMobileMenuOpen || !isHome;
+  // Update visibility logic: 
+  // Desktop: strictly hover or mobile menu open
+  // Mobile: hover, scrolled, menu open, or internal page
+  const isVisible = isDesktop 
+    ? (isHoveredTop || isMobileMenuOpen)
+    : (isHoveredTop || isScrolled || isMobileMenuOpen || !isHome);
 
   return (
     <>
-      {!isVisible && (
+      {!isVisible && isMounted && (
         <div 
-          className="fixed top-0 left-0 w-full h-12 z-[110]" 
+          className="fixed top-0 left-0 w-full h-8 z-[110] hidden md:block" 
           onMouseEnter={() => setIsHoveredTop(true)}
         />
       )}
@@ -107,7 +126,7 @@ export function Navbar() {
             className="fixed top-0 left-0 w-full bg-white border-b border-gray-100 z-[100]"
           >
             {/* Top Bar: Logo, Search, Icons */}
-            <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-10 h-16 md:h-20 flex items-center justify-between gap-4 md:gap-8">
+            <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-10 h-16 md:h-20 flex items-center justify-between gap-2 md:gap-8">
               {/* Mobile Menu Button */}
               <button 
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -138,17 +157,17 @@ export function Navbar() {
               </div>
 
               {/* Icons */}
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-3 sm:gap-6">
                 <div 
                   className="relative"
                   onMouseEnter={() => isLoggedIn && setIsAccountOpen(true)}
                   onMouseLeave={() => setIsAccountOpen(false)}
                 >
-                  <button 
-                    onClick={() => !isLoggedIn && openAuthModal()}
-                    className="text-gray-600 hover:text-black transition-colors flex items-center gap-2 h-20"
-                  >
-                    <User size={22} />
+                    <button 
+                      onClick={() => !isLoggedIn && openAuthModal()}
+                      className="text-gray-600 hover:text-black transition-colors flex items-center gap-2 h-16 md:h-20"
+                    >
+                      <User size={22} />
                     {isLoggedIn && user && (
                       <span className="text-[10px] font-black uppercase tracking-widest hidden xl:block">Hi, {user.name}</span>
                     )}

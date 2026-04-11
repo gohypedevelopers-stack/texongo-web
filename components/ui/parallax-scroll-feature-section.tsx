@@ -7,7 +7,7 @@ export const ParallaxFeatureSection = () => {
   const cardItems: iCardItem[] = [
     {
       title: "PREMIUM KNITS",
-      description: "From lightweight essentials to plush winter textures, our knit fabrics offer unmatched versatility. Create dresses, tops, co-ords, or loungewear with materials crafted to drape effortlessly and stand the test of time.",
+      description: "From lightweight essentials to plush winter textures, our knit fabrics offer unmatched versatility.",
       videoUrl: "/video/1-1.mp4",
       tag: "Women's Collection",
       link: "#",
@@ -16,7 +16,7 @@ export const ParallaxFeatureSection = () => {
     },
     {
       title: "MODERN MAN",
-      description: "From sharp office attire to effortless weekend looks, our fabrics are crafted to offer true versatility adapting flawlessly to every mood moment and season.",
+      description: "From sharp office attire to effortless weekend looks, our fabrics are crafted to offer true versatility adapting flawlessly.",
       videoUrl: '/video/2-1.mp4',
       tag: "Men's Collection",
       link: "#",

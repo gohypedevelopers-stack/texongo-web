@@ -231,7 +231,7 @@ function KnitStylesSection() {
   return (
     <section className="py-24 bg-white overflow-hidden">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12 text-center relative">
-        <h2 className="text-4xl font-bold mb-16 tracking-tight">Choose your Knit Style</h2>
+        <h2 className="text-3xl font-bold mb-16 tracking-tight">Choose your Knit Style</h2>
         <div className="relative group/marquee">
           <button onClick={scrollLeft} className="absolute -left-10 md:-left-4 lg:-left-8 top-1/2 -translate-y-1/2 z-20 hidden md:flex hover:scale-110 transition-transform w-12 h-12 items-center justify-center bg-white/80 rounded-full shadow-md cursor-pointer border border-black/5">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
@@ -350,7 +350,7 @@ function SustainableBlendSection() {
   return (
     <section className="py-12 md:py-24 bg-white overflow-hidden">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 md:mb-20 tracking-tight text-black">Sustainable Brand</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-12 md:mb-20 tracking-tight text-black">Sustainable Brand</h2>
 
         <div className="relative max-w-full mx-auto">
           {/* Scrollable Container with Drag intent */}
@@ -446,7 +446,7 @@ function TestimonialsSection() {
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-6 lg:px-12 text-center">
         <div className="mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-white">What Our Customers Say</h2>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-white">What Our Customers Say</h2>
 
           <div className="flex items-center justify-center gap-4">
             <div className="h-[1px] w-12 bg-white/30"></div>
@@ -494,7 +494,7 @@ export function HomeExperience() {
         textBlend={true}
       >
         <div className="max-w-4xl mx-auto text-center pb-10">
-          <h2 className="text-4xl md:text-5xl font-black mb-8 uppercase tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
+          <h2 className="text-3xl md:text-4xl font-black mb-8 uppercase tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
           <p className="text-xl text-[#475467] font-medium leading-relaxed">
             Texongo combines traditional craftsmanship with cutting-edge 3D visualization.
             Our digital-first approach allows designers to experience the texture, drape,
@@ -564,7 +564,7 @@ export function HomeExperience() {
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
             <div className="max-w-xl">
               <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-green mb-4 block">New Additions</span>
-              <h2 className="text-5xl md:text-7xl font-black leading-none tracking-tight">Newly Added Fabrics</h2>
+              <h2 className="text-4xl md:text-6xl font-black leading-none tracking-tight">Newly Added Fabrics</h2>
             </div>
             <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-brand-green pb-2 cursor-pointer hover:text-brand-green transition-colors">
               View All Fabrics
@@ -587,15 +587,7 @@ export function HomeExperience() {
         </div>
       </section>
 
-      <section id="faq" className={`${styles.faqSection} overflow-hidden bg-[#f3efe8] pt-11 pb-5 sm:pt-[3.75rem] sm:pb-9`}>
-        <div className={styles.sectionBackdropIntro}>
-          <p className={styles.sectionBackdropEyebrowLight}>Need help?</p>
-          <ParallaxText className={styles.faqHeading} speed={0.4}>
-            FAQs
-          </ParallaxText>
-        </div>
-        <FaqSection />
-      </section>
+      <FaqSection />
 
     </main>
   );

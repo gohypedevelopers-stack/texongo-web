@@ -147,10 +147,10 @@ export default function CartPage() {
 
               <Link 
                 href="/checkout" 
-                className="w-full h-16 bg-white text-black flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] hover:text-white transition-all rounded-sm group"
+                className="w-full h-16 bg-white flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] hover:text-white transition-all rounded-sm group"
               >
-                Checkout Now
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <span className="text-black group-hover:text-white transition-colors">Checkout Now</span>
+                <ArrowRight size={18} className="text-black group-hover:text-white transition-all group-hover:translate-x-1" />
               </Link>
               
               <div className="mt-8 pt-8 border-t border-white/5 flex flex-col gap-4">
