@@ -15,7 +15,6 @@ export const SmoothScrollHero = () => {
   return (
     <div className="bg-[#FBF9F4]">
       <ReactLenis root>
-        <Nav />
         <Hero />
         <Schedule />
       </ReactLenis>
@@ -23,25 +22,7 @@ export const SmoothScrollHero = () => {
   );
 };
 
-const Nav = () => {
-  return (
-    <nav className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-4 text-black">
-      <Link href="/" className="text-2xl font-black tracking-tighter mix-blend-difference">
-        TEX<span className="text-[#5D8233]">O</span>NGO
-      </Link>
-      <button
-        onClick={() => {
-          document.getElementById("fabric-collections")?.scrollIntoView({
-            behavior: "smooth",
-          });
-        }}
-        className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#5D8233]"
-      >
-        View Collections <FiArrowRight />
-      </button>
-    </nav>
-  );
-};
+
 
 const SECTION_HEIGHT = 1500;
 
@@ -104,28 +85,28 @@ const ParallaxImages = () => {
         alt="Premium Cotton Fabric"
         start={-200}
         end={200}
-        className="w-1/3 rounded-sm shadow-2xl"
+        className="w-1/2 md:w-1/3 rounded-sm shadow-2xl"
       />
       <ParallaxImg
         src="https://images.unsplash.com/photo-1590733401569-42b36fb2f57b?q=80&w=2670&auto=format&fit=crop"
         alt="Textile Weaving Process"
         start={200}
         end={-250}
-        className="mx-auto w-2/3 rounded-sm shadow-2xl"
+        className="mx-auto w-full md:w-2/3 rounded-sm shadow-2xl"
       />
       <ParallaxImg
         src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2370&auto=format&fit=crop"
         alt="Linen Texture Detail"
         start={-200}
         end={200}
-        className="ml-auto w-1/3 rounded-sm shadow-2xl"
+        className="ml-auto w-1/2 md:w-1/3 rounded-sm shadow-2xl"
       />
       <ParallaxImg
         src="https://images.unsplash.com/photo-1544441893-675973e31985?q=80&w=2670&auto=format&fit=crop"
         alt="Sustainability in Textiles"
         start={0}
         end={-500}
-        className="ml-24 w-5/12 rounded-sm shadow-2xl"
+        className="ml-12 md:ml-24 w-7/12 md:w-5/12 rounded-sm shadow-2xl"
       />
     </div>
   );

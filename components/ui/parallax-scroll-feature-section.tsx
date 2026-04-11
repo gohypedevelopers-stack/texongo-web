@@ -11,7 +11,7 @@ export const ParallaxFeatureSection = () => {
       videoUrl: "/video/1-1.mp4",
       tag: "Women's Collection",
       link: "#",
-      color: "#121212",
+      color: "#5a68b4ff",
       textColor: "white"
     },
     {
@@ -26,7 +26,7 @@ export const ParallaxFeatureSection = () => {
     // {
     //   title: "DIGITAL INNOVATION",
     //   description: "Experience the next generation of textile design with our high-fidelity 3D drapery simulations. See every fold, texture, and movement in stunning detail directly through your browser, where traditional craft meets futuristic technique.",
-    //   src: "https://images.unsplash.com/photo-1558584449-32dd24172e08?q=80&w=2835&auto=format&fit=crop&ixlib=rb-4.1.0",
+    //   videoUrl: 'https://vimeo.com/1032216404?fl=pl&fe=cm',
     //   tag: "3D Studio",
     //   link: "#",
     //   color: "#f3efe8",

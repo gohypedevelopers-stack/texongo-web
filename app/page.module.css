@@ -331,6 +331,7 @@
   /* Extra top breathing room so the backdrop text isn't clipped on scroll */
   padding-top: clamp(1.5rem, 4vw, 3.5rem);
   pointer-events: none;
+  text-align: center;
 }
 
 .arrivalsSection {
@@ -2085,7 +2086,8 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  position: relative;
   gap: 1rem;
   padding: 1.1rem 1.25rem;
   font-family: var(--font-sans), sans-serif;
@@ -2094,7 +2096,7 @@
   color: #111111;
   background: transparent;
   border: none;
-  text-align: left;
+  text-align: center;
   cursor: pointer;
   transition: background 180ms ease;
 }
@@ -2116,6 +2118,8 @@
   font-weight: 300;
   line-height: 1;
   color: rgba(17, 17, 17, 0.55);
+  position: absolute;
+  right: 1.25rem;
   transition: transform 260ms ease, background 220ms ease, color 220ms ease, border-color 220ms ease;
 }
 
@@ -2149,6 +2153,7 @@
   font-size: clamp(0.87rem, 1.15vw, 0.98rem);
   line-height: 1.7;
   color: rgba(17, 17, 17, 0.65);
+  text-align: center;
 }
 
 /* ── Parallax Hero Section ────────────────────────────── */
@@ -2163,7 +2168,8 @@
 .parallaxHeader {
   position: relative;
   z-index: 5;
-  height: 180vh; /* Increased height for longer opposite drift */
+  height: 180vh;
+  /* Increased height for longer opposite drift */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -2180,7 +2186,8 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background-color: var(--brand-black); /* Ensure black space is filled */
+  background-color: var(--brand-black);
+  /* Ensure black space is filled */
 }
 
 .parallaxLayers {
@@ -2212,7 +2219,8 @@
 
 .parallaxLayers [data-parallax-layer="1"] {
   transform: scale(1.15);
-  opacity: 0.85; /* Keep it atmospheric but clear */
+  opacity: 0.85;
+  /* Keep it atmospheric but clear */
 }
 
 .parallaxLayers [data-parallax-layer="2"] {
@@ -2242,16 +2250,14 @@
 }
 
 .parallaxModelImg {
-  height: 75vh; /* Adjusted height for better scale */
+  height: 75vh;
+  /* Adjusted height for better scale */
   width: auto;
   object-fit: contain;
   /* Sharpness Optimizations + Realistic Grounding Shadow */
   image-rendering: -webkit-optimize-contrast;
-  filter: 
-    contrast(1.05) 
-    brightness(1.02) 
-    drop-shadow(0 2px 4px rgba(0,0,0,0.2)) 
-    drop-shadow(0 15px 35px rgba(0,0,0,0.15));
+  filter:
+    contrast(1.05) brightness(1.02) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)) drop-shadow(0 15px 35px rgba(0, 0, 0, 0.15));
   transform-origin: bottom center;
 }
 
@@ -2263,7 +2269,8 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  transform: translateY(-32vh); /* Shifted up significantly to sit completely above the model */
+  transform: translateY(-32vh);
+  /* Shifted up significantly to sit completely above the model */
 }
 
 .parallaxTitle {
@@ -2307,3 +2314,7 @@
     font-size: clamp(3.5rem, 20vw, 8rem);
   }
 }
+
+.parallaxTitle {
+  font-size: clamp(3.5rem, 20vw, 8rem);
+}

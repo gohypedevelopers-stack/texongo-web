@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, User, ShoppingBag, ChevronDown } from "lucide-react";
+import { Search, User, ShoppingBag, ChevronDown, Menu, X, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useCartStore, useAuthStore } from "@/lib/store";
@@ -72,17 +72,20 @@ export function Navbar() {
   const itemCount = getItemCount();
   const isHome = pathname === "/";
   const [isAccountOpen, setIsAccountOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
+      setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isVisible = isHoveredTop;
+  // Update visibility logic: visible if hovered, scrolled, or mobile menu is open
+  const isVisible = isHoveredTop || isScrolled || isMobileMenuOpen || !isHome;
 
   return (
     <>
@@ -104,13 +107,21 @@ export function Navbar() {
             className="fixed top-0 left-0 w-full bg-white border-b border-gray-100 z-[100]"
           >
             {/* Top Bar: Logo, Search, Icons */}
-            <div className="max-w-[1440px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between gap-8">
+            <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-10 h-16 md:h-20 flex items-center justify-between gap-4 md:gap-8">
+              {/* Mobile Menu Button */}
+              <button 
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden p-2 text-gray-600"
+              >
+                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+
               {/* Logo */}
-              <Link href="/" className="flex-shrink-0">
+              <Link href="/" className="flex-shrink-0" onClick={() => setIsMobileMenuOpen(false)}>
                 <img
                   src="https://texongo.com/wp-content/uploads/2025/09/Untitled-design-2-1-e1758707290987.png"
                   alt="Texongo"
-                  className="h-10 w-auto"
+                  className="h-8 md:h-10 w-auto"
                 />
               </Link>
 
@@ -139,7 +150,7 @@ export function Navbar() {
                   >
                     <User size={22} />
                     {isLoggedIn && user && (
-                      <span className="text-[10px] font-black uppercase tracking-widest hidden lg:block">Hi, {user.name}</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest hidden xl:block">Hi, {user.name}</span>
                     )}
                   </button>
 
@@ -180,7 +191,7 @@ export function Navbar() {
                 >
                   <ShoppingBag size={22} />
                   {isMounted && itemCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-[#57AD43] text-white text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-full animate-in zoom-in duration-300">
+                    <span className="absolute -top-1.5 -right-1.5 bg-[#57AD43] text-[8px] md:text-[9px] text-white font-black w-3.5 h-3.5 md:w-4 md:h-4 flex items-center justify-center rounded-full">
                       {itemCount}
                     </span>
                   )}
@@ -188,8 +199,8 @@ export function Navbar() {
               </div>
             </div>
 
-            {/* Navigation Menu (Rest of the navbar omitted for brevity) */}
-            <div className="max-w-[1440px] mx-auto px-6 lg:px-10 h-12 flex items-center justify-center overflow-visible whitespace-nowrap hide-scroll">
+            {/* Desktop Navigation Menu */}
+            <div className="hidden md:flex max-w-[1440px] mx-auto px-6 lg:px-10 h-12 items-center justify-center overflow-visible whitespace-nowrap">
               <ul className="flex items-center gap-8 h-full">
                 {navItems.map((item) => (
                   <li 
@@ -270,6 +281,130 @@ export function Navbar() {
                 ))}
               </ul>
             </div>
+
+            {/* Mobile Navigation Drawer */}
+            <AnimatePresence>
+              {isMobileMenuOpen && (
+                <motion.div
+                  initial={{ x: "-100%" }}
+                  animate={{ x: 0 }}
+                  exit={{ x: "-100%" }}
+                  transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                  className="fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-white z-[90] md:hidden overflow-y-auto"
+                >
+                  <div className="p-6 space-y-4">
+                    {/* Mobile Search */}
+                    <div className="relative mb-8">
+                      <input
+                        type="text"
+                        placeholder="Search fabrics..."
+                        className="w-full h-12 bg-gray-50 border border-gray-100 rounded-full px-6 text-sm focus:outline-none"
+                      />
+                      <button className="absolute right-2 top-1 h-10 w-10 flex items-center justify-center bg-black text-white rounded-full">
+                        <Search size={16} />
+                      </button>
+                    </div>
+
+                    <ul className="space-y-2">
+                      {navItems.map((item) => (
+                        <li key={item.name} className="border-b border-gray-50 pb-2">
+                          <div className="flex items-center justify-between">
+                            <Link
+                              href={item.href}
+                              className="text-sm font-black uppercase tracking-[0.1em] py-3 block"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              {item.name}
+                            </Link>
+                            {(item.megaMenu || item.dropdown) && (
+                              <button
+                                onClick={() => setActiveAccordion(activeAccordion === item.name ? null : item.name)}
+                                className="p-3"
+                              >
+                                <ChevronDown 
+                                  size={18} 
+                                  className={`transition-transform ${activeAccordion === item.name ? "rotate-180" : ""}`} 
+                                />
+                              </button>
+                            )}
+                          </div>
+
+                          {/* Accordion Content */}
+                          <AnimatePresence>
+                            {activeAccordion === item.name && (item.megaMenu || item.dropdown) && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="overflow-hidden"
+                              >
+                                {item.dropdown && (
+                                  <ul className="pl-4 py-2 space-y-3">
+                                    {item.dropdown.map((sub) => (
+                                      <li key={sub.name}>
+                                        <Link
+                                          href={sub.href}
+                                          className="text-xs font-bold text-gray-400 uppercase tracking-widest"
+                                          onClick={() => setIsMobileMenuOpen(false)}
+                                        >
+                                          {sub.name}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                                {item.megaMenu && (
+                                  <div className="pl-4 py-4 space-y-6">
+                                    {item.megaMenu.map((cat) => (
+                                      <div key={cat.title}>
+                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-black mb-3">
+                                          {cat.title}
+                                        </h4>
+                                        <ul className="grid grid-cols-2 gap-y-2 gap-x-4">
+                                          {cat.items.map((sub) => (
+                                            <li key={sub}>
+                                              <Link
+                                                href={`/fabrics?category=${sub.toLowerCase().replace(/ /g, '-')}`}
+                                                className="text-[10px] font-bold text-gray-400"
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                              >
+                                                {sub}
+                                              </Link>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Mobile Account / Auth */}
+                    <div className="pt-8 border-t border-gray-100 flex flex-col gap-4">
+                      {isLoggedIn ? (
+                        <>
+                          <Link href="/orders" className="text-sm font-black uppercase tracking-widest text-[#57AD43]" onClick={() => setIsMobileMenuOpen(false)}>
+                            My Orders
+                          </Link>
+                          <button onClick={() => { logout(); setIsMobileMenuOpen(false); }} className="text-sm font-black uppercase tracking-widest text-red-500 text-left">
+                            Logout
+                          </button>
+                        </>
+                      ) : (
+                        <button onClick={() => { openAuthModal(); setIsMobileMenuOpen(false); }} className="text-sm font-black uppercase tracking-widest text-black text-left">
+                          Sign In
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.nav>
         )}
       </AnimatePresence>
