@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Montserrat, Roboto } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "../components/ui/navbar";
+import { Footer } from "../components/ui/footer";
+import { CartDrawer } from "@/components/ui/cart-drawer";
 
 
 const montserrat = Montserrat({
@@ -35,7 +37,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Navbar />
+        <CartDrawer />
         {children}
+        <Footer />
       </body>
 
     </html>
