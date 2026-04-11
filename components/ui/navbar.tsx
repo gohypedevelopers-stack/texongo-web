@@ -66,6 +66,8 @@ export function Navbar() {
   const [isHoveredTop, setIsHoveredTop] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [exitTimeout, setExitTimeout] = useState<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
   const { getItemCount, toggleCart } = useCartStore();
   const { isLoggedIn, user, openAuthModal, logout } = useAuthStore();
@@ -103,15 +105,39 @@ export function Navbar() {
   // Desktop: strictly hover or mobile menu open
   // Mobile: hover, scrolled, menu open, or internal page
   const isVisible = isDesktop 
-    ? (isHoveredTop || isMobileMenuOpen)
+    ? (isHovered || isMobileMenuOpen)
     : (isHoveredTop || isScrolled || isMobileMenuOpen || !isHome);
+
+  const handleMouseEnter = () => {
+    if (exitTimeout) {
+      clearTimeout(exitTimeout);
+      setExitTimeout(null);
+    }
+    setIsHovered(true);
+    setIsHoveredTop(true);
+  };
+
+  const handleMouseLeave = () => {
+    // Add a small delay before hiding on desktop to prevent flickering
+    if (isDesktop) {
+      const timeout = setTimeout(() => {
+        setIsHovered(false);
+        setIsHoveredTop(false);
+      }, 300); // 300ms grace period
+      setExitTimeout(timeout);
+    } else {
+      setIsHovered(false);
+      setIsHoveredTop(false);
+    }
+  };
 
   return (
     <>
-      {!isVisible && isMounted && (
+      {/* Persistent trigger area for desktop */}
+      {isDesktop && isMounted && (
         <div 
-          className="fixed top-0 left-0 w-full h-8 z-[110] hidden md:block" 
-          onMouseEnter={() => setIsHoveredTop(true)}
+          className="fixed top-0 left-0 w-full h-4 z-[110] bg-transparent" 
+          onMouseEnter={handleMouseEnter}
         />
       )}
 
@@ -122,7 +148,8 @@ export function Navbar() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -132, opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-            onMouseLeave={() => setIsHoveredTop(false)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             className="fixed top-0 left-0 w-full bg-white border-b border-gray-100 z-[100]"
           >
             {/* Top Bar: Logo, Search, Icons */}

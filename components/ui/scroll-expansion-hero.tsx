@@ -43,30 +43,61 @@ const ScrollExpandMedia = ({
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    setScrollProgress(0);
-    setShowContent(false);
-    setMediaFullyExpanded(false);
+    // Detect initial scroll position on mount
+    const detectInitialState = () => {
+      // If we are already scrolled down (even a little), skip the expansion effect
+      if (window.scrollY > 20) {
+        setScrollProgress(1);
+        setShowContent(true);
+        setMediaFullyExpanded(true);
+      } else {
+        // Otherwise start from zero
+        setScrollProgress(0);
+        setShowContent(false);
+        setMediaFullyExpanded(false);
+      }
+    };
+
+    // Browsers often restore scroll position after a short delay on refresh.
+    // We check twice to be safe.
+    const timer1 = setTimeout(detectInitialState, 50);
+    const timer2 = setTimeout(detectInitialState, 150);
+    
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
   }, [mediaType]);
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
-      if (mediaFullyExpanded && e.deltaY < 0 && window.scrollY <= 5) {
-        setMediaFullyExpanded(false);
-        e.preventDefault();
-      } else if (!mediaFullyExpanded) {
-        e.preventDefault();
-        const scrollDelta = e.deltaY * 0.0009;
-        const newProgress = Math.min(
-          Math.max(scrollProgress + scrollDelta, 0),
-          1
-        );
-        setScrollProgress(newProgress);
+      // Only capture wheel events if we are at the top
+      if (window.scrollY <= 20) {
+        if (!mediaFullyExpanded) {
+          // Both scrolling down and UP should affect progress if not expanded
+          // But only prevent default if we are within the expansion range
+          if ((e.deltaY > 0 && scrollProgress < 1) || (e.deltaY < 0 && scrollProgress > 0)) {
+            e.preventDefault();
+            const scrollDelta = e.deltaY * 0.0009;
+            const newProgress = Math.min(
+              Math.max(scrollProgress + scrollDelta, 0),
+              1
+            );
+            setScrollProgress(newProgress);
 
-        if (newProgress >= 1) {
-          setMediaFullyExpanded(true);
-          setShowContent(true);
-        } else if (newProgress < 0.75) {
-          setShowContent(false);
+            if (newProgress >= 1) {
+              setMediaFullyExpanded(true);
+              setShowContent(true);
+            } else if (newProgress < 0.75) {
+              setShowContent(false);
+            }
+          }
+        } else if (e.deltaY < 0 && window.scrollY <= 10) {
+          // Re-entering the "shrink" zone from expanded state
+          e.preventDefault();
+          setMediaFullyExpanded(false);
+          // Start shrinking slightly from the top
+          setScrollProgress(0.99);
         }
       }
     };
@@ -81,28 +112,33 @@ const ScrollExpandMedia = ({
       const touchY = e.touches[0].clientY;
       const deltaY = touchStartY - touchY;
 
-      if (mediaFullyExpanded && deltaY < -20 && window.scrollY <= 5) {
-        setMediaFullyExpanded(false);
-        e.preventDefault();
-      } else if (!mediaFullyExpanded) {
-        e.preventDefault();
-        // Increase sensitivity for mobile, especially when scrolling back
-        const scrollFactor = deltaY < 0 ? 0.008 : 0.005; // Higher sensitivity for scrolling back
-        const scrollDelta = deltaY * scrollFactor;
-        const newProgress = Math.min(
-          Math.max(scrollProgress + scrollDelta, 0),
-          1
-        );
-        setScrollProgress(newProgress);
+      if (window.scrollY <= 20) {
+        if (!mediaFullyExpanded) {
+          if ((deltaY > 0 && scrollProgress < 1) || (deltaY < 0 && scrollProgress > 0)) {
+            e.preventDefault();
+            const scrollFactor = 0.005;
+            const scrollDelta = deltaY * scrollFactor;
+            const newProgress = Math.min(
+              Math.max(scrollProgress + scrollDelta, 0),
+              1
+            );
+            setScrollProgress(newProgress);
 
-        if (newProgress >= 1) {
-          setMediaFullyExpanded(true);
-          setShowContent(true);
-        } else if (newProgress < 0.75) {
-          setShowContent(false);
+            if (newProgress >= 1) {
+              setMediaFullyExpanded(true);
+              setShowContent(true);
+            } else if (newProgress < 0.75) {
+              setShowContent(false);
+            }
+            setTouchStartY(touchY);
+          }
+        } else if (deltaY < -10 && window.scrollY <= 10) {
+          // Reverse expansion on touch
+          e.preventDefault();
+          setMediaFullyExpanded(false);
+          setScrollProgress(0.99);
+          setTouchStartY(touchY);
         }
-
-        setTouchStartY(touchY);
       }
     };
 
@@ -111,9 +147,7 @@ const ScrollExpandMedia = ({
     };
 
     const handleScroll = (): void => {
-      if (!mediaFullyExpanded) {
-        window.scrollTo(0, 0);
-      }
+      // No longer force scroll logic here
     };
 
     window.addEventListener('wheel', handleWheel as unknown as EventListener, {
