@@ -10,44 +10,50 @@ import { AuthModal } from "./auth-modal";
 
 const navItems = [
   { name: "Home", href: "/" },
-  { 
-    name: "FabricaVision", 
+  {
+    name: "FabricaVision",
     href: "/fabricavision",
     megaMenu: [
       {
         title: "Knit Style",
         items: [
-          "Single Jersey", "French Terry", "Fleece", "Rib", "Spandex Knits", 
-          "Pique", "Interlock", "Waffle", "Jacquard", "Stripes", 
+          "Single Jersey", "French Terry", "Fleece", "Rib", "Spandex Knits",
+          "Pique", "Interlock", "Waffle", "Jacquard", "Stripes",
           "Corduroy Vellour", "Printed", "Shiffly", "Ponte", "Yarn", "Neps", "Popcorn"
         ]
       },
       {
         title: "Blends",
         items: [
-          "Cotton", "Viscose", "Cotton Modal", "Giza/ Egyptian", "Melange", 
-          "Nylon", "Poly Cotton", "Polyester", "Slubs", "Spandex Blends", "Supima"
+          "Cotton", "Viscose", "Cotton Modal", "Giza/ Egyptian", "Melange",
+          "Nylon", "Poly Cotton", "Polyester", "Slubs", "Spandex Blends", "Australian"
+        ]
+      },
+      {
+        title: "Menwear",
+        items: [
+          "Cargo", "Hoodies", "Co-ord", "Tshirt", "Joggers",
+          "Loungewear", "Polos", "Sweatshirt"
+        ]
+      },
+      {
+        title: "Womenwear",
+        items: [
+          "Tshirt/ tops", "Athleisure", "Co-ords", "Dresses", "Hoodie",
+          "Jumpsuits", "Lining", "Polos", "Scarves", "Skirts", "Sweatshirt"
         ]
       },
       {
         title: "Sustainable Blends",
         items: [
-          "Wool", "Australian", "Banana-Fabric", "Eco Vero", "Hemp", 
-          "Linen", "Lotus", "Modal", "Organic Cotton", "Recycled Cotton", "Tencel"
+          "Wool", "Supima", "Banana-Fabric", "Eco Vero", "Hemp",
+          "Linen", "Lotus", "Modal", "Organic Cotton", "Recycled Cotton", "Tencel", "BCI"
         ]
-      },
-      {
-        title: "Menwear",
-        items: ["Cargo", "Hoodies", "Co-ord", "Tshirt", "Joggers", "Loungewear", "Polos", "Sweatshirt"]
-      },
-      {
-        title: "Womenwear",
-        items: ["Tshirt/ tops", "Athleisure", "Co-ords", "Dresses", "Hoodie", "Jumpsuits", "Lining", "Polos", "Scarves", "Skirts", "Sweatshirt"]
       }
     ]
   },
-  { 
-    name: "3D Studio", 
+  {
+    name: "3D Studio",
     href: "/3d-studio",
     dropdown: [
       { name: "Digital Drape", href: "/3d-studio/digital-drape" },
@@ -80,7 +86,7 @@ export function Navbar() {
 
   useEffect(() => {
     setIsMounted(true);
-    
+
     const checkIsDesktop = () => {
       setIsDesktop(window.innerWidth >= 768);
     };
@@ -94,7 +100,7 @@ export function Navbar() {
 
     window.addEventListener("resize", checkIsDesktop);
     window.addEventListener("scroll", handleScroll);
-    
+
     return () => {
       window.removeEventListener("resize", checkIsDesktop);
       window.removeEventListener("scroll", handleScroll);
@@ -104,7 +110,7 @@ export function Navbar() {
   // Update visibility logic: 
   // Desktop: strictly hover or mobile menu open
   // Mobile: hover, scrolled, menu open, or internal page
-  const isVisible = isDesktop 
+  const isVisible = isDesktop
     ? (isHovered || isMobileMenuOpen)
     : (isHoveredTop || isScrolled || isMobileMenuOpen || !isHome);
 
@@ -135,15 +141,15 @@ export function Navbar() {
     <>
       {/* Persistent trigger area for desktop */}
       {isDesktop && isMounted && (
-        <div 
-          className="fixed top-0 left-0 w-full h-4 z-[110] bg-transparent" 
+        <div
+          className="fixed top-0 left-0 w-full h-4 z-[110] bg-transparent"
           onMouseEnter={handleMouseEnter}
         />
       )}
 
       <AnimatePresence>
         {isVisible && (
-          <motion.nav 
+          <motion.nav
             initial={{ y: -132, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -132, opacity: 0 }}
@@ -155,7 +161,7 @@ export function Navbar() {
             {/* Top Bar: Logo, Search, Icons */}
             <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-10 h-16 md:h-20 flex items-center justify-between gap-2 md:gap-8">
               {/* Mobile Menu Button */}
-              <button 
+              <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="md:hidden p-2 text-gray-600"
               >
@@ -185,16 +191,16 @@ export function Navbar() {
 
               {/* Icons */}
               <div className="flex items-center gap-3 sm:gap-6">
-                <div 
+                <div
                   className="relative"
                   onMouseEnter={() => isLoggedIn && setIsAccountOpen(true)}
                   onMouseLeave={() => setIsAccountOpen(false)}
                 >
-                    <button 
-                      onClick={() => !isLoggedIn && openAuthModal()}
-                      className="text-gray-600 hover:text-black transition-colors flex items-center gap-2 h-16 md:h-20"
-                    >
-                      <User size={22} />
+                  <button
+                    onClick={() => !isLoggedIn && openAuthModal()}
+                    className="text-gray-600 hover:text-black transition-colors flex items-center gap-2 h-16 md:h-20"
+                  >
+                    <User size={22} />
                     {isLoggedIn && user && (
                       <span className="text-[10px] font-black uppercase tracking-widest hidden xl:block">Hi, {user.name}</span>
                     )}
@@ -209,14 +215,14 @@ export function Navbar() {
                         transition={{ duration: 0.2 }}
                         className="absolute top-[80%] right-0 w-48 bg-white border border-gray-100 shadow-xl z-[120] py-2 overflow-hidden"
                       >
-                        <Link 
+                        <Link
                           href="/orders"
                           className="flex items-center gap-3 px-6 py-4 text-[11px] font-black uppercase tracking-widest text-gray-500 hover:text-black hover:bg-gray-50 transition-all border-b border-gray-50"
                           onClick={() => setIsAccountOpen(false)}
                         >
                           My Orders
                         </Link>
-                        <button 
+                        <button
                           onClick={() => {
                             logout();
                             setIsAccountOpen(false);
@@ -230,8 +236,8 @@ export function Navbar() {
                     )}
                   </AnimatePresence>
                 </div>
-                
-                <button 
+
+                <button
                   onClick={() => toggleCart(true)}
                   className="text-gray-600 hover:text-black transition-colors relative"
                 >
@@ -249,8 +255,8 @@ export function Navbar() {
             <div className="hidden md:flex max-w-[1440px] mx-auto px-6 lg:px-10 h-12 items-center justify-center overflow-visible whitespace-nowrap">
               <ul className="flex items-center gap-8 h-full">
                 {navItems.map((item) => (
-                  <li 
-                    key={item.name} 
+                  <li
+                    key={item.name}
                     className={`${item.megaMenu ? "" : "relative"} h-full flex items-center`}
                     onMouseEnter={() => setHoveredItem(item.name)}
                     onMouseLeave={() => setHoveredItem(null)}
@@ -261,9 +267,9 @@ export function Navbar() {
                     >
                       {item.name}
                       {(item.dropdown || item.megaMenu) && (
-                        <ChevronDown 
-                          size={12} 
-                          className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`} 
+                        <ChevronDown
+                          size={12}
+                          className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`}
                         />
                       )}
                     </Link>
@@ -276,11 +282,10 @@ export function Navbar() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
                           transition={{ duration: 0.2, ease: "easeOut" }}
-                          className={`absolute top-full z-[110] bg-[#f5f5f5] shadow-[0_10px_30px_rgba(0,0,0,0.1)] border border-gray-100 ${
-                            item.megaMenu 
-                              ? "fixed md:absolute left-0 right-0 mx-auto w-[calc(100vw-3rem)] max-w-[1440px]" 
-                              : "left-0 min-w-48"
-                          }`}
+                          className={`absolute top-full z-[110] bg-[#f5f5f5] shadow-[0_10px_30px_rgba(0,0,0,0.1)] border border-gray-100 ${item.megaMenu
+                            ? "fixed md:absolute left-0 right-0 mx-auto w-[calc(100vw-3rem)] max-w-[1440px]"
+                            : "left-0 min-w-48"
+                            }`}
                         >
                           {item.dropdown && (
                             <ul className="flex flex-col py-4">
@@ -367,9 +372,9 @@ export function Navbar() {
                                 onClick={() => setActiveAccordion(activeAccordion === item.name ? null : item.name)}
                                 className="p-3"
                               >
-                                <ChevronDown 
-                                  size={18} 
-                                  className={`transition-transform ${activeAccordion === item.name ? "rotate-180" : ""}`} 
+                                <ChevronDown
+                                  size={18}
+                                  className={`transition-transform ${activeAccordion === item.name ? "rotate-180" : ""}`}
                                 />
                               </button>
                             )}
