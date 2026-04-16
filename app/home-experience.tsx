@@ -156,6 +156,7 @@ function StoryProductCard({
         <LazyVideo
           src={video}
           aria-label={alt}
+          threshold={0.05}
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'multiply' }}
         />
       </Link>
@@ -178,11 +179,22 @@ function StoryProductCard({
 
 function KnitStylesSection() {
   const knitStyles = [
-    { name: "VISCOSE", image: "/category/fabric-single-jersey.png", color: "#14868c" },
+    { name: "POLY COTTON", image: "/category/fabric-single-jersey.png", color: "#2e3b5e" },
+    { name: "JACQUARD", image: "/category/fabric-waffle.png", color: "#d1d5db" },
+    { name: "HONEY COMB", image: "/category/fabric-waffle.png", color: "#f59e0b" },
+    { name: "PONTE", image: "/category/fabric-pique.png", color: "#312e81" },
+    { name: "SEERSUCKER", image: "/arrivals/prod-slub-melange.png", color: "#7dd3fc" },
+    { name: "POLYESTER", image: "/category/fabric-single-jersey.png", color: "#3b82f6" },
+    { name: "MELANGE", image: "/arrivals/prod-slub-melange.png", color: "#4b5563" },
+    { name: "FLEECE", image: "/category/fabric-single-jersey.png", color: "#14b8a6" },
+    { name: "COTTON SPANDEX", image: "/arrivals/prod-cotton-spandex-interlock.png", color: "#c2410c" },
+    { name: "COTTON", image: "/category/fabric-single-jersey.png", color: "#ec4899" },
+    { name: "VISCOSE", image: "/arrivals/prod-poly-viscose-spandex.png", color: "#14868c" },
     { name: "RIB", image: "/category/fabric-rib.png", color: "#e1a84f" },
     { name: "PIQUE", image: "/category/fabric-pique.png", color: "#e84733" },
     { name: "FRENCH TERRY", image: "/category/fabric-french-terry.png", color: "#4f658c" },
     { name: "WAFFLE", image: "/category/fabric-waffle.png", color: "#5bb2e1" },
+    { name: "SINGLE JERSEY", image: "/category/fabric-single-jersey.png", color: "#7f1d1d" },
   ];
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -192,7 +204,7 @@ function KnitStylesSection() {
     if (scrollRef.current) {
       const itemWidth = window.innerWidth >= 768 ? 280 + 24 : 220 + 16;
       // Start in the middle of our 30 sets
-      scrollRef.current.scrollLeft = itemWidth * 5 * 10;
+      scrollRef.current.scrollLeft = itemWidth * knitStyles.length * 10;
     }
   }, []);
 
@@ -217,11 +229,11 @@ function KnitStylesSection() {
 
     // Jump forward if scrolled too far left
     if (scrollLeft < 1500) {
-      scrollRef.current.scrollLeft += itemWidth * 5 * 10;
+      scrollRef.current.scrollLeft += itemWidth * knitStyles.length * 10;
     }
     // Jump backward if scrolled too far right
     else if (scrollLeft > scrollWidth - clientWidth - 1500) {
-      scrollRef.current.scrollLeft -= itemWidth * 5 * 10;
+      scrollRef.current.scrollLeft -= itemWidth * knitStyles.length * 10;
     }
   };
 
@@ -271,11 +283,11 @@ function SustainableBlendSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const baseLogos = [
-    { name: "Banana Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Banana_f7269dad-a9d2-4553-8572-9fb18786d287_360x.webp" },
-    { name: "Supima", src: "https://texongo.com/wp-content/uploads/2025/12/Supiima_360x-1.webp" },
-    { name: "Lotus Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Lotus_360x.webp" },
-    { name: "Hemp", src: "https://texongo.com/wp-content/uploads/2025/12/Hemp_ee5107c1-6add-4868-bc46-6d9111850ba3_360x.webp" },
-    { name: "BCI Cotton", src: "https://texongo.com/wp-content/uploads/2025/12/BCI_a1b34c70-fc29-4342-9c45-a8f95375fa51_360x.webp" },
+    { name: "Banana Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Banana_f7269dad-a9d2-4553-8572-9fb18786d287_360x.webp", href: "https://texongo.com/product-category/sustainable-blends/banana-fabric/" },
+    { name: "Supima", src: "https://texongo.com/wp-content/uploads/2025/12/Supiima_360x-1.webp", href: "https://texongo.com/product-category/blends/supima/" },
+    { name: "Lotus Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Lotus_360x.webp", href: "https://texongo.com/product-category/sustainable-blends/lotus/" },
+    { name: "Hemp", src: "https://texongo.com/wp-content/uploads/2025/12/Hemp_ee5107c1-6add-4868-bc46-6d9111850ba3_360x.webp", href: "https://texongo.com/product-category/sustainable-blends/hemp/" },
+    { name: "BCI Cotton", src: "https://texongo.com/wp-content/uploads/2025/12/BCI_a1b34c70-fc29-4342-9c45-a8f95375fa51_360x.webp", href: "https://texongo.com/product-category/sustainable-blends/organic-cotton/" },
   ];
 
   // Create an extended list for infinite-like scrolling and centering
@@ -366,15 +378,20 @@ function SustainableBlendSection() {
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: (i % baseLogos.length) * 0.05, ease: "easeOut" }}
                 onClick={() => {
                   setActiveIndex(i % baseLogos.length);
                   scrollToLogo(i % baseLogos.length);
                 }}
                 className="flex flex-col items-center justify-center min-w-[200px] md:min-w-[280px] shrink-0 snap-center transition-all duration-300 cursor-pointer"
               >
-                <div className="h-32 md:h-48 flex flex-col items-center justify-center w-full group">
+                <a
+                  href={logo.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-32 md:h-48 flex flex-col items-center justify-center w-full group"
+                >
                   <img
                     src={logo.src}
                     alt={logo.name}
@@ -383,7 +400,7 @@ function SustainableBlendSection() {
                   <span className={`text-[10px] md:text-xs font-black tracking-[0.3em] mt-8 uppercase transition-all duration-300 ${activeIndex === (i % baseLogos.length) ? 'text-black opacity-100' : 'text-black/20 opacity-40'}`}>
                     {logo.name}
                   </span>
-                </div>
+                </a>
               </motion.div>
             ))}
           </div>
@@ -417,18 +434,28 @@ function SustainableBlendSection() {
 
 function TestimonialsSection() {
   const testimonials = [
-    {
-      name: "Neha Verma",
-      text: "The material quality of fabrics are excellent and prices of fabrics are reasonable. I loved how fabrics could be visualized digitally before ordering."
-    },
-    {
-      name: "Amrita Malhan",
-      text: "This website saved me time and money. Their digital fabric previews helped me decide instantly, and the delivered fabric was absolutely good."
-    },
-    {
-      name: "Amit Mittal",
-      text: "From gym wear to party and casual, fabrics here are all available. The 3D visualization is good and the customer service was also good."
-    }
+    { name: "Kamal Singh", text: "I've ordered several times from Syndicate Cloth House Pvt. Ltd. and the durability never disappoints. Their dense, even stitches mean the fabric resists pilling and lasts a long time. It's affordable for the high quality you get.", sub: "1 review • 3 months ago", rating: 5 },
+    { name: "Neeraj Kumar", text: "This mill have Wide range of designer fabrics and different types of textiles available and the owner Mr. Aman and his team shashank ji nature is very nice. Thank you for providing such reliable, high-quality fabrics.", sub: "5 reviews • 3 months ago", rating: 5 },
+    { name: "Jeet Sharma", text: "The team was professional, responsive, and very helpful throughout the process. The quality of service exceeded my expectations, and everything was delivered on time. Highly recommended!", sub: "3 reviews • 3 months ago", rating: 5 },
+    { name: "Daksh Sharma", text: "Excellent fabric quality and a very professional team. Syndicate Cloth House has a wide variety of knits with consistent quantity. Truly reliable and trusted.", sub: "1 review • 3 months ago", rating: 5 },
+    { name: "Krish Arora", text: "Nice collection of knitted fabrics and textured structures. Jacquard quality was good. Overall a decent experience.", sub: "1 review • 3 months ago", rating: 4 },
+    { name: "Alice", text: "Good range of single jersey, ribs, and French terry. Reliable supplier. Loved the pointelle and Jacquard fabrics—great texture and finish.", sub: "5 reviews • 2 months ago", rating: 5 },
+    { name: "Jigisha Bhatia", text: "Texongo has a wide range of knitted and structured fabrics. Average experience overall.", sub: "8 reviews • 3 months ago", rating: 3.5 },
+    { name: "Mamta Narula", text: "Nice variety in ribs, French terry, and other knitted fabrics. Excellent quality Jacquards and structured knits. Very consistent fabric.", sub: "1 review • 2 months ago", rating: 5 },
+    { name: "Trending Abstracts", text: "Great quality knit fabrics and very reliable supplier. Consistent materials, fair pricing, & timely delivery. Highly recommended.", sub: "1 review • 2 months ago", rating: 5 },
+    { name: "Pavni Manchanda", text: "Absolutely loved the fabric and the service they provided. The entire experience was smooth and delightful!", sub: "4 reviews • 3 months ago", rating: 5 },
+    { name: "Neha", text: "Huge collections of basic to Novelty fabrics. Quality fabrics at this store. Staff is very supportive.", sub: "3 reviews • 3 months ago", rating: 5 },
+    { name: "Urmila Vaid", text: "Excellent quality of textured knits fabric. Very consistent fabric.", sub: "1 review • 2 months ago", rating: 5 },
+    { name: "Mithun Yadav", text: "Good supplier with amazing fabric qualities. Highly recommended. 👌", sub: "3 reviews • 2 months ago", rating: 4.5 },
+    { name: "Ansh", text: "Good fabric consistency and finishing across knits fabric. Liked it.", sub: "1 review • 2 months ago", rating: 5 },
+    { name: "Punita", text: "I bought terry fabric from Texongo. Nice quality I received.", sub: "1 review • 3 months ago", rating: 4.5 },
+    { name: "Premjit Sahoo", text: "Fabric quality achi or range bhi kafi achi h. 👍👍", sub: "1 review • 3 months ago", rating: 4 },
+    { name: "Seamless", text: "Best Fabric supplier in India. Little bit expensive but quality is so good it's definitely worth it.", sub: "1 review • 2 years ago", rating: 5 },
+    { name: "Kanishka Soni", text: "I purchased their swatch box and was amazed by the idea. If you want to start in the fashion industry, their swatches really help select premium fabrics. Thank you Texongo!", sub: "7 reviews • 3 years ago", rating: 5 },
+    { name: "Mansi Vaid", text: "Nice texture and finish in pointelle and Jacquard knits.", sub: "5 reviews • 2 months ago", rating: 5 },
+    { name: "Mahaveer Verma", text: "Absolutely love the quality of fabrics! The selection is premium and the materials feel luxurious and durable.", sub: "1 review • 1 year ago", rating: 5 },
+    { name: "Priyanshi Sharma", text: "Syndicate Cloth House is a dependable supplier for ribs and single jersey.", sub: "1 review • 2 months ago", rating: 5 },
+    { name: "Nitin Baghel", text: "Sampling range is excellent though the place can get busy at times.", sub: "1 review • 3 months ago", rating: 4 }
   ];
 
   return (
@@ -457,15 +484,59 @@ function TestimonialsSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-          {testimonials.map((t, idx) => (
-            <div key={idx} className="bg-black/50 backdrop-blur-md rounded border border-white/10 p-8 flex flex-col justify-between h-full min-h-[200px] shadow-lg">
-              <p className="text-white/80 text-sm leading-relaxed mb-8 flex-1 text-center font-medium">
-                {t.text}
-              </p>
-              <h4 className="text-center font-bold text-lg text-white mt-auto">{t.name}</h4>
-            </div>
-          ))}
+        <div className="h-[750px] overflow-hidden relative mt-12">
+          {/* Top and Bottom Fades for a seamless look */}
+          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black to-transparent z-20 pointer-events-none"></div>
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent z-20 pointer-events-none"></div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 h-full">
+            {[
+              { items: testimonials.slice(0, 8), duration: 45 },
+              { items: testimonials.slice(8, 15), duration: 60, reverse: true },
+              { items: testimonials.slice(15), duration: 52 }
+            ].map((column, colIdx) => (
+              <div key={colIdx} className={`relative h-full overflow-hidden ${colIdx === 1 ? 'hidden md:block' : colIdx === 2 ? 'hidden lg:block' : ''}`}>
+                <motion.div
+                  className="flex flex-col gap-8"
+                  animate={{ y: column.reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: column.duration,
+                    ease: "linear"
+                  }}
+                >
+                  {[...column.items, ...column.items].map((t, idx) => (
+                    <div key={idx} className="break-inside-avoid bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-8 flex flex-col shadow-xl text-center">
+                      <div className="flex justify-center gap-1 mb-6">
+                        <svg width="0" height="0" className="absolute">
+                          <defs>
+                            <linearGradient id="halfStar">
+                              <stop offset="50%" stopColor="#FFD700" />
+                              <stop offset="50%" stopColor="#333" stopOpacity="1" />
+                            </linearGradient>
+                          </defs>
+                        </svg>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <svg key={star} xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                            fill={star <= t.rating ? "#FFD700" : (star - 0.5 === t.rating ? "url(#halfStar)" : "#333")}
+                            stroke="none">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                          </svg>
+                        ))}
+                      </div>
+                      <p className="text-white/80 text-sm leading-relaxed mb-6 font-medium italic">
+                        "{t.text}"
+                      </p>
+                      <div className="mt-auto pt-6 border-t border-white/5">
+                        <h4 className="font-bold text-base text-white tracking-wide">{t.name}</h4>
+                        <p className="text-[9px] text-white/40 mt-1 uppercase tracking-[0.2em] font-bold">{t.sub}</p>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -487,8 +558,8 @@ export function HomeExperience() {
       <ScrollExpandMedia
         mediaType="video"
         mediaSrc="/video/Veo.mp4"
-        bgImageSrc="/fabric-bg-clean.png"
-        title="PREMIUM TEXTILES"
+        bgImageSrc="/knit-fabric-hero.png"
+        title="PREMIUM KNITS"
         date="COLLECTION 2026"
         scrollToExpand="Scroll to Explore"
         textBlend={true}
@@ -553,20 +624,18 @@ export function HomeExperience() {
 
       <KnitStylesSection />
       <SustainableBlendSection />
-
-      <TestimonialsSection />
-
-
+      {/* <TrendyFabricsSection/> */}
+      <ProductCatalogSection />
 
       {/* ── NEW ARRIVALS ─────────────────────────────────── */}
-      <section id="fabrics" className="py-24 bg-white">
+      <section id="fabrics" className="py-24 bg-white border-y border-black/5">
         <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
             <div className="max-w-xl">
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-green mb-4 block">New Additions</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-4 block">New Additions</span>
               <h2 className="text-4xl md:text-6xl font-black leading-none tracking-tight">Newly Added Fabrics</h2>
             </div>
-            <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-brand-green pb-2 cursor-pointer hover:text-brand-green transition-colors">
+            <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
               View All Fabrics
             </p>
           </div>
@@ -587,8 +656,208 @@ export function HomeExperience() {
         </div>
       </section>
 
+      <TestimonialsSection />
+
       <FaqSection />
 
+      <BlogSection />
     </main>
+  );
+}
+
+// function TrendyFabricsSection() {
+//   const models = [
+//     { id: 1, image: "/Screenshot 2026-04-16 134454.png" },
+//     { id: 2, image: "/Screenshot 2026-04-16 134502.png" },
+//     { id: 3, image: "/Screenshot 2026-04-16 134513.png" },
+//     { id: 4, image: "/Screenshot 2026-04-16 134521.png" },
+//     { id: 5, image: "/Screenshot 2026-04-16 134527.png" },
+//   ];
+
+//   return (
+//     <section className="py-24 bg-[#c5e3b6] overflow-hidden">
+//       <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
+//         <div className="flex flex-wrap justify-center gap-4 md:gap-5 mb-16">
+//           {models.map((m, idx) => (
+//             <motion.div
+//               key={idx}
+//               initial={{ opacity: 0, y: 50 }}
+//               whileInView={{ opacity: 1, y: 0 }}
+//               transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
+//               viewport={{ once: true }}
+//               className="w-[140px] md:w-[220px] h-[220px] md:h-[390px] bg-white/40 backdrop-blur-md rounded-t-full border-2 border-white/50 overflow-hidden relative group shadow-xl"
+//             >
+//               <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+//               <img 
+//                 src={m.image} 
+//                 alt="Trendy Fabric Showcase" 
+//                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out relative z-10"
+//               />
+//             </motion.div>
+//           ))}
+//         </div>
+
+//         <div className="text-center space-y-4">
+//           <h2 className="text-6xl md:text-8xl font-medium tracking-tight text-[#111111] italic font-serif block">Trendy Fabrics</h2>
+//           <p className="text-[#111111]/70 text-lg md:text-xl font-medium tracking-tight max-w-2xl mx-auto">
+//             Explore our new seasonal fabrics and create the style you want
+//           </p>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+function ProductCatalogSection() {
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const pages = [
+    // Page 1 - 8 Items
+    [
+      { name: "POLY SPANDEX MESH", price: "₹750.00", image: "https://texongo.com/wp-content/uploads/2025/10/12DAB4FF-CC73-4155-AC90-8636067A6951-768x769-1-300x300.jpg" },
+      { name: "COTTON FLEECE TERRY", price: "₹799.00", image: "https://texongo.com/wp-content/uploads/2025/11/Z2K6I157_3-768x768-1-300x300.jpg" },
+      { name: "COTTON LINEN SINGLE JERSEY", price: "₹600.00", image: "https://texongo.com/wp-content/uploads/2025/11/image_1a1e365a-2b74-4d96-8165-f7788358c9bd-768x768-1-300x300.jpg" },
+      { name: "COTTON LUREX SINGLE JERSEY", price: "₹1,000.00", image: "https://texongo.com/wp-content/uploads/2025/11/image_98606efd-a57d-44e0-b499-1698a9de6130-768x768-1-300x300.jpg" },
+      { name: "COTTON 3X1 RIB", price: "₹999.00", image: "https://texongo.com/wp-content/uploads/2025/11/B5K1I131-3-768x768-1-300x300.jpg" },
+      { name: "POLYESTER POPCORN", price: "₹529.00", image: "https://texongo.com/wp-content/uploads/2025/10/A8K1S101-3-768x768-1-300x300.jpg" },
+      { name: "COTTON SHIFFLY SINGLE JERSEY", price: "₹1,000.00", image: "https://texongo.com/wp-content/uploads/2025/10/M9K4S107_3-600x600-1-300x300.jpg" },
+      { name: "POLY COTTON SINGLE JERSEY", price: "₹600.00", image: "https://texongo.com/wp-content/uploads/2025/10/B6K1S116-3-768x768-1-300x300.jpg" },
+
+    ],
+    // Page 2 - 8 Items
+    [
+      { name: "POLY SPANDEX SINGLE JERSEY", price: "₹849.00", image: "https://texongo.com/wp-content/uploads/2025/11/B5K4S151-3-768x768-1-300x300.jpg" },
+      { name: "POLY COTTON SPANDEX INTERLOCK", price: "₹650.00", image: "https://texongo.com/wp-content/uploads/2025/10/78_20241105034142pm-600x600-1-300x300.png" },
+
+
+
+    ]
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentPage((prev) => (prev + 1) % pages.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [pages.length]);
+
+  return (
+    <section className="py-24 bg-white border-b border-black/5 overflow-hidden">
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-16">
+        <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[#111111]">Product Catalog</h2>
+      </div>
+
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-12 relative">
+        <div className="relative overflow-hidden">
+          <motion.div
+            className="flex"
+            animate={{ x: `-${currentPage * 100}%` }}
+            transition={{ duration: 1, ease: [0.32, 0.72, 0, 1] }}
+          >
+            {pages.map((page, pIdx) => (
+              <div key={pIdx} className="w-full flex-shrink-0">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+                  {page.map((p, idx) => (
+                    <motion.div
+                      key={idx}
+                      className="flex flex-col group cursor-pointer"
+                    >
+                      <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700">
+                        <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                      </div>
+                      <div className="space-y-1 text-center px-2">
+                        <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
+                        <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Pagination Dots */}
+        <div className="flex justify-center gap-3 mt-16">
+          {pages.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentPage(idx)}
+              className={`w-3 h-3 rounded-full transition-all duration-500 ${currentPage === idx ? "bg-[#111111] w-8" : "bg-black/10 hover:bg-black/20"
+                }`}
+              aria-label={`Go to page ${idx + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BlogSection() {
+  const blogs = [
+    {
+      title: "Trump's Trade Policies: Impact on Fashion Imports and Exports",
+      image: "https://texongo.com/wp-content/uploads/2026/04/trumps-trade-policies-impact-blog1.png",
+      category: "Market Insights",
+      link: "https://texongo.com/trumps-trade-policies-impact-on-fashion-imports-and-exports/"
+    },
+    {
+      title: "Behind the Scenes at Texongo: A Day in the Life",
+      image: "https://texongo.com/wp-content/uploads/2026/04/Behind-the-Scenes-at-Texongo1.png",
+      category: "Culture",
+      link: "https://texongo.com/behind-the-scenes-at-texongo-a-day-in-the-life/"
+    },
+    {
+      title: "Cross-Cultural Collaborations in the Digital Fashion Space",
+      image: "https://texongo.com/wp-content/uploads/2026/02/how-India-global-designers-are-merging-traditions-with-digital-Innovation.png",
+      category: "Innovation",
+      link: "https://texongo.com/cross-cultural-collaborations-in-the-digital-fashion-space-how-india-and-global-designers-are-merging-traditions-with-digital-innovation/"
+    }
+  ];
+
+  return (
+    <section className="py-28 bg-[#F9FAFB]">
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
+        <div className="flex flex-col items-center mb-20">
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#007bff] mb-4">Latest insights</span>
+          <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-center text-[#111111]">Our Stories</h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {blogs.map((b, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true }}
+              className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-black/5 flex flex-col h-full"
+            >
+              <div className="aspect-[16/10] overflow-hidden relative">
+                <img src={b.image} alt={b.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+              </div>
+              <div className="p-10 space-y-6 flex flex-col flex-1">
+                <span className="inline-block bg-[#007bff] text-white text-[9px] font-black px-4 py-1.5 rounded-sm uppercase tracking-widest w-fit shadow-md">
+                  {b.category}
+                </span>
+                <h3 className="text-xl md:text-2xl font-bold leading-[1.3] flex-1 text-[#111111] group-hover:text-[#007bff] transition-colors duration-300">
+                  {b.title}
+                </h3>
+                <Link
+                  href={b.link}
+                  className="flex items-center gap-3 text-[#007bff] font-black text-[10px] group/btn w-fit pt-8 uppercase tracking-[0.2em] border-t border-black/5 w-full"
+                >
+                  Read Full Story
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="group-hover/btn:translate-x-1.5 transition-transform duration-300">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </Link>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

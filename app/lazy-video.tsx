@@ -46,9 +46,15 @@ export function LazyVideo({ src, threshold = 0.15, style, ...props }: LazyVideoP
       muted
       loop
       playsInline
-      preload="none"
-      style={{ willChange: "transform", ...style }}
+      preload="metadata"
+      style={{ 
+        willChange: "transform",
+        backgroundColor: "transparent",
+        ...style 
+      }}
       {...props}
-    />
+    >
+      {src && <source src={src} type={src.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />}
+    </video>
   );
 }

@@ -18,8 +18,8 @@ export function Footer() {
             <ul className="grid grid-cols-2 gap-4">
               {["Home", "About Us", "Contact Us", "Terms of Service", "Refund Policy", "Shipping Policy", "Privacy Policy"].map((item) => (
                 <li key={item}>
-                  <Link 
-                    href={item === "Home" ? "/" : `/${item.toLowerCase().replace(/ /g, '-')}`} 
+                  <Link
+                    href={item === "Home" ? "/" : `/${item.toLowerCase().replace(/ /g, '-')}`}
                     className="text-sm font-bold text-white/60 hover:text-white transition-colors"
                   >
                     {item}
@@ -31,9 +31,11 @@ export function Footer() {
           <div className="space-y-8">
             <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-white/40">Contact Details</h3>
             <div className="space-y-4">
-              <p className="text-sm text-white/70 font-medium">D 10/1, Pocket D, Okhla Industrial Area Phase II, New Delhi, Delhi 110020</p>
-              <p className="text-sm text-white/70 font-medium">Contact No: +91 9910048498</p>
-              <p className="text-sm text-white/70 font-medium">Email id - contact@texongo.com</p>
+              <p className="text-sm text-white/70 font-medium">D 10/1
+                Okhla Industrial Area Phase II
+                New Delhi , Delhi - 110020 </p>
+              <p className="text-sm text-white/70 font-medium">Contact No: +91 9910048498 / 9310598498</p>
+              <p className="text-sm text-white/70 font-medium">Email id - Connect@texongo.com</p>
             </div>
           </div>
         </div>

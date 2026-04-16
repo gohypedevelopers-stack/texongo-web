@@ -1,6 +1,7 @@
 "use client";
 import { FC, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { LazyVideo } from "../../app/lazy-video";
 import { motion, useScroll, useTransform } from "framer-motion";
 
@@ -32,6 +33,7 @@ const Card: FC<iCardProps> = ({
   i,
   src,
   videoUrl,
+  link,
   progress,
   range,
   targetScale
@@ -87,9 +89,12 @@ const Card: FC<iCardProps> = ({
             {description}
           </p>
           <div className="mt-8 md:mt-12">
-            <button className="h-12 md:h-14 px-8 md:px-10 bg-white text-black text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] rounded-full hover:scale-105 transition-transform">
+            <Link
+              href={link}
+              className="inline-flex items-center justify-center h-12 md:h-14 px-8 md:px-10 bg-white text-black text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] rounded-full hover:scale-105 transition-transform"
+            >
               Explore Collection
-            </button>
+            </Link>
           </div>
         </div>
       </motion.div>

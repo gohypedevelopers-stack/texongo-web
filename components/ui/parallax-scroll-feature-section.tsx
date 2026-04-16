@@ -6,20 +6,20 @@ import { CardsParallax, iCardItem } from "./scroll-cards";
 export const ParallaxFeatureSection = () => {
   const cardItems: iCardItem[] = [
     {
-      title: "PREMIUM KNITS",
-      description: "From lightweight essentials to plush winter textures, our knit fabrics offer unmatched versatility.",
+      title: "FEMININE SIGNATURE",
+      description: "From lightweight essentials to luxury winter textures, our knit fabrics offer unmatched versatility and 3D realism.",
       videoUrl: "/video/1-1.mp4",
       tag: "Women's Collection",
-      link: "#",
+      link: "/fabrics",
       color: "#5a68b4ff",
       textColor: "white"
     },
     {
-      title: "MODERN MAN",
-      description: "From sharp office attire to effortless weekend looks, our fabrics are crafted to offer true versatility adapting flawlessly.",
+      title: "MODERN MASCULINITY",
+      description: "Sharp tailoring meets technical performance. Experience fabrics crafted for the modern man's lifestyle.",
       videoUrl: '/video/2-1.mp4',
       tag: "Men's Collection",
-      link: "#",
+      link: "/fabrics",
       color: "#57AD43",
       textColor: "white"
     },
