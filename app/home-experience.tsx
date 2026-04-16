@@ -709,85 +709,75 @@ export function HomeExperience() {
 // }
 
 function ProductCatalogSection() {
-  const [currentPage, setCurrentPage] = useState(0);
-
-  const pages = [
-    // Page 1 - 8 Items
-    [
-      { name: "POLY SPANDEX MESH", price: "₹750.00", image: "https://texongo.com/wp-content/uploads/2025/10/12DAB4FF-CC73-4155-AC90-8636067A6951-768x769-1-300x300.jpg" },
-      { name: "COTTON FLEECE TERRY", price: "₹799.00", image: "https://texongo.com/wp-content/uploads/2025/11/Z2K6I157_3-768x768-1-300x300.jpg" },
-      { name: "COTTON LINEN SINGLE JERSEY", price: "₹600.00", image: "https://texongo.com/wp-content/uploads/2025/11/image_1a1e365a-2b74-4d96-8165-f7788358c9bd-768x768-1-300x300.jpg" },
-      { name: "COTTON LUREX SINGLE JERSEY", price: "₹1,000.00", image: "https://texongo.com/wp-content/uploads/2025/11/image_98606efd-a57d-44e0-b499-1698a9de6130-768x768-1-300x300.jpg" },
-      { name: "COTTON 3X1 RIB", price: "₹999.00", image: "https://texongo.com/wp-content/uploads/2025/11/B5K1I131-3-768x768-1-300x300.jpg" },
-      { name: "POLYESTER POPCORN", price: "₹529.00", image: "https://texongo.com/wp-content/uploads/2025/10/A8K1S101-3-768x768-1-300x300.jpg" },
-      { name: "COTTON SHIFFLY SINGLE JERSEY", price: "₹1,000.00", image: "https://texongo.com/wp-content/uploads/2025/10/M9K4S107_3-600x600-1-300x300.jpg" },
-      { name: "POLY COTTON SINGLE JERSEY", price: "₹600.00", image: "https://texongo.com/wp-content/uploads/2025/10/B6K1S116-3-768x768-1-300x300.jpg" },
-
-    ],
-    // Page 2 - 8 Items
-    [
-      { name: "POLY SPANDEX SINGLE JERSEY", price: "₹849.00", image: "https://texongo.com/wp-content/uploads/2025/11/B5K4S151-3-768x768-1-300x300.jpg" },
-      { name: "POLY COTTON SPANDEX INTERLOCK", price: "₹650.00", image: "https://texongo.com/wp-content/uploads/2025/10/78_20241105034142pm-600x600-1-300x300.png" },
-
-
-
-    ]
+  const row1 = [
+    { name: "POLY SPANDEX MESH", price: "₹750.00", image: "https://texongo.com/wp-content/uploads/2025/10/12DAB4FF-CC73-4155-AC90-8636067A6951-768x769-1-300x300.jpg", href: "https://texongo.com/product/poly-spandex-mesh/" },
+    { name: "COTTON FLEECE TERRY", price: "₹799.00", image: "https://texongo.com/wp-content/uploads/2025/11/Z2K6I157_3-768x768-1-300x300.jpg", href: "https://texongo.com/product/cotton-fleece-terry/" },
+    { name: "COTTON LINEN SINGLE JERSEY", price: "₹600.00", image: "https://texongo.com/wp-content/uploads/2025/11/image_1a1e365a-2b74-4d96-8165-f7788358c9bd-768x768-1-300x300.jpg", href: "https://texongo.com/product/cotton-linen-single-jersey/" },
+    { name: "COTTON LUREX SINGLE JERSEY", price: "₹1,000.00", image: "https://texongo.com/wp-content/uploads/2025/11/image_98606efd-a57d-44e0-b499-1698a9de6130-768x768-1-300x300.jpg", href: "https://texongo.com/product/cotton-lurex-single-jersey/" },
+    { name: "COTTON 3X1 RIB", price: "₹999.00", image: "https://texongo.com/wp-content/uploads/2025/11/B5K1I131-3-768x768-1-300x300.jpg", href: "https://texongo.com/product/cotton-3x1-rib/" },
   ];
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentPage((prev) => (prev + 1) % pages.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [pages.length]);
+  
+  const row2 = [
+    { name: "POLYESTER POPCORN", price: "₹529.00", image: "https://texongo.com/wp-content/uploads/2025/10/A8K1S101-3-768x768-1-300x300.jpg", href: "https://texongo.com/product/polyester-popcorn/" },
+    { name: "COTTON SHIFFLY SINGLE JERSEY", price: "₹1,000.00", image: "https://texongo.com/wp-content/uploads/2025/10/M9K4S107_3-600x600-1-300x300.jpg", href: "https://texongo.com/product/cotton-shiffly-single-jersey/" },
+    { name: "POLY COTTON SINGLE JERSEY", price: "₹600.00", image: "https://texongo.com/wp-content/uploads/2025/10/B6K1S116-3-768x768-1-300x300.jpg", href: "https://texongo.com/product/poly-cotton-single-jersey/" },
+    { name: "POLY SPANDEX SINGLE JERSEY", price: "₹849.00", image: "https://texongo.com/wp-content/uploads/2025/11/B5K4S151-3-768x768-1-300x300.jpg", href: "https://texongo.com/product/poly-spandex-single-jersey/" },
+    { name: "POLY COTTON SPANDEX INTERLOCK", price: "₹650.00", image: "https://texongo.com/wp-content/uploads/2025/10/78_20241105034142pm-600x600-1-300x300.png", href: "https://texongo.com/product/poly-cotton-spandex-interlock/" },
+  ];
 
   return (
     <section className="py-24 bg-white border-b border-black/5 overflow-hidden">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-16">
         <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[#111111]">Product Catalog</h2>
       </div>
-
-      <div className="mx-auto max-w-[1440px] px-6 lg:px-12 relative">
-        <div className="relative overflow-hidden">
-          <motion.div
-            className="flex"
-            animate={{ x: `-${currentPage * 100}%` }}
-            transition={{ duration: 1, ease: [0.32, 0.72, 0, 1] }}
-          >
-            {pages.map((page, pIdx) => (
-              <div key={pIdx} className="w-full flex-shrink-0">
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
-                  {page.map((p, idx) => (
-                    <motion.div
-                      key={idx}
-                      className="flex flex-col group cursor-pointer"
-                    >
-                      <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700">
-                        <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
-                      </div>
-                      <div className="space-y-1 text-center px-2">
-                        <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
-                        <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
-                      </div>
-                    </motion.div>
-                  ))}
+      
+      <div className="space-y-12">
+        {/* Row 1 - Left Loop */}
+        <div className={styles.marqueeViewport}>
+          <div className={styles.productTrack} style={{ animationDuration: '40s' }}>
+            {[...row1, ...row1, ...row1, ...row1].map((p, idx) => (
+              <Link key={idx} href={p.href} className={styles.productCard + " group"}>
+                <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
+                  <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                  {/* Add to Cart Overlay */}
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                      Add to cart
+                    </button>
+                  </div>
                 </div>
-              </div>
+                <div className="space-y-1 text-center px-2">
+                  <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
+                  <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
+                </div>
+              </Link>
             ))}
-          </motion.div>
+          </div>
         </div>
 
-        {/* Pagination Dots */}
-        <div className="flex justify-center gap-3 mt-16">
-          {pages.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentPage(idx)}
-              className={`w-3 h-3 rounded-full transition-all duration-500 ${currentPage === idx ? "bg-[#111111] w-8" : "bg-black/10 hover:bg-black/20"
-                }`}
-              aria-label={`Go to page ${idx + 1}`}
-            />
-          ))}
+        {/* Row 2 - Right Loop */}
+        <div className={styles.marqueeViewport}>
+          <div className={styles.productTrack} style={{ animationDuration: '45s', animationDirection: 'reverse' }}>
+            {[...row2, ...row2, ...row2, ...row2].map((p, idx) => (
+              <Link key={idx} href={p.href} className={styles.productCard + " group"}>
+                <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
+                  <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                  {/* Add to Cart Overlay */}
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                      Add to cart
+                    </button>
+                  </div>
+                </div>
+                <div className="space-y-1 text-center px-2">
+                  <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
+                  <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </section>
