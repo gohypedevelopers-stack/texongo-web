@@ -35,7 +35,7 @@ const ScrollExpandMedia = ({
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [showContent, setShowContent] = useState<boolean>(false);
   const [mediaFullyExpanded, setMediaFullyExpanded] = useState<boolean>(false);
-  const [touchStartY, setTouchStartY] = useState<number>(0);
+  const touchStartYRef = useRef<number>(0);
   const [isMobileState, setIsMobileState] = useState<boolean>(false);
 
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -116,13 +116,13 @@ const ScrollExpandMedia = ({
       }
     };
 
-    const handleTouchStart = (e: TouchEvent) => setTouchStartY(e.touches[0].clientY);
+    const handleTouchStart = (e: TouchEvent) => { touchStartYRef.current = e.touches[0].clientY; };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (!touchStartY) return;
+      if (!touchStartYRef.current) return;
       const { progress, expanded } = stateRef.current;
       const touchY = e.touches[0].clientY;
-      const deltaY = touchStartY - touchY;
+      const deltaY = touchStartYRef.current - touchY;
 
       const isAtTop = window.scrollY < 20;
       const isMidExpansion = progress > 0 && progress < 1;
@@ -144,7 +144,7 @@ const ScrollExpandMedia = ({
           } else if (newProgress < 0.75) {
             setShowContent(false);
           }
-          setTouchStartY(touchY);
+          touchStartYRef.current = touchY;
 
           if (newProgress < 1 && window.scrollY > 0) {
             window.scrollTo({ top: 0, behavior: 'auto' });
@@ -154,14 +154,14 @@ const ScrollExpandMedia = ({
         if (e.cancelable) e.preventDefault();
         setMediaFullyExpanded(false);
         setScrollProgress(0.99);
-        setTouchStartY(touchY);
+        touchStartYRef.current = touchY;
       }
     };
 
     window.addEventListener('wheel', handleWheel as unknown as EventListener, { passive: false });
     window.addEventListener('touchstart', handleTouchStart as unknown as EventListener, { passive: false });
     window.addEventListener('touchmove', handleTouchMove as unknown as EventListener, { passive: false });
-    window.addEventListener('touchend', () => setTouchStartY(0));
+    window.addEventListener('touchend', () => { touchStartYRef.current = 0; });
 
     return () => {
       window.removeEventListener('wheel', handleWheel as unknown as EventListener);
