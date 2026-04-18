@@ -15,7 +15,7 @@ export default function FabricsListingPage() {
       try {
         const response = await fetch('/api/shopify/products');
         const result = await response.json();
-        
+
         if (result.data?.products?.edges) {
           // The API route currently returns the raw Shopify response. 
           // Let's use the mapping logic we put in lib/shopify.ts or map it here.
@@ -25,7 +25,7 @@ export default function FabricsListingPage() {
             sku: node.id.split('/').pop(),
             name: node.title,
             price: node.priceRange.minVariantPrice.amount,
-            gsm: '200', // Defaulting for now
+            gsm: node.metafields?.find((m: any) => m?.key === 'gsm')?.value || 'N/A',
             image: node.images.edges[0]?.node.url || '',
             description: node.description,
           }));
@@ -47,9 +47,9 @@ export default function FabricsListingPage() {
 
       {/* Hero Banner Section */}
       <section className="relative h-[20vh] md:h-[40vh] w-full overflow-hidden bg-gray-100 border-b border-gray-100">
-        <img 
-          src="/hero/hero-fabrics.jpg" 
-          alt="Our Fabrics" 
+        <img
+          src="/hero/hero-fabrics.jpg"
+          alt="Our Fabrics"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/10"></div>
@@ -91,7 +91,7 @@ export default function FabricsListingPage() {
         ) : error ? (
           <div className="flex flex-col items-center justify-center min-h-[400px] w-full gap-4">
             <p className="text-sm font-bold text-red-400 uppercase tracking-widest">{error}</p>
-            <button 
+            <button
               onClick={() => window.location.reload()}
               className="px-6 py-2 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-sm"
             >
@@ -101,7 +101,7 @@ export default function FabricsListingPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 mt-16">
             {fabrics.map((fabric) => (
-              <FabricCard 
+              <FabricCard
                 key={fabric.id}
                 id={fabric.id}
                 name={fabric.name}
@@ -142,12 +142,11 @@ function FilterDropdown({ label }: { label: string }) {
 
 function PaginationButton({ label, active, isNext }: { label?: string, active?: boolean, isNext?: boolean }) {
   return (
-    <button 
-      className={`h-10 w-10 flex items-center justify-center text-[11px] font-black transition-all rounded-sm border ${
-        active 
-          ? "bg-black text-white border-black" 
+    <button
+      className={`h-10 w-10 flex items-center justify-center text-[11px] font-black transition-all rounded-sm border ${active
+          ? "bg-black text-white border-black"
           : "bg-white text-gray-400 border-gray-100 hover:border-black hover:text-black"
-      }`}
+        }`}
     >
       {isNext ? "→" : label}
     </button>

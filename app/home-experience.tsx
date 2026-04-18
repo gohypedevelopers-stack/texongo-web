@@ -151,6 +151,8 @@ function StoryProductCard({
     <article className="flex flex-col items-center text-center">
       <Link
         href={href}
+        target="_blank"
+        rel="noopener noreferrer"
         className="w-full relative aspect-square bg-transparent mb-8 flex items-center justify-center overflow-hidden shadow-none"
       >
         <LazyVideo
@@ -168,6 +170,8 @@ function StoryProductCard({
 
       <Link
         href={href}
+        target="_blank"
+        rel="noopener noreferrer"
         className="inline-flex items-center justify-center gap-2 bg-[#57AD43] text-white px-6 md:px-8 py-3 rounded-full font-bold text-xs md:text-sm tracking-wide shadow-md hover:bg-[#489935] transition-colors w-[80%] md:w-auto"
       >
         Shop Now
@@ -376,10 +380,10 @@ function SustainableBlendSection() {
             {logos.map((logo, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0.01, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: (i % baseLogos.length) * 0.05, ease: "easeOut" }}
+                viewport={{ once: true, margin: "100px" }}
+                transition={{ duration: 0.4, delay: (i % baseLogos.length) * 0.05, ease: "easeOut" }}
                 onClick={() => {
                   setActiveIndex(i % baseLogos.length);
                   scrollToLogo(i % baseLogos.length);
@@ -635,9 +639,11 @@ export function HomeExperience() {
               <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">New Additions</span>
               <h2 className="text-3xl md:text-6xl font-black leading-none tracking-tight">Newly Added Fabrics</h2>
             </div>
-            <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
-              View All Fabrics
-            </p>
+            <Link href="/fabrics" className="inline-block">
+              <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
+                View All Fabrics
+              </p>
+            </Link>
           </div>
 
           <div className="-mx-6 lg:-mx-10 overflow-hidden">
@@ -716,7 +722,7 @@ function ProductCatalogSection() {
     { name: "COTTON LUREX SINGLE JERSEY", price: "₹1,000.00", image: "https://texongo.com/wp-content/uploads/2025/11/image_98606efd-a57d-44e0-b499-1698a9de6130-768x768-1-300x300.jpg", href: "https://texongo.com/product/cotton-lurex-single-jersey/" },
     { name: "COTTON 3X1 RIB", price: "₹999.00", image: "https://texongo.com/wp-content/uploads/2025/11/B5K1I131-3-768x768-1-300x300.jpg", href: "https://texongo.com/product/cotton-3x1-rib/" },
   ];
-  
+
   const row2 = [
     { name: "POLYESTER POPCORN", price: "₹529.00", image: "https://texongo.com/wp-content/uploads/2025/10/A8K1S101-3-768x768-1-300x300.jpg", href: "https://texongo.com/product/polyester-popcorn/" },
     { name: "COTTON SHIFFLY SINGLE JERSEY", price: "₹1,000.00", image: "https://texongo.com/wp-content/uploads/2025/10/M9K4S107_3-600x600-1-300x300.jpg", href: "https://texongo.com/product/cotton-shiffly-single-jersey/" },
@@ -730,19 +736,19 @@ function ProductCatalogSection() {
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-8 md:mb-16 text-center md:text-left">
         <h2 className="text-2xl md:text-5xl font-black tracking-tight text-[#111111]">Product Catalog</h2>
       </div>
-      
+
       <div className="space-y-12">
         {/* Row 1 - Left Loop */}
         <div className={styles.marqueeViewport}>
           <div className={styles.productTrack} style={{ animationDuration: '40s' }}>
             {[...row1, ...row1, ...row1, ...row1].map((p, idx) => (
-              <Link key={idx} href={p.href} className={styles.productCard + " group"}>
+              <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
                 <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
                   <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                   {/* Add to Cart Overlay */}
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
                       Add to cart
                     </button>
                   </div>
@@ -760,13 +766,13 @@ function ProductCatalogSection() {
         <div className={styles.marqueeViewport}>
           <div className={styles.productTrack} style={{ animationDuration: '45s', animationDirection: 'reverse' }}>
             {[...row2, ...row2, ...row2, ...row2].map((p, idx) => (
-              <Link key={idx} href={p.href} className={styles.productCard + " group"}>
+              <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
                 <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
                   <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                   {/* Add to Cart Overlay */}
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
                       Add to cart
                     </button>
                   </div>
@@ -817,10 +823,10 @@ function BlogSection() {
           {blogs.map((b, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0.01, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.05, ease: "easeOut" }}
+              viewport={{ once: true, margin: "100px" }}
               className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-black/5 flex flex-col h-full"
             >
               <div className="aspect-[16/10] overflow-hidden relative">
@@ -835,6 +841,8 @@ function BlogSection() {
                 </h3>
                 <Link
                   href={b.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-3 text-[#007bff] font-black text-[10px] group/btn w-fit pt-8 uppercase tracking-[0.2em] border-t border-black/5 w-full"
                 >
                   Read Full Story
