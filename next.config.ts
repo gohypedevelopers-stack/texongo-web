@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'texongo.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.shopify.com',
       }
     ],
   },

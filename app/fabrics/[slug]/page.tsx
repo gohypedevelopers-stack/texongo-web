@@ -1,22 +1,72 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { fabricsData } from "@/lib/data";
 import { useCartStore } from "@/lib/store";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, ShoppingBag, ArrowLeft, Heart, Share2, Minus, Plus } from "lucide-react";
+import { ChevronRight, ShoppingBag, ArrowLeft, Heart, Share2, Minus, Plus, Loader2 } from "lucide-react";
 import { notFound } from "next/navigation";
+import { Fabric } from "@/lib/shopify";
 
 export default function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
-  const product = fabricsData.find((f) => f.id === slug);
+  const [product, setProduct] = useState<Fabric | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Fabric[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  
   const addItem = useCartStore((state) => state.addItem);
   const [activeTab, setActiveTab] = useState("description");
   const [quantity, setQuantity] = useState(1);
 
-  if (!product) {
+  useEffect(() => {
+    async function fetchProduct() {
+      try {
+        const productRes = await fetch(`/api/shopify/products/${slug}`);
+        if (!productRes.ok) {
+          setError(true);
+          setLoading(false);
+          return;
+        }
+        const productData = await productRes.json();
+        setProduct(productData);
+
+        // Fetch related products
+        const relatedRes = await fetch('/api/shopify/products');
+        const relatedData = await relatedRes.json();
+        if (relatedData.data?.products?.edges) {
+          const mapped = relatedData.data.products.edges
+            .map(({ node }: any) => ({
+              id: node.handle,
+              name: node.title,
+              price: node.priceRange.minVariantPrice.amount,
+              gsm: '200', 
+              image: node.images.edges[0]?.node.url || '',
+            }))
+            .filter((p: any) => p.id !== slug)
+            .slice(0, 4);
+          setRelatedProducts(mapped);
+        }
+      } catch (err) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProduct();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-white">
+        <Loader2 className="animate-spin text-gray-400" size={40} />
+        <p className="text-xs font-bold uppercase tracking-widest text-gray-400">Fetching product details...</p>
+      </div>
+    );
+  }
+
+  if (error || !product) {
     notFound();
   }
 
@@ -250,22 +300,23 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
         <div id="related-products" className="mt-24 lg:mt-32">
           <h2 className="text-xl font-bold uppercase tracking-tight mb-12">Related products</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-            {fabricsData
-              .filter(f => f.id !== product.id)
-              .sort(() => (product.id.length % 2 === 0 ? 1 : -1)) // Simple stable pseudo-shuffle
-              .slice(0, 4)
-              .map((fabric) => (
-                <Link key={fabric.id} href={`/fabrics/${fabric.id}`} className="group cursor-pointer">
-                  <div className="relative aspect-square mb-4 bg-gray-50 overflow-hidden border border-gray-100">
-                    <Image src={fabric.image} alt={fabric.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
-                    <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[8px] font-black px-2 py-0.5 z-10">
-                      GSM: {fabric.gsm} g/m²
-                    </div>
+            {relatedProducts.map((fabric) => (
+              <Link key={fabric.id} href={`/fabrics/${fabric.id}`} className="group cursor-pointer">
+                <div className="relative aspect-square mb-4 bg-gray-50 overflow-hidden border border-gray-100">
+                  <Image src={fabric.image} alt={fabric.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[8px] font-black px-2 py-0.5 z-10">
+                    GSM: {fabric.gsm} g/m²
                   </div>
-                  <h3 className="text-[10px] font-bold uppercase tracking-widest text-center group-hover:text-[#57AD43] transition-colors">{fabric.name}</h3>
-                  <p className="text-[10px] font-bold text-gray-400 text-center mt-1">₹{fabric.price}.00</p>
-                </Link>
-              ))}
+                </div>
+                <h3 className="text-[10px] font-bold uppercase tracking-widest text-center group-hover:text-[#57AD43] transition-colors">{fabric.name}</h3>
+                <p className="text-[10px] font-bold text-gray-400 text-center mt-1">₹{fabric.price}.00</p>
+              </Link>
+            ))}
+            {relatedProducts.length === 0 && (
+              <p className="text-[10px] text-gray-400 uppercase tracking-widest col-span-full italic">
+                No related products found.
+              </p>
+            )}
           </div>
         </div>
       </div>

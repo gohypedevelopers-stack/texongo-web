@@ -1,10 +1,47 @@
 "use client";
 
 import { FabricCard } from "../../components/ui/fabric-card";
-import { ChevronDown, Filter } from "lucide-react";
-import { fabricsData } from "@/lib/data";
+import { ChevronDown, Filter, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Fabric } from "@/lib/shopify";
 
 export default function FabricsListingPage() {
+  const [fabrics, setFabrics] = useState<Fabric[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await fetch('/api/shopify/products');
+        const result = await response.json();
+        
+        if (result.data?.products?.edges) {
+          // The API route currently returns the raw Shopify response. 
+          // Let's use the mapping logic we put in lib/shopify.ts or map it here.
+          // Since the API route returns the raw response, we'll map it here for now.
+          const mappedProducts = result.data.products.edges.map(({ node }: any) => ({
+            id: node.handle,
+            sku: node.id.split('/').pop(),
+            name: node.title,
+            price: node.priceRange.minVariantPrice.amount,
+            gsm: '200', // Defaulting for now
+            image: node.images.edges[0]?.node.url || '',
+            description: node.description,
+          }));
+          setFabrics(mappedProducts);
+        } else {
+          setError("No products found");
+        }
+      } catch (err) {
+        setError("Failed to load products");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
   return (
     <main className="min-h-screen bg-white">
 
@@ -46,18 +83,35 @@ export default function FabricsListingPage() {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 mt-16">
-          {fabricsData.map((fabric, idx) => (
-            <FabricCard 
-              key={fabric.id}
-              id={fabric.id}
-              name={fabric.name}
-              price={fabric.price}
-              gsm={fabric.gsm}
-              image={fabric.image}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex flex-col items-center justify-center min-h-[400px] w-full gap-4">
+            <Loader2 className="animate-spin text-gray-400" size={40} />
+            <p className="text-xs font-bold uppercase tracking-widest text-gray-400">Loading fine fabrics...</p>
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center min-h-[400px] w-full gap-4">
+            <p className="text-sm font-bold text-red-400 uppercase tracking-widest">{error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="px-6 py-2 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-sm"
+            >
+              Retry
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 mt-16">
+            {fabrics.map((fabric) => (
+              <FabricCard 
+                key={fabric.id}
+                id={fabric.id}
+                name={fabric.name}
+                price={fabric.price}
+                gsm={fabric.gsm}
+                image={fabric.image}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Pagination */}
         <div className="flex justify-center items-center gap-2 mt-24 mb-12">

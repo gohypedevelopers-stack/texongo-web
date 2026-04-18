@@ -161,14 +161,14 @@ function StoryProductCard({
         />
       </Link>
 
-      <h3 className="text-3xl font-bold mb-4 tracking-tight">{name}</h3>
-      <p className="text-[#121212]/80 text-sm font-medium max-w-sm mb-10 leading-relaxed">
+      <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 tracking-tight px-4">{name}</h3>
+      <p className="text-[#121212]/80 text-sm font-medium max-w-sm mb-8 md:mb-10 leading-relaxed px-6">
         {desc}
       </p>
 
       <Link
         href={href}
-        className="inline-flex items-center justify-center gap-2 bg-[#57AD43] text-white px-8 py-3 rounded-full font-bold text-sm tracking-wide shadow-md hover:bg-[#489935] transition-colors"
+        className="inline-flex items-center justify-center gap-2 bg-[#57AD43] text-white px-6 md:px-8 py-3 rounded-full font-bold text-xs md:text-sm tracking-wide shadow-md hover:bg-[#489935] transition-colors w-[80%] md:w-auto"
       >
         Shop Now
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 16l4-4-4-4" /><path d="M8 12h8" /></svg>
@@ -241,9 +241,9 @@ function KnitStylesSection() {
   const extendedStyles = Array(30).fill(knitStyles).flat();
 
   return (
-    <section className="py-24 bg-white overflow-hidden">
-      <div className="mx-auto max-w-[1440px] px-6 lg:px-12 text-center relative">
-        <h2 className="text-3xl font-bold mb-16 tracking-tight">Choose your Knit Style</h2>
+    <section className="py-12 md:py-24 bg-white overflow-hidden">
+      <div className="mx-auto max-w-[1440px] px-4 md:px-6 lg:px-12 text-center relative">
+        <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-16 tracking-tight">Choose your Knit Style</h2>
         <div className="relative group/marquee">
           <button onClick={scrollLeft} className="absolute -left-10 md:-left-4 lg:-left-8 top-1/2 -translate-y-1/2 z-20 hidden md:flex hover:scale-110 transition-transform w-12 h-12 items-center justify-center bg-white/80 rounded-full shadow-md cursor-pointer border border-black/5">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
@@ -371,7 +371,7 @@ function SustainableBlendSection() {
             onScroll={handleScroll}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
-            className="flex items-center gap-12 md:gap-24 overflow-x-auto hide-scroll snap-x snap-mandatory cursor-grab active:cursor-grabbing px-12 md:px-[20%] pb-12 pt-4"
+            className="flex items-center gap-8 md:gap-24 overflow-x-auto hide-scroll snap-x snap-mandatory cursor-grab active:cursor-grabbing px-6 md:px-[20%] pb-12 pt-4"
           >
             {logos.map((logo, i) => (
               <motion.div
@@ -484,7 +484,7 @@ function TestimonialsSection() {
           </div>
         </div>
 
-        <div className="h-[750px] overflow-hidden relative mt-12">
+        <div className="h-[500px] md:h-[750px] overflow-hidden relative mt-8 md:mt-12">
           {/* Top and Bottom Fades for a seamless look */}
           <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black to-transparent z-20 pointer-events-none"></div>
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent z-20 pointer-events-none"></div>
@@ -564,9 +564,9 @@ export function HomeExperience() {
         scrollToExpand="Scroll to Explore"
         textBlend={true}
       >
-        <div className="max-w-4xl mx-auto text-center pb-10">
-          <h2 className="text-3xl md:text-4xl font-black mb-8 uppercase tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
-          <p className="text-xl text-[#475467] font-medium leading-relaxed">
+        <div className="max-w-4xl mx-auto text-center pb-6 md:pb-10 px-6">
+          <h2 className="text-2xl md:text-4xl font-black mb-6 md:mb-8 uppercase tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
+          <p className="text-base md:text-xl text-[#475467] font-medium leading-relaxed">
             Texongo combines traditional craftsmanship with cutting-edge 3D visualization.
             Our digital-first approach allows designers to experience the texture, drape,
             and movement of high-performance textiles before the first thread is even woven.
@@ -582,28 +582,28 @@ export function HomeExperience() {
       </section>
 
       {/* ── STREAMLINE ──────────────────────────────────── */}
-      <section className="bg-white py-0 overflow-hidden border-y border-black/5">
-        <div className={styles.streamlineGrid}>
-          <div className={styles.streamlineVideoWrap}>
+      <section className="bg-white overflow-hidden border-y border-black/5">
+        <div className="flex flex-col md:flex-row w-full">
+          <div className="w-full md:w-1/2 relative min-h-[300px] md:min-h-[500px]">
             <LazyVideo
               src="/video/efficient_en.webm"
-              className={styles.streamlineVideo}
+              className="absolute inset-0 w-full h-full object-cover"
             />
           </div>
 
-          <div className={styles.streamlineContent}>
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-green mb-6 block">Innovation</span>
-            <h2 className={styles.streamlineHeading}>
+          <div className="w-full md:w-1/2 flex flex-col justify-center px-6 py-12 md:p-16 lg:p-24 bg-[#F9FAFB]">
+            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[#57AD43] mb-4 md:mb-6 block">Innovation</span>
+            <h2 className="text-3xl md:text-5xl lg:text-7xl font-black mb-6 md:mb-8 leading-none tracking-tight text-black">
               Streamline Your<br />Fabric Journey
             </h2>
-            <p className={styles.streamlineBody}>
+            <p className="text-sm md:text-lg text-black/70 leading-relaxed font-medium max-w-xl">
               Preview texture, drape, movement, and micro-texture in stunning detail with 3D visualization. Sourcing fabric has never been more precise—where innovation meets craftsmanship.
             </p>
-            <div className="mt-12 flex items-center gap-6">
-              <button className="h-14 px-8 bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-green transition-colors">
+            <div className="mt-8 md:mt-12 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 md:gap-6">
+              <button className="h-12 md:h-14 px-6 md:px-8 bg-black text-white text-[10px] md:text-xs font-black uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-colors font-bold whitespace-nowrap text-center">
                 Book a Demo
               </button>
-              <button className="text-[10px] font-black uppercase tracking-[0.2em] border-b-2 border-black/10 pb-1">
+              <button className="h-12 md:h-14 px-6 md:px-8 bg-transparent text-black text-[10px] md:text-xs font-black uppercase tracking-[0.2em] border-2 border-black/10 hover:border-black transition-colors font-bold whitespace-nowrap text-center">
                 Learn More
               </button>
             </div>
@@ -628,12 +628,12 @@ export function HomeExperience() {
       <ProductCatalogSection />
 
       {/* ── NEW ARRIVALS ─────────────────────────────────── */}
-      <section id="fabrics" className="py-24 bg-white border-y border-black/5">
+      <section id="fabrics" className="py-16 md:py-24 bg-white border-y border-black/5">
         <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-16 gap-6 md:gap-8 text-center md:text-left">
             <div className="max-w-xl">
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-4 block">New Additions</span>
-              <h2 className="text-4xl md:text-6xl font-black leading-none tracking-tight">Newly Added Fabrics</h2>
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">New Additions</span>
+              <h2 className="text-3xl md:text-6xl font-black leading-none tracking-tight">Newly Added Fabrics</h2>
             </div>
             <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
               View All Fabrics
@@ -726,9 +726,9 @@ function ProductCatalogSection() {
   ];
 
   return (
-    <section className="py-24 bg-white border-b border-black/5 overflow-hidden">
-      <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-16">
-        <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[#111111]">Product Catalog</h2>
+    <section className="py-16 md:py-24 bg-white border-b border-black/5 overflow-hidden">
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-8 md:mb-16 text-center md:text-left">
+        <h2 className="text-2xl md:text-5xl font-black tracking-tight text-[#111111]">Product Catalog</h2>
       </div>
       
       <div className="space-y-12">
