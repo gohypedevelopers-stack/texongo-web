@@ -84,77 +84,84 @@ const ScrollExpandMedia = ({
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       const { progress, expanded } = stateRef.current;
-      const isAtTop = window.scrollY < 20;
+      const currentScroll = window.scrollY;
+      const isAtTop = currentScroll < 10;
       const isMidExpansion = progress > 0 && progress < 1;
 
-      if (isMidExpansion || (isAtTop && !expanded)) {
-        if (isMidExpansion || (e.deltaY > 0 && progress < 1) || (e.deltaY < 0 && progress > 0)) {
-          if (e.cancelable) e.preventDefault();
-        }
-
-        if (!expanded) {
-          const scrollDelta = e.deltaY * 0.0018;
-          const newProgress = Math.min(Math.max(progress + scrollDelta, 0), 1);
-          setScrollProgress(newProgress);
-
-          if (newProgress >= 0.98) {
-            setScrollProgress(1);
-            setMediaFullyExpanded(true);
-            setShowContent(true);
-          } else if (newProgress < 0.75) {
-            setShowContent(false);
-          }
-
-          if (newProgress < 1 && window.scrollY > 0) {
-            window.scrollTo({ top: 0, behavior: 'auto' });
-          }
-        }
-      } else if (e.deltaY < 0 && window.scrollY <= 10 && expanded) {
+      // Expansion/Contraction Phase
+      if (isMidExpansion || (isAtTop && !expanded) || (isAtTop && expanded && e.deltaY < 0)) {
         if (e.cancelable) e.preventDefault();
-        setMediaFullyExpanded(false);
-        setScrollProgress(0.99);
+
+        const scrollDelta = e.deltaY * 0.0015;
+        const newProgress = Math.min(Math.max(progress + scrollDelta, 0), 1);
+        
+        if (newProgress >= 0.96) {
+          setScrollProgress(1);
+          setMediaFullyExpanded(true);
+          setShowContent(true);
+        } else {
+          setScrollProgress(newProgress);
+          setMediaFullyExpanded(false);
+          if (newProgress < 0.7) setShowContent(false);
+        }
+
+        if (newProgress < 1 && currentScroll > 0) {
+          window.scrollTo({ top: 0, behavior: 'auto' });
+        }
       }
     };
 
-    const handleTouchStart = (e: TouchEvent) => { touchStartYRef.current = e.touches[0].clientY; };
+    const handleTouchStart = (e: TouchEvent) => { 
+      touchStartYRef.current = e.touches[0].clientY; 
+    };
 
     const handleTouchMove = (e: TouchEvent) => {
       if (!touchStartYRef.current) return;
+      
       const { progress, expanded } = stateRef.current;
       const touchY = e.touches[0].clientY;
       const deltaY = touchStartYRef.current - touchY;
-
-      const isAtTop = window.scrollY < 20;
+      const currentScroll = window.scrollY;
+      
+      // We consider ourselves "at top" more leniently on mobile to account for elastic bounce
+      const isAtTop = currentScroll <= 15;
       const isMidExpansion = progress > 0 && progress < 1;
 
-      if (isMidExpansion || (isAtTop && !expanded)) {
-        if (isMidExpansion || (deltaY > 0 && progress < 1) || (deltaY < 0 && progress > 0)) {
+      // Swiping UP (to scroll DOWN)
+      if (deltaY > 0) {
+        if (isMidExpansion || (isAtTop && !expanded)) {
           if (e.cancelable) e.preventDefault();
-        }
-
-        if (!expanded) {
-          const scrollDelta = deltaY * 0.006;
+          const scrollDelta = deltaY * 0.008;
           const newProgress = Math.min(Math.max(progress + scrollDelta, 0), 1);
+          
           setScrollProgress(newProgress);
-
-          if (newProgress >= 0.98) {
-            setScrollProgress(1);
+          if (newProgress >= 0.96) {
             setMediaFullyExpanded(true);
             setShowContent(true);
-          } else if (newProgress < 0.75) {
-            setShowContent(false);
           }
-          touchStartYRef.current = touchY;
-
-          if (newProgress < 1 && window.scrollY > 0) {
+          
+          if (newProgress < 1 && currentScroll > 0) {
             window.scrollTo({ top: 0, behavior: 'auto' });
           }
+          touchStartYRef.current = touchY;
         }
-      } else if (deltaY < -10 && window.scrollY <= 10 && expanded) {
-        if (e.cancelable) e.preventDefault();
-        setMediaFullyExpanded(false);
-        setScrollProgress(0.99);
-        touchStartYRef.current = touchY;
+      } 
+      // Swiping DOWN (to scroll UP / COLLAPSE)
+      else if (deltaY < 0) {
+        if (isMidExpansion || (isAtTop && expanded)) {
+          if (e.cancelable) e.preventDefault();
+          const scrollDelta = deltaY * 0.008;
+          const newProgress = Math.min(Math.max(progress + scrollDelta, 0), 1);
+          
+          setScrollProgress(newProgress);
+          setMediaFullyExpanded(false);
+          if (newProgress < 0.7) setShowContent(false);
+          
+          if (currentScroll > 0) {
+            window.scrollTo({ top: 0, behavior: 'auto' });
+          }
+          touchStartYRef.current = touchY;
+        }
       }
     };
 
