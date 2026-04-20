@@ -89,7 +89,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
   };
 
   return (
-    <main className="min-h-screen bg-white pb-16 pt-32 lg:pt-44 lg:pb-32">
+    <main className="min-h-screen bg-white pb-16 pt-24 lg:pt-44 lg:pb-32">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
 
@@ -170,25 +170,25 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
             {/* Selection & Add to Cart */}
             <div className="flex flex-col gap-6 mb-10">
               <div className="flex flex-row items-start gap-6 lg:gap-12">
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 w-full lg:w-auto">
                   <div className="text-[10px] font-bold text-black uppercase tracking-widest">
                     Availability
                   </div>
-                  <div className="text-[11px] font-bold text-[#57AD43] uppercase tracking-widest border border-[#57AD43]/20 bg-[#57AD43]/5 px-3 py-1.5 inline-block w-fit whitespace-nowrap">
+                  <div className="h-12 flex items-center justify-center min-w-[160px] px-4 text-[11px] font-bold text-[#57AD43] uppercase tracking-widest border border-[#57AD43]/30 bg-[#57AD43]/5 whitespace-nowrap">
                     {product.qty
                       ? (product.qty.toLowerCase().includes('kg') ? product.qty : `${product.qty} KG IN STOCK`)
                       : (product.totalInventory !== undefined ? `${product.totalInventory} KG IN STOCK` : "IN STOCK")}
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 w-full lg:w-auto">
                   <div className="text-[10px] font-bold text-black uppercase tracking-widest">
                     Quantity
                   </div>
-                  <div className="flex items-center border border-gray-200 bg-white w-fit">
-                    <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors border-r border-gray-200"><Minus size={12} /></button>
-                    <input type="text" value={quantity} readOnly className="w-12 h-10 text-center text-sm font-bold outline-none" />
-                    <button onClick={() => setQuantity(prev => prev + 1)} className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors border-l border-gray-200"><Plus size={12} /></button>
+                  <div className="flex items-center border border-gray-200 bg-white h-12 w-fit">
+                    <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className="w-12 h-full flex items-center justify-center hover:bg-gray-50 transition-colors border-r border-gray-200"><Minus size={14} /></button>
+                    <input type="text" value={quantity} readOnly className="w-16 h-full text-center text-sm font-bold outline-none" />
+                    <button onClick={() => setQuantity(prev => prev + 1)} className="w-12 h-full flex items-center justify-center hover:bg-gray-50 transition-colors border-l border-gray-200"><Plus size={14} /></button>
                   </div>
                 </div>
               </div>
