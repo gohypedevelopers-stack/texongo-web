@@ -89,14 +89,14 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
   };
 
   return (
-    <main className="min-h-screen bg-white pb-16 pt-20 lg:pt-28 lg:pb-32">
+    <main className="min-h-screen bg-white pb-16 pt-32 lg:pt-44 lg:pb-32">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
 
           {/* Left Column: Image Gallery */}
           <div className="space-y-4 lg:space-y-6">
             <div
-              className="relative aspect-square w-full bg-gray-50 overflow-hidden border border-gray-100 group cursor-zoom-in"
+              className="relative aspect-square w-[550px] max-w-full mx-auto bg-gray-50/30 overflow-hidden border border-gray-100 group cursor-crosshair"
               onMouseMove={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
                 const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -108,18 +108,26 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               }}
             >
               <Image
-                src={activeImage || product.image}
+                src={((activeImage || product.image).includes('?') ? `${activeImage || product.image}&width=2048` : `${activeImage || product.image}?width=2048`)}
                 alt={product.name}
                 fill
                 priority
-                className="object-cover transition-transform duration-500 group-hover:scale-[2.5]"
+                quality={100}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-[1.6]"
               />
-              <div className="absolute top-4 left-4 bg-black/80 px-2 py-1 z-10">
-                <img src="https://texongo.com/wp-content/uploads/2025/09/Untitled-design-2-1-e1758707290987.png" alt="Logo" className="h-4" />
+              <div className="absolute top-4 left-4 z-10">
+                <div className="bg-white/70 backdrop-blur-sm border border-black/5 px-2 py-1 shadow-sm">
+                  <img
+                    src="https://texongo.com/wp-content/uploads/2025/09/Untitled-design-2-1-e1758707290987.png"
+                    alt="Texongo"
+                    className="h-5 w-auto object-contain"
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-4 gap-4 max-w-[550px] mx-auto">
               {product.images?.map((imgUrl, i) => (
                 <div
                   key={i}
@@ -127,7 +135,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   className={`aspect-square relative bg-gray-50 cursor-pointer border transition-all ${activeImage === imgUrl ? 'border-[#57AD43] ring-1 ring-[#57AD43]' : 'border-gray-100 hover:border-gray-300'}`}
                 >
                   <Image
-                    src={imgUrl}
+                    src={imgUrl.includes('?') ? `${imgUrl}&width=1000` : `${imgUrl}?width=1000`}
                     alt={`${product.name} view ${i + 1}`}
                     fill
                     className="object-cover"
@@ -146,13 +154,13 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
           {/* Right Column: Product Details */}
           <div className="flex flex-col">
-            <div className="space-y-1 mb-6">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">SKU: {product.sku || "A1K15126"}</p>
-              <h1 className="text-3xl font-bold uppercase text-[#121212] tracking-tight">{product.name}</h1>
+            <div className="space-y-2 mb-6">
+              <p className="text-base font-bold text-black uppercase tracking-widest">SKU: {product.sku || "A1K15126"}</p>
+              <h1 className="text-3xl lg:text-4xl font-bold uppercase text-[#121212] tracking-tight">{product.name}</h1>
             </div>
 
-            <div className="mb-8 p-4 bg-gray-50/50 border-y border-gray-100">
-              <span className="text-3xl font-black tracking-tighter">₹{parseFloat(product.price || '0').toFixed(2)}</span>
+            <div className="mb-8 p-6 bg-gray-50/50 border-y border-gray-100 flex items-baseline gap-2">
+              <span className="text-4xl font-black tracking-tighter">₹{parseFloat(product.price || '0').toFixed(2)}</span>
             </div>
 
             <Link href="#" className="text-[11px] font-medium text-[#57AD43] underline underline-offset-4 mb-8 block">
@@ -160,45 +168,62 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
             </Link>
 
             {/* Selection & Add to Cart */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6 mb-10">
-              <div className="flex items-center justify-between sm:justify-start gap-4">
-                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest min-w-[120px]">
-                  {product.qty
-                    ? (product.qty.toLowerCase().includes('stock') ? product.qty : `${product.qty} IN STOCK`)
-                    : (product.totalInventory !== undefined ? `${product.totalInventory} KG IN STOCK` : "IN STOCK")}
+            <div className="flex flex-col gap-6 mb-10">
+              <div className="flex flex-row items-start gap-6 lg:gap-12">
+                <div className="flex flex-col gap-2">
+                  <div className="text-[10px] font-bold text-black uppercase tracking-widest">
+                    Availability
+                  </div>
+                  <div className="text-[11px] font-bold text-[#57AD43] uppercase tracking-widest border border-[#57AD43]/20 bg-[#57AD43]/5 px-3 py-1.5 inline-block w-fit whitespace-nowrap">
+                    {product.qty
+                      ? (product.qty.toLowerCase().includes('kg') ? product.qty : `${product.qty} KG IN STOCK`)
+                      : (product.totalInventory !== undefined ? `${product.totalInventory} KG IN STOCK` : "IN STOCK")}
+                  </div>
                 </div>
-                <div className="flex items-center border border-gray-200">
-                  <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors"><Minus size={12} /></button>
-                  <input type="text" value={quantity} readOnly className="w-12 h-10 text-center text-sm font-bold border-x border-gray-200 outline-none" />
-                  <button onClick={() => setQuantity(prev => prev + 1)} className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors"><Plus size={12} /></button>
+
+                <div className="flex flex-col gap-2">
+                  <div className="text-[10px] font-bold text-black uppercase tracking-widest">
+                    Quantity
+                  </div>
+                  <div className="flex items-center border border-gray-200 bg-white w-fit">
+                    <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors border-r border-gray-200"><Minus size={12} /></button>
+                    <input type="text" value={quantity} readOnly className="w-12 h-10 text-center text-sm font-bold outline-none" />
+                    <button onClick={() => setQuantity(prev => prev + 1)} className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors border-l border-gray-200"><Plus size={12} /></button>
+                  </div>
                 </div>
               </div>
-              <button onClick={handleAddToCart} className="flex-1 bg-[#444444] text-white px-8 h-16 sm:h-10 flex items-center justify-center gap-3 text-[13px] sm:text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-colors">
-                <ShoppingBag size={14} /> Add to cart
+
+              <button onClick={handleAddToCart} className="w-full bg-[#121212] text-white h-14 flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-all duration-300 shadow-lg shadow-black/5 active:scale-[0.98]">
+                <ShoppingBag size={15} /> Add to cart
               </button>
             </div>
 
             {/* Specifications Table */}
             <div className="space-y-1 border-t border-gray-100 pt-8 mb-12">
-              <SpecRow label="TYPE" value={product.type || "N/A"} />
-              <SpecRow label="FABRIC" value={product.fabric || "N/A"} />
+              <SpecRow label="KNIT STYLE" value={product.knit_style || "N/A"} />
               <SpecRow label="CONTENT" value={product.content || product.composition || "N/A"} />
               <SpecRow label="GSM" value={product.gsm === "N/A" ? "N/A" : `${product.gsm} g/m²`} />
-              <SpecRow label="OUNCE" value={product.ounce || "N/A"} />
-              <SpecRow label="WIDTH" value={product.width || "N/A"} />
-              <SpecRow label="QTY" value={product.qty || (product.totalInventory !== undefined ? `${product.totalInventory} KG` : "N/A")} />
-              <SpecRow label="KNIT STYLE" value={product.knit_style || "N/A"} />
+              <SpecRow label="WIDTH" value={product.width !== "N/A" ? `${product.width}` : "N/A"} />
+              <SpecRow label="TYPE" value={product.type || "N/A"} />
               <SpecRow label="SHADE" value={product.shade || "N/A"} />
+
+
+
+              {/* <SpecRow label="OUNCE" value={product.ounce || "N/A"} /> */}
+
+
+
+
               <SpecRow label="USAGE" value={product.usage || "N/A"} />
             </div>
 
-            {/* Weight/Color Grid */}
-            <div className="grid grid-cols-2 gap-px bg-gray-100 border border-gray-100 mb-12">
-              <div className="bg-gray-50 p-3 text-[11px] font-bold uppercase">Weight</div>
-              <div className="bg-white p-3 text-[11px] font-medium italic">{product.weight || "1 kg"}</div>
-              <div className="bg-gray-50 p-3 text-[11px] font-bold uppercase">Color</div>
-              <div className="bg-white p-3 text-[11px] font-medium italic">{product.shade || "NAVY"}</div>
-            </div>
+            {/* Weight/Color Grid Area (if still needed) */}
+            {/* <div className="grid grid-cols-2 gap-px bg-gray-100 border border-gray-100 mb-12">
+              <div className="bg-gray-50 p-4 text-[11px] font-bold uppercase">Base Weight</div>
+              <div className="bg-white p-4 text-[11px] font-medium italic">{product.weight || "1 KG"} (PER UNIT)</div>
+              <div className="bg-gray-50 p-4 text-[11px] font-bold uppercase">Primary Color</div>
+              <div className="bg-white p-4 text-[11px] font-medium italic uppercase">{product.shade || "N/A"}</div>
+            </div> */}
 
             {/* Accordions */}
             <div className="border-t border-gray-100 divide-y divide-gray-100">
@@ -212,7 +237,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
         {/* Tabs Section */}
         <div className="mt-20 lg:mt-32 border-t border-gray-100">
           <div className="flex overflow-x-auto no-scrollbar justify-start lg:justify-center gap-8 lg:gap-12 -mt-px pt-8 mb-16 px-4">
-            {["Description", "Additional information", "Reviews (0)"].map((tab) => (
+            {["Description", "Reviews (0)"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab.toLowerCase())}
@@ -231,16 +256,63 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   {product.description || "No description available."}
                 </motion.div>
               )}
-              {activeTab === "additional information" && (
+              {/* {activeTab === "additional information" && (
                 <motion.div key="add" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="max-w-xl mx-auto border border-gray-100 divide-y divide-gray-100">
                   <div className="grid grid-cols-3"><div className="bg-gray-50/50 p-4 text-[11px] font-bold uppercase tracking-widest text-black">Weight</div><div className="col-span-2 p-4 text-[11px] font-medium italic text-gray-500">{product.weight || "1 kg"}</div></div>
                   <div className="grid grid-cols-3"><div className="bg-gray-50/50 p-4 text-[11px] font-bold uppercase tracking-widest text-black">Color</div><div className="col-span-2 p-4 text-[11px] font-medium italic text-gray-500 uppercase">{product.shade || "N/A"}</div></div>
                   <div className="grid grid-cols-3"><div className="bg-gray-50/50 p-4 text-[11px] font-bold uppercase tracking-widest text-black">Composition</div><div className="col-span-2 p-4 text-[11px] font-medium italic text-gray-500">{product.content || product.composition || "N/A"}</div></div>
                 </motion.div>
-              )}
+              )} */}
               {activeTab === "reviews (0)" && (
-                <motion.div key="rev" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="text-center text-gray-400 italic text-sm">
-                  There are no reviews yet.
+                <motion.div key="rev" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="max-w-2xl mx-auto py-4">
+                  <div className="space-y-6 text-[11px] lg:text-[13px] text-gray-600">
+                    <p>There are no reviews yet.</p>
+
+                    <div className="space-y-4 pt-4 border-t border-gray-100">
+                      <h3 className="text-sm font-bold uppercase tracking-tight text-black flex items-center gap-2">
+                        Be the first to review &ldquo;{product.name}&rdquo;
+                      </h3>
+                      <p className="italic">Your email address will not be published. Required fields are marked *</p>
+
+                      <form className="space-y-6 pt-4">
+                        <div className="space-y-2">
+                          <label className="font-bold uppercase tracking-widest text-[10px]">Your review *</label>
+                          <textarea
+                            rows={8}
+                            className="w-full border border-gray-200 p-4 outline-none focus:border-black transition-colors"
+                          ></textarea>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <label className="font-bold uppercase tracking-widest text-[10px]">Name *</label>
+                            <input
+                              type="text"
+                              className="w-full border border-gray-200 h-12 px-4 outline-none focus:border-black transition-colors"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="font-bold uppercase tracking-widest text-[10px]">Email *</label>
+                            <input
+                              type="email"
+                              className="w-full border border-gray-200 h-12 px-4 outline-none focus:border-black transition-colors"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <input type="checkbox" id="save-info" className="w-4 h-4 border-gray-200 rounded-none accent-black" />
+                          <label htmlFor="save-info" className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">
+                            Save my name, email, and website in this browser for the next time I comment.
+                          </label>
+                        </div>
+
+                        <button type="submit" className="bg-black text-white px-10 py-4 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition-colors">
+                          Submit
+                        </button>
+                      </form>
+                    </div>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -270,9 +342,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
 function SpecRow({ label, value }: { label: string, value: string }) {
   return (
-    <div className="flex items-start gap-4 text-[11px] leading-relaxed py-1">
-      <span className="font-bold text-black min-w-[80px]">{label}:</span>
-      <span className="text-gray-500 font-medium">{value}</span>
+    <div className="flex items-baseline gap-4 text-[11px] lg:text-[12px] leading-relaxed py-1.5 border-b border-gray-50 last:border-0">
+      <span className="font-bold text-black min-w-[100px] uppercase tracking-wider shrink-0">{label}:</span>
+      <span className="text-gray-600 font-medium">{value}</span>
     </div>
   );
 }

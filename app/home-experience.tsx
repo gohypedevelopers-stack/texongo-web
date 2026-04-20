@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { ReactLenis } from "lenis/react";
 import styles from "./page.module.css";
 import { CategorySlider } from "./category-slider";
 import { FaqSection } from "./faq-section";
@@ -15,61 +16,61 @@ import { ParallaxFeatureSection } from "../components/ui/parallax-scroll-feature
 const marqueeProducts = [
   {
     name: "Cotton Spandex Interlock",
-    price: "₹650 / m",
+    price: "₹650",
     href: "https://texongo.com/product/cotton-spandex-interlock/",
     image: "/arrivals/prod-cotton-spandex-interlock.png",
   },
   {
     name: "Cotton Indigo Terry",
-    price: "₹999 / m",
+    price: "₹999",
     href: "https://texongo.com/product/cotton-indigo-terry/",
     image: "/arrivals/prod-cotton-indigo-terry.png",
   },
   {
     name: "Poly Viscose Spandex S/J",
-    price: "₹700 / m",
+    price: "₹700",
     href: "https://texongo.com/shop/",
     image: "/arrivals/prod-poly-viscose-spandex.png",
   },
   {
     name: "Nylon Spandex S/J",
-    price: "₹799 / m",
+    price: "₹799",
     href: "https://texongo.com/shop/",
     image: "/arrivals/prod-nylon-spandex.png",
   },
   {
     name: "Slub Melange Single Jersey",
-    price: "₹600 / m",
+    price: "₹600",
     href: "https://texongo.com/shop/",
     image: "/arrivals/prod-slub-melange.png",
   },
   {
     name: "Rib Fabric",
-    price: "₹380 / m",
+    price: "₹380",
     href: "https://texongo.com/product-category/knit-style/rib/",
     image: "/category/fabric-rib.png",
   },
   {
     name: "French Terry",
-    price: "₹520 / m",
+    price: "₹520",
     href: "https://texongo.com/product-category/knit-style/french-terry/",
     image: "/category/fabric-french-terry.png",
   },
   {
     name: "Waffle Knit",
-    price: "₹440 / m",
+    price: "₹440",
     href: "https://texongo.com/product-category/knit-style/waffle/",
     image: "/category/fabric-waffle.png",
   },
   {
     name: "Single Jersey",
-    price: "₹395 / m",
+    price: "₹395",
     href: "https://texongo.com/product-category/knit-style/single-jersey/",
     image: "/category/fabric-single-jersey.png",
   },
   {
     name: "Pique",
-    price: "₹460 / m",
+    price: "₹460",
     href: "https://texongo.com/product-category/knit-style/pique/",
     image: "/category/fabric-pique.png",
   },
@@ -557,8 +558,9 @@ export function HomeExperience() {
   }, []);
 
   return (
-    <main className="relative overflow-clip bg-[#F9FAFB] text-[#121212]">
-      {/* ── HERO ─────────────────────────────────────────── */}
+    <ReactLenis root>
+      <main className="relative overflow-clip bg-[#F9FAFB] text-[#121212]">
+        {/* ── HERO ─────────────────────────────────────────── */}
       <ScrollExpandMedia
         mediaType="video"
         mediaSrc="/video/Veo.mp4"
@@ -667,7 +669,8 @@ export function HomeExperience() {
       <FaqSection />
 
       <BlogSection />
-    </main>
+      </main>
+    </ReactLenis>
   );
 }
 
@@ -755,7 +758,7 @@ function ProductCatalogSection() {
                 </div>
                 <div className="space-y-1 text-center px-2">
                   <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
-                  <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
+                   <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
                 </div>
               </Link>
             ))}
@@ -779,7 +782,7 @@ function ProductCatalogSection() {
                 </div>
                 <div className="space-y-1 text-center px-2">
                   <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
-                  <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
+                   <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
                 </div>
               </Link>
             ))}

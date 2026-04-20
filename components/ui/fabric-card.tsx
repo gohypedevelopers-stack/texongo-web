@@ -80,7 +80,7 @@ export function FabricCard({ id, name, gsm, price, image }: FabricCardProps) {
           <h3 className="text-[11px] font-bold uppercase tracking-widest text-[#121212] leading-tight max-w-[200px]">
             {name}
           </h3>
-          <p className="text-xs font-medium text-gray-500">
+          <p className="text-xs font-black text-[#57AD43] uppercase tracking-tighter">
             ₹{price}.00
           </p>
         </div>
