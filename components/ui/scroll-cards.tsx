@@ -42,23 +42,31 @@ const Card: FC<iCardProps> = ({
   const scale = useTransform(progress, range, [1, targetScale]);
 
   return (
-    <div ref={container} className="h-screen flex items-center justify-center sticky top-0 overflow-hidden">
+    <div ref={container} className="h-screen flex items-center justify-center sticky top-0 overflow-hidden" style={{ contain: 'paint' }}>
+
       <motion.div
         style={{
           backgroundColor: color,
           scale,
-          top: `calc(-5vh + ${i * 25}px)`
+          marginTop: `${i * 25}px`,
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden"
         }}
         className="relative flex flex-col md:flex-row h-[85vh] w-[95vw] md:w-[1280px]
-				items-center justify-between mx-auto shadow-2xl rounded-[40px] overflow-hidden origin-top"
+				items-center justify-between mx-auto shadow-2xl rounded-[40px] overflow-hidden origin-top transform-gpu"
+
+
       >
         {/* Media Side */}
         <div className="absolute inset-0 z-0 w-full h-full">
           {videoUrl ? (
             <LazyVideo
               src={videoUrl}
-              className="w-full h-full object-cover opacity-80"
+              className="w-full h-full object-cover opacity-90"
+              threshold={0.01}
             />
+
+
           ) : src ? (
             <Image
               className="w-full h-full object-cover opacity-80"

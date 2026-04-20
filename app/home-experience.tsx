@@ -1,17 +1,22 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ReactLenis } from "lenis/react";
 import styles from "./page.module.css";
-import { CategorySlider } from "./category-slider";
-import { FaqSection } from "./faq-section";
-import { ParallaxText } from "./parallax-text";
 import { LazyVideo } from "./lazy-video";
 import ScrollExpandMedia from "../components/ui/scroll-expansion-hero";
-import { ParallaxFeatureSection } from "../components/ui/parallax-scroll-feature-section";
+import { LazySection } from "../components/ui/lazy-section";
+
+// Dynamic imports for performance (Separate files)
+const CategorySlider = dynamic(() => import("./category-slider").then(mod => mod.CategorySlider), { ssr: false });
+const FaqSection = dynamic(() => import("./faq-section").then(mod => mod.FaqSection), { ssr: false });
+const ParallaxFeatureSection = dynamic(() => import("../components/ui/parallax-scroll-feature-section").then(mod => mod.ParallaxFeatureSection), { ssr: false });
+
+
 
 const marqueeProducts = [
   {
@@ -154,15 +159,17 @@ function StoryProductCard({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full relative aspect-square bg-transparent mb-8 flex items-center justify-center overflow-hidden shadow-none"
+        className="w-full relative aspect-square bg-transparent mb-8 flex items-center justify-center overflow-hidden shadow-none transform-gpu"
+        style={{ backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
       >
         <LazyVideo
           src={video}
           aria-label={alt}
           threshold={0.05}
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'multiply' }}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain' }}
         />
       </Link>
+
 
       <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 tracking-tight px-4">{name}</h3>
       <p className="text-[#121212]/80 text-sm font-medium max-w-sm mb-8 md:mb-10 leading-relaxed px-6">
@@ -242,8 +249,9 @@ function KnitStylesSection() {
     }
   };
 
-  // Using 30 sets (150 items) creates a huge native scroll loop buffer
-  const extendedStyles = Array(30).fill(knitStyles).flat();
+  // Using 6 sets (96 items) is plenty for the scroll loop without killing performance
+  const extendedStyles = Array(6).fill(knitStyles).flat();
+
 
   return (
     <section className="py-12 md:py-24 bg-white overflow-hidden">
@@ -264,7 +272,14 @@ function KnitStylesSection() {
               {extendedStyles.map((knit, i) => (
                 <div key={`${knit.name}-${i}`} className="relative aspect-square md:aspect-[4/5] w-[220px] md:w-[280px] shrink-0 snap-center rounded-xl overflow-hidden group/card cursor-pointer shadow-[0_4px_18px_rgba(17,17,17,0.08)] hover:shadow-[0_12px_32px_rgba(17,17,17,0.14)] transition-all duration-300">
                   <div className="absolute inset-0" style={{ backgroundColor: knit.color }}></div>
-                  <img src={knit.image} alt={knit.name} className="relative z-0 object-cover w-full h-full mix-blend-multiply opacity-60 group-hover/card:scale-110 transition-transform duration-700" />
+                  <img
+                    src={knit.image}
+                    alt={knit.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="relative z-0 object-cover w-full h-full mix-blend-multiply opacity-60 group-hover/card:scale-110 transition-transform duration-700"
+                  />
+
                   <div className="absolute bottom-4 left-4 z-10 bg-white px-4 py-1.5 rounded-full text-[10px] font-bold text-black tracking-widest shadow-sm uppercase">
                     {knit.name}
                   </div>
@@ -561,114 +576,132 @@ export function HomeExperience() {
     <ReactLenis root>
       <main className="relative overflow-clip bg-[#F9FAFB] text-[#121212]">
         {/* ── HERO ─────────────────────────────────────────── */}
-      <ScrollExpandMedia
-        mediaType="video"
-        mediaSrc="/video/Veo.mp4"
-        bgImageSrc="/knit-fabric-hero.png"
-        title="PREMIUM KNITS"
-        date="COLLECTION 2026"
-        scrollToExpand="Scroll to Explore"
-        textBlend={true}
-      >
-        <div className="max-w-4xl mx-auto text-center pb-6 md:pb-10 px-6">
-          <h2 className="text-2xl md:text-4xl font-black mb-6 md:mb-8 uppercase tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
-          <p className="text-base md:text-xl text-[#475467] font-medium leading-relaxed">
-            Texongo combines traditional craftsmanship with cutting-edge 3D visualization.
-            Our digital-first approach allows designers to experience the texture, drape,
-            and movement of high-performance textiles before the first thread is even woven.
-          </p>
-        </div>
-      </ScrollExpandMedia>
+        <ScrollExpandMedia
+          mediaType="video"
+          mediaSrc="/video/Veo.mp4"
+          bgImageSrc="/knit-fabric-hero.png"
+          title="PREMIUM KNITS"
+          date="COLLECTION 2026"
+          scrollToExpand="Scroll to Explore"
+          textBlend={true}
+        >
+          <div className="max-w-4xl mx-auto text-center pt-6 md:pt-10 px-6">
 
-
-
-      {/* ── THE STORY ───────────────────────────────────── */}
-      <section id="collections" className="relative">
-        <ParallaxFeatureSection />
-      </section>
-
-      {/* ── STREAMLINE ──────────────────────────────────── */}
-      <section className="bg-white overflow-hidden border-y border-black/5">
-        <div className="flex flex-col md:flex-row w-full">
-          <div className="w-full md:w-1/2 relative min-h-[300px] md:min-h-[500px]">
-            <LazyVideo
-              src="/video/efficient_en.webm"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          </div>
-
-          <div className="w-full md:w-1/2 flex flex-col justify-center px-6 py-12 md:p-16 lg:p-24 bg-[#F9FAFB]">
-            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[#57AD43] mb-4 md:mb-6 block">Innovation</span>
-            <h2 className="text-3xl md:text-5xl lg:text-7xl font-black mb-6 md:mb-8 leading-none tracking-tight text-black">
-              Streamline Your<br />Fabric Journey
-            </h2>
-            <p className="text-sm md:text-lg text-black/70 leading-relaxed font-medium max-w-xl">
-              Preview texture, drape, movement, and micro-texture in stunning detail with 3D visualization. Sourcing fabric has never been more precise—where innovation meets craftsmanship.
+            <h2 className="text-2xl md:text-4xl font-black mb-6 md:mb-8 uppercase tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
+            <p className="text-base md:text-xl text-[#475467] font-medium leading-relaxed">
+              Texongo combines traditional craftsmanship with cutting-edge 3D visualization.
+              Our digital-first approach allows designers to experience the texture, drape,
+              and movement of high-performance textiles before the first thread is even woven.
             </p>
-            <div className="mt-8 md:mt-12 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 md:gap-6">
-              <button className="h-12 md:h-14 px-6 md:px-8 bg-black text-white text-[10px] md:text-xs font-black uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-colors font-bold whitespace-nowrap text-center">
-                Book a Demo
-              </button>
-              <button className="h-12 md:h-14 px-6 md:px-8 bg-transparent text-black text-[10px] md:text-xs font-black uppercase tracking-[0.2em] border-2 border-black/10 hover:border-black transition-colors font-bold whitespace-nowrap text-center">
-                Learn More
-              </button>
-            </div>
           </div>
-        </div>
-      </section>
+        </ScrollExpandMedia>
 
-      {/* ── CAMPAIGN STORY ─────────────────────────────── */}
-      <section id="womenswear" className="bg-white py-20 pb-0">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            {storyProducts.map((product) => (
-              <StoryProductCard key={product.name} {...product} />
-            ))}
-          </div>
-        </div>
-      </section>
 
-      <KnitStylesSection />
-      <SustainableBlendSection />
-      {/* <TrendyFabricsSection/> */}
-      <ProductCatalogSection />
 
-      {/* ── NEW ARRIVALS ─────────────────────────────────── */}
-      <section id="fabrics" className="py-16 md:py-24 bg-white border-y border-black/5">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
-          <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-16 gap-6 md:gap-8 text-center md:text-left">
-            <div className="max-w-xl">
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">New Additions</span>
-              <h2 className="text-3xl md:text-6xl font-black leading-none tracking-tight">Newly Added Fabrics</h2>
+        {/* ── THE STORY ───────────────────────────────────── */}
+        <section id="collections" className="relative">
+          <LazySection>
+            <ParallaxFeatureSection />
+          </LazySection>
+        </section>
+
+        {/* ── STREAMLINE ──────────────────────────────────── */}
+        <section className="bg-white overflow-hidden border-y border-black/5">
+          <div className="flex flex-col md:flex-row w-full">
+            <div className="w-full md:w-1/2 relative min-h-[250px] md:min-h-[400px]">
+              <LazyVideo
+                src="/video/efficient_en.webm"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
-            <Link href="/fabrics" className="inline-block">
-              <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
-                View All Fabrics
+
+            <div className="w-full md:w-1/2 flex flex-col justify-center p-8 md:p-12 lg:p-16 bg-[#F9FAFB]">
+              <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[#57AD43] mb-4 md:mb-6 block">Innovation</span>
+              <h2 className="text-3xl md:text-5xl font-black mb-4 md:mb-6 leading-tight tracking-tight text-black">
+                Streamline Your<br />Fabric Journey
+              </h2>
+              <p className="text-sm md:text-base text-black/70 leading-relaxed font-medium max-w-xl">
+                Preview texture, drape, movement, and micro-texture in stunning detail with 3D visualization. Sourcing fabric has never been more precise—where innovation meets craftsmanship.
               </p>
-            </Link>
+              <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                <button className="h-10 md:h-12 px-6 bg-black text-white text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-colors font-bold whitespace-nowrap text-center rounded-sm">
+                  Book a Demo
+                </button>
+                <button className="h-10 md:h-12 px-6 bg-transparent text-black text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] border border-black/10 hover:border-black transition-colors font-bold whitespace-nowrap text-center rounded-sm">
+                  Learn More
+                </button>
+              </div>
+            </div>
           </div>
+        </section>
 
-          <div className="-mx-6 lg:-mx-10 overflow-hidden">
-            <div className={styles.productTrack}>
-              {[...marqueeProducts, ...marqueeProducts].map((product, index) => (
-                <MarqueeProductCard
-                  key={`${product.name}-${index}`}
-                  name={product.name}
-                  price={product.price}
-                  href={product.href}
-                  image={product.image}
-                />
+
+
+        {/* ── CAMPAIGN STORY ─────────────────────────────── */}
+        <section id="womenswear" className="bg-white py-20 pb-0">
+          <div className="mx-auto max-w-7xl px-6 lg:px-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+              {storyProducts.map((product) => (
+                <StoryProductCard key={product.name} {...product} />
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <TestimonialsSection />
+        <LazySection>
+          <KnitStylesSection />
+        </LazySection>
 
-      <FaqSection />
+        <LazySection>
+          <SustainableBlendSection />
+        </LazySection>
 
-      <BlogSection />
+        <LazySection>
+          <ProductCatalogSection />
+        </LazySection>
+
+        {/* ── NEW ARRIVALS ─────────────────────────────────── */}
+        <section id="fabrics" className="py-16 md:py-24 bg-white border-y border-black/5">
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
+            <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-16 gap-6 md:gap-8 text-center md:text-left">
+              <div className="max-w-xl">
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">New Additions</span>
+                <h2 className="text-3xl md:text-6xl font-black leading-none tracking-tight">Newly Added Fabrics</h2>
+              </div>
+              <Link href="/fabrics" className="inline-block">
+                <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
+                  View All Fabrics
+                </p>
+              </Link>
+            </div>
+
+            <div className="-mx-6 lg:-mx-10 overflow-hidden">
+              <div className={styles.productTrack}>
+                {[...marqueeProducts, ...marqueeProducts].map((product, index) => (
+                  <MarqueeProductCard
+                    key={`${product.name}-${index}`}
+                    name={product.name}
+                    price={product.price}
+                    href={product.href}
+                    image={product.image}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <LazySection>
+          <TestimonialsSection />
+        </LazySection>
+
+        <LazySection>
+          <FaqSection />
+        </LazySection>
+
+        <LazySection>
+          <BlogSection />
+        </LazySection>
       </main>
     </ReactLenis>
   );
@@ -747,7 +780,14 @@ function ProductCatalogSection() {
             {[...row1, ...row1, ...row1, ...row1].map((p, idx) => (
               <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
                 <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
-                  <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                  />
+
                   {/* Add to Cart Overlay */}
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
@@ -758,7 +798,7 @@ function ProductCatalogSection() {
                 </div>
                 <div className="space-y-1 text-center px-2">
                   <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
-                   <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
+                  <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
                 </div>
               </Link>
             ))}
@@ -771,7 +811,14 @@ function ProductCatalogSection() {
             {[...row2, ...row2, ...row2, ...row2].map((p, idx) => (
               <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
                 <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
-                  <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                  />
+
                   {/* Add to Cart Overlay */}
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
@@ -782,7 +829,7 @@ function ProductCatalogSection() {
                 </div>
                 <div className="space-y-1 text-center px-2">
                   <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
-                   <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
+                  <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
                 </div>
               </Link>
             ))}
