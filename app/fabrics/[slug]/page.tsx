@@ -205,7 +205,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               <SpecRow label="GSM" value={product.gsm === "N/A" ? "N/A" : `${product.gsm} g/m²`} />
               <SpecRow label="WIDTH" value={product.width !== "N/A" ? `${product.width}` : "N/A"} />
               <SpecRow label="TYPE" value={product.type || "N/A"} />
-              <SpecRow label="COLOR" value={product.shade || "N/A"} />
+              <SpecRow label="SHADE" value={product.shade || "N/A"} />
 
 
 
