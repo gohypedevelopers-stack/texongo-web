@@ -23,14 +23,14 @@ export default function ShippingAndReturnPolicy() {
 
       <div className="max-w-[1100px] mx-auto px-6 lg:px-10 relative z-10">
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="mb-20 text-center lg:text-left"
         >
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors mb-12 w-fit mx-auto lg:mx-0"
           >
             <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-1" />
@@ -46,20 +46,20 @@ export default function ShippingAndReturnPolicy() {
 
         {/* Quick Info Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
-          <FeatureCard 
-            icon={ShieldCheck} 
-            title="Inspection Ready" 
-            content="The buyer is responsible for inspecting fabric upon receipt and testing prior to any cutting or production." 
+          <FeatureCard
+            icon={ShieldCheck}
+            title="Inspection Ready"
+            content="The buyer is responsible for inspecting fabric upon receipt and testing prior to any cutting or production."
           />
-          <FeatureCard 
-            icon={Package} 
-            title="No-Return Policy" 
-            content="Cut fabric cannot be returned or exchanged. Laundry or processed fabric is deemed accepted by the buyer." 
+          <FeatureCard
+            icon={Package}
+            title="No-Return Policy"
+            content="Cut fabric cannot be returned or exchanged. Laundry or processed fabric is deemed accepted by the buyer."
           />
-          <FeatureCard 
-            icon={Truck} 
-            title="Tracked Shipping" 
-            content="Reliable delivery across India and international destinations with real-time tracking updates." 
+          <FeatureCard
+            icon={Truck}
+            title="Tracked Shipping"
+            content="Reliable delivery across India and international destinations with real-time tracking updates."
           />
         </div>
 

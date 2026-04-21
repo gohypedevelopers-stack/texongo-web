@@ -15,14 +15,14 @@ export default function TermsAndConditions() {
 
       <div className="max-w-[1000px] mx-auto px-6 lg:px-10 relative z-10">
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="mb-20"
         >
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors mb-12 w-fit"
           >
             <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-1" />
@@ -37,7 +37,7 @@ export default function TermsAndConditions() {
         </motion.div>
 
         {/* Content */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 1 }}
@@ -135,13 +135,13 @@ export default function TermsAndConditions() {
                   <p>TEXTILE ON PVT LTD</p>
                   <p>D 10/1 Okhla Industrial Area</p>
                   <p>Phase II, New Delhi – 110020</p>
-                  <p className="text-[#57AD43] mt-4">GST NO: 07AAJCT3326N1ZY</p>
+                  {/* <p className="text-[#57AD43] mt-4">GST NO: 07AAJCT3326N1ZY</p> */}
                 </div>
               </div>
               <div className="pt-8">
-                <Link 
+                <Link
                   href="/shipping-and-return-policy"
-                  className="text-white border border-white/20 px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all"
+                  className="text-white border border-white/20 px-8 py-4 text-[10px] font-bold uppercase tracking-widest "
                 >
                   View Shipping Policy
                 </Link>
