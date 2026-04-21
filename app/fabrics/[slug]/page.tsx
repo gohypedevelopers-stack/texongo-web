@@ -163,7 +163,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               <span className="text-4xl font-black tracking-tighter">₹{parseFloat(product.price || '0').toFixed(2)}</span>
             </div>
 
-            <Link href="#" className="text-[11px] font-medium text-[#57AD43] underline underline-offset-4 mb-8 block">
+            <Link href="/shipping-and-return-policy" className="text-[11px] font-medium text-[#57AD43] underline underline-offset-4 mb-8 block hover:text-black transition-colors">
               Shipping calculated at checkout
             </Link>
 
@@ -175,9 +175,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                     Availability
                   </div>
                   <div className="h-12 flex items-center justify-center min-w-[160px] px-4 text-[11px] font-bold text-[#57AD43] uppercase tracking-widest border border-[#57AD43]/30 bg-[#57AD43]/5 whitespace-nowrap">
-                    {product.qty
-                      ? (product.qty.toLowerCase().includes('kg') ? product.qty : `${product.qty} KG IN STOCK`)
-                      : (product.totalInventory !== undefined ? `${product.totalInventory} KG IN STOCK` : "IN STOCK")}
+                    {product.totalInventory !== undefined
+                      ? `${product.totalInventory} KG IN STOCK`
+                      : "IN STOCK"}
                   </div>
                 </div>
 
@@ -205,7 +205,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               <SpecRow label="GSM" value={product.gsm === "N/A" ? "N/A" : `${product.gsm} g/m²`} />
               <SpecRow label="WIDTH" value={product.width !== "N/A" ? `${product.width}` : "N/A"} />
               <SpecRow label="TYPE" value={product.type || "N/A"} />
-              <SpecRow label="SHADE" value={product.shade || "N/A"} />
+              <SpecRow label="COLOR" value={product.shade || "N/A"} />
 
 
 
@@ -227,9 +227,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
             {/* Accordions */}
             <div className="border-t border-gray-100 divide-y divide-gray-100">
-              <AccordionItem title="Note" content='"Please note that color difference on website may vary due to lighting and environmental factors."' defaultOpen />
-              <AccordionItem title="Shipping Info" content="Worldwide shipping available. Standard rates apply." />
-              <AccordionItem title="Care Info" content="Machine wash cold, tumble dry low." />
+              <AccordionItem title="Note" content='COLOR: Please note that color difference on website may vary due to lighting and environmental factors.
+GSM Tolerance: ±10% variation from specified GSM is standard in knitted fabrics and not a defect.
+Width Tolerance: Slight width variations due to knitting, finishing, and batch differences are normal and acceptable' defaultOpen />
+              <AccordionItem title="Shipping Info" content="We offer delivery services across India. Shipping charges are calculated based on the total weight of the fabric and the delivery pincode. We also provide international shipping options. For complete details, please refer to our Shipping & Return Policy." />
+              <AccordionItem title="Care Info" content="Hand wash or dry clean preferred; machine wash on mild cycle. Test before full wash.
+Minor GSM, width, and color variations may occur—acceptable as per industry standards." />
             </div>
           </div>
         </div>

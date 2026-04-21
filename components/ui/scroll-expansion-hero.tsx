@@ -52,7 +52,7 @@ const ScrollExpandMedia = ({
   // Actually, let's use a simpler mapping:
   // "start start" -> container top hits viewport top (scrollY = 0)
   // "end end" -> container bottom hits viewport bottom (scrollY = 100vh if container is 200vh)
-  
+
   const { scrollYProgress: expansionProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end']
@@ -63,22 +63,22 @@ const ScrollExpandMedia = ({
     [0, 1],
     [300, 300 + 1 * (isMobileState ? 700 : 1620)]
   );
-  
+
   const mediaHeight = useTransform(
     expansionProgress,
     [0, 1],
     [400, 400 + 1 * (isMobileState ? 400 : 850)]
   );
-  
+
   const textTranslateXRaw = useTransform(
     expansionProgress,
     [0, 1],
     [0, isMobileState ? 180 : 150]
   );
-  
+
   const textTranslateXLeft = useMotionTemplate`-${textTranslateXRaw}vw`;
   const textTranslateXRight = useMotionTemplate`${textTranslateXRaw}vw`;
-  
+
   const bgOpacity = useTransform(expansionProgress, [0, 1], [1, 0]);
   const overlayOpacity = useTransform(expansionProgress, [0, 1], [0.5, 0.2]);
   const titleOpacity = useTransform(expansionProgress, [0, 0.4], [1, 0]);
@@ -115,8 +115,8 @@ const ScrollExpandMedia = ({
                 ) : (
                   <Image src={mediaSrc} alt={title || ''} fill className='object-cover' />
                 )}
-                
-                <motion.div 
+
+                <motion.div
                   className="absolute inset-x-0 bottom-8 z-20 flex flex-col items-center text-center"
                   style={{ opacity: titleOpacity }}
                 >
@@ -140,7 +140,7 @@ const ScrollExpandMedia = ({
                 <motion.div className='absolute inset-0 bg-black/40' style={{ opacity: overlayOpacity }} />
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 style={{ opacity: titleOpacity }}
                 className={`absolute top-1/2 left-0 w-full -translate-y-1/2 flex items-center justify-center z-10 pointer-events-none transition-none ${textBlend ? 'mix-blend-difference' : ''}`}
               >
@@ -155,7 +155,7 @@ const ScrollExpandMedia = ({
           </div>
         </div>
       </div>
-      
+
       <div className="relative z-10 pt-20 w-full px-8 md:px-16 bg-[#F9FAFB]">
 
         {children}

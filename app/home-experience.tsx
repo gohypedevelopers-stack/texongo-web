@@ -159,16 +159,17 @@ function StoryProductCard({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full relative aspect-square bg-transparent mb-8 flex items-center justify-center overflow-hidden shadow-none transform-gpu"
+        className="w-full max-w-[300px] relative aspect-square bg-transparent mb-8 flex items-center justify-center overflow-hidden shadow-none transform-gpu"
         style={{ backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
       >
         <LazyVideo
           src={video}
           aria-label={alt}
-          threshold={0.05}
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain' }}
+          threshold={0.01}
+          className="absolute inset-0"
         />
       </Link>
+
 
 
       <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 tracking-tight px-4">{name}</h3>
@@ -606,47 +607,51 @@ export function HomeExperience() {
         </section>
 
         {/* ── STREAMLINE ──────────────────────────────────── */}
-        <section className="bg-white overflow-hidden border-y border-black/5">
-          <div className="flex flex-col md:flex-row w-full">
-            <div className="w-full md:w-1/2 relative min-h-[250px] md:min-h-[400px]">
-              <LazyVideo
-                src="/video/efficient_en.webm"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </div>
+        <LazySection>
+          <section className="bg-white overflow-hidden border-y border-black/5">
+            <div className="flex flex-col md:flex-row w-full">
+              <div className="w-full md:w-1/2 relative min-h-[250px] md:min-h-[400px]">
+                <LazyVideo
+                  src="/video/efficient_en.webm"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </div>
 
-            <div className="w-full md:w-1/2 flex flex-col justify-center p-8 md:p-12 lg:p-16 bg-[#F9FAFB]">
-              <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[#57AD43] mb-4 md:mb-6 block">Innovation</span>
-              <h2 className="text-3xl md:text-5xl font-black mb-4 md:mb-6 leading-tight tracking-tight text-black">
-                Streamline Your<br />Fabric Journey
-              </h2>
-              <p className="text-sm md:text-base text-black/70 leading-relaxed font-medium max-w-xl">
-                Preview texture, drape, movement, and micro-texture in stunning detail with 3D visualization. Sourcing fabric has never been more precise—where innovation meets craftsmanship.
-              </p>
-              <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                <button className="h-10 md:h-12 px-6 bg-black text-white text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-colors font-bold whitespace-nowrap text-center rounded-sm">
-                  Book a Demo
-                </button>
-                <button className="h-10 md:h-12 px-6 bg-transparent text-black text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] border border-black/10 hover:border-black transition-colors font-bold whitespace-nowrap text-center rounded-sm">
-                  Learn More
-                </button>
+              <div className="w-full md:w-1/2 flex flex-col justify-center p-8 md:p-12 lg:p-16 bg-[#F9FAFB]">
+                <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[#57AD43] mb-4 md:mb-6 block">Innovation</span>
+                <h2 className="text-3xl md:text-5xl font-black mb-4 md:mb-6 leading-tight tracking-tight text-black">
+                  Streamline Your<br />Fabric Journey
+                </h2>
+                <p className="text-sm md:text-base text-black/70 leading-relaxed font-medium max-w-xl">
+                  Preview texture, drape, movement, and micro-texture in stunning detail with 3D visualization. Sourcing fabric has never been more precise—where innovation meets craftsmanship.
+                </p>
+                <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                  <button className="h-10 md:h-12 px-6 bg-black text-white text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-colors font-bold whitespace-nowrap text-center rounded-sm">
+                    Book a Demo
+                  </button>
+                  <button className="h-10 md:h-12 px-6 bg-transparent text-black text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] border border-black/10 hover:border-black transition-colors font-bold whitespace-nowrap text-center rounded-sm">
+                    Learn More
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </LazySection>
 
 
 
         {/* ── CAMPAIGN STORY ─────────────────────────────── */}
-        <section id="womenswear" className="bg-white py-20 pb-0">
-          <div className="mx-auto max-w-7xl px-6 lg:px-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-              {storyProducts.map((product) => (
-                <StoryProductCard key={product.name} {...product} />
-              ))}
+        <LazySection>
+          <section id="womenswear" className="bg-white py-20 pb-0">
+            <div className="mx-auto max-w-7xl px-6 lg:px-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+                {storyProducts.map((product) => (
+                  <StoryProductCard key={product.name} {...product} />
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </LazySection>
 
         <LazySection>
           <KnitStylesSection />
@@ -661,35 +666,37 @@ export function HomeExperience() {
         </LazySection>
 
         {/* ── NEW ARRIVALS ─────────────────────────────────── */}
-        <section id="fabrics" className="py-16 md:py-24 bg-white border-y border-black/5">
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
-            <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-16 gap-6 md:gap-8 text-center md:text-left">
-              <div className="max-w-xl">
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">New Additions</span>
-                <h2 className="text-3xl md:text-6xl font-black leading-none tracking-tight">Newly Added Fabrics</h2>
+        <LazySection>
+          <section id="fabrics" className="py-16 md:py-24 bg-white border-y border-black/5">
+            <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
+              <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-16 gap-6 md:gap-8 text-center md:text-left">
+                <div className="max-w-xl">
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">New Additions</span>
+                  <h2 className="text-3xl md:text-6xl font-black leading-none tracking-tight">Newly Added Fabrics</h2>
+                </div>
+                <Link href="/fabrics" className="inline-block">
+                  <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
+                    View All Fabrics
+                  </p>
+                </Link>
               </div>
-              <Link href="/fabrics" className="inline-block">
-                <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
-                  View All Fabrics
-                </p>
-              </Link>
-            </div>
 
-            <div className="-mx-6 lg:-mx-10 overflow-hidden">
-              <div className={styles.productTrack}>
-                {[...marqueeProducts, ...marqueeProducts].map((product, index) => (
-                  <MarqueeProductCard
-                    key={`${product.name}-${index}`}
-                    name={product.name}
-                    price={product.price}
-                    href={product.href}
-                    image={product.image}
-                  />
-                ))}
+              <div className="-mx-6 lg:-mx-10 overflow-hidden">
+                <div className={styles.productTrack}>
+                  {[...marqueeProducts, ...marqueeProducts].map((product, index) => (
+                    <MarqueeProductCard
+                      key={`${product.name}-${index}`}
+                      name={product.name}
+                      price={product.price}
+                      href={product.href}
+                      image={product.image}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </LazySection>
 
         <LazySection>
           <TestimonialsSection />

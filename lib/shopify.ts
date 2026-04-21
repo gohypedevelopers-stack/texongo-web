@@ -3,7 +3,7 @@ import { createStorefrontApiClient } from '@shopify/storefront-api-client';
 const domain = process.env.SHOPIFY_STORE_DOMAIN || '';
 const publicAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN || '';
 
-const API_VERSION = '2025-01'; 
+const API_VERSION = '2025-01';
 
 export const storefrontClient = createStorefrontApiClient({
   storeDomain: domain,
@@ -90,7 +90,6 @@ export interface Fabric {
   fabric?: string;
   content?: string;
   ounce?: string;
-  qty?: string;
   knit_style?: string;
   shade?: string;
   usage?: string;
@@ -101,7 +100,7 @@ export interface Fabric {
 
 export function mapShopifyProduct(node: any): Fabric {
   if (!node) return {} as Fabric;
-  
+
   const metafields = Array.isArray(node.metafields) ? node.metafields : [];
 
   const getMeta = (key: string) => {
@@ -109,9 +108,18 @@ export function mapShopifyProduct(node: any): Fabric {
     return m?.value || 'N/A';
   };
 
-  const totalInventory = node.variants?.edges?.reduce((acc: number, edge: any) => {
+  // Aggregate quantity from all variants as it's often more reliable than top-level totalInventory
+  const variantInventory = node.variants?.edges?.reduce((acc: number, edge: any) => {
     return acc + (edge.node.quantityAvailable || 0);
   }, 0);
+
+  // Fallback chain: Variant Sum -> top-level totalInventory -> 'qty' metafield
+  const qtyMeta = getMeta('qty');
+  const totalInventory = (variantInventory && variantInventory > 0) 
+    ? variantInventory 
+    : (typeof node.totalInventory === 'number' && node.totalInventory > 0 
+        ? node.totalInventory 
+        : (qtyMeta !== 'N/A' ? parseInt(qtyMeta) : 0));
   const firstVariant = node.variants?.edges?.[0]?.node;
   const weight = firstVariant?.weight ? `${firstVariant.weight} ${firstVariant.weightUnit || 'kg'}` : undefined;
 
@@ -120,7 +128,31 @@ export function mapShopifyProduct(node: any): Fabric {
   // Logic: If 'fabric' metafield is N/A but 'type' metafield has a value, use 'type' for fabric.
   const fabricMeta = getMeta('fabric');
   const typeMeta = getMeta('type');
+
+  const selectedOptions = firstVariant?.selectedOptions || [];
+  const colorOption = selectedOptions.find((opt: any) => 
+    opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'shade'
+  );
   
+  // Look for color in MetaObject references (Shopify Taxonomy) or raw values
+  const colorMeta = metafields.find((m: any) => 
+    (m?.namespace === 'shopify' && m?.key === 'color') ||
+    (m?.namespace === 'standard' && m?.key === 'color') ||
+    m?.key?.toLowerCase() === 'color'
+  );
+
+  const metafieldColor = (() => {
+    if (!colorMeta) return undefined;
+    // If it's a MetaObject reference, look for a field named 'label' or 'name' (case-insensitive)
+    if (colorMeta.reference?.fields) {
+      const labelField = colorMeta.reference.fields.find((f: any) => 
+        ['label', 'name', 'display_name', 'title'].includes(f.key.toLowerCase())
+      );
+      return labelField?.value || colorMeta.reference.fields[0]?.value;
+    }
+    return colorMeta.value;
+  })();
+
   return {
     id: node.handle || '',
     sku: firstVariant?.sku || node.id?.split('/').pop() || '',
@@ -135,9 +167,14 @@ export function mapShopifyProduct(node: any): Fabric {
     fabric: fabricMeta !== 'N/A' ? fabricMeta : (typeMeta !== 'N/A' ? typeMeta : 'N/A'),
     content: getMeta('content'),
     ounce: getMeta('ounce'),
-    qty: getMeta('qty') !== 'N/A' ? getMeta('qty') : undefined,
     knit_style: getMeta('knit_style'),
-    shade: getMeta('shade'),
+    shade: (() => {
+      const base = colorOption?.value || metafieldColor || getMeta('shade');
+      if (base && base.startsWith('{')) {
+        try { return JSON.parse(base).label || base; } catch(e) { return base; }
+      }
+      return base;
+    })(),
     usage: getMeta('usage'),
     type: node.productType || 'N/A',
     totalInventory: typeof totalInventory === 'number' ? totalInventory : undefined,
@@ -184,6 +221,7 @@ export const PRODUCT_BY_HANDLE_QUERY = `
           currencyCode
         }
       }
+      totalInventory
       variants(first: 10) {
         edges {
           node {
@@ -191,6 +229,10 @@ export const PRODUCT_BY_HANDLE_QUERY = `
             quantityAvailable
             weight
             weightUnit
+            selectedOptions {
+              name
+              value
+            }
           }
         }
       }
@@ -200,14 +242,25 @@ export const PRODUCT_BY_HANDLE_QUERY = `
         {namespace: "custom", key: "gsm"},
         {namespace: "custom", key: "ounce"},
         {namespace: "custom", key: "width"},
-        {namespace: "custom", key: "qty"},
+        {namespace: "shopify", key: "color"},
+        {namespace: "standard", key: "color"},
+        {namespace: "custom", key: "color"},
         {namespace: "custom", key: "knit_style"},
         {namespace: "custom", key: "shade"},
         {namespace: "custom", key: "usage"},
         {namespace: "custom", key: "type"}
       ]) {
+        namespace
         key
         value
+        reference {
+          ... on Metaobject {
+            fields {
+              key
+              value
+            }
+          }
+        }
       }
     }
   }

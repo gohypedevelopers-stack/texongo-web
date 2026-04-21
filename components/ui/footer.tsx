@@ -16,13 +16,19 @@ export function Footer() {
           <div className="space-y-8">
             <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-white/40">Menu</h3>
             <ul className="grid grid-cols-2 gap-4">
-              {["Home", "About Us", "Contact Us", "Terms of Service", "Refund Policy", "Shipping Policy", "Privacy Policy"].map((item) => (
-                <li key={item}>
+              {[
+                { name: "Home", href: "/" },
+                { name: "About Us", href: "/about-us" },
+                { name: "Contact Us", href: "/contact-us" },
+                { name: "Terms & Conditions", href: "/terms-and-conditions" },
+                { name: "Shipping & Return Policy", href: "/shipping-and-return-policy" },
+              ].map((item) => (
+                <li key={item.name}>
                   <Link
-                    href={item === "Home" ? "/" : `/${item.toLowerCase().replace(/ /g, '-')}`}
+                    href={item.href}
                     className="text-sm font-bold text-white/60 hover:text-white transition-colors"
                   >
-                    {item}
+                    {item.name}
                   </Link>
                 </li>
               ))}
