@@ -13,12 +13,6 @@ const FeatureCard = ({ icon: Icon, title, content }: any) => (
 );
 
 export default function ShippingAndReturnPolicy() {
-  const fadeIn = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.8, ease: "easeOut" }
-  };
-
   return (
     <main className="min-h-screen bg-white pb-32 pt-24 lg:pt-44">
       {/* Background Decor */}
@@ -29,7 +23,12 @@ export default function ShippingAndReturnPolicy() {
 
       <div className="max-w-[1100px] mx-auto px-6 lg:px-10 relative z-10">
         {/* Header */}
-        <motion.div {...fadeIn} className="mb-20 text-center lg:text-left">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="mb-20 text-center lg:text-left"
+        >
           <Link 
             href="/" 
             className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors mb-12 w-fit mx-auto lg:mx-0"
