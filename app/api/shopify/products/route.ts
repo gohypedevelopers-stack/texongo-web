@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const response = await shopifyFetch({
       query: PRODUCTS_QUERY,
-      variables: { first: 10 },
+      variables: { first: 50 },
     });
 
     return NextResponse.json(response);

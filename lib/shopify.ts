@@ -1,15 +1,17 @@
 import { createStorefrontApiClient } from '@shopify/storefront-api-client';
 
-const domain = process.env.SHOPIFY_STORE_DOMAIN || '';
-const publicAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN || '';
+const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || process.env.SHOPIFY_STORE_DOMAIN || '';
+const publicAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN || process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN || '';
 
 const API_VERSION = '2025-01';
 
-export const storefrontClient = createStorefrontApiClient({
-  storeDomain: domain,
-  apiVersion: API_VERSION,
-  publicAccessToken: publicAccessToken,
-});
+export const storefrontClient = (domain && publicAccessToken)
+  ? createStorefrontApiClient({
+    storeDomain: domain,
+    apiVersion: API_VERSION,
+    publicAccessToken: publicAccessToken,
+  })
+  : null;
 
 export async function shopifyFetch<T>({
   query,
@@ -108,34 +110,30 @@ export function mapShopifyProduct(node: any): Fabric {
     return m?.value || 'N/A';
   };
 
-  // Aggregate quantity from all variants as it's often more reliable than top-level totalInventory
   const variantInventory = node.variants?.edges?.reduce((acc: number, edge: any) => {
     return acc + (edge.node.quantityAvailable || 0);
   }, 0);
 
-  // Fallback chain: Variant Sum -> top-level totalInventory -> 'qty' metafield
   const qtyMeta = getMeta('qty');
-  const totalInventory = (variantInventory && variantInventory > 0) 
-    ? variantInventory 
-    : (typeof node.totalInventory === 'number' && node.totalInventory > 0 
-        ? node.totalInventory 
-        : (qtyMeta !== 'N/A' ? parseInt(qtyMeta) : 0));
+  const totalInventory = (variantInventory && variantInventory > 0)
+    ? variantInventory
+    : (typeof node.totalInventory === 'number' && node.totalInventory > 0
+      ? node.totalInventory
+      : (qtyMeta !== 'N/A' ? parseInt(qtyMeta) : 0));
   const firstVariant = node.variants?.edges?.[0]?.node;
   const weight = firstVariant?.weight ? `${firstVariant.weight} ${firstVariant.weightUnit || 'kg'}` : undefined;
 
   const allImages = node.images?.edges?.map((e: any) => e.node.url) || [];
 
-  // Logic: If 'fabric' metafield is N/A but 'type' metafield has a value, use 'type' for fabric.
   const fabricMeta = getMeta('fabric');
   const typeMeta = getMeta('type');
 
   const selectedOptions = firstVariant?.selectedOptions || [];
-  const colorOption = selectedOptions.find((opt: any) => 
+  const colorOption = selectedOptions.find((opt: any) =>
     opt.name.toLowerCase() === 'color' || opt.name.toLowerCase() === 'shade'
   );
-  
-  // Look for color in MetaObject references (Shopify Taxonomy) or raw values
-  const colorMeta = metafields.find((m: any) => 
+
+  const colorMeta = metafields.find((m: any) =>
     (m?.namespace === 'shopify' && m?.key === 'color') ||
     (m?.namespace === 'standard' && m?.key === 'color') ||
     m?.key?.toLowerCase() === 'color'
@@ -143,9 +141,8 @@ export function mapShopifyProduct(node: any): Fabric {
 
   const metafieldColor = (() => {
     if (!colorMeta) return undefined;
-    // If it's a MetaObject reference, look for a field named 'label' or 'name' (case-insensitive)
     if (colorMeta.reference?.fields) {
-      const labelField = colorMeta.reference.fields.find((f: any) => 
+      const labelField = colorMeta.reference.fields.find((f: any) =>
         ['label', 'name', 'display_name', 'title'].includes(f.key.toLowerCase())
       );
       return labelField?.value || colorMeta.reference.fields[0]?.value;
@@ -171,7 +168,7 @@ export function mapShopifyProduct(node: any): Fabric {
     shade: (() => {
       const base = colorOption?.value || metafieldColor || getMeta('shade');
       if (base && base.startsWith('{')) {
-        try { return JSON.parse(base).label || base; } catch(e) { return base; }
+        try { return JSON.parse(base).label || base; } catch (e) { return base; }
       }
       return base;
     })(),
@@ -266,6 +263,29 @@ export const PRODUCT_BY_HANDLE_QUERY = `
   }
 `;
 
+export const FILE_BY_NAME_QUERY = `
+  query getFileByName($query: String!) {
+    files(first: 1, query: $query) {
+      edges {
+        node {
+          ... on Video {
+            id
+            sources {
+              url
+              format
+              mimeType
+            }
+          }
+          ... on GenericFile {
+            id
+            url
+          }
+        }
+      }
+    }
+  }
+`;
+
 export async function getShopifyProduct(handle: string): Promise<Fabric | null> {
   try {
     const response = await shopifyFetch<any>({
@@ -280,6 +300,82 @@ export async function getShopifyProduct(handle: string): Promise<Fabric | null> 
     const all = await getShopifyProducts(50);
     return all.find(p => p.id === handle) || null;
   } catch (err) {
+    return null;
+  }
+}
+
+/**
+ * Fetches a video CDN URL from Shopify by its Filename.
+ */
+export async function getShopifyVideoUrl(fileName: string): Promise<string | null> {
+  try {
+    if (/^\d+$/.test(fileName)) {
+      return getShopifyVideoUrlById(fileName);
+    }
+
+    const cleanName = fileName.replace(/\.[^/.]+$/, "");
+
+    const response = await shopifyFetch<any>({
+      query: FILE_BY_NAME_QUERY,
+      variables: { query: `filename:${cleanName}` },
+    });
+
+    const fileNode = response.data?.files?.edges?.[0]?.node;
+    if (!fileNode) return null;
+
+    if (fileNode.sources) {
+      const mp4Source = fileNode.sources
+        .filter((s: any) => s.mimeType === 'video/mp4')
+        .sort((a: any) => a.url.includes('1080p') ? -1 : 1)[0];
+
+      return mp4Source?.url || fileNode.sources[0].url;
+    }
+
+    return (fileNode as any).url || null;
+  } catch (error) {
+    console.error("Error fetching Shopify video URL:", error);
+    return null;
+  }
+}
+
+/**
+ * Fetches a video CDN URL from Shopify by its numerical ID or GID.
+ */
+export async function getShopifyVideoUrlById(id: string): Promise<string | null> {
+  try {
+    const gid = id.startsWith('gid://') ? id : `gid://shopify/Video/${id}`;
+
+    const response = await shopifyFetch<any>({
+      query: `
+        query getFileById($id: ID!) {
+          node(id: $id) {
+            ... on Video {
+              id
+              sources {
+                url
+                mimeType
+              }
+            }
+          }
+        }
+      `,
+      variables: { id: gid },
+    });
+
+    const fileNode = response.data?.node;
+    if (!fileNode) return null;
+
+    if (fileNode.sources) {
+      const mp4Source = fileNode.sources
+        .filter((s: any) => s.mimeType === 'video/mp4')
+        .sort((a: any) => a.url.includes('1080p') ? -1 : 1)[0];
+
+      return mp4Source?.url || fileNode.sources[0].url;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error fetching Shopify video by ID:", error);
     return null;
   }
 }

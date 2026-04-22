@@ -3,7 +3,7 @@
 import { FabricCard } from "../../components/ui/fabric-card";
 import { ChevronDown, Filter, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Fabric } from "@/lib/shopify";
+import { Fabric, mapShopifyProduct } from "@/lib/shopify";
 
 export default function FabricsListingPage() {
   const [fabrics, setFabrics] = useState<Fabric[]>([]);
@@ -20,15 +20,7 @@ export default function FabricsListingPage() {
           // The API route currently returns the raw Shopify response. 
           // Let's use the mapping logic we put in lib/shopify.ts or map it here.
           // Since the API route returns the raw response, we'll map it here for now.
-          const mappedProducts = result.data.products.edges.map(({ node }: any) => ({
-            id: node.handle,
-            sku: node.id.split('/').pop(),
-            name: node.title,
-            price: node.priceRange.minVariantPrice.amount,
-            gsm: node.metafields?.find((m: any) => m?.key === 'gsm')?.value || 'N/A',
-            image: node.images.edges[0]?.node.url || '',
-            description: node.description,
-          }));
+          const mappedProducts = result.data.products.edges.map(({ node }: any) => mapShopifyProduct(node));
           setFabrics(mappedProducts);
         } else {
           setError("No products found");
@@ -72,7 +64,7 @@ export default function FabricsListingPage() {
           {/* Results Info & Sort */}
           <div className="flex flex-col md:flex-row justify-between items-center border-t border-gray-100 pt-8 gap-4">
             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-              Showing 1–16 of 1298 results
+              Showing {fabrics.length} result{fabrics.length !== 1 ? 's' : ''}
             </p>
             <div className="flex items-center gap-3 border border-gray-100 rounded px-4 py-2 cursor-pointer hover:border-black transition-colors group">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest group-hover:text-black">Sort by:</span>
@@ -114,17 +106,12 @@ export default function FabricsListingPage() {
         )}
 
         {/* Pagination */}
-        <div className="flex justify-center items-center gap-2 mt-24 mb-12">
-          <PaginationButton label="1" active />
-          <PaginationButton label="2" />
-          <PaginationButton label="3" />
-          <PaginationButton label="4" />
-          <span className="px-3 text-gray-400">...</span>
-          <PaginationButton label="80" />
-          <PaginationButton label="81" />
-          <PaginationButton label="82" />
-          <PaginationButton isNext />
-        </div>
+        {fabrics.length > 20 && (
+          <div className="flex justify-center items-center gap-2 mt-24 mb-12">
+            <PaginationButton label="1" active />
+            <PaginationButton isNext />
+          </div>
+        )}
       </div>
 
     </main>

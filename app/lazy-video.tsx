@@ -28,7 +28,7 @@ export function LazyVideo({ src, threshold = 0.15, style, className, ...props }:
               video.src = src;
               video.load();
             }
-            video.play().catch(() => {/* autoplay blocked — no-op */});
+            video.play().catch(() => {/* autoplay blocked — no-op */ });
           } else {
             video.pause();
           }
@@ -55,7 +55,7 @@ export function LazyVideo({ src, threshold = 0.15, style, className, ...props }:
         playsInline
         preload="none"
         onLoadedData={() => setIsLoading(false)}
-        style={{ 
+        style={{
           willChange: "transform, opacity",
           transform: "translateZ(0)", // Force GPU acceleration
           backgroundColor: "transparent",

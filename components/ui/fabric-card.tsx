@@ -81,7 +81,7 @@ export function FabricCard({ id, name, gsm, price, image }: FabricCardProps) {
             {name}
           </h3>
           <p className="text-xs font-black text-[#57AD43] uppercase tracking-tighter">
-            ₹{price}.00
+            ₹{parseFloat(price).toFixed(2)}
           </p>
         </div>
       </Link>

@@ -28,82 +28,96 @@ interface iCardProps extends iCardItem {
 const Card: FC<iCardProps> = ({
   title,
   description,
-  color,
-  textColor,
-  i,
-  src,
+  tag,
   videoUrl,
+  src,
   link,
+  i,
   progress,
   range,
   targetScale
 }) => {
   const container = useRef(null);
-  const scale = useTransform(progress, range, [1, targetScale]);
+
+  // Minimal opacity fade for a sleek feel
+  const opacity = useTransform(progress, range, [1, 0.7]);
 
   return (
-    <div ref={container} className="h-screen flex items-center justify-center sticky top-0 overflow-hidden" style={{ contain: 'paint' }}>
+    <div ref={container} className="relative w-full h-[75vh] sticky top-0 overflow-hidden bg-white flex items-center justify-center border-b border-gray-50">
 
-      <motion.div
-        style={{
-          backgroundColor: color,
-          scale,
-          marginTop: `${i * 25}px`,
-          transform: "translateZ(0)",
-          backfaceVisibility: "hidden"
-        }}
-        className="relative flex flex-col md:flex-row h-[85vh] w-[95vw] md:w-[1280px]
-				items-center justify-between mx-auto shadow-2xl rounded-[40px] overflow-hidden origin-top transform-gpu"
+      {/* 1. Large Faint Background Marquee (z-10) */}
+      <div className="absolute inset-0 z-99 flex items-center pointer-events-none select-none overflow-hidden hidden md:flex">
+        <motion.div
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{
+            duration: 30,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="flex whitespace-nowrap"
+        >
+          <span className="text-[20vw] font-black tracking-tighter uppercase text-black opacity-[0.04] pr-20">
+            {title} &nbsp; {title} &nbsp; {title} &nbsp;
+          </span>
+          <span className="text-[20vw] font-black tracking-tighter uppercase text-black opacity-[0.04] pr-20">
+            {title} &nbsp; {title} &nbsp; {title} &nbsp;
+          </span>
+        </motion.div>
+      </div>
 
-
-      >
-        {/* Media Side */}
-        <div className="absolute inset-0 z-0 w-full h-full">
+      {/* 2. Primary Model Composition (z-0 to sit in background) */}
+      <div className="relative z-0 h-full w-full max-w-5xl flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 1.2, ease: "circOut" }}
+          className="relative h-[95%] aspect-[3/4] md:aspect-square flex items-center justify-center"
+        >
           {videoUrl ? (
             <LazyVideo
               src={videoUrl}
-              className="w-full h-full object-cover opacity-90"
+              className="w-full h-full object-contain"
               threshold={0.01}
             />
-
-
           ) : src ? (
-            <Image
-              className="w-full h-full object-cover opacity-80"
-              src={src}
-              alt={title}
-              fill
-              priority={i === 0}
-            />
+            <div className="relative w-full h-full">
+              <Image
+                className="object-contain"
+                src={src}
+                alt={title}
+                fill
+                priority={i === 0}
+              />
+            </div>
           ) : null}
+        </motion.div>
+      </div>
 
-        </div>
-
-        {/* Content Overlay */}
-        <div className="relative z-10 w-full h-full flex flex-col items-center justify-center text-center p-6 md:p-20">
-          <span className="text-[11px] font-black uppercase tracking-[0.5em] mb-4 opacity-70" style={{ color: textColor }}>
-            Texongo Featured
+      {/* 3. High-Contrast Text Overlay (z-20 for top layer) */}
+      <motion.div
+        style={{ opacity }}
+        className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-6"
+      >
+        <div className="max-w-2xl mt-auto mb-16 flex flex-col items-center">
+          <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.5em] mb-4 text-black/40">
+            {tag || "Women's Collection"}
           </span>
-          <h2
-            className="text-3xl md:text-6xl lg:text-8xl font-black mb-4 md:mb-6 tracking-tighter uppercase leading-[0.9]"
-            style={{ color: textColor }}
-          >
+
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-4 md:mb-6 tracking-tighter uppercase leading-[0.8] text-black">
             {title}
           </h2>
-          <p
-            className="text-base md:text-xl lg:text-2xl font-medium max-w-2xl opacity-90 leading-relaxed px-4 md:px-0"
-            style={{ color: textColor }}
-          >
+
+          <p className="text-sm md:text-base lg:text-lg font-medium text-black/60 mb-10 max-w-lg leading-relaxed">
             {description}
           </p>
-          <div className="mt-8 md:mt-12">
-            <Link
-              href={link}
-              className="inline-flex items-center justify-center h-12 md:h-14 px-8 md:px-10 bg-white text-black text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] rounded-full hover:scale-105 transition-transform"
-            >
-              Explore Collection
-            </Link>
-          </div>
+
+          <Link
+            href={link}
+            style={{ color: '#ffffff', backgroundColor: '#000000' }}
+            className="relative z-30 inline-flex items-center justify-center h-14 md:h-16 px-12 md:px-16 text-[13px] md:text-[14px] font-black uppercase tracking-[0.4em] rounded-full hover:scale-105 transition-all shadow-2xl active:scale-95"
+          >
+            Explore Collection
+          </Link>
         </div>
       </motion.div>
     </div>
@@ -122,17 +136,17 @@ export const CardsParallax: FC<iCardSlideProps> = ({ items }) => {
   });
 
   return (
-    <div ref={container} className="relative mt-[10vh]">
+    <div ref={container} className="relative" style={{ height: `${items.length * 75}vh` }}>
       {items.map((project, i) => {
-        const targetScale = 1 - ((items.length - i) * 0.05);
+        const range = [i * (1 / items.length), (i + 1) * (1 / items.length)];
         return (
           <Card
             key={`p_${i}`}
             {...project}
             i={i}
             progress={scrollYProgress}
-            range={[i * 0.25, 1]}
-            targetScale={targetScale}
+            range={range as [number, number]}
+            targetScale={1}
           />
         );
       })}
