@@ -1,5 +1,5 @@
 "use client";
-import { FC, useRef } from "react";
+import { FC, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { LazyVideo } from "../../app/lazy-video";
@@ -21,7 +21,6 @@ interface iCardProps extends iCardItem {
   i: number;
   progress: any;
   range: [number, number];
-  targetScale: number;
 }
 
 // Components
@@ -131,13 +130,19 @@ interface iCardSlideProps {
 
 export const CardsParallax: FC<iCardSlideProps> = ({ items }) => {
   const container = useRef(null);
+  const [mt, setMt] = useState(85);
+
+  useEffect(() => {
+    if (window.innerWidth < 1024) setMt(100);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: container,
     offset: ['start start', 'end end']
   });
 
   return (
-    <div ref={container} className="relative" style={{ height: `${items.length * 85}vh` }}>
+    <div ref={container} className="relative" style={{ height: `${items.length * mt}vh` }}>
       {items.map((project, i) => {
         const range = [i * (1 / items.length), (i + 1) * (1 / items.length)];
         return (
@@ -147,7 +152,6 @@ export const CardsParallax: FC<iCardSlideProps> = ({ items }) => {
             i={i}
             progress={scrollYProgress}
             range={range as [number, number]}
-            targetScale={1}
           />
         );
       })}

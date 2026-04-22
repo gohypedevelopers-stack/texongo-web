@@ -23,14 +23,22 @@ export function LazyVideo({ src, threshold = 0.15, style, className, ...props }:
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Set src only when first becoming visible (lazy load)
-            if (!video.src && src) {
+            // Set src and load when entering viewport
+            if (video.src !== new URL(src, window.location.href).href) {
               video.src = src;
               video.load();
             }
-            video.play().catch(() => {/* autoplay blocked — no-op */ });
+            video.play().catch(() => {/* autoplay blocked or aborted */ });
           } else {
-            video.pause();
+            // Aggressively free up memory on mobile by clearing the src
+            if (window.innerWidth < 1024) {
+              video.pause();
+              video.src = ""; 
+              video.load(); // Force the browser to release the video resource
+              setIsLoading(true);
+            } else {
+              video.pause();
+            }
           }
         });
       },
