@@ -76,12 +76,12 @@ export function FabricCard({ id, name, gsm, price, image }: FabricCardProps) {
         </div>
 
         {/* Product Info */}
-        <div className="w-full flex flex-col items-center gap-2">
-          <h3 className="text-[11px] font-bold uppercase tracking-widest text-[#121212] leading-tight max-w-[200px]">
+        <div className="w-full flex flex-col items-center gap-3 py-2">
+          <h3 className="text-sm font-black uppercase tracking-widest text-black leading-tight max-w-[240px] group-hover:text-[#57AD43] transition-colors duration-300">
             {name}
           </h3>
-          <p className="text-xs font-black text-[#57AD43] uppercase tracking-tighter">
-            ₹{parseFloat(price).toFixed(2)}
+          <p className="text-lg font-black text-black uppercase tracking-tighter flex items-center gap-2">
+            <span className="text-[#57AD43]">₹</span>{parseFloat(price).toFixed(2)}
           </p>
         </div>
       </Link>

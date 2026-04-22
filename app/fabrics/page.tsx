@@ -38,40 +38,45 @@ export default function FabricsListingPage() {
     <main className="min-h-screen bg-white">
 
       {/* Hero Banner Section */}
-      <section className="relative h-[20vh] md:h-[40vh] w-full overflow-hidden bg-gray-100 border-b border-gray-100">
+      <section className="relative h-[25vh] md:h-[50vh] w-full overflow-hidden bg-gray-900 border-b border-gray-100 flex items-center justify-center">
         <img
           src="/hero/hero-fabrics.jpg"
           alt="Our Fabrics"
-          className="w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105"
         />
-        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <div className="relative z-10 text-center px-6">
+           <span className="text-[10px] font-black uppercase tracking-[0.6em] text-[#57AD43] mb-4 block">Exquisite Curation</span>
+           <h1 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none">
+              KNIT <span className="text-[#57AD43]">STYLE</span>
+           </h1>
+        </div>
       </section>
 
       {/* Filter & Sorting Bar */}
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-12">
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col items-center gap-12 text-center">
           {/* Filter Labels */}
-          <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold tracking-tight text-gray-800">Filter</h1>
+          <div className="space-y-4">
+            <h2 className="text-4xl lg:text-7xl font-black uppercase tracking-tighter text-black">Curation <span className="text-[#57AD43]">Filters</span></h2>
+            <div className="h-px bg-gray-100 w-24 mx-auto" />
           </div>
-
-          {/* Filter Dropdowns */}
-          <div className="flex items-center gap-4">
-            <FilterDropdown label="Gsm" />
-            <FilterDropdown label="Colors" />
+          
+          <div className="flex flex-wrap justify-center items-center gap-6">
+            <FilterDropdown label="Gsm Range" />
+            <FilterDropdown label="Color Palette" />
           </div>
+        </div>
 
-          {/* Results Info & Sort */}
-          <div className="flex flex-col md:flex-row justify-between items-center border-t border-gray-100 pt-8 gap-4">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-              Showing {fabrics.length} result{fabrics.length !== 1 ? 's' : ''}
+        <div className="flex flex-col md:flex-row justify-between items-center border-t border-gray-100 pt-12 gap-8 mt-12">
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em]">
+              Archive Analysis: {fabrics.length} result{fabrics.length !== 1 ? 's' : ''}
             </p>
-            <div className="flex items-center gap-3 border border-gray-100 rounded px-4 py-2 cursor-pointer hover:border-black transition-colors group">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest group-hover:text-black">Sort by:</span>
-              <span className="text-xs font-black uppercase tracking-widest">Sort by latest</span>
-              <ChevronDown size={14} className="text-gray-400" />
+            <div className="flex items-center gap-4 border-b-2 border-black pb-2 cursor-pointer hover:border-[#57AD43] transition-all group">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-400">Sort Matrix:</span>
+              <span className="text-sm font-black uppercase tracking-tight">Latest Selection</span>
+              <ChevronDown size={14} className="text-black" />
             </div>
-          </div>
         </div>
 
         {/* Product Grid */}
@@ -120,9 +125,9 @@ export default function FabricsListingPage() {
 
 function FilterDropdown({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-8 border border-gray-100 rounded px-6 py-2 min-w-[120px] justify-between cursor-pointer hover:border-black transition-colors">
-      <span className="text-xs font-black uppercase tracking-widest text-[#121212]">{label}</span>
-      <ChevronDown size={14} className="text-gray-400" />
+    <div className="flex items-center gap-8 border border-gray-100 rounded-full px-8 py-4 min-w-[180px] justify-between cursor-pointer hover:border-[#57AD43] hover:bg-gray-50 transition-all group">
+      <span className="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-[#121212]">{label}</span>
+      <ChevronDown size={14} className="text-gray-400 group-hover:text-black transition-colors" />
     </div>
   );
 }
