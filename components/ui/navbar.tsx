@@ -149,14 +149,14 @@ export function Navbar() {
 
       <AnimatePresence>
         {isVisible && (
-          <motion.nav
+            <motion.nav
             initial={{ y: -132, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -132, opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className="fixed top-0 left-0 w-full bg-white border-b border-gray-100 z-[100]"
+            className="fixed top-0 left-0 w-full bg-white border-b border-gray-100 z-[1000]"
           >
             {/* Top Bar: Logo, Search, Icons */}
             <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-10 h-16 md:h-20 flex items-center justify-between gap-2 md:gap-8">
@@ -282,7 +282,7 @@ export function Navbar() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
                           transition={{ duration: 0.2, ease: "easeOut" }}
-                          className={`absolute top-full z-[110] bg-[#f5f5f5] shadow-[0_10px_30px_rgba(0,0,0,0.1)] border border-gray-100 ${item.megaMenu
+                          className={`absolute top-full z-[1100] bg-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] border border-gray-100 ${item.megaMenu
                             ? "fixed md:absolute left-0 right-0 mx-auto w-[calc(100vw-3rem)] max-w-[1440px]"
                             : "left-0 min-w-48"
                             }`}

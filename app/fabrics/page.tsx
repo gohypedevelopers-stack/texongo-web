@@ -10,6 +10,11 @@ export default function FabricsListingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Filter States
+  const [selectedGsm, setSelectedGsm] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("Latest Selection");
+
   useEffect(() => {
     async function fetchProducts() {
       try {
@@ -17,9 +22,6 @@ export default function FabricsListingPage() {
         const result = await response.json();
 
         if (result.data?.products?.edges) {
-          // The API route currently returns the raw Shopify response. 
-          // Let's use the mapping logic we put in lib/shopify.ts or map it here.
-          // Since the API route returns the raw response, we'll map it here for now.
           const mappedProducts = result.data.products.edges.map(({ node }: any) => mapShopifyProduct(node));
           setFabrics(mappedProducts);
         } else {
@@ -34,6 +36,39 @@ export default function FabricsListingPage() {
 
     fetchProducts();
   }, []);
+
+  // Derived Data
+  const gsmOptions = ["All GSM", "Light (<200)", "Medium (200-300)", "Heavy (>300)"];
+  
+  const colorOptions = ["All Colors", ...Array.from(new Set(fabrics.map(f => f.shade).filter((val): val is string => !!val && val !== 'N/A')))].sort();
+
+  const sortOptions = ["Latest Selection", "Price: Low to High", "Price: High to Low", "GSM: Low to High"];
+
+  // Filtering & Sorting Logic
+  const filteredFabrics = fabrics
+    .filter(f => {
+      const rawValue = typeof f.gsm === 'string' ? f.gsm : '';
+      const rawGsm = parseInt(rawValue.replace(/[^0-9]/g, ''));
+      const gsmMatch = !selectedGsm || selectedGsm === "All GSM" || (() => {
+        if (isNaN(rawGsm)) return false;
+        if (rawGsm < 200) return selectedGsm === "Light (<200)";
+        if (rawGsm <= 300) return selectedGsm === "Medium (200-300)";
+        return selectedGsm === "Heavy (>300)";
+      })();
+      const colorMatch = !selectedColor || selectedColor === "All Colors" || f.shade === selectedColor;
+      return gsmMatch && colorMatch;
+    })
+    .sort((a, b) => {
+      if (sortBy === "Price: Low to High") return parseFloat(a.price) - parseFloat(b.price);
+      if (sortBy === "Price: High to Low") return parseFloat(b.price) - parseFloat(a.price);
+      if (sortBy === "GSM: Low to High") {
+        const gsmA = parseInt(a.gsm.replace(/[^0-9]/g, '')) || 0;
+        const gsmB = parseInt(b.gsm.replace(/[^0-9]/g, '')) || 0;
+        return gsmA - gsmB;
+      }
+      return 0; // Latest Selection is default order from API
+    });
+
   return (
     <main className="min-h-screen bg-white">
 
@@ -53,81 +88,178 @@ export default function FabricsListingPage() {
         </div>
       </section>
 
-      {/* Filter & Sorting Bar */}
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-12">
+      {/* Filter Bar */}
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-12 relative z-[100]">
         <div className="flex flex-col items-center gap-12 text-center">
-          {/* Filter Labels */}
           <div className="space-y-4">
             <h2 className="text-4xl lg:text-7xl font-black uppercase tracking-tighter text-black">Curation <span className="text-[#57AD43]">Filters</span></h2>
             <div className="h-px bg-gray-100 w-24 mx-auto" />
           </div>
           
-          <div className="flex flex-wrap justify-center items-center gap-6">
-            <FilterDropdown label="Gsm Range" />
-            <FilterDropdown label="Color Palette" />
+          <div className="flex flex-wrap justify-center items-center gap-6 relative">
+            <FilterDropdown 
+              label={selectedGsm || "Gsm Range"} 
+              options={gsmOptions} 
+              onSelect={setSelectedGsm}
+              active={!!selectedGsm && selectedGsm !== "All GSM"}
+            />
+            <FilterDropdown 
+              label={selectedColor || "Color Palette"} 
+              options={colorOptions} 
+              onSelect={setSelectedColor}
+              active={!!selectedColor && selectedColor !== "All Colors"}
+            />
+          </div>
+
+          {/* Sort Matrix Section */}
+          <div className="pt-4">
+            <SortDropdown 
+              label={sortBy} 
+              options={sortOptions} 
+              onSelect={setSortBy} 
+            />
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center border-t border-gray-100 pt-12 gap-8 mt-12">
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em]">
-              Archive Analysis: {fabrics.length} result{fabrics.length !== 1 ? 's' : ''}
+              Archive Analysis: {filteredFabrics.length} result{filteredFabrics.length !== 1 ? 's' : ''}
+              {fabrics.length !== filteredFabrics.length && ` (of ${fabrics.length})`}
             </p>
-            <div className="flex items-center gap-4 border-b-2 border-black pb-2 cursor-pointer hover:border-[#57AD43] transition-all group">
-              <span className="text-xs font-black uppercase tracking-widest text-gray-400">Sort Matrix:</span>
-              <span className="text-sm font-black uppercase tracking-tight">Latest Selection</span>
-              <ChevronDown size={14} className="text-black" />
+            <div 
+              onClick={() => { setSelectedGsm(""); setSelectedColor(""); setSortBy("Latest Selection"); }}
+              className="text-[10px] font-black uppercase tracking-widest text-[#57AD43] cursor-pointer hover:text-black transition-colors"
+            >
+              Reset Filters
             </div>
         </div>
-
-        {/* Product Grid */}
-        {loading ? (
-          <div className="flex flex-col items-center justify-center min-h-[400px] w-full gap-4">
-            <Loader2 className="animate-spin text-gray-400" size={40} />
-            <p className="text-xs font-bold uppercase tracking-widest text-gray-400">Loading fine fabrics...</p>
-          </div>
-        ) : error ? (
-          <div className="flex flex-col items-center justify-center min-h-[400px] w-full gap-4">
-            <p className="text-sm font-bold text-red-400 uppercase tracking-widest">{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-2 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-sm"
-            >
-              Retry
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 mt-16">
-            {fabrics.map((fabric) => (
-              <FabricCard
-                key={fabric.id}
-                id={fabric.id}
-                name={fabric.name}
-                price={fabric.price}
-                gsm={fabric.gsm}
-                image={fabric.image}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Pagination */}
-        {fabrics.length > 20 && (
-          <div className="flex justify-center items-center gap-2 mt-24 mb-12">
-            <PaginationButton label="1" active />
-            <PaginationButton isNext />
-          </div>
-        )}
       </div>
 
-    </main>
+        {/* Product Grid */}
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 pb-20">
+          {loading ? (
+            <div className="flex flex-col items-center justify-center min-h-[400px] w-full gap-4">
+              <Loader2 className="animate-spin text-gray-400" size={40} />
+              <p className="text-xs font-bold uppercase tracking-widest text-gray-400">Loading fine fabrics...</p>
+            </div>
+          ) : error ? (
+            <div className="flex flex-col items-center justify-center min-h-[400px] w-full gap-4">
+              <p className="text-sm font-bold text-red-400 uppercase tracking-widest">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-6 py-2 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-sm"
+              >
+                Retry
+              </button>
+            </div>
+          ) : filteredFabrics.length === 0 ? (
+            <div className="flex flex-col items-center justify-center min-h-[400px] w-full gap-6 text-center">
+              <p className="text-xl font-black uppercase tracking-tighter text-gray-300">No matches found for these filters</p>
+              <button
+                onClick={() => { setSelectedGsm("All GSM"); setSelectedColor("All Colors"); }}
+                className="text-xs font-black uppercase tracking-widest text-[#57AD43] border-b border-[#57AD43] pb-1"
+              >
+                Clear All Selections
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 mt-16">
+              {filteredFabrics.map((fabric) => (
+                <FabricCard
+                  key={fabric.id}
+                  id={fabric.id}
+                  name={fabric.name}
+                  price={fabric.price}
+                  gsm={fabric.gsm}
+                  image={fabric.image}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Pagination */}
+          {filteredFabrics.length > 20 && (
+            <div className="flex justify-center items-center gap-2 mt-24 mb-12">
+              <PaginationButton label="1" active />
+              <PaginationButton isNext />
+            </div>
+          )}
+        </div>
+      </main>
+    );
+  }
+
+function FilterDropdown({ label, options, onSelect, active }: { label: string, options: string[], onSelect: (val: string) => void, active?: boolean }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative">
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className={`flex items-center gap-8 border rounded-full px-8 py-4 min-w-[240px] justify-between cursor-pointer transition-all group ${
+          active ? 'border-[#57AD43] bg-[#57AD43]/5' : 'border-gray-100 hover:border-[#57AD43] hover:bg-gray-50'
+        }`}
+      >
+        <span className={`text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] ${active ? 'text-[#57AD43]' : 'text-[#121212]'}`}>{label}</span>
+        <ChevronDown size={14} className={`${active ? 'text-[#57AD43]' : 'text-gray-400'} group-hover:text-black transition-all ${isOpen ? 'rotate-180' : ''}`} />
+      </div>
+
+      {isOpen && (
+        <div className="absolute top-full left-0 mt-4 w-full bg-white border border-gray-100 rounded-2xl shadow-2xl z-[500] overflow-hidden py-2 max-h-[300px] overflow-y-auto min-w-[240px]">
+          {options.map((opt) => (
+            <div 
+              key={opt}
+              onClick={(e) => { 
+                e.stopPropagation();
+                onSelect(opt); 
+                setIsOpen(false); 
+              }}
+              className={`px-8 py-4 text-[10px] font-black uppercase tracking-widest cursor-pointer transition-colors ${
+                label === opt ? 'bg-[#57AD43] text-white' : 'text-gray-500 hover:bg-gray-50 hover:text-black'
+              }`}
+            >
+              {opt}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
-function FilterDropdown({ label }: { label: string }) {
+function SortDropdown({ label, options, onSelect }: { label: string, options: string[], onSelect: (val: string) => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className="flex items-center gap-8 border border-gray-100 rounded-full px-8 py-4 min-w-[180px] justify-between cursor-pointer hover:border-[#57AD43] hover:bg-gray-50 transition-all group">
-      <span className="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-[#121212]">{label}</span>
-      <ChevronDown size={14} className="text-gray-400 group-hover:text-black transition-colors" />
+    <div className="relative inline-block border-b-2 border-[#57AD43] pb-1 min-w-[280px]">
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-3 cursor-pointer group"
+      >
+        <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Sort Matrix:</span>
+        <span className="text-[11px] font-black text-black uppercase tracking-widest">{label}</span>
+        <ChevronDown size={14} className={`text-black transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </div>
+
+      {isOpen && (
+        <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-100 rounded-lg shadow-2xl z-[500] overflow-hidden py-2">
+          {options.map((opt) => (
+            <div 
+              key={opt}
+              onClick={(e) => { 
+                e.stopPropagation();
+                onSelect(opt); 
+                setIsOpen(false); 
+              }}
+              className={`px-4 py-3 text-[10px] font-black uppercase tracking-widest cursor-pointer transition-colors ${
+                label === opt ? 'bg-[#57AD43] text-white' : 'text-gray-500 hover:bg-gray-50 hover:text-black'
+              }`}
+            >
+              {opt}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

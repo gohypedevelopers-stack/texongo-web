@@ -68,9 +68,38 @@ export const PRODUCTS_QUERY = `
               currencyCode
             }
           }
-          metafields(identifiers: [{namespace: "custom", key: "gsm"}]) {
+          variants(first: 1) {
+            edges {
+              node {
+                sku
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
+          metafields(identifiers: [
+            {namespace: "custom", key: "gsm"},
+            {namespace: "custom", key: "shade"},
+            {namespace: "shopify", key: "color"},
+            {namespace: "standard", key: "color"},
+            {namespace: "custom", key: "width"},
+            {namespace: "custom", key: "composition"},
+            {namespace: "custom", key: "knit_style"},
+            {namespace: "custom", key: "usage"}
+          ]) {
+            namespace
             key
             value
+            reference {
+              ... on Metaobject {
+                fields {
+                  key
+                  value
+                }
+              }
+            }
           }
         }
       }

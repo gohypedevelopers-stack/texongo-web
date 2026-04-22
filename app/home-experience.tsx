@@ -586,7 +586,7 @@ export function HomeExperience() {
           scrollToExpand="Scroll to Explore"
           textBlend={true}
         >
-          <div className="max-w-4xl mx-auto text-center pt-6 md:pt-10 px-6">
+          <div className="max-w-4xl mx-auto text-center pt-4 pb-4 px-6">
 
             <h2 className="text-2xl md:text-4xl font-black mb-6 md:mb-8 uppercase tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
             <p className="text-base md:text-xl text-[#475467] font-medium leading-relaxed">

@@ -94,7 +94,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
 
           {/* Left Column: Image Gallery */}
-          <div className="space-y-4 lg:space-y-6">
+          <div className="lg:sticky lg:top-36 h-fit space-y-4 lg:space-y-6">
             <div
               className="relative aspect-square w-[550px] max-w-full mx-auto bg-gray-50/30 overflow-hidden border border-gray-100 group cursor-crosshair"
               onMouseMove={(e) => {
