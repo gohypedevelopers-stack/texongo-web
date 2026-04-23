@@ -7,7 +7,7 @@ import { useCartStore } from "@/lib/store";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, ShoppingBag, ArrowLeft, Heart, Share2, Minus, Plus, Loader2 } from "lucide-react";
 import { notFound } from "next/navigation";
-import { Fabric } from "@/lib/shopify";
+import { Fabric, mapShopifyProduct } from "@/lib/shopify";
 
 export default function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -45,14 +45,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
         const relatedData = await relatedRes.json();
         if (relatedData.data?.products?.edges) {
           const mapped = relatedData.data.products.edges
-            .map(({ node }: any) => ({
-              id: node.handle,
-              name: node.title,
-              price: node.priceRange.minVariantPrice.amount,
-              gsm: node.metafields?.find((m: any) => m?.key === 'gsm')?.value || 'N/A',
-              image: node.images.edges[0]?.node.url || '',
-            }))
-            .filter((p: any) => p.id !== slug)
+            .map(({ node }: any) => mapShopifyProduct(node))
+            .filter((p: Fabric) => p.id !== slug)
             .slice(0, 4);
           setRelatedProducts(mapped);
         }
@@ -107,15 +101,21 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 }
               }}
             >
-              <Image
-                src={((activeImage || product.image).includes('?') ? `${activeImage || product.image}&width=2048` : `${activeImage || product.image}?width=2048`)}
-                alt={product.name}
-                fill
-                priority
-                quality={100}
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-[1.6]"
-              />
+              {(activeImage || product.image) ? (
+                <Image
+                  src={((activeImage || product.image).includes('?') ? `${activeImage || product.image}&width=2048` : `${activeImage || product.image}?width=2048`)}
+                  alt={product.name}
+                  fill
+                  priority
+                  quality={100}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-[1.6]"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                  <span className="text-xs font-black uppercase tracking-widest text-gray-400">No Image Available</span>
+                </div>
+              )}
               <div className="absolute top-4 left-4 z-10">
                 <div className="bg-white/70 backdrop-blur-sm border border-black/5 px-2 py-1 shadow-sm">
                   <img
@@ -128,7 +128,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
             </div>
 
             <div className="grid grid-cols-4 gap-4 max-w-[550px] mx-auto">
-              {product.images?.map((imgUrl, i) => (
+              {product.images?.filter(Boolean).map((imgUrl, i) => (
                 <div
                   key={i}
                   onClick={() => setActiveImage(imgUrl)}
@@ -167,7 +167,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               Shipping calculated at checkout
             </Link>
 
-            {/* Selection & Add to Cart */}
+            {/* Selection & Add to Cart moved back to right column */}
             <div className="flex flex-col gap-6 mb-10">
               <div className="flex flex-row items-start gap-6 lg:gap-12">
                 <div className="flex flex-col gap-2 w-full lg:w-auto">
@@ -198,7 +198,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               </button>
             </div>
 
-            {/* Specifications Table */}
+            {/* Specifications Table restored to right column */}
             <div className="space-y-1 border-t border-gray-100 pt-8 mb-12">
               <SpecRow label="KNIT STYLE" value={product.knit_style || "N/A"} />
               <SpecRow label="CONTENT" value={product.content || product.composition || "N/A"} />
@@ -206,30 +206,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               <SpecRow label="WIDTH" value={product.width !== "N/A" ? `${product.width}` : "N/A"} />
               <SpecRow label="TYPE" value={product.type || "N/A"} />
               <SpecRow label="SHADE" value={product.shade || "N/A"} />
-
-
-
-              {/* <SpecRow label="OUNCE" value={product.ounce || "N/A"} /> */}
-
-
-
-
               <SpecRow label="USAGE" value={product.usage || "N/A"} />
             </div>
 
-            {/* Weight/Color Grid Area (if still needed) */}
-            {/* <div className="grid grid-cols-2 gap-px bg-gray-100 border border-gray-100 mb-12">
-              <div className="bg-gray-50 p-4 text-[11px] font-bold uppercase">Base Weight</div>
-              <div className="bg-white p-4 text-[11px] font-medium italic">{product.weight || "1 KG"} (PER UNIT)</div>
-              <div className="bg-gray-50 p-4 text-[11px] font-bold uppercase">Primary Color</div>
-              <div className="bg-white p-4 text-[11px] font-medium italic uppercase">{product.shade || "N/A"}</div>
-            </div> */}
-
-            {/* Accordions */}
+            {/* Accordions restored to right column */}
             <div className="border-t border-gray-100 divide-y divide-gray-100">
-              <AccordionItem title="Note" content='COLOR: Please note that color difference on website may vary due to lighting and environmental factors.
-GSM Tolerance: ±10% variation from specified GSM is standard in knitted fabrics and not a defect.
-Width Tolerance: Slight width variations due to knitting, finishing, and batch differences are normal and acceptable' defaultOpen />
+              <AccordionItem title="Note" content={
+                <ul className="space-y-2 list-disc ml-4">
+                  <li><strong>COLOR:</strong> Please note that color difference on website may vary due to lighting and environmental factors.</li>
+                  <li><strong>GSM Tolerance:</strong> ±10% variation from specified GSM is standard in knitted fabrics and not a defect.</li>
+                  <li><strong>Width Tolerance:</strong> Slight width variations due to knitting, finishing, and batch differences are normal and acceptable.</li>
+                </ul>
+              } defaultOpen />
               <AccordionItem title="Shipping Info" content="We offer delivery services across India. Shipping charges are calculated based on the total weight of the fabric and the delivery pincode. We also provide international shipping options. For complete details, please refer to our Shipping & Return Policy." />
               <AccordionItem title="Care Info" content="Hand wash or dry clean preferred; machine wash on mild cycle. Test before full wash.
 Minor GSM, width, and color variations may occur—acceptable as per industry standards." />
@@ -329,7 +317,11 @@ Minor GSM, width, and color variations may occur—acceptable as per industry st
             {relatedProducts.map((fabric) => (
               <Link key={fabric.id} href={`/fabrics/${fabric.id}`} className="group cursor-pointer">
                 <div className="relative aspect-square mb-4 bg-gray-50 overflow-hidden border border-gray-100">
-                  <Image src={fabric.image} alt={fabric.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                  {fabric.image ? (
+                    <Image src={fabric.image} alt={fabric.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100 text-[10px] text-gray-400 font-bold uppercase tracking-widest">No Image</div>
+                  )}
                   <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[8px] font-black px-2 py-0.5 z-10">GSM: {fabric.gsm} g/m²</div>
                 </div>
                 <h3 className="text-[10px] font-bold uppercase tracking-widest text-center group-hover:text-[#57AD43] transition-colors">{fabric.name}</h3>
@@ -352,7 +344,7 @@ function SpecRow({ label, value }: { label: string, value: string }) {
   );
 }
 
-function AccordionItem({ title, content, defaultOpen = false }: { title: string, content: string, defaultOpen?: boolean }) {
+function AccordionItem({ title, content, defaultOpen = false }: { title: string, content: React.ReactNode, defaultOpen?: boolean }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
     <div className="py-4">
@@ -371,7 +363,7 @@ function AccordionItem({ title, content, defaultOpen = false }: { title: string,
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <p className="mt-4 text-[11px] text-gray-500 italic leading-relaxed pl-6">{content}</p>
+            <div className="mt-4 text-[13px] text-gray-800 leading-relaxed pl-6 whitespace-pre-line">{content}</div>
           </motion.div>
         )}
       </AnimatePresence>

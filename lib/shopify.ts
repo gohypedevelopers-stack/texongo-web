@@ -130,7 +130,23 @@ export interface Fabric {
 }
 
 export function mapShopifyProduct(node: any): Fabric {
-  if (!node) return {} as Fabric;
+  const defaultFabric: Fabric = {
+    id: '',
+    sku: '',
+    name: 'Untitled Product',
+    price: '0',
+    gsm: 'N/A',
+    image: '',
+    images: [],
+    composition: 'N/A',
+    width: 'N/A',
+    description: '',
+    shade: 'N/A',
+    usage: 'N/A',
+    type: 'N/A'
+  };
+
+  if (!node) return defaultFabric;
 
   const metafields = Array.isArray(node.metafields) ? node.metafields : [];
 
@@ -152,7 +168,10 @@ export function mapShopifyProduct(node: any): Fabric {
   const firstVariant = node.variants?.edges?.[0]?.node;
   const weight = firstVariant?.weight ? `${firstVariant.weight} ${firstVariant.weightUnit || 'kg'}` : undefined;
 
-  const allImages = node.images?.edges?.map((e: any) => e.node.url) || [];
+  const allImages = node.images?.edges?.map((e: any) => {
+    const url = e.node?.url;
+    return typeof url === 'string' ? url : '';
+  }).filter(Boolean) || [];
 
   const fabricMeta = getMeta('fabric');
   const typeMeta = getMeta('type');
@@ -180,6 +199,7 @@ export function mapShopifyProduct(node: any): Fabric {
   })();
 
   return {
+    ...defaultFabric,
     id: node.handle || '',
     sku: firstVariant?.sku || node.id?.split('/').pop() || '',
     name: node.title || '',
@@ -199,7 +219,7 @@ export function mapShopifyProduct(node: any): Fabric {
       if (base && base.startsWith('{')) {
         try { return JSON.parse(base).label || base; } catch (e) { return base; }
       }
-      return base;
+      return base || 'N/A';
     })(),
     usage: getMeta('usage'),
     type: node.productType || 'N/A',

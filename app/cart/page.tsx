@@ -65,13 +65,17 @@ export default function CartPage() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     className="bg-white p-6 md:p-8 flex flex-col md:flex-row gap-8 shadow-sm border border-gray-100 rounded-sm relative overflow-hidden"
                   >
-                    <Link href={`/fabrics/${item.id}`} className="block w-full md:w-32 aspect-[4/5] relative bg-gray-50 shrink-0">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                      />
+                    <Link href={`/fabrics/${item.id}`} className="block w-full md:w-32 aspect-[4/5] relative bg-gray-50 shrink-0 overflow-hidden">
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-100 text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center p-2">No Image</div>
+                      )}
                     </Link>
 
                     <div className="flex-1 flex flex-col justify-between">

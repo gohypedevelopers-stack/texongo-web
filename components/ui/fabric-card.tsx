@@ -43,12 +43,18 @@ export function FabricCard({ id, name, gsm, price, image }: FabricCardProps) {
       <Link href={`/fabrics/${id}`} className="w-full">
         {/* Product Image Container */}
         <div className="relative aspect-[4/5] w-full overflow-hidden bg-gray-50 mb-6">
-          <Image
-            src={image}
-            alt={name}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-          />
+          {image && image !== "" ? (
+            <Image
+              src={image}
+              alt={name}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-100">
+              <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">No Image</span>
+            </div>
+          )}
           
           {/* GSM Badge */}
           <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[9px] font-black uppercase tracking-widest px-2 py-1 z-10">

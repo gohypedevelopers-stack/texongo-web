@@ -14,80 +14,83 @@ const FeatureCard = ({ icon: Icon, title, content }: any) => (
 
 export default function ShippingAndReturnPolicy() {
   return (
-    <main className="min-h-screen bg-white pb-32 pt-24 lg:pt-44">
+    <main className="min-h-screen bg-white pb-32 pt-24 lg:pt-48">
       {/* Background Decor */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-[20%] -left-[5%] w-[30%] h-[30%] bg-[#57AD43]/5 rounded-full blur-[100px]" />
-        <div className="absolute bottom-[20%] -right-[5%] w-[30%] h-[30%] bg-blue-50/30 rounded-full blur-[100px]" />
+        <div className="absolute top-[15%] -left-[10%] w-[40%] h-[40%] bg-[#57AD43]/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[15%] -right-[10%] w-[40%] h-[40%] bg-blue-50/40 rounded-full blur-[120px]" />
       </div>
 
-      <div className="max-w-[1100px] mx-auto px-6 lg:px-10 relative z-10">
+      <div className="max-w-[1240px] mx-auto px-8 lg:px-12 relative z-10">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-20 text-center lg:text-left"
+          className="mb-32 text-center lg:text-left"
         >
           <Link
             href="/"
-            className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors mb-12 w-fit mx-auto lg:mx-0"
+            className="group inline-flex items-center gap-3 text-[12px] font-black uppercase tracking-[0.3em] text-gray-400 hover:text-black transition-all mb-16"
           >
-            <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-1" />
-            Back to Home
+            <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-2" />
+            Return to Store
           </Link>
-          <h1 className="text-4xl lg:text-7xl font-bold uppercase tracking-tighter text-black mb-6">
-            Shipping & <span className="text-[#57AD43]">Returns</span>
+          <h1 className="text-5xl lg:text-8xl font-black uppercase tracking-tighter text-black mb-8 leading-[0.9]">
+            Shipping & <br className="hidden lg:block" />
+            <span className="text-[#57AD43]">Returns</span>
           </h1>
-          <p className="max-w-2xl text-gray-500 text-sm leading-relaxed italic">
-            "Delivering premium knitted fabrics worldwide with accuracy, care, and transparency."
+          <p className="max-w-2xl text-gray-500 text-lg lg:text-xl font-medium leading-relaxed italic border-l-4 border-[#57AD43] pl-8 mt-12 py-2">
+            "Delivering premium knitted fabrics worldwide with accuracy, care, and total transparency."
           </p>
         </motion.div>
 
         {/* Quick Info Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-32">
           <FeatureCard
             icon={ShieldCheck}
             title="Inspection Ready"
-            content="The buyer is responsible for inspecting fabric upon receipt and testing prior to any cutting or production."
+            content="Buyers are responsible for inspecting all fabrics immediately upon receipt. Quality testing must be completed prior to any cutting or production."
           />
           <FeatureCard
             icon={Package}
             title="No-Return Policy"
-            content="Cut fabric cannot be returned or exchanged. Laundry or processed fabric is deemed accepted by the buyer."
+            content="Cut fabric cannot be returned or exchanged. Any fabric that has been laundered or processed is deemed accepted by the buyer."
           />
           <FeatureCard
             icon={Truck}
             title="Tracked Shipping"
-            content="Reliable delivery across India and international destinations with real-time tracking updates."
+            content="We provide reliable, real-time tracked delivery across India and international destinations through professional logistics partners."
           />
         </div>
 
         {/* Detailed Sections */}
-        <div className="space-y-24">
+        <div className="space-y-32">
           {/* Shipping Rates */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start border-t border-gray-100 pt-12">
-            <div className="lg:col-span-4">
-              <h2 className="text-2xl font-bold uppercase tracking-tighter text-black">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start border-t border-gray-200 pt-16">
+            <div className="lg:col-span-4 sticky top-32">
+              <span className="text-[#57AD43] font-black text-sm tracking-widest uppercase mb-4 block">Section 01</span>
+              <h2 className="text-3xl lg:text-4xl font-black uppercase tracking-tighter text-black">
                 Shipping <span className="text-[#57AD43]">Rates</span>
               </h2>
             </div>
-            <div className="lg:col-span-8 space-y-8">
-              <div className="text-sm text-gray-600 leading-relaxed">
+            <div className="lg:col-span-8 space-y-10">
+              <div className="text-lg lg:text-xl text-gray-600 leading-relaxed font-medium">
                 <p>
-                  Your shipping rate at checkout is calculated based on the total weight, packaging type, and delivery destination of your order. At Texongo, we aim to keep shipping charges as fair and economical as possible.
+                  Shipping rates are calculated at checkout based on the total weight, packaging dimensions, and final destination. At Texongo, we minimize shipping overhead to ensure fair and economical pricing for our global clients.
                 </p>
               </div>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-10">
                 {[
                   "Subsidized & discounted checkout rates",
                   "Automatic weight-based calculation",
                   "Crease-free tube packing (where applicable)",
-                  "No hidden handling charges",
-                  "Bulky packaging costs absorbed by us"
+                  "No hidden handling or service charges",
+                  "Bulky packaging costs absorbed by us",
+                  "Transparent carrier selection"
                 ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-black">
-                    <div className="w-1 h-1 bg-[#57AD43]" />
+                  <li key={i} className="flex items-start gap-4 text-[13px] font-black uppercase tracking-widest text-black/80">
+                    <div className="w-2 h-2 bg-[#57AD43] mt-1" />
                     {item}
                   </li>
                 ))}
@@ -96,28 +99,31 @@ export default function ShippingAndReturnPolicy() {
           </section>
 
           {/* Shipping Time */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start border-t border-gray-100 pt-12">
-            <div className="lg:col-span-4">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start border-t border-gray-200 pt-16">
+            <div className="lg:col-span-4 sticky top-32">
+              <span className="text-[#57AD43] font-black text-sm tracking-widest uppercase mb-4 block">Section 02</span>
               <div className="flex items-center gap-4 mb-4">
-                <Clock className="text-[#57AD43]" size={20} />
-                <h2 className="text-2xl font-bold uppercase tracking-tighter text-black">Dispatch Time</h2>
+                <Clock className="text-[#57AD43]" size={28} />
+                <h2 className="text-3xl lg:text-4xl font-black uppercase tracking-tighter text-black">Timeline</h2>
               </div>
             </div>
             <div className="lg:col-span-8">
-              <div className="bg-gray-50 p-8 space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                  <div>
-                    <h4 className="text-[10px] font-bold text-[#57AD43] uppercase tracking-widest mb-2">Standard Ground</h4>
-                    <p className="text-sm font-bold">3–7 Business Days</p>
+              <div className="bg-gray-50 border border-gray-100 p-12 space-y-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+                  <div className="space-y-4">
+                    <h4 className="text-[12px] font-black text-[#57AD43] uppercase tracking-[0.3em]">Standard Ground</h4>
+                    <p className="text-2xl font-black text-black">3–7 Business Days</p>
+                    <p className="text-sm text-gray-500">Reliable pan-India delivery for bulk orders.</p>
                   </div>
-                  <div>
-                    <h4 className="text-[10px] font-bold text-[#57AD43] uppercase tracking-widest mb-2">Metro Cities</h4>
-                    <p className="text-sm font-bold">2–4 Business Days</p>
+                  <div className="space-y-4">
+                    <h4 className="text-[12px] font-black text-[#57AD43] uppercase tracking-[0.3em]">Express Metros</h4>
+                    <p className="text-2xl font-black text-black">2–4 Business Days</p>
+                    <p className="text-sm text-gray-500">Prioritized delivery for major metropolitan hubs.</p>
                   </div>
                 </div>
-                <div className="pt-6 border-t border-gray-200">
-                  <p className="text-[11px] text-gray-400 italic">
-                    * Orders are usually dispatched within 1–7 business days after payment confirmation. Business days: Mon-Fri.
+                <div className="pt-8 border-t border-gray-200">
+                  <p className="text-sm text-gray-400 italic">
+                    * Orders are typically dispatched within 1–7 business days after payment confirmation. Business days: Monday to Friday.
                   </p>
                 </div>
               </div>
@@ -125,51 +131,55 @@ export default function ShippingAndReturnPolicy() {
           </section>
 
           {/* International Shipping */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start border-t border-gray-100 pt-12">
-            <div className="lg:col-span-4">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start border-t border-gray-200 pt-16">
+            <div className="lg:col-span-4 sticky top-32">
+              <span className="text-[#57AD43] font-black text-sm tracking-widest uppercase mb-4 block">Section 03</span>
               <div className="flex items-center gap-4 mb-4">
-                <Globe className="text-[#57AD43]" size={20} />
-                <h2 className="text-2xl font-bold uppercase tracking-tighter text-black">Global Reach</h2>
+                <Globe className="text-[#57AD43]" size={28} />
+                <h2 className="text-3xl lg:text-4xl font-black uppercase tracking-tighter text-black">Exports</h2>
               </div>
             </div>
-            <div className="lg:col-span-8 bg-black text-white p-12 space-y-8">
-              <h3 className="text-xl font-bold uppercase tracking-tight">International Shipping Info</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Texongo provides international shipping worldwide, subject to serviceability. All shipments may be subject to customs duties and taxes of the destination country, which are the sole responsibility of the customer.
+            <div className="lg:col-span-8 bg-black text-white p-16 space-y-10 shadow-2xl">
+              <h3 className="text-3xl font-black uppercase tracking-tight">International Shipping</h3>
+              <p className="text-lg text-gray-400 leading-relaxed">
+                Texongo provides global logistics reach. All international shipments are subject to local customs duties, taxes, and import regulations of the destination country, which are the exclusive responsibility of the recipient.
               </p>
-              <div className="pt-8 border-t border-white/10">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Need a Quote?</p>
-                <a href="mailto:connect@texongo.com" className="text-[#57AD43] text-sm font-bold border-b border-[#57AD43] pb-1 hover:text-white transition-colors">
-                  connect@texongo.com
-                </a>
+              <div className="pt-10 border-t border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8">
+                <div>
+                  <p className="text-[12px] font-black uppercase tracking-[0.3em] mb-4 text-white/40">Inquiries</p>
+                  <a href="mailto:connect@texongo.com" className="text-[#57AD43] text-xl font-bold border-b-2 border-[#57AD43] pb-1 hover:text-white transition-colors">
+                    connect@texongo.com
+                  </a>
+                </div>
+                <Link href="/contact-us" className="bg-[#57AD43] text-black text-[12px] font-black tracking-widest uppercase px-10 py-5 rounded-full hover:bg-white transition-all">
+                  Request Quote
+                </Link>
               </div>
             </div>
           </section>
 
           {/* Undeliverables */}
-          <section className="bg-gray-50 p-12 lg:p-16 text-center space-y-6">
-            <h2 className="text-[11px] font-bold uppercase tracking-[0.4em] text-red-500">Undeliverable / Returned Shipments</h2>
-            <p className="max-w-2xl mx-auto text-sm text-gray-600 leading-relaxed italic">
-              "Orders returned due to incorrect details or refusal will be treated as returns. Initial shipping costs and return charges will be deducted from any refund."
+          <section className="bg-gray-50 p-16 lg:p-24 text-center space-y-8 border border-gray-100">
+            <h2 className="text-[13px] font-black uppercase tracking-[0.5em] text-red-500">Notice for Returns</h2>
+            <p className="max-w-3xl mx-auto text-xl lg:text-2xl font-medium text-black leading-tight italic">
+              "Orders returned due to incorrect address details or refusal will be treated as returns. Initial shipping costs and return handling fees will be deducted from your final credit."
             </p>
           </section>
 
-          {/* Customer Support Info (Formerly Footer) */}
-          <section className="pt-20 border-t border-gray-100 text-center pb-12">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 mb-8">Customer Support</p>
-            <div className="flex flex-col md:flex-row justify-center items-center gap-12 font-bold uppercase tracking-widest text-xs text-black">
-              <div className="space-y-1">
-                <p className="text-gray-400 text-[10px] mb-2 font-bold">Email</p>
-                <p>connect@texongo.com</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-gray-400 text-[10px] mb-2 font-bold">Phone</p>
-                <p>+91 99100 48498</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-gray-400 text-[10px] mb-2 font-bold">Hours</p>
-                <p>Mon - Fri | 10:00 - 18:00 (IST)</p>
-              </div>
+          {/* Support Info */}
+          <section className="pt-32 border-t border-gray-200 text-center pb-24">
+            <p className="text-[13px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-12">Global Assistance</p>
+            <div className="flex flex-col md:flex-row justify-center items-center gap-16 lg:gap-24 font-bold uppercase tracking-[0.2em] text-sm text-black">
+              {[
+                { label: "Email", value: "connect@texongo.com" },
+                { label: "Direct", value: "+91 99100 48498" },
+                { label: "Business Hours", value: "Mon - Fri | 10:00 - 18:00 (IST)" }
+              ].map((info, i) => (
+                <div key={i} className="space-y-3">
+                  <p className="text-gray-400 text-[11px] uppercase font-black">{info.label}</p>
+                  <p className="text-base lg:text-lg">{info.value}</p>
+                </div>
+              ))}
             </div>
           </section>
         </div>
