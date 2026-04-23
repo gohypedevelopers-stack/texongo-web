@@ -163,12 +163,37 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               <span className="text-4xl font-black tracking-tighter">₹{parseFloat(product.price || '0').toFixed(2)}</span>
             </div>
 
-            <Link href="/shipping-and-return-policy" className="text-[11px] font-medium text-[#57AD43] underline underline-offset-4 mb-8 block hover:text-black transition-colors">
+            <Link href="/shipping-and-return-policy" className="text-[11px] font-medium text-[#57AD43] underline underline-offset-4 mb-6 block hover:text-black transition-colors">
               Shipping calculated at checkout
             </Link>
 
-            {/* Selection & Add to Cart moved back to right column */}
-            <div className="flex flex-col gap-6 mb-10">
+            {/* Specifications Table moved up */}
+            <div className="space-y-1 border-t border-gray-100 pt-6 mb-8">
+              <SpecRow label="KNIT STYLE" value={product.knit_style || "N/A"} />
+              <SpecRow label="CONTENT" value={product.content || product.composition || "N/A"} />
+              <SpecRow label="GSM" value={product.gsm === "N/A" ? "N/A" : `${product.gsm} g/m²`} />
+              <SpecRow label="WIDTH" value={product.width !== "N/A" ? `${product.width}` : "N/A"} />
+              <SpecRow label="TYPE" value={product.type || "N/A"} />
+              <SpecRow label="SHADE" value={product.shade || "N/A"} />
+              <SpecRow label="USAGE" value={product.usage || "N/A"} />
+            </div>
+
+            {/* Accordions moved up */}
+            <div className="border-t border-gray-100 divide-y divide-gray-100 mb-8">
+              <AccordionItem title="Note" content={
+                <ul className="space-y-2 list-disc ml-4">
+                  <li><strong>COLOR:</strong> Please note that color difference on website may vary due to lighting and environmental factors.</li>
+                  <li><strong>GSM Tolerance:</strong> ±10% variation from specified GSM is standard in knitted fabrics and not a defect.</li>
+                  <li><strong>Width Tolerance:</strong> Slight width variations due to knitting, finishing, and batch differences are normal and acceptable.</li>
+                </ul>
+              } defaultOpen />
+              <AccordionItem title="Shipping Info" content="We offer delivery services across India. Shipping charges are calculated based on the total weight of the fabric and the delivery pincode. We also provide international shipping options. For complete details, please refer to our Shipping & Return Policy." />
+              <AccordionItem title="Care Info" content="Hand wash or dry clean preferred; machine wash on mild cycle. Test before full wash.
+Minor GSM, width, and color variations may occur—acceptable as per industry standards." />
+            </div>
+
+            {/* Selection & Add to Cart moved to the bottom */}
+            <div className="flex flex-col gap-6 pt-6 border-t border-gray-100">
               <div className="flex flex-row items-start gap-6 lg:gap-12">
                 <div className="flex flex-col gap-2 w-full lg:w-auto">
                   <div className="text-[10px] font-bold text-black uppercase tracking-widest">
@@ -196,31 +221,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               <button onClick={handleAddToCart} className="w-full bg-[#121212] text-white h-14 flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-all duration-300 shadow-lg shadow-black/5 active:scale-[0.98]">
                 <ShoppingBag size={15} /> Add to cart
               </button>
-            </div>
-
-            {/* Specifications Table restored to right column */}
-            <div className="space-y-1 border-t border-gray-100 pt-8 mb-12">
-              <SpecRow label="KNIT STYLE" value={product.knit_style || "N/A"} />
-              <SpecRow label="CONTENT" value={product.content || product.composition || "N/A"} />
-              <SpecRow label="GSM" value={product.gsm === "N/A" ? "N/A" : `${product.gsm} g/m²`} />
-              <SpecRow label="WIDTH" value={product.width !== "N/A" ? `${product.width}` : "N/A"} />
-              <SpecRow label="TYPE" value={product.type || "N/A"} />
-              <SpecRow label="SHADE" value={product.shade || "N/A"} />
-              <SpecRow label="USAGE" value={product.usage || "N/A"} />
-            </div>
-
-            {/* Accordions restored to right column */}
-            <div className="border-t border-gray-100 divide-y divide-gray-100">
-              <AccordionItem title="Note" content={
-                <ul className="space-y-2 list-disc ml-4">
-                  <li><strong>COLOR:</strong> Please note that color difference on website may vary due to lighting and environmental factors.</li>
-                  <li><strong>GSM Tolerance:</strong> ±10% variation from specified GSM is standard in knitted fabrics and not a defect.</li>
-                  <li><strong>Width Tolerance:</strong> Slight width variations due to knitting, finishing, and batch differences are normal and acceptable.</li>
-                </ul>
-              } defaultOpen />
-              <AccordionItem title="Shipping Info" content="We offer delivery services across India. Shipping charges are calculated based on the total weight of the fabric and the delivery pincode. We also provide international shipping options. For complete details, please refer to our Shipping & Return Policy." />
-              <AccordionItem title="Care Info" content="Hand wash or dry clean preferred; machine wash on mild cycle. Test before full wash.
-Minor GSM, width, and color variations may occur—acceptable as per industry standards." />
             </div>
           </div>
         </div>
@@ -353,7 +353,7 @@ function AccordionItem({ title, content, defaultOpen = false }: { title: string,
         className="flex items-center gap-3 w-full text-left"
       >
         <span className="text-xs font-bold text-gray-400">{isOpen ? "−" : "+"}</span>
-        <span className="text-[11px] font-bold uppercase tracking-widest">{title}</span>
+        <span className="text-[13px] font-bold uppercase tracking-widest">{title}</span>
       </button>
       <AnimatePresence>
         {isOpen && (
