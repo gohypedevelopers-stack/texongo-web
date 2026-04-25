@@ -579,7 +579,7 @@ export function HomeExperience() {
         {/* ── HERO ─────────────────────────────────────────── */}
         <ScrollExpandMedia
           mediaType="video"
-          mediaSrc="/video/Veo.mp4"
+          mediaSrc="/video/new.mp4"
           bgImageSrc="/knit-fabric-hero.png"
           title="PREMIUM KNITS"
           date="COLLECTION 2026"
