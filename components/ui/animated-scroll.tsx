@@ -17,7 +17,9 @@ interface PageData {
 
 const pages: PageData[] = [
   {
-    leftVideoSrc: '/video/1-1.mp4',
+    // Fix: Using the direct Shopify CDN URL instead of the admin link.
+    // Replace this with the URL copied from Shopify Admin -> Content -> Files -> Copy Link
+    leftVideoSrc: 'https://cdn.shopify.com/videos/c/o/v/53912139956588/video.mp4',
     rightVideoSrc: null,
     leftContent: null,
     rightContent: {
@@ -28,8 +30,8 @@ const pages: PageData[] = [
     bgColor: '#121212',
   },
   {
-    leftVideoSrc: null,
-    rightVideoSrc: '/video/2-1.mp4',
+    leftVideoSrc: "https://cdn.shopify.com/videos/c/o/v/53939944161644/fef4794b3d034734a775d66b94f36715.mp4",
+    rightVideoSrc: null,
     leftContent: {
       heading: 'BOLD FABRICS FOR THE MODERN MAN',
       description:
@@ -235,6 +237,8 @@ export default function ScrollAdventure() {
                 {page.leftVideoSrc && (
                   <LazyVideo
                     src={page.leftVideoSrc}
+                    controls // User requirement: enable controls
+                    preload="metadata" // User requirement: preload metadata
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                 )}
@@ -275,6 +279,8 @@ export default function ScrollAdventure() {
                 {page.rightVideoSrc && (
                   <LazyVideo
                     src={page.rightVideoSrc}
+                    controls
+                    preload="metadata"
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                 )}

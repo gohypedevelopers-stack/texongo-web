@@ -2,18 +2,61 @@
 
 import { useCartStore } from "@/lib/store";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Trash2, Minus, Plus, ShoppingBag, ArrowRight } from "lucide-react";
+import { X, Trash2, Minus, Plus, ShoppingBag, ArrowRight, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { createCheckout } from "@/lib/shopify";
 
 export function CartDrawer() {
   const { items, isCartOpen, toggleCart, updateQuantity, removeItem, getTotalPrice } = useCartStore();
   const [isMounted, setIsMounted] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const handleCheckout = async () => {
+    if (items.length === 0) return;
+    
+    setIsCheckingOut(true);
+    try {
+      const checkoutItems = items.map(item => ({
+        variantId: item.variantId || "",
+        quantity: item.quantity
+      })).filter(item => item.variantId !== "");
+
+      if (checkoutItems.length === 0) {
+        alert("Your cart items are missing Shopify identifiers. Please try removing and re-adding them to your cart.");
+        setIsCheckingOut(false);
+        return;
+      }
+
+      const response = await fetch('/api/shopify/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items: checkoutItems }),
+      });
+
+      const data = await response.json();
+
+      if (data.checkoutUrl) {
+        toggleCart(false);
+        setIsCheckingOut(false);
+        window.location.href = data.checkoutUrl;
+      } else {
+        alert(data.error || "Failed to create checkout. Please try refreshing and adding items again.");
+        setIsCheckingOut(false);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert("An error occurred during checkout. Please check your internet connection.");
+      setIsCheckingOut(false);
+    }
+  };
 
   if (!isMounted) return null;
 
@@ -123,14 +166,15 @@ export function CartDrawer() {
                 </div>
                 
                 <div className="flex flex-col gap-3">
-                  <Link 
-                    href="/checkout"
-                    onClick={() => toggleCart(false)}
-                    className="h-14 bg-black flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-300 hover:bg-[#222222] shadow-lg shadow-black/10 active:scale-[0.98]"
+                  <button 
+                    onClick={handleCheckout}
+                    disabled={isCheckingOut}
+                    className="h-14 bg-black flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-300 hover:bg-[#222222] shadow-lg shadow-black/10 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <span className="text-white">Checkout Now</span>
-                    <ArrowRight size={14} className="text-white" />
-                  </Link>
+                    <span className="text-white">{isCheckingOut ? "Processing..." : "Checkout Now"}</span>
+                    {!isCheckingOut && <ArrowRight size={14} className="text-white" />}
+                    {isCheckingOut && <Loader2 size={14} className="text-white animate-spin" />}
+                  </button>
                   <Link 
                     href="/cart"
                     onClick={() => toggleCart(false)}

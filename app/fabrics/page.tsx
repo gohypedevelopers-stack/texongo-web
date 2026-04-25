@@ -122,16 +122,20 @@ export default function FabricsListingPage() {
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center border-t border-gray-100 pt-12 gap-8 mt-12">
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em]">
-              Archive Analysis: {filteredFabrics.length} result{filteredFabrics.length !== 1 ? 's' : ''}
-              {fabrics.length !== filteredFabrics.length && ` (of ${fabrics.length})`}
-            </p>
-            <div 
-              onClick={() => { setSelectedGsm(""); setSelectedColor(""); setSortBy("Latest Selection"); }}
-              className="text-[10px] font-black uppercase tracking-widest text-[#57AD43] cursor-pointer hover:text-black transition-colors"
-            >
-              Reset Filters
-            </div>
+            {!loading && (
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em]">
+                Archive Analysis: {filteredFabrics.length} result{filteredFabrics.length !== 1 ? 's' : ''}
+                {fabrics.length !== filteredFabrics.length && ` (of ${fabrics.length})`}
+              </p>
+            )}
+            {!loading && (
+              <div 
+                onClick={() => { setSelectedGsm(""); setSelectedColor(""); setSortBy("Latest Selection"); }}
+                className="text-[10px] font-black uppercase tracking-widest text-[#57AD43] cursor-pointer hover:text-black transition-colors"
+              >
+                Reset Filters
+              </div>
+            )}
         </div>
       </div>
 

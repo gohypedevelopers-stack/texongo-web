@@ -6,15 +6,57 @@ import { useCartStore } from "@/lib/store";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, Minus, Plus, ShoppingBag, ArrowRight, ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
+import { createCheckout } from "@/lib/shopify";
+import { Loader2 } from "lucide-react";
 
 export default function CartPage() {
   const { items, updateQuantity, removeItem, getTotalPrice, getItemCount } = useCartStore();
   const [isReady, setIsReady] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   // Fix hydration mismatch for persisted store
   useEffect(() => {
     setIsReady(true);
   }, []);
+
+  const handleCheckout = async () => {
+    if (items.length === 0) return;
+    
+    setIsCheckingOut(true);
+    try {
+      const checkoutItems = items.map(item => ({
+        variantId: item.variantId || "",
+        quantity: item.quantity
+      })).filter(item => item.variantId !== "");
+
+      if (checkoutItems.length === 0) {
+        alert("Your cart items are missing Shopify identifiers. Please try removing and re-adding them to your cart.");
+        setIsCheckingOut(false);
+        return;
+      }
+
+      const response = await fetch('/api/shopify/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items: checkoutItems }),
+      });
+
+      const data = await response.json();
+
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        alert(data.error || "Failed to create checkout. Please try refreshing and adding items again.");
+        setIsCheckingOut(false);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert("An error occurred during checkout. Please check your internet connection.");
+      setIsCheckingOut(false);
+    }
+  };
 
   if (!isReady) return null;
 
@@ -149,13 +191,15 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <Link 
-                href="/checkout" 
-                className="w-full h-16 bg-white flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] hover:text-white transition-all rounded-sm group"
+              <button 
+                onClick={handleCheckout}
+                disabled={isCheckingOut}
+                className="w-full h-16 bg-white flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] hover:text-white transition-all rounded-sm group disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <span className="text-black group-hover:text-white transition-colors">Checkout Now</span>
-                <ArrowRight size={18} className="text-black group-hover:text-white transition-all group-hover:translate-x-1" />
-              </Link>
+                <span className="text-black group-hover:text-white transition-colors">{isCheckingOut ? "Processing..." : "Checkout Now"}</span>
+                {!isCheckingOut && <ArrowRight size={18} className="text-black group-hover:text-white transition-all group-hover:translate-x-1" />}
+                {isCheckingOut && <Loader2 size={18} className="text-black group-hover:text-white animate-spin" />}
+              </button>
               
               <div className="mt-8 pt-8 border-t border-white/5 flex flex-col gap-4">
                 <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] italic text-center leading-relaxed">

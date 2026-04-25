@@ -21,10 +21,28 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState("");
 
-  // Update active image when product is loaded
+  // Update active image and SEO metadata when product is loaded
   useEffect(() => {
     if (product?.image) {
       setActiveImage(product.image);
+    }
+    // Update browser title and meta description for SEO
+    if (product?.seoTitle) {
+      document.title = `${product.seoTitle} | Texongo`;
+    } else if (product?.name) {
+      document.title = `${product.name} | Texongo`;
+    }
+    
+    if (product?.seoDescription) {
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute('content', product.seoDescription);
+      } else {
+        const meta = document.createElement('meta');
+        meta.name = 'description';
+        meta.content = product.seoDescription;
+        document.head.appendChild(meta);
+      }
     }
   }, [product]);
 
@@ -75,8 +93,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
   const handleAddToCart = () => {
     addItem({
       id: product.id,
+      variantId: product.variantId,
       name: product.name,
-      price: parseInt(product.price),
+      price: parseFloat(product.price || '0'),
       gsm: product.gsm,
       image: product.image
     }, quantity);
@@ -160,7 +179,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
             </div>
 
             <div className="mb-8 p-6 bg-gray-50/50 border-y border-gray-100 flex items-baseline gap-2">
-              <span className="text-4xl font-black tracking-tighter">₹{parseFloat(product.price || '0').toFixed(2)}</span>
+              <span className="text-2xl font-black tracking-tighter">₹{parseFloat(product.price || '0').toFixed(2)}</span>
             </div>
 
             <Link href="/shipping-and-return-policy" className="text-[11px] font-medium text-[#57AD43] underline underline-offset-4 mb-6 block hover:text-black transition-colors">
@@ -187,6 +206,25 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   <li><strong>Width Tolerance:</strong> Slight width variations due to knitting, finishing, and batch differences are normal and acceptable.</li>
                 </ul>
               } defaultOpen />
+              <AccordionItem title="SEO Information" content={
+                <div className="space-y-4">
+                  {product.seoTitle && (
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">SEO Title</p>
+                      <p className="text-gray-900 font-bold">{product.seoTitle}</p>
+                    </div>
+                  )}
+                  {product.seoDescription && (
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">SEO Description</p>
+                      <p className="text-gray-700 italic leading-relaxed">{product.seoDescription}</p>
+                    </div>
+                  )}
+                  {!product.seoTitle && !product.seoDescription && (
+                    <p className="text-gray-400 italic">No SEO metadata provided for this product.</p>
+                  )}
+                </div>
+              } />
               <AccordionItem title="Shipping Info" content="We offer delivery services across India. Shipping charges are calculated based on the total weight of the fabric and the delivery pincode. We also provide international shipping options. For complete details, please refer to our Shipping & Return Policy." />
               <AccordionItem title="Care Info" content="Hand wash or dry clean preferred; machine wash on mild cycle. Test before full wash.
 Minor GSM, width, and color variations may occur—acceptable as per industry standards." />

@@ -62,6 +62,10 @@ export const PRODUCTS_QUERY = `
               }
             }
           }
+          seo {
+            title
+            description
+          }
           priceRange {
             minVariantPrice {
               amount
@@ -69,13 +73,12 @@ export const PRODUCTS_QUERY = `
             }
           }
           variants(first: 1) {
-            edges {
-              node {
-                sku
-                selectedOptions {
-                  name
-                  value
-                }
+            nodes {
+              id
+              sku
+              selectedOptions {
+                name
+                value
               }
             }
           }
@@ -127,6 +130,9 @@ export interface Fabric {
   type?: string;
   totalInventory?: number;
   weight?: string;
+  variantId?: string;
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 export function mapShopifyProduct(node: any): Fabric {
@@ -165,7 +171,7 @@ export function mapShopifyProduct(node: any): Fabric {
     : (typeof node.totalInventory === 'number' && node.totalInventory > 0
       ? node.totalInventory
       : (qtyMeta !== 'N/A' ? parseInt(qtyMeta) : 0));
-  const firstVariant = node.variants?.edges?.[0]?.node;
+  const firstVariant = node.variants?.nodes?.[0] || node.variants?.edges?.[0]?.node;
   const weight = firstVariant?.weight ? `${firstVariant.weight} ${firstVariant.weightUnit || 'kg'}` : undefined;
 
   const allImages = node.images?.edges?.map((e: any) => {
@@ -224,7 +230,10 @@ export function mapShopifyProduct(node: any): Fabric {
     usage: getMeta('usage'),
     type: node.productType || 'N/A',
     totalInventory: typeof totalInventory === 'number' ? totalInventory : undefined,
-    weight
+    weight,
+    variantId: firstVariant?.id || '',
+    seoTitle: node.seo?.title || '',
+    seoDescription: node.seo?.description || ''
   };
 }
 
@@ -261,6 +270,10 @@ export const PRODUCT_BY_HANDLE_QUERY = `
           }
         }
       }
+      seo {
+        title
+        description
+      }
       priceRange {
         minVariantPrice {
           amount
@@ -269,16 +282,15 @@ export const PRODUCT_BY_HANDLE_QUERY = `
       }
       totalInventory
       variants(first: 10) {
-        edges {
-          node {
-            sku
-            quantityAvailable
-            weight
-            weightUnit
-            selectedOptions {
-              name
-              value
-            }
+        nodes {
+          id
+          sku
+          quantityAvailable
+          weight
+          weightUnit
+          selectedOptions {
+            name
+            value
           }
         }
       }
@@ -425,6 +437,55 @@ export async function getShopifyVideoUrlById(id: string): Promise<string | null>
     return null;
   } catch (error) {
     console.error("Error fetching Shopify video by ID:", error);
+    return null;
+  }
+}
+
+/**
+ * Creates a Shopify cart and returns the checkout URL.
+ */
+export async function createCheckout(items: { variantId: string, quantity: number }[]): Promise<string | null> {
+  try {
+    const lines = items.map(item => ({
+      merchandiseId: item.variantId,
+      quantity: item.quantity
+    }));
+
+    console.log("Creating Shopify cart with lines:", JSON.stringify(lines, null, 2));
+
+    const response = await shopifyFetch<any>({
+      query: `
+        mutation cartCreate($input: CartInput!) {
+          cartCreate(input: $input) {
+            cart {
+              checkoutUrl
+            }
+            userErrors {
+              code
+              field
+              message
+            }
+          }
+        }
+      `,
+      variables: {
+        input: {
+          lines
+        }
+      }
+    });
+
+    const cart = response.data?.cartCreate?.cart;
+    const errors = response.data?.cartCreate?.userErrors;
+
+    if (errors && errors.length > 0) {
+      console.error("Shopify Cart Errors:", errors);
+      return null;
+    }
+
+    return cart?.checkoutUrl || null;
+  } catch (error) {
+    console.error("Error creating Shopify cart:", error);
     return null;
   }
 }
