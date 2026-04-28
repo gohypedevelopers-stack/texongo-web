@@ -32,7 +32,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
     } else if (product?.name) {
       document.title = `${product.name} | Texongo`;
     }
-    
+
     if (product?.seoDescription) {
       const metaDescription = document.querySelector('meta[name="description"]');
       if (metaDescription) {
@@ -206,23 +206,22 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   <li><strong>Width Tolerance:</strong> Slight width variations due to knitting, finishing, and batch differences are normal and acceptable.</li>
                 </ul>
               } defaultOpen />
-              <AccordionItem title="SEO Information" content={
+              <AccordionItem title="Queries" content={
                 <div className="space-y-4">
-                  {product.seoTitle && (
-                    <div>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">SEO Title</p>
-                      <p className="text-gray-900 font-bold">{product.seoTitle}</p>
-                    </div>
-                  )}
-                  {product.seoDescription && (
-                    <div>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">SEO Description</p>
-                      <p className="text-gray-700 italic leading-relaxed">{product.seoDescription}</p>
-                    </div>
-                  )}
-                  {!product.seoTitle && !product.seoDescription && (
-                    <p className="text-gray-400 italic">No SEO metadata provided for this product.</p>
-                  )}
+                  <p className="text-gray-700 leading-loose">
+                    For any queries regarding it or any bulk query, Feel free to connect with us at:
+                    <br />
+                    <a href="mailto:connect@texongo.com" className="inline-block mt-2 text-[#57AD43] font-black bg-[#57AD43]/10 px-3 py-1 rounded-md hover:bg-[#57AD43] hover:text-white transition-all duration-300">
+                      connect@texongo.com
+                    </a>
+                    <br />
+                    <span className="text-gray-400 font-bold mx-1">or</span>
+                    <br />
+                    <a href="tel:9310598498" className="inline-block mt-1 text-[#57AD43] font-black bg-[#57AD43]/10 px-3 py-1 rounded-md hover:bg-[#57AD43] hover:text-white transition-all duration-300">
+                      9310598498
+                    </a>
+                    <span className="ml-3 text-gray-500 font-medium">( 11 AM to 6 PM IST )</span>
+                  </p>
                 </div>
               } />
               <AccordionItem title="Shipping Info" content="We offer delivery services across India. Shipping charges are calculated based on the total weight of the fabric and the delivery pincode. We also provide international shipping options. For complete details, please refer to our Shipping & Return Policy." />

@@ -192,22 +192,19 @@ function StoryProductCard({
 
 function KnitStylesSection() {
   const knitStyles = [
-    { name: "POLY COTTON", image: "/category/fabric-single-jersey.png", color: "#2e3b5e" },
-    { name: "JACQUARD", image: "/category/fabric-waffle.png", color: "#d1d5db" },
-    { name: "HONEY COMB", image: "/category/fabric-waffle.png", color: "#f59e0b" },
-    { name: "PONTE", image: "/category/fabric-pique.png", color: "#312e81" },
-    { name: "SEERSUCKER", image: "/arrivals/prod-slub-melange.png", color: "#7dd3fc" },
-    { name: "POLYESTER", image: "/category/fabric-single-jersey.png", color: "#3b82f6" },
-    { name: "MELANGE", image: "/arrivals/prod-slub-melange.png", color: "#4b5563" },
-    { name: "FLEECE", image: "/category/fabric-single-jersey.png", color: "#14b8a6" },
-    { name: "COTTON SPANDEX", image: "/arrivals/prod-cotton-spandex-interlock.png", color: "#c2410c" },
-    { name: "COTTON", image: "/category/fabric-single-jersey.png", color: "#ec4899" },
-    { name: "VISCOSE", image: "/arrivals/prod-poly-viscose-spandex.png", color: "#14868c" },
-    { name: "RIB", image: "/category/fabric-rib.png", color: "#e1a84f" },
-    { name: "PIQUE", image: "/category/fabric-pique.png", color: "#e84733" },
-    { name: "FRENCH TERRY", image: "/category/fabric-french-terry.png", color: "#4f658c" },
-    { name: "WAFFLE", image: "/category/fabric-waffle.png", color: "#5bb2e1" },
-    { name: "SINGLE JERSEY", image: "/category/fabric-single-jersey.png", color: "#7f1d1d" },
+    { name: "PIQUE", image: "https://texongo.com/wp-content/uploads/2025/08/Pique_20241215064036pm.png", color: "#f3f4f6" },
+    { name: "FRENCH TERRY", image: "https://texongo.com/wp-content/uploads/2025/12/Terry_20241215064032pm.png", color: "#f3f4f6" },
+    { name: "WAFFLE", image: "https://texongo.com/wp-content/uploads/2025/08/Waffle_20241215064033pm.png", color: "#f3f4f6" },
+    { name: "SINGLE JERSEY", image: "https://texongo.com/wp-content/uploads/2025/12/Single-Jersey_20241215064031pm.png", color: "#f3f4f6" },
+    { name: "POLY COTTON", image: "https://texongo.com/wp-content/uploads/2025/08/Poly-Cotton_20241215064036pm.png", color: "#f3f4f6" },
+    { name: "JACQUARD", image: "https://texongo.com/wp-content/uploads/2025/12/Jacquard_20241215064035pm.png", color: "#f3f4f6" },
+    { name: "POLYESTER", image: "https://texongo.com/wp-content/uploads/2025/12/Polyester_20241215064037pm.png", color: "#f3f4f6" },
+    { name: "MELANGE", image: "https://texongo.com/wp-content/uploads/2025/12/Melange_20241215064035pm.png", color: "#f3f4f6" },
+    { name: "FLEECE", image: "https://texongo.com/wp-content/uploads/2025/09/Fleece_20241215064034pm.png", color: "#f3f4f6" },
+    { name: "COTTON SPANDEX", image: "https://texongo.com/wp-content/uploads/2025/12/Cotton-Spandex_20241215064033pm.png", color: "#f3f4f6" },
+    { name: "COTTON", image: "https://texongo.com/wp-content/uploads/2025/12/Cotton_20241215064034pm.png", color: "#f3f4f6" },
+    { name: "VISCOSE", image: "https://texongo.com/wp-content/uploads/2025/11/Viscose_20241215064032pm.png", color: "#f3f4f6" },
+    { name: "RIB", image: "https://texongo.com/wp-content/uploads/2025/12/Rib_20241215064030pm.png", color: "#f3f4f6" },
   ];
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -216,8 +213,8 @@ function KnitStylesSection() {
   useEffect(() => {
     if (scrollRef.current) {
       const itemWidth = window.innerWidth >= 768 ? 280 + 24 : 220 + 16;
-      // Start in the middle of our 30 sets
-      scrollRef.current.scrollLeft = itemWidth * knitStyles.length * 10;
+      // Start in the middle of our 6 sets
+      scrollRef.current.scrollLeft = itemWidth * knitStyles.length * 2;
     }
   }, []);
 
@@ -240,17 +237,16 @@ function KnitStylesSection() {
     const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
     const itemWidth = window.innerWidth >= 768 ? 280 + 24 : 220 + 16;
 
-    // Jump forward if scrolled too far left
-    if (scrollLeft < 1500) {
-      scrollRef.current.scrollLeft += itemWidth * knitStyles.length * 10;
+    // Jump forward/backward if scrolled too far
+    if (scrollLeft < itemWidth * knitStyles.length) {
+      scrollRef.current.scrollLeft += itemWidth * knitStyles.length * 2;
     }
-    // Jump backward if scrolled too far right
-    else if (scrollLeft > scrollWidth - clientWidth - 1500) {
-      scrollRef.current.scrollLeft -= itemWidth * knitStyles.length * 10;
+    else if (scrollLeft > scrollWidth - clientWidth - itemWidth * knitStyles.length) {
+      scrollRef.current.scrollLeft -= itemWidth * knitStyles.length * 2;
     }
   };
 
-  // Using 6 sets (96 items) is plenty for the scroll loop without killing performance
+  // Using 6 sets is plenty for the scroll loop
   const extendedStyles = Array(6).fill(knitStyles).flat();
 
 
@@ -258,8 +254,12 @@ function KnitStylesSection() {
     <section className="py-12 md:py-24 bg-white overflow-hidden">
       <div className="mx-auto max-w-[1440px] px-4 md:px-6 lg:px-12 text-center relative">
         <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-16 tracking-tight">Choose your Knit Style</h2>
-        <div className="relative group/marquee">
-          <button onClick={scrollLeft} className="absolute -left-10 md:-left-4 lg:-left-8 top-1/2 -translate-y-1/2 z-20 hidden md:flex hover:scale-110 transition-transform w-12 h-12 items-center justify-center bg-white/80 rounded-full shadow-md cursor-pointer border border-black/5">
+        <div className="relative group/marquee px-4">
+          <button 
+            onClick={scrollLeft} 
+            className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-30 hidden md:flex hover:scale-110 active:scale-95 transition-transform w-12 h-12 items-center justify-center bg-white rounded-full shadow-xl cursor-pointer border border-black/5"
+            aria-label="Scroll left"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
           </button>
 
@@ -272,13 +272,13 @@ function KnitStylesSection() {
             >
               {extendedStyles.map((knit, i) => (
                 <div key={`${knit.name}-${i}`} className="relative aspect-square md:aspect-[4/5] w-[220px] md:w-[280px] shrink-0 snap-center rounded-xl overflow-hidden group/card cursor-pointer shadow-[0_4px_18px_rgba(17,17,17,0.08)] hover:shadow-[0_12px_32px_rgba(17,17,17,0.14)] transition-all duration-300">
-                  <div className="absolute inset-0" style={{ backgroundColor: knit.color }}></div>
+                  <div className="absolute inset-0 bg-zinc-50"></div>
                   <img
                     src={knit.image}
                     alt={knit.name}
                     loading="lazy"
                     decoding="async"
-                    className="relative z-0 object-cover w-full h-full mix-blend-multiply opacity-60 group-hover/card:scale-110 transition-transform duration-700"
+                    className="relative z-0 object-cover w-full h-full group-hover/card:scale-110 transition-transform duration-700"
                   />
 
                   <div className="absolute bottom-4 left-4 z-10 bg-white px-4 py-1.5 rounded-full text-[10px] font-bold text-black tracking-widest shadow-sm uppercase">
@@ -289,7 +289,11 @@ function KnitStylesSection() {
             </div>
           </div>
 
-          <button onClick={scrollRight} className="absolute -right-10 md:-right-4 lg:-right-8 top-1/2 -translate-y-1/2 z-20 hidden md:flex hover:scale-110 transition-transform w-12 h-12 items-center justify-center bg-white/80 rounded-full shadow-md cursor-pointer border border-black/5">
+          <button 
+            onClick={scrollRight} 
+            className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-30 hidden md:flex hover:scale-110 active:scale-95 transition-transform w-12 h-12 items-center justify-center bg-white rounded-full shadow-xl cursor-pointer border border-black/5"
+            aria-label="Scroll right"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
           </button>
         </div>

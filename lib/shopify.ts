@@ -489,3 +489,133 @@ export async function createCheckout(items: { variantId: string, quantity: numbe
     return null;
   }
 }
+
+export const ARTICLES_QUERY = `
+  query getArticles($first: Int!) {
+    articles(first: $first, sortKey: PUBLISHED_AT, reverse: true) {
+      edges {
+        node {
+          id
+          title
+          handle
+          excerpt
+          publishedAt
+          image {
+            url
+            altText
+          }
+          blog {
+            handle
+            title
+          }
+        }
+      }
+    }
+  }
+`;
+
+export interface ShopifyArticle {
+  id: string;
+  title: string;
+  handle: string;
+  excerpt: string;
+  publishedAt: string;
+  image: string;
+  blogHandle: string;
+  blogTitle: string;
+}
+
+export async function getShopifyArticles(limit: number = 10): Promise<ShopifyArticle[]> {
+  try {
+    const response = await shopifyFetch<any>({
+      query: ARTICLES_QUERY,
+      variables: { first: limit },
+    });
+
+    if (!response.data || !response.data.articles) {
+      return [];
+    }
+
+    return response.data.articles.edges.map(({ node }: any) => ({
+      id: node.id,
+      title: node.title,
+      handle: node.handle,
+      excerpt: node.excerpt || '',
+      publishedAt: node.publishedAt,
+      image: node.image?.url || '',
+      blogHandle: node.blog?.handle || 'news',
+      blogTitle: node.blog?.title || 'News'
+    }));
+  } catch (err) {
+    console.error('Error fetching articles:', err);
+    return [];
+  }
+}
+
+export const ARTICLE_BY_HANDLE_QUERY = `
+  query getArticleByHandle($blogHandle: String!, $articleHandle: String!) {
+    blog(handle: $blogHandle) {
+      title
+      articleByHandle(handle: $articleHandle) {
+        id
+        title
+        contentHtml
+        excerpt
+        publishedAt
+        tags
+        image {
+          url
+          altText
+        }
+        authorV2 {
+          name
+        }
+        seo {
+          title
+          description
+        }
+        comments(first: 10) {
+          edges {
+            node {
+              id
+              contentHtml
+              author {
+                name
+                email
+              }
+            }
+          }
+        }
+        metafields(identifiers: [
+          {namespace: "custom", key: "reading_time"},
+          {namespace: "custom", key: "subtitle"}
+        ]) {
+          key
+          value
+        }
+      }
+    }
+  }
+`;
+
+export async function getShopifyArticle(blogHandle: string, articleHandle: string) {
+  try {
+    const response = await shopifyFetch<any>({
+      query: ARTICLE_BY_HANDLE_QUERY,
+      variables: { blogHandle, articleHandle },
+    });
+
+    if (response.data?.blog?.articleByHandle) {
+      return {
+        ...response.data.blog.articleByHandle,
+        blog: {
+          title: response.data.blog.title
+        }
+      };
+    }
+    return null;
+  } catch (err) {
+    console.error('Error fetching article:', err);
+    return null;
+  }
+}
