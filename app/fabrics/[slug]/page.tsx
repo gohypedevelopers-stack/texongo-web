@@ -204,6 +204,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   <li><strong>COLOR:</strong> Please note that color difference on website may vary due to lighting and environmental factors.</li>
                   <li><strong>GSM Tolerance:</strong> ±10% variation from specified GSM is standard in knitted fabrics and not a defect.</li>
                   <li><strong>Width Tolerance:</strong> Slight width variations due to knitting, finishing, and batch differences are normal and acceptable.</li>
+                  <li><strong>Blends:</strong> Fabric compositions mentioned on our website are approximate and may vary , as not all fabrics undergo detailed composition testing.</li>
                 </ul>
               } defaultOpen />
               <AccordionItem title="Queries" content={
