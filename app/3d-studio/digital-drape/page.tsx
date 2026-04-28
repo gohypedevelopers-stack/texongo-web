@@ -3,32 +3,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 
-const videoSources = [
-  "/digital-drape-fixed/FAB_1_DES_1C.mp4",
-  "/digital-drape-fixed/FAB_10_DES_10B.mp4",
-  "/digital-drape-fixed/FAB_11_DES_11C.mp4",
-  "/digital-drape-fixed/FAB_12_DES_12B.mp4",
-  "/digital-drape-fixed/FAB_13_DES_13A.mp4",
-  "/digital-drape-fixed/FAB_14_DES_18C.mp4",
-  "/digital-drape-fixed/FAB_15_DES_21C.mp4",
-  "/digital-drape-fixed/FAB_16_DES_16A.mp4",
-  "/digital-drape-fixed/FAB_17_DES_17A.mp4",
-  "/digital-drape-fixed/FAB_18_DES_18B.mp4",
-  "/digital-drape-fixed/FAB_19_DES_19A.mp4",
-  "/digital-drape-fixed/FAB_2_DES_2B.mp4",
-  "/digital-drape-fixed/FAB_20_DES_15B.mp4",
-  "/digital-drape-fixed/FAB_21_DES_21B.mp4",
-  "/digital-drape-fixed/FAB_22_DES_21C.mp4",
-  "/digital-drape-fixed/FAB_23_DES_16A.mp4",
-  "/digital-drape-fixed/FAB_24_DES_2C.mp4",
-  "/digital-drape-fixed/FAB_26_FAB_2A.mp4",
-  "/digital-drape-fixed/FAB_28_DES_9C.mp4",
-  "/digital-drape-fixed/FAB_29_DES_7A.mp4",
-  "/digital-drape-fixed/FAB_3_DES_3A.mp4",
-  "/digital-drape-fixed/FAB_30_DES_1A.mp4"
-];
-
 const ITEMS_PER_PAGE = 12;
+const VIDEO_COUNT = 93;
 
 function DrapeCard({ videoSrc, id }: { videoSrc: string; id: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -63,18 +39,19 @@ function DrapeCard({ videoSrc, id }: { videoSrc: string; id: number }) {
         playsInline
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
       />
-      
-      {/* Overlay removed as per user request */}
     </motion.div>
   );
 }
 
 export default function DigitalDrapePage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(videoSources.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(VIDEO_COUNT / ITEMS_PER_PAGE);
   
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentVideos = videoSources.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const currentIds = Array.from(
+    { length: Math.min(ITEMS_PER_PAGE, VIDEO_COUNT - startIndex) }, 
+    (_, i) => startIndex + i + 1
+  );
 
   return (
     <main className="min-h-screen bg-black text-white pt-24 lg:pt-32">
@@ -94,18 +71,18 @@ export default function DigitalDrapePage() {
       <section className="max-w-[1440px] mx-auto px-6 lg:px-10 pb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
           <AnimatePresence mode="wait">
-            {currentVideos.map((src, index) => (
+            {currentIds.map((id) => (
               <DrapeCard 
-                key={`${currentPage}-${index}`} 
-                id={startIndex + index} 
-                videoSrc={src} 
+                key={`${currentPage}-${id}`} 
+                id={id} 
+                videoSrc={`/digital-drape-fixed/${id}.mp4`} 
               />
             ))}
           </AnimatePresence>
         </div>
 
         {/* Pagination Controls */}
-        <div className="mt-16 flex items-center justify-center gap-4">
+        <div className="mt-16 flex items-center justify-center gap-4 flex-wrap">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
               key={page}
