@@ -6,27 +6,17 @@ import { X } from "lucide-react";
 
 const ITEMS_PER_PAGE = 12;
 const VIDEO_COUNT = 93;
-const LOAD_TIMEOUT = 10000; // Increased to 10 seconds
 
 function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; onClick: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  // Reset state when id changes
   useEffect(() => {
-    // Reset state when id changes (important for pagination)
     setIsLoaded(false);
     setHasError(false);
-
-    const timer = setTimeout(() => {
-      if (!isLoaded) {
-        console.warn(`Video ${id} timed out loading.`);
-        setHasError(true);
-      }
-    }, LOAD_TIMEOUT);
-
-    return () => clearTimeout(timer);
-  }, [id, videoSrc]); // Depend on videoSrc/id to reset when paging
+  }, [id]);
 
   const handleMouseEnter = () => {
     if (videoRef.current && isLoaded) {
@@ -40,18 +30,19 @@ function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; on
     }
   };
 
+  // If the video explicitly fails to load, remove the box
   if (hasError) return null;
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="relative aspect-[3/4] bg-zinc-900 overflow-hidden group cursor-pointer border border-white/5"
+      className={`relative aspect-[3/4] bg-zinc-900 overflow-hidden group cursor-pointer border border-white/5 ${!isLoaded ? 'hidden' : 'block'}`}
     >
       <video
         ref={videoRef}
@@ -59,16 +50,11 @@ function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; on
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="auto"
         onLoadedData={() => setIsLoaded(true)}
         onError={() => setHasError(true)}
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className="absolute inset-0 w-full h-full object-cover"
       />
-      {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-zinc-900">
-          <div className="w-4 h-4 border border-white/10 border-t-white/40 rounded-full animate-spin" />
-        </div>
-      )}
     </motion.div>
   );
 }
