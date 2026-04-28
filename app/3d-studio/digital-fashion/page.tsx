@@ -3,12 +3,27 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { X } from "lucide-react";
-import { LazyVideo } from "@/app/lazy-video";
 
 const ITEMS_PER_PAGE = 12;
 const VIDEO_COUNT = 35;
 
 function FashionCard({ id, onClick }: { id: number; onClick: () => void }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleMouseEnter = () => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(err => {
+        // Handle autoplay policy/abort errors silently
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -17,10 +32,16 @@ function FashionCard({ id, onClick }: { id: number; onClick: () => void }) {
       transition={{ duration: 0.5 }}
       className="relative aspect-[3/4] bg-zinc-900 overflow-hidden group cursor-pointer border border-white/5"
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      <LazyVideo
+      <video
+        ref={videoRef}
         src={`/digital-fashion-fixed/${id}.mp4`}
-        threshold={0.1}
+        muted
+        loop
+        playsInline
+        preload="metadata"
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
       />
     </motion.div>

@@ -3,12 +3,25 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { X } from "lucide-react";
-import { LazyVideo } from "@/app/lazy-video";
 
 const ITEMS_PER_PAGE = 12;
 const VIDEO_COUNT = 93;
 
 function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; onClick: () => void }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleMouseEnter = () => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(err => console.log("Playback error:", err));
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -16,11 +29,17 @@ function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; on
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className="relative aspect-[3/4] bg-zinc-900 overflow-hidden group cursor-pointer border border-white/5"
     >
-      <LazyVideo
+      <video
+        ref={videoRef}
         src={videoSrc}
-        threshold={0.1}
+        muted
+        loop
+        playsInline
+        preload="metadata"
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
       />
     </motion.div>
