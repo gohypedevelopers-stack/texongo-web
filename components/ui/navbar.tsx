@@ -173,7 +173,7 @@ export function Navbar() {
                 <img
                   src="https://texongo.com/wp-content/uploads/2025/09/Untitled-design-2-1-e1758707290987.png"
                   alt="Texongo"
-                  className="h-8 md:h-10 w-auto"
+                  className="h-8 md:h-10 w-auto mix-blend-multiply"
                 />
               </Link>
 

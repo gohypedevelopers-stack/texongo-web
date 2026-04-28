@@ -135,12 +135,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   <span className="text-xs font-black uppercase tracking-widest text-gray-400">No Image Available</span>
                 </div>
               )}
-              <div className="absolute top-4 left-4 z-10">
-                <div className="bg-white/70 backdrop-blur-sm border border-black/5 px-2 py-1 shadow-sm">
+              <div className="absolute top-6 left-6 z-10">
+                <div className="bg-white px-3 py-1.5 rounded-full shadow-xl border border-black/5 flex items-center justify-center">
                   <img
                     src="https://texongo.com/wp-content/uploads/2025/09/Untitled-design-2-1-e1758707290987.png"
                     alt="Texongo"
-                    className="h-5 w-auto object-contain"
+                    className="h-4 w-auto object-contain mix-blend-multiply"
                   />
                 </div>
               </div>
