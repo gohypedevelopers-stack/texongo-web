@@ -64,7 +64,7 @@ function FashionCard({ src, index }: { src: string; index: number }) {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-100"
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
       />
       
       {/* Overlays removed as per user request */}

@@ -61,7 +61,7 @@ function DrapeCard({ videoSrc, id }: { videoSrc: string; id: number }) {
         muted
         loop
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
       />
       
       {/* Overlay removed as per user request */}
