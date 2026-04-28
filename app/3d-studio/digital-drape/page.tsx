@@ -1,8 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useRef, useEffect } from "react";
-import { LazyVideo } from "@/app/lazy-video";
+import { motion, AnimatePresence } from "framer-motion";
+import { useRef, useState } from "react";
 
 const videoSources = [
   "/digital-drape-fixed/FAB_1_DES_1C.mp4",
@@ -29,6 +28,8 @@ const videoSources = [
   "/digital-drape-fixed/FAB_30_DES_1A.mp4"
 ];
 
+const ITEMS_PER_PAGE = 12;
+
 function DrapeCard({ videoSrc, id }: { videoSrc: string; id: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -46,10 +47,10 @@ function DrapeCard({ videoSrc, id }: { videoSrc: string; id: number }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: (id % 3) * 0.1 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5 }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="relative aspect-[3/4] bg-zinc-900 overflow-hidden group cursor-pointer border border-white/5"
@@ -60,28 +61,23 @@ function DrapeCard({ videoSrc, id }: { videoSrc: string; id: number }) {
         muted
         loop
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity duration-700"
+        className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700"
       />
       
-      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 flex items-center justify-center pointer-events-none">
-        <span className="text-[10px] font-black uppercase tracking-widest border border-white/30 px-4 py-2 bg-black/20 backdrop-blur-sm">
-          View Simulation
-        </span>
-      </div>
-      
-      <div className="absolute inset-0 flex items-center justify-center text-white/10 text-[10px] font-black uppercase tracking-[0.5em] rotate-90 pointer-events-none group-hover:opacity-0 transition-opacity">
-        Texongo 3D Studio Content
-      </div>
+      {/* Overlay removed as per user request */}
     </motion.div>
   );
 }
 
 export default function DigitalDrapePage() {
-  const placeholders = Array.from({ length: 24 }, (_, i) => i + 1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(videoSources.length / ITEMS_PER_PAGE);
+  
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentVideos = videoSources.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
     <main className="min-h-screen bg-black text-white pt-24 lg:pt-32">
-
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-16 text-center">
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
@@ -96,15 +92,35 @@ export default function DigitalDrapePage() {
       </div>
 
       <section className="max-w-[1440px] mx-auto px-6 lg:px-10 pb-24">
-
-
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
-          {placeholders.map((id, index) => (
-            <DrapeCard 
-              key={id} 
-              id={id} 
-              videoSrc={videoSources[index % videoSources.length]} 
-            />
+          <AnimatePresence mode="wait">
+            {currentVideos.map((src, index) => (
+              <DrapeCard 
+                key={`${currentPage}-${index}`} 
+                id={startIndex + index} 
+                videoSrc={src} 
+              />
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="mt-16 flex items-center justify-center gap-4">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => {
+                setCurrentPage(page);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className={`w-10 h-10 flex items-center justify-center text-[10px] font-black uppercase tracking-widest border transition-all ${
+                currentPage === page 
+                  ? "bg-white text-black border-white" 
+                  : "bg-transparent text-white/40 border-white/10 hover:border-white/40"
+              }`}
+            >
+              {page}
+            </button>
           ))}
         </div>
       </section>

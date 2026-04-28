@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 
 const videoSources = [
@@ -29,12 +29,12 @@ const videoSources = [
   "FAB_90_DES_7C.mp4", "FAB_91_DES_13A.mp4", "FAB_9_DES_9A.mp4"
 ];
 
+const ITEMS_PER_PAGE = 12;
+
 function FashionCard({ src, index }: { src: string; index: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
     if (videoRef.current) {
       videoRef.current.play().catch(err => {
         // Handle autoplay policy/abort errors silently
@@ -43,7 +43,6 @@ function FashionCard({ src, index }: { src: string; index: number }) {
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
     if (videoRef.current) {
       videoRef.current.pause();
     }
@@ -52,9 +51,9 @@ function FashionCard({ src, index }: { src: string; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5 }}
       className="relative aspect-[3/4] bg-zinc-900 overflow-hidden group cursor-pointer border border-white/5"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -65,30 +64,21 @@ function FashionCard({ src, index }: { src: string; index: number }) {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-100"
       />
       
-      {/* Interaction Overlay */}
-      <div className={`absolute inset-0 bg-black/40 transition-opacity duration-500 z-10 flex flex-col items-center justify-center ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/90 mb-4 px-6 text-center">
-          {src.replace(/_/g, ' ').replace('.mp4', '')}
-        </span>
-        <span className="text-[8px] font-black uppercase tracking-widest border border-white/30 px-3 py-1.5 text-white/70">
-          Interactive View
-        </span>
-      </div>
-
-      {/* Static Label (Always visible but subtle) */}
-      <div className="absolute bottom-4 left-4 z-20 pointer-events-none">
-        <span className="text-[8px] font-black uppercase tracking-widest text-white/30">
-          TX-3D-{index + 1}
-        </span>
-      </div>
+      {/* Overlays removed as per user request */}
     </motion.div>
   );
 }
 
 export default function DigitalFashionPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(videoSources.length / ITEMS_PER_PAGE);
+  
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentVideos = videoSources.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
   return (
     <main className="min-h-screen bg-black text-white">
       {/* Header Section */}
@@ -119,10 +109,32 @@ export default function DigitalFashionPage() {
       </div>
 
       {/* Cinematic Grid */}
-      <section className="max-w-[1440px] mx-auto px-6 lg:px-10 py-1">
+      <section className="max-w-[1440px] mx-auto px-6 lg:px-10 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
-          {videoSources.map((src, index) => (
-            <FashionCard key={src} src={src} index={index} />
+          <AnimatePresence mode="wait">
+            {currentVideos.map((src, index) => (
+              <FashionCard key={`${currentPage}-${src}`} src={src} index={startIndex + index} />
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="mt-16 flex items-center justify-center gap-4">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => {
+                setCurrentPage(page);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className={`w-10 h-10 flex items-center justify-center text-[10px] font-black uppercase tracking-widest border transition-all ${
+                currentPage === page 
+                  ? "bg-white text-black border-white" 
+                  : "bg-transparent text-white/40 border-white/10 hover:border-white/40"
+              }`}
+            >
+              {page}
+            </button>
           ))}
         </div>
       </section>
