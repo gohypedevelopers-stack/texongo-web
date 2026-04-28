@@ -6,12 +6,30 @@ import { X } from "lucide-react";
 
 const ITEMS_PER_PAGE = 12;
 const VIDEO_COUNT = 91;
+const LOAD_TIMEOUT = 10000; // Increased to 10 seconds
 
 function FallCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; onClick: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [hasError, setHasError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    // Reset state when id changes
+    setIsLoaded(false);
+    setHasError(false);
+
+    const timer = setTimeout(() => {
+      if (!isLoaded) {
+        console.warn(`Video fall/${id} timed out loading.`);
+        setHasError(true);
+      }
+    }, LOAD_TIMEOUT);
+
+    return () => clearTimeout(timer);
+  }, [id, isLoaded]);
 
   const handleMouseEnter = () => {
-    if (videoRef.current) {
+    if (videoRef.current && isLoaded) {
       videoRef.current.play().catch(err => console.log("Playback error:", err));
     }
   };
@@ -22,11 +40,13 @@ function FallCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; onC
     }
   };
 
+  if (hasError) return null;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.5 }}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
@@ -40,8 +60,15 @@ function FallCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; onC
         loop
         playsInline
         preload="metadata"
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+        onLoadedData={() => setIsLoaded(true)}
+        onError={() => setHasError(true)}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
       />
+      {!isLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-zinc-900">
+          <div className="w-4 h-4 border border-white/10 border-t-white/40 rounded-full animate-spin" />
+        </div>
+      )}
     </motion.div>
   );
 }
@@ -84,7 +111,7 @@ export default function DigitalFallPage() {
 
       <section className="max-w-[1440px] mx-auto px-6 lg:px-10 pb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="popLayout">
             {currentIds.map((id) => (
               <FallCard 
                 key={`${currentPage}-${id}`} 
