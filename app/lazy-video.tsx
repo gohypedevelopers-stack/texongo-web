@@ -118,6 +118,7 @@ export function LazyVideo({ src, threshold = 0.15, style, className, ...props }:
       ) : (
         <video
           ref={videoRef}
+          src={videoSrc || undefined}
           muted
           loop
           playsInline
@@ -135,7 +136,6 @@ export function LazyVideo({ src, threshold = 0.15, style, className, ...props }:
           }}
           {...props}
         >
-          {videoSrc && <source src={videoSrc} type="video/mp4" />}
           Your browser does not support the video tag.
         </video>
       )}
