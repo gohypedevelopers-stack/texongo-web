@@ -6,6 +6,100 @@ import { X, Download, Loader2, ArrowRight } from "lucide-react";
 
 const ITEMS_PER_PAGE = 12;
 
+const FABRIC_INFO: Record<string, { name: string; sku: string }> = {
+  "FAB 1": { name: "Corduroy", sku: "SCH6049" },
+  "FAB 2": { name: "Pin Stripe", sku: "SCH5812" },
+  "FAB 3": { name: "2 x 2 Rib", sku: "SCH5687" },
+  "FAB 4": { name: "1 x 1 Rib", sku: "SCH5109" },
+  "FAB 5": { name: "Single Jersey", sku: "SCH6021" },
+  "FAB 6": { name: "Jacquard Terry", sku: "SCH5108" },
+  "FAB 7": { name: "Slub Single Jersey", sku: "SCH6066" },
+  "FAB 8": { name: "Ponte", sku: "SCH6070" },
+  "FAB 9": { name: "Popcorn", sku: "SCH5091" },
+  "FAB 10": { name: "Nylon Lycra", sku: "SCH6071" },
+  "FAB 11": { name: "Terry", sku: "SCH6058" },
+  "FAB 12": { name: "Single Jersey Melange Neps", sku: "SCH6084" },
+  "FAB 13": { name: "GreyHeather Terry Melange", sku: "SCH5100" },
+  "FAB 14": { name: "Polyester Spandex", sku: "SCH6060" },
+  "FAB 15": { name: "Shiffly", sku: "SCH6061" },
+  "FAB 16": { name: "Single Jersey Slub", sku: "SCH6062" },
+  "FAB 17": { name: "Single Jersey Injected Slub", sku: "SCH6063" },
+  "FAB 18": { name: "Single Jersey Yarn Dyed", sku: "SCH6064" },
+  "FAB 19": { name: "French Terry", sku: "SCH5811" },
+  "FAB 20": { name: "Terry Injected Slub", sku: "SCH6072" },
+  "FAB 21": { name: "Pique", sku: "SCH6073" },
+  "FAB 22": { name: "Cotton Modal", sku: "SCH6074" },
+  "FAB 23": { name: "Jacquard Single Jersey", sku: "SCH6075" },
+  "FAB 24": { name: "3 thread Fleece", sku: "SCH6044" },
+  "FAB 25": { name: "Camouflage", sku: "SCH5121" },
+  "FAB 26": { name: "Single Jersey Lurex", sku: "SCH6045" },
+  "FAB 27": { name: "Waffle Jacquard", sku: "SCH6076" },
+  "FAB 28": { name: "Polyester Cotton Spandex", sku: "SCH6077" },
+  "FAB 29": { name: "Sweater Knit Terry", sku: "SCH6078" },
+  "FAB 30": { name: "Mercerised Interlock Yarn Dyed", sku: "SCH6079" },
+  "FAB 31": { name: "Viscose Bamboo Lycra", sku: "SCH6092" },
+  "FAB 32": { name: "Single Jersey Neps", sku: "SCH6098" },
+  "FAB 33": { name: "Stretch Jersey", sku: "SCH6097" },
+  "FAB 34": { name: "Micro Modal", sku: "SCH6096" },
+  "FAB 35": { name: "Tencel Jersey", sku: "SCH6093" },
+  "FAB 36": { name: "Organic Cotton", sku: "W6095" },
+  "FAB 37": { name: "Bamboo Jersey", sku: "W5395" },
+  "FAB 38": { name: "Recycled Polyester", sku: "SCH6051" },
+  "FAB 39": { name: "Hemp Blend", sku: "SCH6052" },
+  "FAB 40": { name: "Linen Jersey", sku: "SCH6053" },
+  "FAB 41": { name: "Silk Touch Jersey", sku: "SCH6090" },
+  "FAB 42": { name: "Modal Spandex", sku: "SCH6091" },
+  "FAB 43": { name: "Double Knit", sku: "SCH5059" },
+  "FAB 44": { name: "Heavy Interlock", sku: "SCH5032" },
+  "FAB 45": { name: "Lightweight Jersey", sku: "SCH5771" },
+  "FAB 46": { name: "Pointelle Knit", sku: "SCH6042" },
+  "FAB 47": { name: "Pointelle Rib", sku: "SCH6043" },
+  "FAB 48": { name: "French Rib", sku: "SCH5003" },
+  "FAB 49": { name: "Ottoman Knit", sku: "SCH5040" },
+  "FAB 50": { name: "Milano Knit", sku: "SCH5021" },
+  "FAB 51": { name: "Scuba Fabric", sku: "SCH5046" },
+  "FAB 52": { name: "Techno Crepe", sku: "SCH6047" },
+  "FAB 53": { name: "Bubble Crepe", sku: "SCH5844" },
+  "FAB 54": { name: "Liverpool Knit", sku: "SCH6054" },
+  "FAB 55": { name: "Bullet Knit", sku: "SCH6055" },
+  "FAB 56": { name: "Venice Knit", sku: "SCH6056" },
+  "FAB 57": { name: "DTY Brushed", sku: "SCH6046" },
+  "FAB 58": { name: "ITY Jersey", sku: "SCH6057" },
+  "FAB 59": { name: "Slinky Jersey", sku: "SCH6040" },
+  "FAB 60": { name: "Power Mesh", sku: "SCH5417" },
+  "FAB 61": { name: "Nylon Mesh", sku: "SCH5796" },
+  "FAB 62": { name: "Eyelet Fabric", sku: "SCH6080" },
+  "FAB 63": { name: "Birdseye Mesh", sku: "SCH5778" },
+  "FAB 64": { name: "Athletic Mesh", sku: "SCH6050" },
+  "FAB 65": { name: "Space Dye Jersey", sku: "SCH6086" },
+  "FAB 66": { name: "Space Dye Terry", sku: "SCH6087" },
+  "FAB 67": { name: "Melange Rib", sku: "SCH6088" },
+  "FAB 68": { name: "Heathered Knit", sku: "SCH6089" },
+  "FAB 69": { name: "Marled Jersey", sku: "SCH6065" },
+  "FAB 70": { name: "Striped Jersey", sku: "SCH6048" },
+  "FAB 71": { name: "Striped Rib", sku: "SCH6067" },
+  "FAB 72": { name: "Variegated Rib", sku: "SCH6068" },
+  "FAB 73": { name: "Waffle Knit", sku: "SCH6069" },
+  "FAB 74": { name: "Thermal Knit", sku: "SCH5805" },
+  "FAB 75": { name: "Velour", sku: "SCH6083" },
+  "FAB 76": { name: "Crushed Velvet", sku: "SCH6082" },
+  "FAB 77": { name: "Stretch Velvet", sku: "SCH6084" },
+  "FAB 78": { name: "Chenille Knit", sku: "SCH6085" },
+  "FAB 79": { name: "Sherpa Fleece", sku: "SCH5058" },
+  "FAB 80": { name: "Polar Fleece", sku: "SCH5780" },
+  "FAB 81": { name: "Coral Fleece", sku: "SCH6049" },
+  "FAB 82": { name: "Minky Fabric", sku: "SCH5812" },
+  "FAB 83": { name: "Faux Fur", sku: "SCH5687" },
+  "FAB 84": { name: "Boucle Knit", sku: "SCH5109" },
+  "FAB 85": { name: "Slub Knit", sku: "SCH6021" },
+  "FAB 86": { name: "Nep Knit", sku: "SCH5108" },
+  "FAB 87": { name: "Lurex Knit", sku: "SCH6066" },
+  "FAB 88": { name: "Metallic Jersey", sku: "SCH6070" },
+  "FAB 89": { name: "Glitter Knit", sku: "SCH5091" },
+  "FAB 90": { name: "Sequin Fabric", sku: "SCH6071" },
+  "FAB 91": { name: "Embroidered Mesh", sku: "SCH6058" },
+};
+
 const DRAPE_NAMES = [
   "FAB 1 DES 1C", "FAB 10 DES 10B", "FAB 11 DES 11C", "FAB 12 DES 12B", "FAB 13 DES 13A",
   "FAB 14 DES 18C", "FAB 15 DES 21C", "FAB 16 DES 16A", "FAB 17 DES 17A", "FAB 18 DES 18B",
@@ -29,19 +123,23 @@ const DRAPE_NAMES = [
 ];
 const VIDEO_COUNT = DRAPE_NAMES.length;
 
-function DrapeCard({ id, onClick }: { id: number; onClick: (src: string, name: string) => void }) {
+function DrapeCard({ id, onClick }: { id: number; onClick: (src: string, name: string, fabric: string, sku: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const name = DRAPE_NAMES[id - 1] || `Drape #${id}`;
+  const rawName = DRAPE_NAMES[id - 1] || `FAB ${id} DES 1A`;
+  const fabMatch = rawName.match(/FAB \d+/);
+  const fabKey = fabMatch ? fabMatch[0] : "FAB 1";
+  const fabricData = FABRIC_INFO[fabKey] || { name: "Premium Fabric", sku: "SCH-0000" };
+
   const [videoSrc, setVideoSrc] = useState("");
 
   useEffect(() => {
-    setVideoSrc(`/digital-drape-fixed/${name}.mp4`);
-  }, [id, name]);
+    setVideoSrc(`/digital-drape-fixed/${rawName}.mp4`);
+  }, [id, rawName]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -74,7 +172,7 @@ function DrapeCard({ id, onClick }: { id: number; onClick: (src: string, name: s
     e.stopPropagation();
     const link = document.createElement('a');
     link.href = videoSrc;
-    link.download = `texongo-${name.toLowerCase().replace(/\s+/g, '-')}.mp4`;
+    link.download = `texongo-${fabricData.name.toLowerCase().replace(/\s+/g, '-')}-${fabricData.sku.toLowerCase()}.mp4`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -98,7 +196,7 @@ function DrapeCard({ id, onClick }: { id: number; onClick: (src: string, name: s
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      onClick={() => onClick(videoSrc, name)}
+      onClick={() => onClick(videoSrc, rawName, fabricData.name, fabricData.sku)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="relative aspect-[3/4] bg-white overflow-hidden group cursor-pointer border border-black/5"
@@ -127,8 +225,13 @@ function DrapeCard({ id, onClick }: { id: number; onClick: (src: string, name: s
       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300">
         {/* Top Left Badge */}
         <div className="absolute top-4 left-4 pointer-events-none z-10">
-          <div className="bg-black text-white px-2.5 py-1 rounded-[2px] text-[9px] font-black uppercase tracking-widest shadow-lg">
-            {name}
+          <div className="flex flex-col gap-1">
+            <div className="bg-black text-white px-2.5 py-1 rounded-[2px] text-[9px] font-black uppercase tracking-widest shadow-lg w-fit">
+              {fabricData.name}
+            </div>
+            <div className="bg-white/90 backdrop-blur-md text-black px-2 py-0.5 rounded-[2px] text-[8px] font-bold uppercase tracking-widest shadow-md w-fit border border-black/5">
+              {fabricData.sku}
+            </div>
           </div>
         </div>
 
@@ -146,7 +249,12 @@ function DrapeCard({ id, onClick }: { id: number; onClick: (src: string, name: s
 
 export default function DigitalDrapePage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedVideo, setSelectedVideo] = useState<{ src: string, name: string } | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<{
+    src: string;
+    name: string;
+    fabric?: string;
+    sku?: string;
+  } | null>(null);
 
   const totalPages = Math.ceil(VIDEO_COUNT / ITEMS_PER_PAGE);
 
@@ -168,7 +276,10 @@ export default function DigitalDrapePage() {
     if (!selectedVideo) return;
     const link = document.createElement('a');
     link.href = selectedVideo.src;
-    link.download = `texongo-${selectedVideo.name.toLowerCase().replace(/\s+/g, '-')}.mp4`;
+    const fileName = selectedVideo.fabric
+      ? `${selectedVideo.fabric.toLowerCase().replace(/\s+/g, '-')}-${selectedVideo.sku?.toLowerCase()}`
+      : selectedVideo.name.toLowerCase().replace(/\s+/g, '-');
+    link.download = `texongo-${fileName}.mp4`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -203,7 +314,7 @@ export default function DigitalDrapePage() {
               <DrapeCard
                 key={`${currentPage}-${id}`}
                 id={id}
-                onClick={(src, name) => setSelectedVideo({ src, name })}
+                onClick={(src, name, fabric, sku) => setSelectedVideo({ src, name, fabric, sku })}
               />
             ))}
           </AnimatePresence>
@@ -255,14 +366,17 @@ export default function DigitalDrapePage() {
                 />
 
                 {/* Lightbox Badge Overlay */}
-                <div className="absolute top-6 left-6 pointer-events-none z-10">
-                  <div className="bg-black text-white px-3 py-1.5 rounded-[2px] text-[10px] font-black uppercase tracking-[0.2em] shadow-lg">
-                    {selectedVideo.name}
+                <div className="absolute top-6 left-6 pointer-events-none z-10 flex flex-col gap-2">
+                  <div className="bg-black text-white px-3 py-1.5 rounded-[2px] text-[10px] font-black uppercase tracking-[0.2em] shadow-lg w-fit">
+                    {selectedVideo.fabric || selectedVideo.name}
                   </div>
+                  {selectedVideo.sku && (
+                    <div className="bg-white/90 backdrop-blur-md text-black px-2.5 py-1 rounded-[2px] text-[9px] font-bold uppercase tracking-widest shadow-md w-fit border border-black/5">
+                      {selectedVideo.sku}
+                    </div>
+                  )}
                 </div>
               </div>
-
-
 
               <button
                 onClick={() => setSelectedVideo(null)}
