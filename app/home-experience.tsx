@@ -85,7 +85,7 @@ const storyProducts = [
   {
     name: "Digital Drape",
     desc: "Visualize how fabrics drape digitally, bringing realistic flow, elegance, and style to every garment design effortlessly.",
-    video: "/video/Untitled-design-1.mp4",
+    video: "https://cdn.shopify.com/videos/c/o/v/0a1bbae469b6414f8ad969bcc83c1399.mp4",
     alt: "Digital Drape",
     href: "#digital-drape",
   },
@@ -255,8 +255,8 @@ function KnitStylesSection() {
       <div className="mx-auto max-w-[1440px] px-4 md:px-6 lg:px-12 text-center relative">
         <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-16 tracking-tight">Choose your Knit Style</h2>
         <div className="relative group/marquee px-4">
-          <button 
-            onClick={scrollLeft} 
+          <button
+            onClick={scrollLeft}
             className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-30 hidden md:flex hover:scale-110 active:scale-95 transition-transform w-12 h-12 items-center justify-center bg-white rounded-full shadow-xl cursor-pointer border border-black/5"
             aria-label="Scroll left"
           >
@@ -289,8 +289,8 @@ function KnitStylesSection() {
             </div>
           </div>
 
-          <button 
-            onClick={scrollRight} 
+          <button
+            onClick={scrollRight}
             className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-30 hidden md:flex hover:scale-110 active:scale-95 transition-transform w-12 h-12 items-center justify-center bg-white rounded-full shadow-xl cursor-pointer border border-black/5"
             aria-label="Scroll right"
           >
@@ -616,7 +616,7 @@ export function HomeExperience() {
             <div className="flex flex-col md:flex-row w-full">
               <div className="w-full md:w-1/2 relative min-h-[250px] md:min-h-[400px]">
                 <LazyVideo
-                  src="/video/efficient_en.webm"
+                  src="https://cdn.shopify.com/videos/c/o/v/ebe78b4f20aa4b058686865135442659.webm"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               </div>
