@@ -47,7 +47,7 @@ export default function AboutUsPage() {
               <img 
                 src="/ChatGPT Image Apr 30, 2026, 12_48_00 PM.png" 
                 alt="Mr. Jagdish Chand Gupta" 
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </motion.div>
@@ -96,7 +96,7 @@ export default function AboutUsPage() {
               <img 
                 src="/ChatGPT Image Apr 30, 2026, 12_44_57 PM.png" 
                 alt="Mr. Manoj Gupta" 
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </motion.div>
@@ -113,7 +113,7 @@ export default function AboutUsPage() {
             <img 
               src="/category/fabric-single-jersey.png" 
               alt="Our Commitment" 
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              className="w-full h-full object-cover transition-all duration-700"
             />
           </motion.div>
           <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="space-y-8">
