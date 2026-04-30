@@ -5,7 +5,6 @@ import { useRef, useState, useEffect } from "react";
 import { X, Download, Loader2, ArrowRight } from "lucide-react";
 
 const ITEMS_PER_PAGE = 12;
-const VIDEO_COUNT = 93;
 
 const DRAPE_NAMES = [
   "FAB 1 DES 1C", "FAB 10 DES 10B", "FAB 11 DES 11C", "FAB 12 DES 12B", "FAB 13 DES 13A",
@@ -28,15 +27,21 @@ const DRAPE_NAMES = [
   "FAB 85 DES 21C", "FAB 86 DES 11A", "FAB 87 DES 13C", "FAB 88 DES 10C", "FAB 89 DES 16B",
   "FAB 9 DES 9A", "FAB 90 DES 15A", "FAB 91 DES 18B"
 ];
+const VIDEO_COUNT = DRAPE_NAMES.length;
 
-function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; onClick: () => void }) {
+function DrapeCard({ id, onClick }: { id: number; onClick: (src: string, name: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const name = DRAPE_NAMES[id - 1] || `Drape #${id}`;
+  const [videoSrc, setVideoSrc] = useState("");
+
+  useEffect(() => {
+    setVideoSrc(`/digital-drape-fixed/${name}.mp4`);
+  }, [id, name]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -52,11 +57,6 @@ function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; on
     return () => observer.disconnect();
   }, [id]);
 
-  useEffect(() => {
-    setIsLoaded(false);
-    setHasError(false);
-  }, [id]);
-
   const handleMouseEnter = () => {
     if (videoRef.current && isLoaded) {
       videoRef.current.play().catch(err => console.log("Playback error:", err));
@@ -66,6 +66,7 @@ function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; on
   const handleMouseLeave = () => {
     if (videoRef.current) {
       videoRef.current.pause();
+      videoRef.current.currentTime = 0;
     }
   };
 
@@ -79,7 +80,16 @@ function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; on
     document.body.removeChild(link);
   };
 
-  if (hasError) return null;
+  const handleError = () => {
+    const idPath = `/digital-drape-fixed/${id}.mp4`;
+    if (videoSrc !== idPath) {
+      setVideoSrc(idPath);
+    } else {
+      setIsError(true);
+    }
+  };
+
+  if (isError) return null;
 
   return (
     <motion.div
@@ -88,7 +98,7 @@ function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; on
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      onClick={onClick}
+      onClick={() => onClick(videoSrc, name)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="relative aspect-[3/4] bg-white overflow-hidden group cursor-pointer border border-black/5"
@@ -108,7 +118,7 @@ function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; on
           playsInline
           preload="metadata"
           onLoadedData={() => setIsLoaded(true)}
-          onError={() => setHasError(true)}
+          onError={handleError}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
       )}
@@ -116,15 +126,15 @@ function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; on
       {/* Overlay Actions */}
       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300">
         {/* Top Left Badge */}
-        <div className="absolute top-4 left-4 pointer-events-none transform -translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-          <div className="bg-black text-white px-2.5 py-1 rounded-[2px] text-[9px] font-black uppercase tracking-widest">
+        <div className="absolute top-4 left-4 pointer-events-none z-10">
+          <div className="bg-black text-white px-2.5 py-1 rounded-[2px] text-[9px] font-black uppercase tracking-widest shadow-lg">
             {name}
           </div>
         </div>
 
         <button
           onClick={handleDownload}
-          className="absolute top-4 right-4 p-2 bg-white/80 backdrop-blur-md rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white translate-y-2 group-hover:translate-y-0"
+          className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-md rounded-full shadow-lg transition-all duration-300 hover:bg-white z-10"
           title="Download Simulation"
         >
           <Download size={16} className="text-black" />
@@ -136,7 +146,7 @@ function DrapeCard({ videoSrc, id, onClick }: { videoSrc: string; id: number; on
 
 export default function DigitalDrapePage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedVideo, setSelectedVideo] = useState<{src: string, id: number} | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<{ src: string, name: string } | null>(null);
 
   const totalPages = Math.ceil(VIDEO_COUNT / ITEMS_PER_PAGE);
 
@@ -158,14 +168,11 @@ export default function DigitalDrapePage() {
     if (!selectedVideo) return;
     const link = document.createElement('a');
     link.href = selectedVideo.src;
-    const name = DRAPE_NAMES[selectedVideo.id - 1] || `drape-${selectedVideo.id}`;
-    link.download = `texongo-${name.toLowerCase().replace(/\s+/g, '-')}.mp4`;
+    link.download = `texongo-${selectedVideo.name.toLowerCase().replace(/\s+/g, '-')}.mp4`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
-
-  const selectedName = selectedVideo ? (DRAPE_NAMES[selectedVideo.id - 1] || `Simulation #${selectedVideo.id}`) : "";
 
   return (
     <main className="min-h-screen bg-[#F9FAFB] text-[#111111] pt-24 lg:pt-32">
@@ -185,8 +192,7 @@ export default function DigitalDrapePage() {
           Digital Drape
         </motion.h1>
         <p className="text-[#475467]/60 text-[10px] md:text-xs uppercase tracking-[0.3em] max-w-2xl mx-auto font-bold leading-relaxed">
-          Interactive textile physics exploring the authentic flow, 
-          elegance, and texture of our premium knit collections.
+          Digital Drape, Real-World Sourcing. Explore hyper-realistic 3D simulations of fabrics you can buy and use today.
         </p>
       </div>
 
@@ -197,8 +203,7 @@ export default function DigitalDrapePage() {
               <DrapeCard
                 key={`${currentPage}-${id}`}
                 id={id}
-                videoSrc={`/digital-drape-fixed/${id}.mp4`}
-                onClick={() => setSelectedVideo({ src: `/digital-drape-fixed/${id}.mp4`, id })}
+                onClick={(src, name) => setSelectedVideo({ src, name })}
               />
             ))}
           </AnimatePresence>
@@ -213,8 +218,8 @@ export default function DigitalDrapePage() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className={`w-10 h-10 flex items-center justify-center text-[10px] font-black uppercase tracking-widest border transition-all ${currentPage === page
-                  ? "bg-black text-white border-black"
-                  : "bg-transparent text-black/40 border-black/10 hover:border-black/40 hover:text-black"
+                ? "bg-black text-white border-black"
+                : "bg-transparent text-black/40 border-black/10 hover:border-black/40 hover:text-black"
                 }`}
             >
               {page}
@@ -248,11 +253,11 @@ export default function DigitalDrapePage() {
                   playsInline
                   className="w-full h-full object-contain bg-black"
                 />
-                
+
                 {/* Lightbox Badge Overlay */}
                 <div className="absolute top-6 left-6 pointer-events-none z-10">
                   <div className="bg-black text-white px-3 py-1.5 rounded-[2px] text-[10px] font-black uppercase tracking-[0.2em] shadow-lg">
-                    {selectedName}
+                    {selectedVideo.name}
                   </div>
                 </div>
               </div>

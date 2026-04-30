@@ -31,16 +31,27 @@ const FASHION_NAMES = [
 ];
 
 // The "fixed" folder contains 35 optimized videos named 1.mp4 through 35.mp4
-const VIDEO_COUNT = 97;
+const VIDEO_COUNT = FASHION_NAMES.length;
 
-function FashionCard({ id, onClick }: { id: number; onClick: () => void }) {
+function FashionCard({ id, onClick }: { id: number; onClick: (src: string, name: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const name = FASHION_NAMES[id - 1] || `Fashion Preview #${id}`;
-  const videoSrc = `/digital-fashion-fixed/${id}.mp4`;
+  const [videoSrc, setVideoSrc] = useState("");
+
+  useEffect(() => {
+    // Start with the descriptive name as it's more likely to be the correct source
+    // Fallback to id.mp4 if needed (handled in onError)
+    if (id === 1) {
+      setVideoSrc(`/digital-fashion-fixed/1.mp4`);
+    } else {
+      setVideoSrc(`/digital-fashion-fixed/${name}.mp4`);
+    }
+  }, [id, name]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -78,13 +89,26 @@ function FashionCard({ id, onClick }: { id: number; onClick: () => void }) {
     document.body.removeChild(link);
   };
 
+  const handleError = () => {
+    const idPath = `/digital-fashion-fixed/${id}.mp4`;
+    if (videoSrc !== idPath) {
+      // If the named path failed, try the numbered path
+      setVideoSrc(idPath);
+    } else {
+      // If both failed, hide the card
+      setIsError(true);
+    }
+  };
+
+  if (isError) return null;
+
   return (
     <motion.div
       ref={containerRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      onClick={onClick}
+      onClick={() => onClick(videoSrc, name)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="relative aspect-[4/5] bg-white overflow-hidden group cursor-pointer border border-black/5"
@@ -104,6 +128,7 @@ function FashionCard({ id, onClick }: { id: number; onClick: () => void }) {
           playsInline
           preload="metadata"
           onLoadedData={() => setIsLoaded(true)}
+          onError={handleError}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
       )}
@@ -111,15 +136,15 @@ function FashionCard({ id, onClick }: { id: number; onClick: () => void }) {
       {/* Overlay Actions */}
       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300">
         {/* Top Left Badge */}
-        <div className="absolute top-4 left-4 pointer-events-none transform -translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-          <div className="bg-black text-white px-2.5 py-1 rounded-[2px] text-[9px] font-black uppercase tracking-widest">
+        <div className="absolute top-4 left-4 pointer-events-none z-10">
+          <div className="bg-black text-white px-2.5 py-1 rounded-[2px] text-[9px] font-black uppercase tracking-widest shadow-lg">
             {name}
           </div>
         </div>
 
         <button
           onClick={handleDownload}
-          className="absolute top-4 right-4 p-2 bg-white/80 backdrop-blur-md rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white translate-y-2 group-hover:translate-y-0"
+          className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-md rounded-full shadow-lg transition-all duration-300 hover:bg-white z-10"
           title="Download Simulation"
         >
           <Download size={16} className="text-black" />
@@ -170,8 +195,7 @@ export default function DigitalFashionPage() {
         <motion.p
           className="text-[#475467] text-[10px] md:text-xs max-w-2xl mx-auto uppercase tracking-[0.3em] leading-relaxed font-bold"
         >
-          Cinematic 3D garment simulations showcasing hyper-realistic movement,
-          texture, and fluid digital drape.
+          Real Fabrics, Virtually Perfected. Preview the drape, feel the texture, and source the fabric—all in one place
         </motion.p>
       </div>
 
@@ -182,10 +206,7 @@ export default function DigitalFashionPage() {
               <FashionCard
                 key={id}
                 id={id}
-                onClick={() => setSelectedVideo({
-                  src: `/digital-fashion-fixed/${id}.mp4`,
-                  name: FASHION_NAMES[id - 1] || `Fashion #${id}`
-                })}
+                onClick={(src, name) => setSelectedVideo({ src, name })}
               />
             ))}
           </AnimatePresence>

@@ -12,7 +12,7 @@ const navItems = [
   { name: "Home", href: "/" },
   {
     name: "FabricaVision",
-    href: "/fabricavision",
+    href: "#",
     megaMenu: [
       {
         title: "Knit Style",
@@ -54,7 +54,7 @@ const navItems = [
   },
   {
     name: "3D Studio",
-    href: "/3d-studio",
+    href: "#",
     dropdown: [
       { name: "Digital Drape", href: "/3d-studio/digital-drape" },
       { name: "Digital Fall", href: "/3d-studio/digital-fall" },
@@ -261,18 +261,30 @@ export function Navbar() {
                     onMouseEnter={() => setHoveredItem(item.name)}
                     onMouseLeave={() => setHoveredItem(null)}
                   >
-                    <Link
-                      href={item.href}
-                      className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:text-black transition-colors h-full"
-                    >
-                      {item.name}
-                      {(item.dropdown || item.megaMenu) && (
-                        <ChevronDown
-                          size={12}
-                          className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`}
-                        />
-                      )}
-                    </Link>
+                    {item.href === "#" ? (
+                      <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:text-black transition-colors h-full cursor-default">
+                        {item.name}
+                        {(item.dropdown || item.megaMenu) && (
+                          <ChevronDown
+                            size={12}
+                            className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`}
+                          />
+                        )}
+                      </span>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:text-black transition-colors h-full"
+                      >
+                        {item.name}
+                        {(item.dropdown || item.megaMenu) && (
+                          <ChevronDown
+                            size={12}
+                            className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`}
+                          />
+                        )}
+                      </Link>
+                    )}
 
                     {/* Dropdown or Mega Menu */}
                     <AnimatePresence>
@@ -360,13 +372,22 @@ export function Navbar() {
                       {navItems.map((item) => (
                         <li key={item.name} className="border-b border-gray-50 pb-2">
                           <div className="flex items-center justify-between">
-                            <Link
-                              href={item.href}
-                              className="text-sm font-black uppercase tracking-[0.1em] py-3 block"
-                              onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                              {item.name}
-                            </Link>
+                            {item.href === "#" ? (
+                              <span
+                                className="text-sm font-black uppercase tracking-[0.1em] py-3 block cursor-pointer flex-1"
+                                onClick={() => setActiveAccordion(activeAccordion === item.name ? null : item.name)}
+                              >
+                                {item.name}
+                              </span>
+                            ) : (
+                              <Link
+                                href={item.href}
+                                className="text-sm font-black uppercase tracking-[0.1em] py-3 block flex-1"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                              >
+                                {item.name}
+                              </Link>
+                            )}
                             {(item.megaMenu || item.dropdown) && (
                               <button
                                 onClick={() => setActiveAccordion(activeAccordion === item.name ? null : item.name)}
