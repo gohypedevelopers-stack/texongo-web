@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { X, Download, Loader2, ArrowRight } from "lucide-react";
+import { X, Loader2, ArrowRight } from "lucide-react";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -177,28 +177,8 @@ function DrapeCard({ id, onClick }: { id: number; onClick: (src: string, name: s
     return () => observer.disconnect();
   }, [id]);
 
-  const handleMouseEnter = () => {
-    if (videoRef.current && isLoaded) {
-      videoRef.current.play().catch(err => console.log("Playback error:", err));
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  };
-
-  const handleDownload = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const link = document.createElement('a');
-    link.href = videoSrc;
-    link.download = `texongo-${fabricData.name.toLowerCase().replace(/\s+/g, '-')}-${fabricData.sku.toLowerCase()}.mp4`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const handleMouseEnter = () => { if (videoRef.current && isLoaded) videoRef.current.play().catch(() => {}); };
+  const handleMouseLeave = () => { if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; } };
 
   const handleError = () => {
     const idPath = `/digital-drape-fixed/${id}.mp4`;
@@ -243,38 +223,25 @@ function DrapeCard({ id, onClick }: { id: number; onClick: (src: string, name: s
         />
       )}
 
-      {/* Overlay Actions */}
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300">
+      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-all duration-500">
         {/* Bottom Left Label - Premium Editorial Style */}
         <div className="absolute bottom-0 left-0 p-5 w-full pointer-events-none z-10">
           <div className="flex flex-col gap-1.5 items-start">
-            <motion.div 
+            <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              className="h-[1px] w-12 bg-gradient-to-r from-white/60 to-transparent origin-left" 
+              className="h-[1px] w-12 bg-white/60 origin-left"
             />
-            <motion.div 
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              className="flex flex-col"
-            >
+            <div className="flex flex-col">
               <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                 {fabricData.name}
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/80 leading-none mt-1 drop-shadow-md">
+              <span className="text-[9px] font-medium uppercase tracking-[0.3em] text-white/70 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] mt-0.5">
                 {fabricData.sku}
               </span>
-            </motion.div>
+            </div>
           </div>
         </div>
-
-        <button
-          onClick={handleDownload}
-          className="absolute top-5 right-5 p-2.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-2xl transition-all duration-300 hover:bg-white group/btn z-10"
-          title="Download Simulation"
-        >
-          <Download size={16} className="text-white group-hover/btn:text-black transition-colors" />
-        </button>
       </div>
     </motion.div>
   );
@@ -400,7 +367,7 @@ export default function DigitalDrapePage() {
 
                 {/* Lightbox Badge Overlay */}
                 <div className="absolute bottom-8 left-8 pointer-events-none z-10 flex flex-col gap-3">
-                  <motion.div 
+                  <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     className="flex flex-col border-l-2 border-[#57AD43] pl-4 py-1"

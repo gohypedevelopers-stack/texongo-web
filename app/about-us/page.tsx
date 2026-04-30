@@ -42,14 +42,20 @@ export default function AboutUsPage() {
         
         {/* Section 1: Legacy & Journey */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <motion.div {...fadeIn} className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl group">
-            <img 
-              src="/ChatGPT Image Apr 30, 2026, 12_48_00 PM.png" 
-              alt="Mr. Jagdish Chand Gupta" 
-              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          </motion.div>
+          <div className="space-y-6">
+            <motion.div {...fadeIn} className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl group">
+              <img 
+                src="/ChatGPT Image Apr 30, 2026, 12_48_00 PM.png" 
+                alt="Mr. Jagdish Chand Gupta" 
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </motion.div>
+            <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.1 }} className="text-center md:text-left space-y-1 px-4">
+              <h3 className="text-2xl font-black text-black uppercase tracking-tighter">Mr. Jagdish Chand Gupta</h3>
+              <p className="text-[#57AD43] font-bold text-xs uppercase tracking-[0.3em]">Founder</p>
+            </motion.div>
+          </div>
           <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="space-y-8">
             <div>
               <h2 className="text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">About Us</h2>
@@ -85,14 +91,20 @@ export default function AboutUsPage() {
               </p>
             </div>
           </motion.div>
-          <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="order-1 lg:order-2 relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl group">
-            <img 
-              src="/ChatGPT Image Apr 30, 2026, 12_44_57 PM.png" 
-              alt="Mr. Manoj Gupta" 
-              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          </motion.div>
+          <div className="order-1 lg:order-2 space-y-6">
+            <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl group">
+              <img 
+                src="/ChatGPT Image Apr 30, 2026, 12_44_57 PM.png" 
+                alt="Mr. Manoj Gupta" 
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </motion.div>
+            <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.3 }} className="text-center md:text-left space-y-1 px-4">
+              <h3 className="text-2xl font-black text-black uppercase tracking-tighter">Mr. Manoj Gupta</h3>
+              <p className="text-[#57AD43] font-bold text-xs uppercase tracking-[0.3em]">Managing Director</p>
+            </motion.div>
+          </div>
         </section>
 
         {/* Section 3: Commitment */}

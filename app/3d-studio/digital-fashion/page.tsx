@@ -2,36 +2,41 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { X, Download, Loader2, ArrowRight } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 
 const ITEMS_PER_PAGE = 12;
 
-// These are the names extracted from the "digital fashion" folder for descriptive labels
-const FASHION_NAMES = [
-  "FAB 1 DES 1A", "FAB 10 DES 10A", "FAB 11 DES 11A", "FAB 12 DES 12A", "FAB 13 DES 13A",
-  "FAB 14 DES 14B", "FAB 15 DES 15A", "FAB 16 DES 16A", "FAB 17 DES 17A", "FAB 18 DES 18A",
-  "FAB 19 DES19A", "FAB 2 DES 2A", "FAB 20 DES 20A", "FAB 21 DES 21A", "FAB 22 DES 10B",
-  "FAB 23 DES 16A", "FAB 24 DES 2B", "FAB 25 DES 8C", "FAB 26 DES 15B", "FAB 27 DES 2C",
-  "FAB 28  DES 9C", "FAB 29 DES 21A", "FAB 3 DES 3A", "FAB 30 DES 10A", "FAB 30 DES 20B",
-  "FAB 31 DES 15C", "FAB 32 DES 11C", "FAB 32 DES 15C", "FAB 33 DES 20A", "FAB 34 DES 5C",
-  "FAB 35 DES 15B", "FAB 36 DES 2A", "FAB 37 DES 17A", "FAB 38 DES 2C", "FAB 39 DES 16C",
-  "FAB 4 DES 4A", "FAB 40 DES 18B", "FAB 41 DES 9B", "FAB 42 DES 7C", "FAB 43 DES 7A",
-  "FAB 44 DES 12C", "FAB 44 DES 8A", "FAB 45 DES 11A", "FAB 46 DES 3B", "FAB 47 DES 13A",
-  "FAB 48 DES 2A", "FAB 49 DES 17C", "FAB 5 DES 5A", "FAB 50 DES 5C", "FAB 51 DES 2A",
-  "FAB 52 DES 1B", "FAB 53 DES 2A", "FAB 54 DES 2A", "FAB 55 DES 2A", "FAB 56 DES 2C",
-  "FAB 57 DES 2B", "FAB 58 DES 12C", "FAB 59 DES 15B", "FAB 6 DES 6A", "FAB 60 DES 8B",
-  "FAB 61 DES 10A", "FAB 62 DES 10B", "FAB 63 DES 3A", "FAB 64 DES 18B", "FAB 65 DES 10C",
-  "FAB 66 DES 11C", "FAB 67 DES 2C", "FAB 68 DES 10B", "FAB 69 DES 12B", "FAB 7 DES 7A",
-  "FAB 70 DES 8B", "FAB 71 DES 9C", "FAB 72 DES 20A", "FAB 73 DES 5B", "FAB 74 DES 2C",
-  "FAB 75 DES 9C", "FAB 76 DES 11B", "FAB 76 DES 21B", "FAB 77 DES 8C", "FAB 78 DES 1B",
-  "FAB 79 DES 12A", "FAB 8 DES 8A", "FAB 80 DES 2B", "FAB 81 DES 19C", "FAB 82 DES 17C",
-  "FAB 83 DES 8B", "FAB 84 DES 15B", "FAB 85 DES 20C", "FAB 86 DES 21C", "FAB 87 DES 2C",
-  "FAB 88 DES 10A", "FAB 88 DES 20C", "FAB 89 DES 10B", "FAB 9 DES 9A", "FAB 90 DES 7C",
-  "FAB 90 DES 8C", "FAB 91 DES 13A"
+// Deduplicated unique filenames from the public/digital-fashion-fixed folder
+const FASHION_FILES = [
+  "1.mp4", "10.mp4", "11.mp4", "12.mp4", "13.mp4", "14.mp4", "15.mp4", "16.mp4", "17.mp4", 
+  "18.mp4", "19.mp4", "2.mp4", "20.mp4", "21.mp4", "22.mp4", "23.mp4", "24.mp4", "25.mp4", 
+  "26.mp4", "27.mp4", "28.mp4", "29.mp4", "3.mp4", "30.mp4", "31.mp4", "32.mp4", "33.mp4", 
+  "34.mp4", "4.mp4", "5.mp4", "6.mp4", "7.mp4", "8.mp4", "9.mp4", "FAB 10 DES 10A.mp4", 
+  "FAB 11 DES 11A.mp4", "FAB 12 DES 12A.mp4", "FAB 13 DES 13A.mp4", "FAB 14 DES 14B.mp4", 
+  "FAB 15 DES 15A.mp4", "FAB 16 DES 16A.mp4", "FAB 17 DES 17A.mp4", "FAB 18 DES 18A.mp4", 
+  "FAB 19 DES19A.mp4", "FAB 2 DES 2A.mp4", "FAB 20 DES 20A.mp4", "FAB 21 DES 21A.mp4", 
+  "FAB 22 DES 10B.mp4", "FAB 23 DES 16A.mp4", "FAB 24 DES 2B.mp4", "FAB 25 DES 8C.mp4", 
+  "FAB 26 DES 15B.mp4", "FAB 27 DES 2C.mp4", "FAB 28  DES 9C.mp4", "FAB 29 DES 21A.mp4", 
+  "FAB 3 DES 3A.mp4", "FAB 30 DES 10A.mp4", "FAB 30 DES 20B.mp4", "FAB 31 DES 15C.mp4", 
+  "FAB 32 DES 11C.mp4", "FAB 32 DES 15C.mp4", "FAB 33 DES 20A.mp4", "FAB 34 DES 5C.mp4", 
+  "FAB 35 DES 15B.mp4", "FAB 36 DES 2A.mp4", "FAB 37 DES 17A.mp4", "FAB 38 DES 2C.mp4", 
+  "FAB 39 DES 16C.mp4", "FAB 4 DES 4A.mp4", "FAB 40 DES 18B.mp4", "FAB 41 DES 9B.mp4", 
+  "FAB 42 DES 7C.mp4", "FAB 43 DES 7A.mp4", "FAB 44 DES 12C.mp4", "FAB 44 DES 8A.mp4", 
+  "FAB 45 DES 11A.mp4", "FAB 46 DES 3B.mp4", "FAB 47 DES 13A.mp4", "FAB 48 DES 2A.mp4", 
+  "FAB 49 DES 17C.mp4", "FAB 5 DES 5A.mp4", "FAB 50 DES 5C.mp4", "FAB 51 DES 2A.mp4", 
+  "FAB 52 DES 1B.mp4", "FAB 53 DES 2A.mp4", "FAB 54 DES 2A.mp4", "FAB 55 DES 2A.mp4", 
+  "FAB 56 DES 2C.mp4", "FAB 57 DES 2B.mp4", "FAB 58 DES 12C.mp4", "FAB 59 DES 15B.mp4", 
+  "FAB 6 DES 6A.mp4", "FAB 60 DES 8B.mp4", "FAB 61 DES 10A.mp4", "FAB 62 DES 10B.mp4", 
+  "FAB 63 DES 3A.mp4", "FAB 64 DES 18B.mp4", "FAB 65 DES 10C.mp4", "FAB 66 DES 11C.mp4", 
+  "FAB 67 DES 2C.mp4", "FAB 68 DES 10B.mp4", "FAB 69 DES 12B.mp4", "FAB 7 DES 7A.mp4", 
+  "FAB 70 DES 8B.mp4", "FAB 71 DES 9C.mp4", "FAB 72 DES 20A.mp4", "FAB 73 DES 5B.mp4", 
+  "FAB 74 DES 2C.mp4", "FAB 75 DES 9C.mp4", "FAB 76 DES 11B.mp4", "FAB 76 DES 21B.mp4", 
+  "FAB 77 DES 8C.mp4", "FAB 78 DES 1B.mp4", "FAB 79 DES 12A.mp4", "FAB 8 DES 8A.mp4", 
+  "FAB 80 DES 2B.mp4", "FAB 81 DES 19C.mp4", "FAB 82 DES 17C.mp4", "FAB 83 DES 8B.mp4", 
+  "FAB 84 DES 15B.mp4", "FAB 85 DES 20C.mp4", "FAB 86 DES 21C.mp4", "FAB 87 DES 2C.mp4", 
+  "FAB 88 DES 10A.mp4", "FAB 88 DES 20C.mp4", "FAB 89 DES 10B.mp4", "FAB 9 DES 9A.mp4", 
+  "FAB 90 DES 7C.mp4", "FAB 90 DES 8C.mp4", "FAB 91 DES 13A.mp4"
 ];
-
-// The "fixed" folder contains 35 optimized videos named 1.mp4 through 35.mp4
-const VIDEO_COUNT = FASHION_NAMES.length;
 
 const FABRIC_INFO: Record<string, { name: string; sku: string }> = {
   "FAB 1": { name: "Corduroy", sku: "SCH5040" },
@@ -127,16 +132,17 @@ const FABRIC_INFO: Record<string, { name: string; sku: string }> = {
   "FAB 91": { name: "Embroidered Mesh", sku: "SCH6058" },
 };
 
-// Helper to get fabric data based on descriptive name or ID
-const getFabricData = (rawName: string) => {
+const getFabricData = (fileName: string) => {
+  const rawName = fileName.replace('.mp4', '');
   const fabMatch = rawName.match(/FAB (\d+)/);
   const fabKey = fabMatch ? `FAB ${fabMatch[1]}` : "FAB 1";
-  const baseInfo = FABRIC_INFO[fabKey] || { name: "Premium Fabric", sku: "SCH-0000" };
+  const numMatch = rawName.match(/^(\d+)$/);
+  const finalFabKey = numMatch ? `FAB ${numMatch[1]}` : fabKey;
+  const baseInfo = FABRIC_INFO[finalFabKey] || { name: "Premium Fabric", sku: "SCH-0000" };
 
-  const desMatch = rawName.match(/DES (\d+[ABC])/);
+  const desMatch = rawName.match(/DES\s*(\d+[ABC])/i);
   if (desMatch) {
-    const des = desMatch[1];
-    // Map SKUs based on the user-provided design table
+    const des = desMatch[1].toUpperCase();
     if (["18B", "16A", "5B", "10B", "7C", "21C", "8C"].includes(des)) return { ...baseInfo, sku: "SCH6083" };
     if (["2A", "5A", "2B", "8B", "12B", "2C", "13C"].includes(des)) return { ...baseInfo, sku: "SCH5805" };
     if (["13A", "18A", "6B", "18C"].includes(des)) return { ...baseInfo, sku: "SCH6084" };
@@ -148,32 +154,19 @@ const getFabricData = (rawName: string) => {
     if (["16C", "16B", "11B", "11A"].includes(des)) return { ...baseInfo, sku: "SCH6043" };
     if (["9A", "9B"].includes(des)) return { ...baseInfo, sku: "SCH5003" };
   }
-
   return baseInfo;
 };
 
-function FashionCard({ id, onClick }: { id: number; onClick: (src: string, name: string, fabric: string, sku: string) => void }) {
+function FashionCard({ fileName, onClick }: { fileName: string; onClick: (src: string, name: string, fabric: string, sku: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const rawName = FASHION_NAMES[id - 1] || `FAB ${id} DES 1A`;
-  const fabricData = getFabricData(rawName);
-  const name = `Fashion Show - ${fabricData.name}`;
-
-  const [videoSrc, setVideoSrc] = useState("");
-
-  useEffect(() => {
-    // Start with the descriptive name as it's more likely to be the correct source
-    // Fallback to id.mp4 if needed (handled in onError)
-    if (id === 1) {
-      setVideoSrc(`/digital-fashion-fixed/1.mp4`);
-    } else {
-      setVideoSrc(`/digital-fashion-fixed/${name}.mp4`);
-    }
-  }, [id, name]);
+  const videoSrc = `/digital-fashion-fixed/${fileName}`;
+  const fabricData = getFabricData(fileName);
+  const displayName = fabricData.name;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -187,40 +180,17 @@ function FashionCard({ id, onClick }: { id: number; onClick: (src: string, name:
     );
     if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
-  }, [id]);
+  }, [fileName]);
 
-  const handleMouseEnter = () => {
-    if (videoRef.current && isLoaded) {
-      videoRef.current.play().catch(err => console.log("Playback error:", err));
-    }
-  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!isLoaded && !isError) setIsError(true);
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, [isLoaded, isError]);
 
-  const handleMouseLeave = () => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-    }
-  };
-
-  const handleDownload = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const link = document.createElement('a');
-    link.href = videoSrc;
-    link.download = `texongo-${name.toLowerCase().replace(/\s+/g, '-')}.mp4`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const handleError = () => {
-    const idPath = `/digital-fashion-fixed/${id}.mp4`;
-    if (videoSrc !== idPath) {
-      // If the named path failed, try the numbered path
-      setVideoSrc(idPath);
-    } else {
-      // If both failed, hide the card
-      setIsError(true);
-    }
-  };
+  const handleMouseEnter = () => { if (videoRef.current && isLoaded) videoRef.current.play().catch(() => {}); };
+  const handleMouseLeave = () => { if (videoRef.current) videoRef.current.pause(); };
 
   if (isError) return null;
 
@@ -230,7 +200,7 @@ function FashionCard({ id, onClick }: { id: number; onClick: (src: string, name:
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      onClick={() => onClick(videoSrc, name, fabricData.name, fabricData.sku)}
+      onClick={() => onClick(videoSrc, fileName, fabricData.name, fabricData.sku)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="relative aspect-[4/5] bg-white overflow-hidden group cursor-pointer border border-black/5"
@@ -240,7 +210,6 @@ function FashionCard({ id, onClick }: { id: number; onClick: (src: string, name:
           <Loader2 className="w-5 h-5 text-zinc-200 animate-spin" />
         </div>
       )}
-
       {isInView && (
         <video
           ref={videoRef}
@@ -250,43 +219,24 @@ function FashionCard({ id, onClick }: { id: number; onClick: (src: string, name:
           playsInline
           preload="metadata"
           onLoadedData={() => setIsLoaded(true)}
-          onError={handleError}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          onError={() => setIsError(true)}
+          className={`w-full h-full object-cover transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
       )}
-
-      {/* Overlay Actions */}
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300">
-        {/* Bottom Left Label - Premium Editorial Style */}
+      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-all duration-500">
         <div className="absolute bottom-0 left-0 p-5 w-full pointer-events-none z-10">
           <div className="flex flex-col gap-1.5 items-start">
-            <motion.div 
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              className="h-[1px] w-12 bg-gradient-to-r from-white/60 to-transparent origin-left" 
-            />
-            <motion.div 
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              className="flex flex-col"
-            >
+            <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} className="h-[1px] w-12 bg-white/60 origin-left" />
+            <div className="flex flex-col">
               <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                 {fabricData.name}
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/80 leading-none mt-1 drop-shadow-md">
+              <span className="text-[9px] font-medium uppercase tracking-[0.3em] text-white/70 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] mt-0.5">
                 {fabricData.sku}
               </span>
-            </motion.div>
+            </div>
           </div>
         </div>
-
-        <button
-          onClick={handleDownload}
-          className="absolute top-5 right-5 p-2.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-2xl transition-all duration-300 hover:bg-white group/btn z-10"
-          title="Download Simulation"
-        >
-          <Download size={16} className="text-white group-hover/btn:text-black transition-colors" />
-        </button>
       </div>
     </motion.div>
   );
@@ -294,71 +244,54 @@ function FashionCard({ id, onClick }: { id: number; onClick: (src: string, name:
 
 export default function DigitalFashionPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedVideo, setSelectedVideo] = useState<{ 
-    src: string; 
+  const [selectedVideo, setSelectedVideo] = useState<{
+    src: string;
     name: string;
     fabric?: string;
     sku?: string;
   } | null>(null);
 
-  const totalPages = Math.ceil(VIDEO_COUNT / ITEMS_PER_PAGE);
-
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentIds = Array.from(
-    { length: Math.min(ITEMS_PER_PAGE, VIDEO_COUNT - startIndex) },
-    (_, i) => startIndex + i + 1
+  const totalPages = Math.ceil(FASHION_FILES.length / ITEMS_PER_PAGE);
+  const currentFiles = FASHION_FILES.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   );
 
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSelectedVideo(null);
-    };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, []);
-
-  const handleModalDownload = () => {
-    if (!selectedVideo) return;
-    const link = document.createElement('a');
-    link.href = selectedVideo.src;
-    const fileName = selectedVideo.fabric 
-      ? `${selectedVideo.fabric.toLowerCase().replace(/\s+/g, '-')}-${selectedVideo.sku?.toLowerCase()}`
-      : selectedVideo.name.toLowerCase().replace(/\s+/g, '-');
-    link.download = `texongo-${fileName}.mp4`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+    if (selectedVideo) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [selectedVideo]);
 
   return (
-    <main className="min-h-screen bg-[#F9FAFB] text-[#111111] pt-24 lg:pt-32">
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-16 text-center">
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-[10px] font-black uppercase tracking-[0.5em] text-[#57AD43] mb-4 block"
-        >
-          3D Studio
-        </motion.span>
-        <motion.h1
+    <main className="min-h-screen bg-white">
+      {/* Dynamic Header */}
+      <div className="pt-32 pb-16 px-6 text-center bg-[#F9FAFB] border-b border-black/5">
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-3xl md:text-5xl font-black uppercase tracking-[0.2em] mb-6"
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 border border-black/5 mb-6"
         >
+          <span className="w-2 h-2 rounded-full bg-[#57AD43] animate-pulse" />
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-black/60">3D Studio Experience</span>
+        </motion.div>
+        <h1 className="text-4xl md:text-7xl font-black text-black uppercase tracking-tighter mb-4">
           Digital Fashion
-        </motion.h1>
+        </h1>
         <p className="text-[#475467]/60 text-[10px] md:text-xs uppercase tracking-[0.3em] max-w-2xl mx-auto font-bold leading-relaxed">
           The Future of Fashion, Digitized. High-fidelity 3D simulations of fabrics available in our inventory
         </p>
       </div>
 
-      <section className="max-w-[1440px] mx-auto px-6 lg:px-10 pb-24">
+      <section className="max-w-[1440px] mx-auto px-6 lg:px-10 pb-24 mt-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
           <AnimatePresence mode="popLayout">
-            {currentIds.map((id) => (
+            {currentFiles.map((fileName) => (
               <FashionCard
-                key={`${currentPage}-${id}`}
-                id={id}
+                key={`${currentPage}-${fileName}`}
+                fileName={fileName}
                 onClick={(src, name, fabric, sku) => setSelectedVideo({ src, name, fabric, sku })}
               />
             ))}
@@ -412,7 +345,7 @@ export default function DigitalFashionPage() {
 
                 {/* Lightbox Badge Overlay */}
                 <div className="absolute bottom-8 left-8 pointer-events-none z-10 flex flex-col gap-3">
-                  <motion.div 
+                  <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     className="flex flex-col border-l-2 border-[#57AD43] pl-4 py-1"
