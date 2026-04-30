@@ -33,14 +33,136 @@ const FASHION_NAMES = [
 // The "fixed" folder contains 35 optimized videos named 1.mp4 through 35.mp4
 const VIDEO_COUNT = FASHION_NAMES.length;
 
-function FashionCard({ id, onClick }: { id: number; onClick: (src: string, name: string) => void }) {
+const FABRIC_INFO: Record<string, { name: string; sku: string }> = {
+  "FAB 1": { name: "Corduroy", sku: "SCH5040" },
+  "FAB 2": { name: "Pin Stripe", sku: "SCH5021" },
+  "FAB 3": { name: "2 x 2 Rib", sku: "SCH5046" },
+  "FAB 4": { name: "1 x 1 Rib", sku: "SCH6047" },
+  "FAB 5": { name: "Single Jersey", sku: "SCH5844" },
+  "FAB 6": { name: "Jacquard Terry", sku: "SCH6054" },
+  "FAB 7": { name: "Slub Single Jersey", sku: "SCH6055" },
+  "FAB 8": { name: "Ponte", sku: "SCH6056" },
+  "FAB 9": { name: "Popcorn", sku: "SCH6046" },
+  "FAB 10": { name: "Nylon Lycra", sku: "SCH6057" },
+  "FAB 11": { name: "Terry", sku: "SCH6040" },
+  "FAB 12": { name: "Single Jersey Melange Neps", sku: "SCH5417" },
+  "FAB 13": { name: "GreyHeather Terry Melange", sku: "SCH5687" },
+  "FAB 14": { name: "Polyester Spandex", sku: "SCH5812" },
+  "FAB 15": { name: "Shiffly", sku: "SCH5796" },
+  "FAB 16": { name: "Single Jersey Slub", sku: "SCH6080" },
+  "FAB 17": { name: "Single Jersey Injected Slub", sku: "SCH5109" },
+  "FAB 18": { name: "Single Jersey Yarn Dyed", sku: "SCH6021" },
+  "FAB 19": { name: "French Terry", sku: "SCH5108" },
+  "FAB 20": { name: "Terry Injected Slub", sku: "SCH6065" },
+  "FAB 21": { name: "Pique", sku: "SCH6048" },
+  "FAB 22": { name: "Cotton Modal", sku: "SCH6066" },
+  "FAB 23": { name: "Jacquard Single Jersey", sku: "SCH6067" },
+  "FAB 24": { name: "3 thread Fleece", sku: "SCH6068" },
+  "FAB 25": { name: "Camouflage", sku: "SCH6069" },
+  "FAB 26": { name: "Single Jersey Lurex", sku: "SCH6070" },
+  "FAB 27": { name: "Waffle Jacquard", sku: "SCH5091" },
+  "FAB 28": { name: "Polyester Cotton Spandex", sku: "SCH6071" },
+  "FAB 29": { name: "Sweater Knit Terry", sku: "SCH6058" },
+  "FAB 30": { name: "Mercerised Interlock Yarn Dyed", sku: "SCH6059" },
+  "FAB 31": { name: "Viscose Bamboo Lycra", sku: "SCH5100" },
+  "FAB 32": { name: "Single Jersey Neps", sku: "SCH6060" },
+  "FAB 33": { name: "Stretch Jersey", sku: "SCH6061" },
+  "FAB 34": { name: "Micro Modal", sku: "SCH6062" },
+  "FAB 35": { name: "Tencel Jersey", sku: "SCH6063" },
+  "FAB 36": { name: "Organic Cotton", sku: "SCH6064" },
+  "FAB 37": { name: "Bamboo Jersey", sku: "SCH5811" },
+  "FAB 38": { name: "Recycled Polyester", sku: "SCH6072" },
+  "FAB 39": { name: "Hemp Blend", sku: "SCH6073" },
+  "FAB 40": { name: "Linen Jersey", sku: "SCH6074" },
+  "FAB 41": { name: "Silk Touch Jersey", sku: "SCH6075" },
+  "FAB 42": { name: "Modal Spandex", sku: "SCH6044" },
+  "FAB 43": { name: "Double Knit", sku: "SCH5121" },
+  "FAB 44": { name: "Heavy Interlock", sku: "SCH6045" },
+  "FAB 45": { name: "Lightweight Jersey", sku: "SCH6076" },
+  "FAB 46": { name: "Pointelle Knit", sku: "SCH6077" },
+  "FAB 47": { name: "Pointelle Rib", sku: "SCH6078" },
+  "FAB 48": { name: "French Rib", sku: "SCH6079" },
+  "FAB 49": { name: "Ottoman Knit", sku: "SCH6083" },
+  "FAB 50": { name: "Milano Knit", sku: "SCH5805" },
+  "FAB 51": { name: "Scuba Fabric", sku: "SCH6084" },
+  "FAB 52": { name: "Techno Crepe", sku: "SCH6047" },
+  "FAB 53": { name: "Bubble Crepe", sku: "SCH5844" },
+  "FAB 54": { name: "Liverpool Knit", sku: "SCH6054" },
+  "FAB 55": { name: "Bullet Knit", sku: "SCH6055" },
+  "FAB 56": { name: "Venice Knit", sku: "SCH6056" },
+  "FAB 57": { name: "DTY Brushed", sku: "SCH6046" },
+  "FAB 58": { name: "ITY Jersey", sku: "SCH6057" },
+  "FAB 59": { name: "Slinky Jersey", sku: "SCH6040" },
+  "FAB 60": { name: "Power Mesh", sku: "SCH5417" },
+  "FAB 61": { name: "Nylon Mesh", sku: "SCH5796" },
+  "FAB 62": { name: "Eyelet Fabric", sku: "SCH6080" },
+  "FAB 63": { name: "Birdseye Mesh", sku: "SCH5778" },
+  "FAB 64": { name: "Athletic Mesh", sku: "SCH6050" },
+  "FAB 65": { name: "Space Dye Jersey", sku: "SCH6086" },
+  "FAB 66": { name: "Space Dye Terry", sku: "SCH6087" },
+  "FAB 67": { name: "Melange Rib", sku: "SCH6088" },
+  "FAB 68": { name: "Heathered Knit", sku: "SCH6089" },
+  "FAB 69": { name: "Marled Jersey", sku: "SCH6065" },
+  "FAB 70": { name: "Striped Jersey", sku: "SCH6048" },
+  "FAB 71": { name: "Striped Rib", sku: "SCH6067" },
+  "FAB 72": { name: "Variegated Rib", sku: "SCH6068" },
+  "FAB 73": { name: "Waffle Knit", sku: "SCH6069" },
+  "FAB 74": { name: "Thermal Knit", sku: "SCH5805" },
+  "FAB 75": { name: "Velour", sku: "SCH6083" },
+  "FAB 76": { name: "Crushed Velvet", sku: "SCH6082" },
+  "FAB 77": { name: "Stretch Velvet", sku: "SCH6084" },
+  "FAB 78": { name: "Chenille Knit", sku: "SCH6085" },
+  "FAB 79": { name: "Sherpa Fleece", sku: "SCH5058" },
+  "FAB 80": { name: "Polar Fleece", sku: "SCH5780" },
+  "FAB 81": { name: "Coral Fleece", sku: "SCH6049" },
+  "FAB 82": { name: "Minky Fabric", sku: "SCH5812" },
+  "FAB 83": { name: "Faux Fur", sku: "SCH5687" },
+  "FAB 84": { name: "Boucle Knit", sku: "SCH5109" },
+  "FAB 85": { name: "Slub Knit", sku: "SCH6021" },
+  "FAB 86": { name: "Nep Knit", sku: "SCH5108" },
+  "FAB 87": { name: "Lurex Knit", sku: "SCH6066" },
+  "FAB 88": { name: "Metallic Jersey", sku: "SCH6070" },
+  "FAB 89": { name: "Glitter Knit", sku: "SCH5091" },
+  "FAB 90": { name: "Sequin Fabric", sku: "SCH6071" },
+  "FAB 91": { name: "Embroidered Mesh", sku: "SCH6058" },
+};
+
+// Helper to get fabric data based on descriptive name or ID
+const getFabricData = (rawName: string) => {
+  const fabMatch = rawName.match(/FAB (\d+)/);
+  const fabKey = fabMatch ? `FAB ${fabMatch[1]}` : "FAB 1";
+  const baseInfo = FABRIC_INFO[fabKey] || { name: "Premium Fabric", sku: "SCH-0000" };
+
+  const desMatch = rawName.match(/DES (\d+[ABC])/);
+  if (desMatch) {
+    const des = desMatch[1];
+    // Map SKUs based on the user-provided design table
+    if (["18B", "16A", "5B", "10B", "7C", "21C", "8C"].includes(des)) return { ...baseInfo, sku: "SCH6083" };
+    if (["2A", "5A", "2B", "8B", "12B", "2C", "13C"].includes(des)) return { ...baseInfo, sku: "SCH5805" };
+    if (["13A", "18A", "6B", "18C"].includes(des)) return { ...baseInfo, sku: "SCH6084" };
+    if (["9C", "15B"].includes(des)) return { ...baseInfo, sku: "SCH6085" };
+    if (["8A", "6A", "7A", "15A", "19A", "21A", "19C"].includes(des)) return { ...baseInfo, sku: "SCH6086" };
+    if (["1A", "1B", "1C", "10A", "17C", "20B"].includes(des)) return { ...baseInfo, sku: "SCH6087" };
+    if (["17A", "11C", "5C", "15C"].includes(des)) return { ...baseInfo, sku: "SCH6088" };
+    if (["3B", "6C", "14C"].includes(des)) return { ...baseInfo, sku: "SCH6091" };
+    if (["16C", "16B", "11B", "11A"].includes(des)) return { ...baseInfo, sku: "SCH6043" };
+    if (["9A", "9B"].includes(des)) return { ...baseInfo, sku: "SCH5003" };
+  }
+
+  return baseInfo;
+};
+
+function FashionCard({ id, onClick }: { id: number; onClick: (src: string, name: string, fabric: string, sku: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const name = FASHION_NAMES[id - 1] || `Fashion Preview #${id}`;
+  const rawName = FASHION_NAMES[id - 1] || `FAB ${id} DES 1A`;
+  const fabricData = getFabricData(rawName);
+  const name = `Fashion Show - ${fabricData.name}`;
+
   const [videoSrc, setVideoSrc] = useState("");
 
   useEffect(() => {
@@ -108,7 +230,7 @@ function FashionCard({ id, onClick }: { id: number; onClick: (src: string, name:
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      onClick={() => onClick(videoSrc, name)}
+      onClick={() => onClick(videoSrc, name, fabricData.name, fabricData.sku)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="relative aspect-[4/5] bg-white overflow-hidden group cursor-pointer border border-black/5"
@@ -135,19 +257,35 @@ function FashionCard({ id, onClick }: { id: number; onClick: (src: string, name:
 
       {/* Overlay Actions */}
       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300">
-        {/* Top Left Badge */}
-        <div className="absolute top-4 left-4 pointer-events-none z-10">
-          <div className="bg-black text-white px-2.5 py-1 rounded-[2px] text-[9px] font-black uppercase tracking-widest shadow-lg">
-            {name}
+        {/* Bottom Left Label - Premium Editorial Style */}
+        <div className="absolute bottom-0 left-0 p-5 w-full pointer-events-none z-10">
+          <div className="flex flex-col gap-1.5 items-start">
+            <motion.div 
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              className="h-[1px] w-12 bg-gradient-to-r from-white/60 to-transparent origin-left" 
+            />
+            <motion.div 
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              className="flex flex-col"
+            >
+              <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                {fabricData.name}
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/80 leading-none mt-1 drop-shadow-md">
+                {fabricData.sku}
+              </span>
+            </motion.div>
           </div>
         </div>
 
         <button
           onClick={handleDownload}
-          className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-md rounded-full shadow-lg transition-all duration-300 hover:bg-white z-10"
+          className="absolute top-5 right-5 p-2.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-2xl transition-all duration-300 hover:bg-white group/btn z-10"
           title="Download Simulation"
         >
-          <Download size={16} className="text-black" />
+          <Download size={16} className="text-white group-hover/btn:text-black transition-colors" />
         </button>
       </div>
     </motion.div>
@@ -156,20 +294,37 @@ function FashionCard({ id, onClick }: { id: number; onClick: (src: string, name:
 
 export default function DigitalFashionPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedVideo, setSelectedVideo] = useState<{ src: string, name: string } | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<{ 
+    src: string; 
+    name: string;
+    fabric?: string;
+    sku?: string;
+  } | null>(null);
 
   const totalPages = Math.ceil(VIDEO_COUNT / ITEMS_PER_PAGE);
+
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentIds = Array.from(
     { length: Math.min(ITEMS_PER_PAGE, VIDEO_COUNT - startIndex) },
     (_, i) => startIndex + i + 1
   );
 
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedVideo(null);
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
+
   const handleModalDownload = () => {
     if (!selectedVideo) return;
     const link = document.createElement('a');
     link.href = selectedVideo.src;
-    link.download = `texongo-${selectedVideo.name.toLowerCase().replace(/\s+/g, '-')}.mp4`;
+    const fileName = selectedVideo.fabric 
+      ? `${selectedVideo.fabric.toLowerCase().replace(/\s+/g, '-')}-${selectedVideo.sku?.toLowerCase()}`
+      : selectedVideo.name.toLowerCase().replace(/\s+/g, '-');
+    link.download = `texongo-${fileName}.mp4`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -177,7 +332,7 @@ export default function DigitalFashionPage() {
 
   return (
     <main className="min-h-screen bg-[#F9FAFB] text-[#111111] pt-24 lg:pt-32">
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-20 text-center border-b border-black/5">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-16 text-center">
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -192,21 +347,19 @@ export default function DigitalFashionPage() {
         >
           Digital Fashion
         </motion.h1>
-        <motion.p
-          className="text-[#475467] text-[10px] md:text-xs max-w-2xl mx-auto uppercase tracking-[0.3em] leading-relaxed font-bold"
-        >
-          Real Fabrics, Virtually Perfected. Preview the drape, feel the texture, and source the fabric—all in one place
-        </motion.p>
+        <p className="text-[#475467]/60 text-[10px] md:text-xs uppercase tracking-[0.3em] max-w-2xl mx-auto font-bold leading-relaxed">
+          The Future of Fashion, Digitized. High-fidelity 3D simulations of fabrics available in our inventory
+        </p>
       </div>
 
-      <section className="max-w-[1440px] mx-auto px-6 lg:px-10 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
+      <section className="max-w-[1440px] mx-auto px-6 lg:px-10 pb-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
           <AnimatePresence mode="popLayout">
             {currentIds.map((id) => (
               <FashionCard
-                key={id}
+                key={`${currentPage}-${id}`}
                 id={id}
-                onClick={(src, name) => setSelectedVideo({ src, name })}
+                onClick={(src, name, fabric, sku) => setSelectedVideo({ src, name, fabric, sku })}
               />
             ))}
           </AnimatePresence>
@@ -258,10 +411,21 @@ export default function DigitalFashionPage() {
                 />
 
                 {/* Lightbox Badge Overlay */}
-                <div className="absolute top-6 left-6 pointer-events-none z-10">
-                  <div className="bg-black text-white px-3 py-1.5 rounded-[2px] text-[10px] font-black uppercase tracking-[0.2em] shadow-lg">
-                    {selectedVideo.name}
-                  </div>
+                <div className="absolute bottom-8 left-8 pointer-events-none z-10 flex flex-col gap-3">
+                  <motion.div 
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="flex flex-col border-l-2 border-[#57AD43] pl-4 py-1"
+                  >
+                    <span className="text-[14px] font-black uppercase tracking-[0.3em] text-white drop-shadow-2xl">
+                      {selectedVideo.fabric || selectedVideo.name}
+                    </span>
+                    {selectedVideo.sku && (
+                      <span className="text-[12px] font-bold uppercase tracking-[0.1em] text-white/70 mt-1.5">
+                        {selectedVideo.sku}
+                      </span>
+                    )}
+                  </motion.div>
                 </div>
               </div>
 

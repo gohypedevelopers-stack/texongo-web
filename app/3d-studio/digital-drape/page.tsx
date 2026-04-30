@@ -123,6 +123,30 @@ const DRAPE_NAMES = [
 ];
 const VIDEO_COUNT = DRAPE_NAMES.length;
 
+const getFabricData = (rawName: string) => {
+  const fabMatch = rawName.match(/FAB (\d+)/);
+  const fabKey = fabMatch ? `FAB ${fabMatch[1]}` : "FAB 1";
+  const baseInfo = FABRIC_INFO[fabKey] || { name: "Premium Fabric", sku: "SCH-0000" };
+
+  const desMatch = rawName.match(/DES (\d+[ABC])/);
+  if (desMatch) {
+    const des = desMatch[1];
+    // Map SKUs based on the user-provided design table
+    if (["18B", "16A", "5B", "10B", "7C", "21C", "8C"].includes(des)) return { ...baseInfo, sku: "SCH6083" };
+    if (["2A", "5A", "2B", "8B", "12B", "2C", "13C"].includes(des)) return { ...baseInfo, sku: "SCH5805" };
+    if (["13A", "18A", "6B", "18C"].includes(des)) return { ...baseInfo, sku: "SCH6084" };
+    if (["9C", "15B"].includes(des)) return { ...baseInfo, sku: "SCH6085" };
+    if (["8A", "6A", "7A", "15A", "19A", "21A", "19C"].includes(des)) return { ...baseInfo, sku: "SCH6086" };
+    if (["1A", "1B", "1C", "10A", "17C", "20B"].includes(des)) return { ...baseInfo, sku: "SCH6087" };
+    if (["17A", "11C", "5C", "15C"].includes(des)) return { ...baseInfo, sku: "SCH6088" };
+    if (["3B", "6C", "14C"].includes(des)) return { ...baseInfo, sku: "SCH6091" };
+    if (["16C", "16B", "11B", "11A"].includes(des)) return { ...baseInfo, sku: "SCH6043" };
+    if (["9A", "9B"].includes(des)) return { ...baseInfo, sku: "SCH5003" };
+  }
+
+  return baseInfo;
+};
+
 function DrapeCard({ id, onClick }: { id: number; onClick: (src: string, name: string, fabric: string, sku: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -131,9 +155,7 @@ function DrapeCard({ id, onClick }: { id: number; onClick: (src: string, name: s
   const [isError, setIsError] = useState(false);
 
   const rawName = DRAPE_NAMES[id - 1] || `FAB ${id} DES 1A`;
-  const fabMatch = rawName.match(/FAB \d+/);
-  const fabKey = fabMatch ? fabMatch[0] : "FAB 1";
-  const fabricData = FABRIC_INFO[fabKey] || { name: "Premium Fabric", sku: "SCH-0000" };
+  const fabricData = getFabricData(rawName);
 
   const [videoSrc, setVideoSrc] = useState("");
 
@@ -223,24 +245,35 @@ function DrapeCard({ id, onClick }: { id: number; onClick: (src: string, name: s
 
       {/* Overlay Actions */}
       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300">
-        {/* Top Left Badge */}
-        <div className="absolute top-4 left-4 pointer-events-none z-10">
-          <div className="flex flex-col gap-1">
-            <div className="bg-black text-white px-2.5 py-1 rounded-[2px] text-[9px] font-black uppercase tracking-widest shadow-lg w-fit">
-              {fabricData.name}
-            </div>
-            <div className="bg-white/90 backdrop-blur-md text-black px-2 py-0.5 rounded-[2px] text-[8px] font-bold uppercase tracking-widest shadow-md w-fit border border-black/5">
-              {fabricData.sku}
-            </div>
+        {/* Bottom Left Label - Premium Editorial Style */}
+        <div className="absolute bottom-0 left-0 p-5 w-full pointer-events-none z-10">
+          <div className="flex flex-col gap-1.5 items-start">
+            <motion.div 
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              className="h-[1px] w-12 bg-gradient-to-r from-white/60 to-transparent origin-left" 
+            />
+            <motion.div 
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              className="flex flex-col"
+            >
+              <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                {fabricData.name}
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/80 leading-none mt-1 drop-shadow-md">
+                {fabricData.sku}
+              </span>
+            </motion.div>
           </div>
         </div>
 
         <button
           onClick={handleDownload}
-          className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-md rounded-full shadow-lg transition-all duration-300 hover:bg-white z-10"
+          className="absolute top-5 right-5 p-2.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-2xl transition-all duration-300 hover:bg-white group/btn z-10"
           title="Download Simulation"
         >
-          <Download size={16} className="text-black" />
+          <Download size={16} className="text-white group-hover/btn:text-black transition-colors" />
         </button>
       </div>
     </motion.div>
@@ -366,15 +399,21 @@ export default function DigitalDrapePage() {
                 />
 
                 {/* Lightbox Badge Overlay */}
-                <div className="absolute top-6 left-6 pointer-events-none z-10 flex flex-col gap-2">
-                  <div className="bg-black text-white px-3 py-1.5 rounded-[2px] text-[10px] font-black uppercase tracking-[0.2em] shadow-lg w-fit">
-                    {selectedVideo.fabric || selectedVideo.name}
-                  </div>
-                  {selectedVideo.sku && (
-                    <div className="bg-white/90 backdrop-blur-md text-black px-2.5 py-1 rounded-[2px] text-[9px] font-bold uppercase tracking-widest shadow-md w-fit border border-black/5">
-                      {selectedVideo.sku}
-                    </div>
-                  )}
+                <div className="absolute bottom-8 left-8 pointer-events-none z-10 flex flex-col gap-3">
+                  <motion.div 
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="flex flex-col border-l-2 border-[#57AD43] pl-4 py-1"
+                  >
+                    <span className="text-[14px] font-black uppercase tracking-[0.3em] text-white drop-shadow-2xl">
+                      {selectedVideo.fabric || selectedVideo.name}
+                    </span>
+                    {selectedVideo.sku && (
+                      <span className="text-[12px] font-bold uppercase tracking-[0.1em] text-white/70 mt-1.5">
+                        {selectedVideo.sku}
+                      </span>
+                    )}
+                  </motion.div>
                 </div>
               </div>
 

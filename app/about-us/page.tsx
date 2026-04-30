@@ -42,12 +42,13 @@ export default function AboutUsPage() {
         
         {/* Section 1: Legacy & Journey */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <motion.div {...fadeIn} className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl">
+          <motion.div {...fadeIn} className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl group">
             <img 
-              src="/category/fabric-rib.png" 
-              alt="Legacy Journey" 
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              src="/ChatGPT Image Apr 30, 2026, 12_48_00 PM.png" 
+              alt="Mr. Jagdish Chand Gupta" 
+              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           </motion.div>
           <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="space-y-8">
             <div>
@@ -84,12 +85,13 @@ export default function AboutUsPage() {
               </p>
             </div>
           </motion.div>
-          <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="order-1 lg:order-2 relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl">
+          <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="order-1 lg:order-2 relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl group">
             <img 
-              src="/category/fabric-pique.png" 
-              alt="Growth Expansion" 
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              src="/ChatGPT Image Apr 30, 2026, 12_44_57 PM.png" 
+              alt="Mr. Manoj Gupta" 
+              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           </motion.div>
         </section>
 
