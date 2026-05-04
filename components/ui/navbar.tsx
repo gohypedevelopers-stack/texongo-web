@@ -162,14 +162,6 @@ export function Navbar() {
             {/* Glassmorphism Pill Container */}
             <div className="relative flex items-center justify-between px-8 md:px-12 h-12 md:h-14 bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.06)] rounded-full transition-all duration-500">
 
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden p-2 text-gray-600"
-              >
-                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-              </button>
-
               {/* Logo */}
               <Link href="/" className="flex-shrink-0" onClick={() => setIsMobileMenuOpen(false)}>
                 <img
@@ -203,7 +195,7 @@ export function Navbar() {
                       ) : (
                         <Link
                           href={item.href}
-                          className="group relative flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-black transition-colors h-full"
+                          className={`group relative flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${pathname === item.href ? "text-black" : "text-gray-500 hover:text-black"} h-full`}
                         >
                           {item.name}
                           {(item.dropdown || item.megaMenu) && (
@@ -212,7 +204,7 @@ export function Navbar() {
                               className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`}
                             />
                           )}
-                          <span className="absolute bottom-[-6px] left-0 w-0 h-[2px] bg-[#57AD43] group-hover:w-full transition-all duration-500 ease-out" />
+                          <span className={`absolute bottom-[-6px] left-0 h-[2px] bg-[#57AD43] transition-all duration-500 ease-out ${pathname === item.href ? "w-full" : "w-0 group-hover:w-full"}`} />
                         </Link>
                       )}
 
@@ -289,7 +281,7 @@ export function Navbar() {
               <div className="flex items-center gap-3 sm:gap-5">
                 <button
                   onClick={() => setIsSearchOpen(true)}
-                  className="text-gray-600 hover:text-black transition-colors"
+                  className="text-gray-600 hover:text-black transition-colors focus:outline-none"
                 >
                   <Search size={18} />
                 </button>
@@ -301,7 +293,7 @@ export function Navbar() {
                 >
                   <button
                     onClick={() => !isLoggedIn && openAuthModal()}
-                    className="text-gray-600 hover:text-black transition-colors flex items-center justify-center h-12 md:h-14"
+                    className="text-gray-600 hover:text-black transition-colors flex items-center justify-center h-12 md:h-14 focus:outline-none"
                   >
                     <User size={18} />
                   </button>
@@ -339,7 +331,7 @@ export function Navbar() {
 
                 <button
                   onClick={() => toggleCart(true)}
-                  className="text-gray-600 hover:text-black transition-colors relative"
+                  className="text-gray-600 hover:text-black transition-colors relative focus:outline-none"
                 >
                   <ShoppingBag size={18} />
                   {isMounted && itemCount > 0 && (
@@ -347,6 +339,14 @@ export function Navbar() {
                       {itemCount}
                     </span>
                   )}
+                </button>
+
+                {/* Mobile Menu Button - Moved to the right */}
+                <button
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="md:hidden p-2 text-gray-600 border-l border-gray-100 ml-2 focus:outline-none"
+                >
+                  {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
                 </button>
               </div>
             </div>
@@ -358,7 +358,7 @@ export function Navbar() {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="fixed top-[80px] left-1/2 -translate-x-1/2 w-[95%] max-w-[500px] bg-white rounded-3xl shadow-2xl z-[90] md:hidden overflow-hidden"
+                  className="fixed top-[70px] left-1/2 -translate-x-1/2 w-[95%] max-w-[500px] bg-white rounded-3xl shadow-2xl z-[90] md:hidden overflow-hidden"
                 >
                   <div className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
                     {/* Mobile Search */}
