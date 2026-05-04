@@ -319,7 +319,7 @@ function SustainableBlendSection() {
     const x = e.pageX - scrollRef.current.offsetLeft;
     const walk = (x - startX);
     scrollRef.current.scrollLeft = scrollLeftState - walk;
-    
+
     // Update active index in real-time while dragging
     handleScroll();
   };
@@ -329,7 +329,7 @@ function SustainableBlendSection() {
       setIsDragging(false);
       scrollRef.current.style.scrollBehavior = 'smooth';
       scrollRef.current.style.scrollSnapType = 'x mandatory';
-      
+
       handleScroll();
       scrollToLogo(activeIndex);
     }
@@ -597,7 +597,7 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
 
 
         {/* ── CAMPAIGN STORY ─────────────────────────────── */}
-        <LazySection>
+        {/* <LazySection>
           <section id="womenswear" className="bg-white py-20 pb-0">
             <div className="mx-auto max-w-7xl px-6 lg:px-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
@@ -607,7 +607,7 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
               </div>
             </div>
           </section>
-        </LazySection>
+        </LazySection> */}
 
         <LazySection y={0}>
           <KnitStylesSection />
