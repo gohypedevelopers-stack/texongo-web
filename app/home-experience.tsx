@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useState, useEffect, useRef, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 import { ReactLenis } from "lenis/react";
 import styles from "./page.module.css";
 import { LazyVideo } from "./lazy-video";
@@ -15,6 +15,9 @@ import { LazySection } from "../components/ui/lazy-section";
 const CategorySlider = dynamic(() => import("./category-slider").then(mod => mod.CategorySlider), { ssr: false });
 const FaqSection = dynamic(() => import("./faq-section").then(mod => mod.FaqSection), { ssr: false });
 const ParallaxFeatureSection = dynamic(() => import("../components/ui/parallax-scroll-feature-section").then(mod => mod.ParallaxFeatureSection), { ssr: false });
+const IntroAnimation = dynamic(() => import("../components/ui/scroll-morph-hero"), { ssr: false });
+const BlendAnimation = dynamic(() => import("../components/ui/scroll-morph-hero").then(mod => mod.BlendAnimation), { ssr: false });
+
 
 
 
@@ -191,116 +194,37 @@ function StoryProductCard({
 }
 
 function KnitStylesSection() {
-  const knitStyles = [
-    { name: "PIQUE", image: "https://texongo.com/wp-content/uploads/2025/08/Pique_20241215064036pm.png", color: "#f3f4f6" },
-    { name: "FRENCH TERRY", image: "https://texongo.com/wp-content/uploads/2025/12/Terry_20241215064032pm.png", color: "#f3f4f6" },
-    { name: "WAFFLE", image: "https://texongo.com/wp-content/uploads/2025/08/Waffle_20241215064033pm.png", color: "#f3f4f6" },
-    { name: "SINGLE JERSEY", image: "https://texongo.com/wp-content/uploads/2025/12/Single-Jersey_20241215064031pm.png", color: "#f3f4f6" },
-    { name: "POLY COTTON", image: "https://texongo.com/wp-content/uploads/2025/08/Poly-Cotton_20241215064036pm.png", color: "#f3f4f6" },
-    { name: "JACQUARD", image: "https://texongo.com/wp-content/uploads/2025/12/Jacquard_20241215064035pm.png", color: "#f3f4f6" },
-    { name: "POLYESTER", image: "https://texongo.com/wp-content/uploads/2025/12/Polyester_20241215064037pm.png", color: "#f3f4f6" },
-    { name: "MELANGE", image: "https://texongo.com/wp-content/uploads/2025/12/Melange_20241215064035pm.png", color: "#f3f4f6" },
-    { name: "FLEECE", image: "https://texongo.com/wp-content/uploads/2025/09/Fleece_20241215064034pm.png", color: "#f3f4f6" },
-    { name: "COTTON SPANDEX", image: "https://texongo.com/wp-content/uploads/2025/12/Cotton-Spandex_20241215064033pm.png", color: "#f3f4f6" },
-    { name: "COTTON", image: "https://texongo.com/wp-content/uploads/2025/12/Cotton_20241215064034pm.png", color: "#f3f4f6" },
-    { name: "VISCOSE", image: "https://texongo.com/wp-content/uploads/2025/11/Viscose_20241215064032pm.png", color: "#f3f4f6" },
-    { name: "RIB", image: "https://texongo.com/wp-content/uploads/2025/12/Rib_20241215064030pm.png", color: "#f3f4f6" },
-  ];
-
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  // Initialize scroll to the middle so user can endlessly scroll left or right
-  useEffect(() => {
-    if (scrollRef.current) {
-      const itemWidth = window.innerWidth >= 768 ? 280 + 24 : 220 + 16;
-      // Start in the middle of our 6 sets
-      scrollRef.current.scrollLeft = itemWidth * knitStyles.length * 2;
-    }
-  }, []);
-
-  const scrollLeft = () => {
-    if (scrollRef.current) {
-      const itemWidth = window.innerWidth >= 768 ? 280 + 24 : 220 + 16;
-      scrollRef.current.scrollBy({ left: -itemWidth, behavior: 'smooth' });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollRef.current) {
-      const itemWidth = window.innerWidth >= 768 ? 280 + 24 : 220 + 16;
-      scrollRef.current.scrollBy({ left: itemWidth, behavior: 'smooth' });
-    }
-  };
-
-  const handleScroll = () => {
-    if (!scrollRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-    const itemWidth = window.innerWidth >= 768 ? 280 + 24 : 220 + 16;
-
-    // Jump forward/backward if scrolled too far
-    if (scrollLeft < itemWidth * knitStyles.length) {
-      scrollRef.current.scrollLeft += itemWidth * knitStyles.length * 2;
-    }
-    else if (scrollLeft > scrollWidth - clientWidth - itemWidth * knitStyles.length) {
-      scrollRef.current.scrollLeft -= itemWidth * knitStyles.length * 2;
-    }
-  };
-
-  // Using 6 sets is plenty for the scroll loop
-  const extendedStyles = Array(6).fill(knitStyles).flat();
-
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
 
   return (
-    <section className="py-12 md:py-24 bg-white overflow-hidden">
-      <div className="mx-auto max-w-[1440px] px-4 md:px-6 lg:px-12 text-center relative">
-        <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-16 tracking-tight">Choose your Knit Style</h2>
-        <div className="relative group/marquee px-4">
-          <button
-            onClick={scrollLeft}
-            className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-30 hidden md:flex hover:scale-110 active:scale-95 transition-transform w-12 h-12 items-center justify-center bg-white rounded-full shadow-xl cursor-pointer border border-black/5"
-            aria-label="Scroll left"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
-          </button>
-
-          <div className="relative overflow-hidden w-full px-1" style={{ maskImage: "linear-gradient(to right, transparent, black 1%, black 99%, transparent)" }}>
-            <div
-              ref={scrollRef}
-              onScroll={handleScroll}
-              className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pt-2 pb-6 px-4 w-full hide-scroll"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {extendedStyles.map((knit, i) => (
-                <div key={`${knit.name}-${i}`} className="relative aspect-square md:aspect-[4/5] w-[220px] md:w-[280px] shrink-0 snap-center rounded-xl overflow-hidden group/card cursor-pointer shadow-[0_4px_18px_rgba(17,17,17,0.08)] hover:shadow-[0_12px_32px_rgba(17,17,17,0.14)] transition-all duration-300">
-                  <div className="absolute inset-0 bg-zinc-50"></div>
-                  <img
-                    src={knit.image}
-                    alt={knit.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="relative z-0 object-cover w-full h-full group-hover/card:scale-110 transition-transform duration-700"
-                  />
-
-                  <div className="absolute bottom-4 left-4 z-10 bg-white px-4 py-1.5 rounded-full text-[10px] font-bold text-black tracking-widest shadow-sm uppercase">
-                    {knit.name}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <button
-            onClick={scrollRight}
-            className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-30 hidden md:flex hover:scale-110 active:scale-95 transition-transform w-12 h-12 items-center justify-center bg-white rounded-full shadow-xl cursor-pointer border border-black/5"
-            aria-label="Scroll right"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
-          </button>
-        </div>
+    <section ref={containerRef} className="relative h-[600vh] bg-white">
+      <div className="sticky top-0 h-screen w-full overflow-hidden">
+        <IntroAnimation scrollProgress={scrollYProgress} />
       </div>
     </section>
   );
 }
+
+function BlendStylesSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  return (
+    <section ref={containerRef} className="relative h-[600vh] bg-white">
+      <div className="sticky top-0 h-screen w-full overflow-hidden">
+        <BlendAnimation scrollProgress={scrollYProgress} />
+      </div>
+    </section>
+  );
+}
+
 
 function SustainableBlendSection() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -471,10 +395,10 @@ function TestimonialsSection() {
     { name: "Pavni Manchanda", text: "Absolutely loved the fabric and the service they provided. The entire experience was smooth and delightful!", sub: "4 reviews • 3 months ago", rating: 5 },
     { name: "Neha", text: "Huge collections of basic to Novelty fabrics. Quality fabrics at this store. Staff is very supportive.", sub: "3 reviews • 3 months ago", rating: 5 },
     { name: "Urmila Vaid", text: "Excellent quality of textured knits fabric. Very consistent fabric.", sub: "1 review • 2 months ago", rating: 5 },
-    { name: "Mithun Yadav", text: "Good supplier with amazing fabric qualities. Highly recommended. 👌", sub: "3 reviews • 2 months ago", rating: 4.5 },
+    { name: "Mithun Yadav", text: "Good supplier with amazing fabric qualities. Highly recommended.", sub: "3 reviews • 2 months ago", rating: 4.5 },
     { name: "Ansh", text: "Good fabric consistency and finishing across knits fabric. Liked it.", sub: "1 review • 2 months ago", rating: 5 },
     { name: "Punita", text: "I bought terry fabric from Texongo. Nice quality I received.", sub: "1 review • 3 months ago", rating: 4.5 },
-    { name: "Premjit Sahoo", text: "Fabric quality achi or range bhi kafi achi h. 👍👍", sub: "1 review • 3 months ago", rating: 4 },
+    { name: "Premjit Sahoo", text: "Fabric quality achi or range bhi kafi achi h.", sub: "1 review • 3 months ago", rating: 4 },
     { name: "Seamless", text: "Best Fabric supplier in India. Little bit expensive but quality is so good it's definitely worth it.", sub: "1 review • 2 years ago", rating: 5 },
     { name: "Kanishka Soni", text: "I purchased their swatch box and was amazed by the idea. If you want to start in the fashion industry, their swatches really help select premium fabrics. Thank you Texongo!", sub: "7 reviews • 3 years ago", rating: 5 },
     { name: "Mansi Vaid", text: "Nice texture and finish in pointelle and Jacquard knits.", sub: "5 reviews • 2 months ago", rating: 5 },
@@ -627,16 +551,8 @@ export function HomeExperience() {
                   Streamline Your<br />Fabric Journey
                 </h2>
                 <p className="text-sm md:text-base text-black/70 leading-relaxed font-medium max-w-xl">
-                  Preview texture, drape, movement, and micro-texture in stunning detail with 3D visualization. Sourcing fabric has never been more precise—where innovation meets craftsmanship.
+                  Traditional sourcing often gets trapped in a cycle of physical sampling and endless reviews, creating costly conflicts and delays. Texongo solves this by introducing 3D Samples early in the journey. By reviewing and refining digitally before production, we eliminate friction and ensure a seamless path from design to market.
                 </p>
-                <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                  <button className="h-10 md:h-12 px-6 bg-black text-white text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-colors font-bold whitespace-nowrap text-center rounded-sm">
-                    Book a Demo
-                  </button>
-                  <button className="h-10 md:h-12 px-6 bg-transparent text-black text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] border border-black/10 hover:border-black transition-colors font-bold whitespace-nowrap text-center rounded-sm">
-                    Learn More
-                  </button>
-                </div>
               </div>
             </div>
           </section>
@@ -662,8 +578,14 @@ export function HomeExperience() {
         </LazySection>
 
         <LazySection>
+          <BlendStylesSection />
+        </LazySection>
+
+        <LazySection>
           <SustainableBlendSection />
         </LazySection>
+
+
 
         <LazySection>
           <ProductCatalogSection />
@@ -671,12 +593,12 @@ export function HomeExperience() {
 
         {/* ── NEW ARRIVALS ─────────────────────────────────── */}
         <LazySection>
-          <section id="fabrics" className="py-16 md:py-24 bg-white border-y border-black/5">
+          <section id="menswear" className="py-16 md:py-24 bg-white border-y border-black/5">
             <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
               <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-16 gap-6 md:gap-8 text-center md:text-left">
                 <div className="max-w-xl">
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">New Additions</span>
-                  <h2 className="text-3xl md:text-6xl font-black leading-none tracking-tight">Newly Added Fabrics</h2>
+                  <h2 className="text-3xl md:text-6xl font-black leading-none tracking-tight"> Fabric Collection.</h2>
                 </div>
                 <Link href="/fabrics" className="inline-block">
                   <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
@@ -687,7 +609,7 @@ export function HomeExperience() {
 
               <div className="-mx-6 lg:-mx-10 overflow-hidden">
                 <div className={styles.productTrack}>
-                  {[...marqueeProducts, ...marqueeProducts].map((product, index) => (
+                  {[...marqueeProducts, ...marqueeProducts].slice(0, 24).map((product, index) => (
                     <MarqueeProductCard
                       key={`${product.name}-${index}`}
                       name={product.name}
@@ -750,17 +672,6 @@ export function HomeExperience() {
 //           ))}
 //         </div>
 
-//         <div className="text-center space-y-4">
-//           <h2 className="text-6xl md:text-8xl font-medium tracking-tight text-[#111111] italic font-serif block">Trendy Fabrics</h2>
-//           <p className="text-[#111111]/70 text-lg md:text-xl font-medium tracking-tight max-w-2xl mx-auto">
-//             Explore our new seasonal fabrics and create the style you want
-//           </p>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-
 function ProductCatalogSection() {
   const row1 = [
     { name: "POLY SPANDEX MESH", price: "₹750.00", image: "https://texongo.com/wp-content/uploads/2025/10/12DAB4FF-CC73-4155-AC90-8636067A6951-768x769-1-300x300.jpg", href: "https://texongo.com/product/poly-spandex-mesh/" },
@@ -784,72 +695,97 @@ function ProductCatalogSection() {
         <h2 className="text-2xl md:text-5xl font-black tracking-tight text-[#111111]">Product Catalog</h2>
       </div>
 
-      <div className="space-y-12">
-        {/* Row 1 - Left Loop */}
-        <div className={styles.marqueeViewport}>
-          <div className={styles.productTrack} style={{ animationDuration: '40s' }}>
-            {[...row1, ...row1, ...row1, ...row1].map((p, idx) => (
-              <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
-                <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                  />
+      <div className="space-y-20">
+        {/* Row 1 - Women's Wear */}
+        <div>
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-10 flex items-center justify-between">
+            <div className="space-y-1">
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43]">Collection</span>
+              <h3 className="text-xl md:text-3xl font-black tracking-tight text-[#111111] uppercase">Womens Wear</h3>
+            </div>
+            <Link href="#womenswear" className="text-xs font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
+              Explore Section
+            </Link>
+          </div>
 
-                  {/* Add to Cart Overlay */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
-                      Add to cart
-                    </button>
+          <div className={styles.marqueeViewport}>
+            <div className={styles.productTrack} style={{ animationDuration: '40s' }}>
+              {[...row1, ...row1, ...row1, ...row1].slice(0, 20).map((p, idx) => (
+                <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
+                  <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                    />
+
+                    {/* Add to Cart Overlay */}
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
+                        Add to cart
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="space-y-1 text-center px-2">
-                  <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
-                  <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
-                </div>
-              </Link>
-            ))}
+                  <div className="space-y-1 text-center px-2">
+                    <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
+                    <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Row 2 - Right Loop */}
-        <div className={styles.marqueeViewport}>
-          <div className={styles.productTrack} style={{ animationDuration: '45s', animationDirection: 'reverse' }}>
-            {[...row2, ...row2, ...row2, ...row2].map((p, idx) => (
-              <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
-                <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                  />
+        {/* Row 2 - Men's Wear */}
+        <div>
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-10 flex items-center justify-between">
+            <div className="space-y-1">
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43]">Collection</span>
+              <h3 className="text-xl md:text-3xl font-black tracking-tight text-[#111111] uppercase">Mens Wear</h3>
+            </div>
+            <Link href="#menswear" className="text-xs font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
+              Explore Section
+            </Link>
+          </div>
 
-                  {/* Add to Cart Overlay */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
-                      Add to cart
-                    </button>
+          <div className={styles.marqueeViewport}>
+            <div className={styles.productTrack} style={{ animationDuration: '45s', animationDirection: 'reverse' }}>
+              {[...row2, ...row2, ...row2, ...row2].slice(0, 20).map((p, idx) => (
+                <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
+                  <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                    />
+
+                    {/* Add to Cart Overlay */}
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
+                        Add to cart
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="space-y-1 text-center px-2">
-                  <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
-                  <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
-                </div>
-              </Link>
-            ))}
+                  <div className="space-y-1 text-center px-2">
+                    <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
+                    <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
 }
+
 
 function BlogSection() {
   const blogs = [

@@ -350,6 +350,12 @@
   contain-intrinsic-size: 0 600px;
 }
 
+.faqSection {
+  contain: paint;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
 .sectionBackdropEyebrowLight,
 .sectionBackdropEyebrowDark {
   margin: 0 0 0.3rem;

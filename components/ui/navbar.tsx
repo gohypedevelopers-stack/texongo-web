@@ -83,6 +83,7 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
   const [isDesktop, setIsDesktop] = useState(true);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -108,11 +109,8 @@ export function Navbar() {
   }, []);
 
   // Update visibility logic: 
-  // Desktop: strictly hover or mobile menu open
-  // Mobile: hover, scrolled, menu open, or internal page
-  const isVisible = isDesktop
-    ? (isHovered || isMobileMenuOpen)
-    : (isHoveredTop || isScrolled || isMobileMenuOpen || !isHome);
+  // Always visible as per user request for "sticky" navbar
+  const isVisible = true;
 
   const handleMouseEnter = () => {
     if (exitTimeout) {
@@ -149,7 +147,7 @@ export function Navbar() {
 
       <AnimatePresence>
         {isVisible && (
-            <motion.nav
+          <motion.nav
             initial={{ y: -132, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -132, opacity: 0 }}
@@ -177,20 +175,109 @@ export function Navbar() {
                 />
               </Link>
 
-              {/* Search Bar */}
-              <div className="hidden md:flex flex-1 max-w-xl relative">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-full h-10 bg-gray-50 border border-gray-200 rounded px-4 pr-10 text-sm focus:outline-none focus:border-black transition-colors"
-                />
-                <button className="absolute right-0 top-0 h-10 w-10 flex items-center justify-center bg-black text-white rounded-r">
-                  <Search size={18} />
-                </button>
+              {/* Desktop Navigation Links - Integrated into top bar */}
+              <div className="hidden md:flex flex-1 items-center justify-center">
+                <ul className="flex items-center gap-8 h-full">
+                  {navItems.map((item) => (
+                    <li
+                      key={item.name}
+                      className={`${item.megaMenu ? "" : "relative"} h-full flex items-center`}
+                      onMouseEnter={() => setHoveredItem(item.name)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                    >
+                      {item.href === "#" ? (
+                        <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:text-black transition-colors h-full cursor-default">
+                          {item.name}
+                          {(item.dropdown || item.megaMenu) && (
+                            <ChevronDown
+                              size={12}
+                              className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`}
+                            />
+                          )}
+                        </span>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:text-black transition-colors h-full"
+                        >
+                          {item.name}
+                          {(item.dropdown || item.megaMenu) && (
+                            <ChevronDown
+                              size={12}
+                              className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`}
+                            />
+                          )}
+                        </Link>
+                      )}
+
+                      {/* Dropdown or Mega Menu */}
+                      <AnimatePresence>
+                        {hoveredItem === item.name && (item.dropdown || item.megaMenu) && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                            className={`absolute top-full z-[1100] bg-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] border border-gray-100 ${item.megaMenu
+                              ? "fixed md:absolute left-0 right-0 mx-auto w-[calc(100vw-3rem)] max-w-[1440px]"
+                              : "left-0 min-w-48"
+                              }`}
+                          >
+                            {item.dropdown && (
+                              <ul className="flex flex-col py-4">
+                                {item.dropdown.map((subItem) => (
+                                  <li key={subItem.name}>
+                                    <Link
+                                      href={subItem.href}
+                                      className="block px-6 py-3 text-[12px] font-medium text-gray-400 hover:text-black hover:bg-black/5 transition-all"
+                                    >
+                                      {subItem.name}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+
+                            {item.megaMenu && (
+                              <div className="flex flex-wrap justify-between gap-x-12 gap-y-10 p-10">
+                                {item.megaMenu.map((category) => (
+                                  <div key={category.title} className="flex flex-col gap-5 min-w-[160px]">
+                                    <h3 className="text-[12px] font-black uppercase tracking-[0.2em] text-[#121212] border-b border-gray-100 pb-3">
+                                      {category.title}
+                                    </h3>
+                                    <ul className={`grid gap-x-10 gap-y-1.5 ${category.items.length > 10 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                                      {category.items.map((subItem) => (
+                                        <li key={subItem}>
+                                          <Link
+                                            href={`/fabrics?category=${subItem.toLowerCase().replace(/ /g, '-')}`}
+                                            className="text-[11px] font-medium text-gray-500 hover:text-[#57AD43] transition-colors whitespace-nowrap"
+                                          >
+                                            {subItem}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
               {/* Icons */}
               <div className="flex items-center gap-3 sm:gap-6">
+                <button
+                  onClick={() => setIsSearchOpen(true)}
+                  className="text-gray-600 hover:text-black transition-colors"
+                >
+                  <Search size={22} />
+                </button>
+
                 <div
                   className="relative"
                   onMouseEnter={() => isLoggedIn && setIsAccountOpen(true)}
@@ -251,99 +338,7 @@ export function Navbar() {
               </div>
             </div>
 
-            {/* Desktop Navigation Menu */}
-            <div className="hidden md:flex max-w-[1440px] mx-auto px-6 lg:px-10 h-12 items-center justify-center overflow-visible whitespace-nowrap">
-              <ul className="flex items-center gap-8 h-full">
-                {navItems.map((item) => (
-                  <li
-                    key={item.name}
-                    className={`${item.megaMenu ? "" : "relative"} h-full flex items-center`}
-                    onMouseEnter={() => setHoveredItem(item.name)}
-                    onMouseLeave={() => setHoveredItem(null)}
-                  >
-                    {item.href === "#" ? (
-                      <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:text-black transition-colors h-full cursor-default">
-                        {item.name}
-                        {(item.dropdown || item.megaMenu) && (
-                          <ChevronDown
-                            size={12}
-                            className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`}
-                          />
-                        )}
-                      </span>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:text-black transition-colors h-full"
-                      >
-                        {item.name}
-                        {(item.dropdown || item.megaMenu) && (
-                          <ChevronDown
-                            size={12}
-                            className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`}
-                          />
-                        )}
-                      </Link>
-                    )}
 
-                    {/* Dropdown or Mega Menu */}
-                    <AnimatePresence>
-                      {hoveredItem === item.name && (item.dropdown || item.megaMenu) && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 10 }}
-                          transition={{ duration: 0.2, ease: "easeOut" }}
-                          className={`absolute top-full z-[1100] bg-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] border border-gray-100 ${item.megaMenu
-                            ? "fixed md:absolute left-0 right-0 mx-auto w-[calc(100vw-3rem)] max-w-[1440px]"
-                            : "left-0 min-w-48"
-                            }`}
-                        >
-                          {item.dropdown && (
-                            <ul className="flex flex-col py-4">
-                              {item.dropdown.map((subItem) => (
-                                <li key={subItem.name}>
-                                  <Link
-                                    href={subItem.href}
-                                    className="block px-6 py-3 text-[12px] font-medium text-gray-400 hover:text-black hover:bg-black/5 transition-all"
-                                  >
-                                    {subItem.name}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-
-                          {item.megaMenu && (
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 p-12 overflow-y-auto max-h-[80vh] md:max-h-none">
-                              {item.megaMenu.map((category) => (
-                                <div key={category.title} className="flex flex-col gap-6">
-                                  <h3 className="text-[13px] font-black uppercase tracking-[0.2em] text-[#121212]">
-                                    {category.title}
-                                  </h3>
-                                  <ul className="flex flex-col gap-3">
-                                    {category.items.map((subItem) => (
-                                      <li key={subItem}>
-                                        <Link
-                                          href={`/fabrics?category=${subItem.toLowerCase().replace(/ /g, '-')}`}
-                                          className="text-[12px] font-medium text-gray-400 hover:text-black transition-colors"
-                                        >
-                                          {subItem}
-                                        </Link>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </li>
-                ))}
-              </ul>
-            </div>
 
             {/* Mobile Navigation Drawer */}
             <AnimatePresence>
@@ -478,6 +473,113 @@ export function Navbar() {
               )}
             </AnimatePresence>
           </motion.nav>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isSearchOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-white/98 backdrop-blur-md z-[3000] flex flex-col overflow-y-auto"
+          >
+            <div className="max-w-[1440px] mx-auto w-full px-6 md:px-12 py-8 md:py-12">
+              {/* Header with Logo and Close Button */}
+              <div className="flex justify-between items-center mb-20 md:mb-32">
+                <img
+                  src="https://texongo.com/wp-content/uploads/2025/09/Untitled-design-2-1-e1758707290987.png"
+                  alt="Texongo"
+                  className="h-8 md:h-10 w-auto mix-blend-multiply"
+                />
+                <button
+                  onClick={() => setIsSearchOpen(false)}
+                  className="group flex items-center gap-3 text-gray-400 hover:text-black transition-all"
+                >
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] hidden md:block">Close Escape</span>
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-100 flex items-center justify-center group-hover:rotate-90 transition-transform duration-500">
+                    <X size={20} strokeWidth={2.5} />
+                  </div>
+                </button>
+              </div>
+
+              {/* Search Core */}
+              <div className="max-w-5xl mx-auto w-full">
+                <div className="space-y-4 mb-16 md:mb-24">
+                  <span className="text-[10px] font-black uppercase tracking-[0.6em] text-[#57AD43]">Explore Texongo</span>
+                  <div className="relative flex items-end">
+                    <input
+                      autoFocus
+                      type="text"
+                      placeholder="Start typing..."
+                      className="w-full text-4xl md:text-7xl lg:text-8xl font-black placeholder:text-gray-100 focus:outline-none bg-transparent pb-6 border-b-[6px] border-gray-50 focus:border-black transition-all duration-700"
+                    />
+                    <div className="absolute right-0 bottom-8">
+                      <Search className="text-gray-200" size={48} strokeWidth={3} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Suggestions Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-24">
+                  {/* Left Column: Popular Tags */}
+                  <div className="lg:col-span-7">
+                    <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 mb-10 border-l-2 border-[#57AD43] pl-4">Trending Now</h3>
+                    <div className="flex flex-wrap gap-4 md:gap-6">
+                      {[
+                        { name: "Single Jersey", count: "120+" },
+                        { name: "French Terry", count: "85" },
+                        { name: "Organic Cotton", count: "可持续" },
+                        { name: "Rib Knits", count: "New" },
+                        { name: "Pique", count: "Classic" },
+                        { name: "Supima Blends", count: "Luxury" }
+                      ].map((item) => (
+                        <Link
+                          key={item.name}
+                          href={`/fabrics?category=${item.name.toLowerCase().replace(/ /g, '-')}`}
+                          onClick={() => setIsSearchOpen(false)}
+                          className="group relative flex items-center gap-4 bg-gray-50 hover:bg-black p-4 md:p-6 rounded-2xl transition-all duration-500 hover:-translate-y-1 shadow-sm hover:shadow-xl"
+                        >
+                          <div className="flex flex-col">
+                            <span className="text-xs md:text-sm font-black uppercase tracking-widest text-gray-900 group-hover:text-white transition-colors">{item.name}</span>
+                            <span className="text-[9px] font-bold text-gray-400 group-hover:text-white/50 uppercase tracking-[0.2em]">{item.count} items</span>
+                          </div>
+                          <div className="w-8 h-8 rounded-full bg-white group-hover:bg-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+                            <ChevronRight size={14} className="text-black group-hover:text-white" />
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Quick Links & Help */}
+                  <div className="lg:col-span-5 space-y-16">
+                    <div>
+                      <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 mb-10 border-l-2 border-[#57AD43] pl-4">Quick Navigation</h3>
+                      <ul className="space-y-6">
+                        {[
+                          { name: "Explore New Arrivals", sub: "Latest fabric drops" },
+                          { name: "Shop Best Sellers", sub: "Most popular choices" },
+                          { name: "Sustainable Collection", sub: "Eco-friendly fabrics" },
+                          { name: "3D Digital Studio", sub: "Interactive visualization" }
+                        ].map((link) => (
+                          <li key={link.name}>
+                            <Link
+                              href="/fabrics"
+                              onClick={() => setIsSearchOpen(false)}
+                              className="group flex flex-col gap-1"
+                            >
+                              <span className="text-xl md:text-2xl font-black text-gray-900 group-hover:text-[#57AD43] transition-colors">{link.name}</span>
+                              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{link.sub}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
       <AuthModal />

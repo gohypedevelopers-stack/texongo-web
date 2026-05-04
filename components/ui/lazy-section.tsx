@@ -21,23 +21,23 @@ export function LazySection({
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, {
     once,
-    amount: threshold,
-    margin: "0px 0px -100px 0px" // Trigger slightly after coming into view for better visibility
+    amount: 0,
+    margin: "0px" 
   });
 
   return (
     <div ref={ref} className={className}>
       <Suspense fallback={fallback}>
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{
-            duration: 0.8,
-            ease: [0.22, 1, 0.36, 1], // Cubic bezier for smooth reveal
+            duration: 0.6,
+            ease: [0.22, 1, 0.36, 1],
             delay: 0.1
           }}
         >
-          {isInView ? children : <div className="invisible">{children}</div>}
+          {children}
         </motion.div>
       </Suspense>
     </div>
