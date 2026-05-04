@@ -325,7 +325,7 @@ export function BlendAnimation({ scrollProgress, products }: { scrollProgress: M
                         <FabricCard
                             key={i}
                             index={i}
-                            src={item.image || (item as any).src}
+                            src={'image' in item ? (item as any).image : (item as any).src}
                             label={item.name}
                             totalCount={products && products.length > 0 ? (isMobile ? 6 : Math.min(products.length, 10)) : (isMobile ? 6 : BLEND_DATA.length)}
                             smoothProgress={smoothProgress}

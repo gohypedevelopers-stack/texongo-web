@@ -653,7 +653,7 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
                       key={`${product.name}-${index}`}
                       name={product.name}
                       price={typeof product.price === 'string' ? (product.price.startsWith('₹') ? product.price : `₹${product.price}`) : `₹${product.price}`}
-                      href={('href' in product ? (product as any).href : null) || `/fabrics/${product.id}`}
+                      href={('href' in product && (product as any).href) ? (product as any).href : ('id' in product ? `/fabrics/${(product as any).id}` : '#')}
                       image={product.image}
                     />
                   ))}
