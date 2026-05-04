@@ -9,6 +9,7 @@ interface LazySectionProps {
   threshold?: number;
   once?: boolean;
   className?: string;
+  y?: number;
 }
 
 export function LazySection({
@@ -17,6 +18,7 @@ export function LazySection({
   threshold = 0.1,
   once = true,
   className = "",
+  y = 30,
 }: LazySectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, {
@@ -29,8 +31,8 @@ export function LazySection({
     <div ref={ref} className={className}>
       <Suspense fallback={fallback}>
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: y }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: y }}
           transition={{
             duration: 0.6,
             ease: [0.22, 1, 0.36, 1],

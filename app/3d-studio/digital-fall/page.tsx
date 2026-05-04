@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { X, Loader2, ArrowRight } from "lucide-react";
+import { WatermarkOverlay, VideoBadge } from "@/components/ui/watermark";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -137,11 +138,18 @@ function FallCard({ id, onClick }: { id: number; onClick: (src: string, name: st
     return () => observer.disconnect();
   }, [id]);
 
-  const handleMouseEnter = () => { if (videoRef.current && isLoaded) videoRef.current.play().catch(() => {}); };
+  const handleMouseEnter = () => { if (videoRef.current && isLoaded) videoRef.current.play().catch(() => { }); };
   const handleMouseLeave = () => { if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; } };
 
   const handleError = () => {
     setIsError(true);
+  };
+
+  const [showWatermark, setShowWatermark] = useState(false);
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    setShowWatermark(true);
+    setTimeout(() => setShowWatermark(false), 2000);
   };
 
   if (isError) return null;
@@ -156,6 +164,7 @@ function FallCard({ id, onClick }: { id: number; onClick: (src: string, name: st
       onClick={() => onClick(videoSrc, name, fabricData.name, fabricData.sku)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onContextMenu={handleContextMenu}
       className="relative aspect-[3/4] bg-white overflow-hidden group cursor-pointer border border-black/5"
     >
       {!isLoaded && (
@@ -178,7 +187,13 @@ function FallCard({ id, onClick }: { id: number; onClick: (src: string, name: st
         />
       )}
 
-      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-all duration-500">
+      <div className={`absolute inset-0 pointer-events-none z-[50] overflow-hidden transition-opacity duration-300 ${showWatermark ? 'opacity-100' : 'opacity-0'}`}>
+        <WatermarkOverlay />
+      </div>
+
+      <VideoBadge />
+
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-100 transition-all duration-500">
         {/* Bottom Left Label - Premium Editorial Style */}
         <div className="absolute bottom-0 left-0 p-5 w-full pointer-events-none z-10">
           <div className="flex flex-col gap-1.5 items-start">
@@ -319,6 +334,8 @@ export default function DigitalFallPage() {
                   playsInline
                   className="w-full h-full object-contain bg-black"
                 />
+
+                <VideoBadge />
 
                 {/* Lightbox Badge Overlay */}
                 <div className="absolute bottom-8 left-8 pointer-events-none z-10 flex flex-col gap-3">

@@ -44,16 +44,10 @@ const FabricCard = React.memo(({
     const transform = useTransform(smoothProgress, (p) => {
         const morph = p < 0.15 ? 0 : (p < 0.30 ? (p - 0.15) / 0.15 : 1);
         const shuffleProgress = p < 0.30 ? 0 : (p < 0.45 ? (p - 0.30) / 0.15 : 1);
-        const shuffleAngle = directionMultiplier * shuffleProgress * 120;
-
         const lineProgress = p < 0.45 ? 0 : (p < 0.55 ? (p - 0.45) / 0.1 : 1);
-
-        // --- PRECISION SLIDE LOGIC ---
-        const endSlideOffset = isMobile ? containerSize.w * 0.1 : containerSize.w * 0.35;
-        const slideTarget = totalW - endSlideOffset;
         const slideProgress = p < 0.55 ? 0 : (p < 0.90 ? (p - 0.55) / 0.35 : 1);
 
-        const angle = baseAngle + shuffleAngle;
+        const angle = baseAngle + (directionMultiplier * shuffleProgress * 120);
         const rad = (angle * Math.PI) / 180;
 
         // Base Position
@@ -62,21 +56,14 @@ const FabricCard = React.memo(({
         let tr = angle + 90;
         let ts = isMobile ? 0.7 : 0.9;
 
-        // Line & Carousel Phase
         if (lineProgress > 0) {
-            let lineX;
-            if (direction === "clockwise") {
-                lineX = initialLineX - (slideProgress * slideTarget);
-            } else {
-                // Mirror clockwise: start at 0, move RIGHT
-                // This avoids the starting gap and maintains symmetry
-                lineX = -initialLineX + (slideProgress * slideTarget);
-            }
+            const endSlideOffset = isMobile ? containerSize.w * 0.1 : containerSize.w * 0.35;
+            const slideTarget = totalW - endSlideOffset;
+            const lineX = (direction === "clockwise" ? 1 : -1) * (initialLineX - (slideProgress * slideTarget));
 
             tx = tx * (1 - lineProgress) + lineX * lineProgress;
             ty = ty * (1 - lineProgress);
             tr = tr * (1 - lineProgress);
-
             const maxCardH = isMobile ? 220 : 380;
             const safeTs = containerSize.h < maxCardH ? (containerSize.h / 140) * 0.8 : (isMobile ? 1.4 : 2.7);
             ts = ts * (1 - lineProgress) + safeTs * lineProgress;
@@ -87,9 +74,8 @@ const FabricCard = React.memo(({
         const finalR = scatterPos.r * (1 - morph) + tr * morph;
         const finalS = 0.4 * (1 - morph) + ts * morph;
 
-        const displayR = Math.abs(finalR) < 0.5 ? 0 : finalR.toFixed(2);
-        return `translate3d(${Math.round(finalX)}px, ${Math.round(finalY)}px, 0) rotate(${displayR}deg) scale(${finalS.toFixed(3)})`;
-    });
+        return `translate3d(${finalX.toFixed(2)}px, ${finalY.toFixed(2)}px, 0) rotate(${finalR.toFixed(2)}deg) scale(${finalS.toFixed(3)})`;
+    }, { usePassive: true });
 
     const opacity = useTransform(smoothProgress, [0, 0.1, 1.0], [0, 1, 1]);
 
@@ -101,10 +87,8 @@ const FabricCard = React.memo(({
                 position: "absolute",
                 width: 100,
                 height: 140,
-                willChange: "transform, opacity",
+                willChange: "transform",
                 zIndex: 2,
-                backfaceVisibility: "hidden",
-                WebkitBackfaceVisibility: "hidden",
                 transformStyle: "preserve-3d",
                 isolation: "isolate",
             }}
@@ -202,8 +186,8 @@ export function IntroAnimation({ scrollProgress }: { scrollProgress: MotionValue
     }, []);
 
     const smoothProgress = useSpring(scrollProgress, {
-        stiffness: 45,
-        damping: 35,
+        stiffness: 60,
+        damping: 40,
         mass: 1.2,
         restDelta: 0.001
     });
@@ -223,12 +207,12 @@ export function IntroAnimation({ scrollProgress }: { scrollProgress: MotionValue
 
     return (
         <div ref={containerRef} className="relative w-full h-full bg-white overflow-hidden font-sans select-none transform-gpu">
-            <div className="flex h-full w-full items-center justify-center">
+            <div className="flex h-full w-full items-center justify-center pt-10 md:pt-14">
 
                 {/* Showroom Header */}
                 <motion.div
                     style={{ opacity: arrowOpacity }}
-                    className="absolute top-12 left-0 w-full text-center z-20 pointer-events-none"
+                    className="absolute top-24 left-0 w-full text-center z-20 pointer-events-none"
                 >
                     <h2 className="text-xl md:text-3xl font-black text-black uppercase tracking-tight">Our Premium Knit Collection</h2>
                 </motion.div>
@@ -305,8 +289,8 @@ export function BlendAnimation({ scrollProgress }: { scrollProgress: MotionValue
     }, []);
 
     const smoothProgress = useSpring(scrollProgress, {
-        stiffness: 45,
-        damping: 35,
+        stiffness: 60,
+        damping: 40,
         mass: 1.2,
         restDelta: 0.001
     });
@@ -326,12 +310,12 @@ export function BlendAnimation({ scrollProgress }: { scrollProgress: MotionValue
 
     return (
         <div ref={containerRef} className="relative w-full h-full bg-white overflow-hidden font-sans select-none transform-gpu">
-            <div className="flex h-full w-full items-center justify-center">
+            <div className="flex h-full w-full items-center justify-center pt-10 md:pt-14">
 
                 {/* Showroom Header */}
                 <motion.div
                     style={{ opacity: arrowOpacity }}
-                    className="absolute top-12 left-0 w-full text-center z-20 pointer-events-none"
+                    className="absolute top-24 left-0 w-full text-center z-20 pointer-events-none"
                 >
                     <h2 className="text-xl md:text-3xl font-black text-black uppercase tracking-tight">Our Premium Blend Collection</h2>
                 </motion.div>

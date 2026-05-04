@@ -229,6 +229,9 @@ function BlendStylesSection() {
 function SustainableBlendSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftState, setScrollLeftState] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const baseLogos = [
@@ -239,14 +242,12 @@ function SustainableBlendSection() {
     { name: "BCI Cotton", src: "https://texongo.com/wp-content/uploads/2025/12/BCI_a1b34c70-fc29-4342-9c45-a8f95375fa51_360x.webp", href: "https://texongo.com/product-category/sustainable-blends/organic-cotton/" },
   ];
 
-  // Create an extended list for infinite-like scrolling and centering
   const logos = [...baseLogos, ...baseLogos, ...baseLogos];
 
   const scrollToLogo = (index: number) => {
     if (scrollRef.current) {
       const container = scrollRef.current;
       const items = Array.from(container.children) as HTMLElement[];
-      // We want to scroll to the middle set of logos for better looping
       const targetIndex = index + baseLogos.length;
       const targetItem = items[targetIndex];
       if (targetItem) {
@@ -260,7 +261,7 @@ function SustainableBlendSection() {
   };
 
   useEffect(() => {
-    if (isPaused) return;
+    if (isDragging || isPaused) return;
 
     const interval = setInterval(() => {
       setActiveIndex((current) => {
@@ -268,25 +269,19 @@ function SustainableBlendSection() {
         scrollToLogo(next);
         return next;
       });
-    }, 4000); // 4 seconds interval
+    }, 4000);
 
     return () => clearInterval(interval);
-  }, [baseLogos.length, isPaused]);
+  }, [baseLogos.length, isPaused, isDragging]);
 
-  // Initial scroll to middle
   useEffect(() => {
     setTimeout(() => scrollToLogo(activeIndex), 100);
   }, []);
 
-  // Removed the useEffect that was firing scrollToLogo on every activeIndex change
-  // to prevent fighting with manual scroll/drag interactions.
-
   const handleScroll = () => {
     if (scrollRef.current) {
       const container = scrollRef.current;
-      const scrollLeft = container.scrollLeft;
-      const clientWidth = container.clientWidth;
-      const scrollCenterX = scrollLeft + clientWidth / 2;
+      const scrollCenterX = container.scrollLeft + container.clientWidth / 2;
 
       const items = Array.from(container.children) as HTMLElement[];
       let closestIndex = 0;
@@ -308,19 +303,54 @@ function SustainableBlendSection() {
     }
   };
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeftState(scrollRef.current.scrollLeft);
+    scrollRef.current.style.scrollBehavior = 'auto';
+    scrollRef.current.style.scrollSnapType = 'none';
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX);
+    scrollRef.current.scrollLeft = scrollLeftState - walk;
+    
+    // Update active index in real-time while dragging
+    handleScroll();
+  };
+
+  const handleMouseUpOrLeave = () => {
+    if (isDragging && scrollRef.current) {
+      setIsDragging(false);
+      scrollRef.current.style.scrollBehavior = 'smooth';
+      scrollRef.current.style.scrollSnapType = 'x mandatory';
+      
+      handleScroll();
+      scrollToLogo(activeIndex);
+    }
+  };
+
   return (
     <section className="py-12 md:py-24 bg-white overflow-hidden">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12 text-center">
         <h2 className="text-2xl md:text-3xl font-bold mb-12 md:mb-20 tracking-tight text-black">Sustainable Brand</h2>
 
         <div className="relative max-w-full mx-auto">
-          {/* Scrollable Container with Drag intent */}
           <div
             ref={scrollRef}
             onScroll={handleScroll}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUpOrLeave}
+            onMouseLeave={handleMouseUpOrLeave}
             onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-            className="flex items-center gap-8 md:gap-24 overflow-x-auto hide-scroll snap-x snap-mandatory cursor-grab active:cursor-grabbing px-6 md:px-[20%] pb-12 pt-4"
+            onMouseOut={() => !isDragging && setIsPaused(false)}
+            className={`flex items-center gap-8 md:gap-24 overflow-x-auto hide-scroll snap-x snap-mandatory px-6 md:px-[20%] pb-12 pt-4 transition-all duration-300 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+            style={{ scrollSnapType: isDragging ? 'none' : 'x mandatory' }}
           >
             {logos.map((logo, i) => (
               <motion.div
@@ -329,7 +359,11 @@ function SustainableBlendSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "100px" }}
                 transition={{ duration: 0.4, delay: (i % baseLogos.length) * 0.05, ease: "easeOut" }}
-                onClick={() => {
+                onClick={(e) => {
+                  if (Math.abs(startX - (e.pageX - (scrollRef.current?.offsetLeft || 0))) > 5) {
+                    e.preventDefault();
+                    return;
+                  }
                   setActiveIndex(i % baseLogos.length);
                   scrollToLogo(i % baseLogos.length);
                 }}
@@ -353,6 +387,7 @@ function SustainableBlendSection() {
               </motion.div>
             ))}
           </div>
+
 
           {/* Hidden left/right gradient overlaps (optional, based on design) */}
           <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none hidden md:block" />
@@ -573,11 +608,11 @@ export function HomeExperience() {
           </section>
         </LazySection>
 
-        <LazySection>
+        <LazySection y={0}>
           <KnitStylesSection />
         </LazySection>
 
-        <LazySection>
+        <LazySection y={0}>
           <BlendStylesSection />
         </LazySection>
 

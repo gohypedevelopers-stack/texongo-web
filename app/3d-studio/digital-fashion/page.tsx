@@ -3,38 +3,39 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { X, Loader2 } from "lucide-react";
+import { WatermarkOverlay, VideoBadge } from "@/components/ui/watermark";
 
 const ITEMS_PER_PAGE = 12;
 
 // Deduplicated unique filenames from the public/digital-fashion-fixed folder
 const FASHION_FILES = [
-  "1.mp4", "10.mp4", "11.mp4", "12.mp4", "13.mp4", "14.mp4", "15.mp4", "16.mp4", "17.mp4", 
-  "18.mp4", "19.mp4", "2.mp4", "20.mp4", "21.mp4", "22.mp4", "23.mp4", "24.mp4", "25.mp4", 
-  "26.mp4", "27.mp4", "28.mp4", "29.mp4", "3.mp4", "30.mp4", "31.mp4", "32.mp4", "33.mp4", 
-  "34.mp4", "4.mp4", "5.mp4", "6.mp4", "7.mp4", "8.mp4", "9.mp4", "FAB 10 DES 10A.mp4", 
-  "FAB 11 DES 11A.mp4", "FAB 12 DES 12A.mp4", "FAB 13 DES 13A.mp4", "FAB 14 DES 14B.mp4", 
-  "FAB 15 DES 15A.mp4", "FAB 16 DES 16A.mp4", "FAB 17 DES 17A.mp4", "FAB 18 DES 18A.mp4", 
-  "FAB 19 DES19A.mp4", "FAB 2 DES 2A.mp4", "FAB 20 DES 20A.mp4", "FAB 21 DES 21A.mp4", 
-  "FAB 22 DES 10B.mp4", "FAB 23 DES 16A.mp4", "FAB 24 DES 2B.mp4", "FAB 25 DES 8C.mp4", 
-  "FAB 26 DES 15B.mp4", "FAB 27 DES 2C.mp4", "FAB 28  DES 9C.mp4", "FAB 29 DES 21A.mp4", 
-  "FAB 3 DES 3A.mp4", "FAB 30 DES 10A.mp4", "FAB 30 DES 20B.mp4", "FAB 31 DES 15C.mp4", 
-  "FAB 32 DES 11C.mp4", "FAB 32 DES 15C.mp4", "FAB 33 DES 20A.mp4", "FAB 34 DES 5C.mp4", 
-  "FAB 35 DES 15B.mp4", "FAB 36 DES 2A.mp4", "FAB 37 DES 17A.mp4", "FAB 38 DES 2C.mp4", 
-  "FAB 39 DES 16C.mp4", "FAB 4 DES 4A.mp4", "FAB 40 DES 18B.mp4", "FAB 41 DES 9B.mp4", 
-  "FAB 42 DES 7C.mp4", "FAB 43 DES 7A.mp4", "FAB 44 DES 12C.mp4", "FAB 44 DES 8A.mp4", 
-  "FAB 45 DES 11A.mp4", "FAB 46 DES 3B.mp4", "FAB 47 DES 13A.mp4", "FAB 48 DES 2A.mp4", 
-  "FAB 49 DES 17C.mp4", "FAB 5 DES 5A.mp4", "FAB 50 DES 5C.mp4", "FAB 51 DES 2A.mp4", 
-  "FAB 52 DES 1B.mp4", "FAB 53 DES 2A.mp4", "FAB 54 DES 2A.mp4", "FAB 55 DES 2A.mp4", 
-  "FAB 56 DES 2C.mp4", "FAB 57 DES 2B.mp4", "FAB 58 DES 12C.mp4", "FAB 59 DES 15B.mp4", 
-  "FAB 6 DES 6A.mp4", "FAB 60 DES 8B.mp4", "FAB 61 DES 10A.mp4", "FAB 62 DES 10B.mp4", 
-  "FAB 63 DES 3A.mp4", "FAB 64 DES 18B.mp4", "FAB 65 DES 10C.mp4", "FAB 66 DES 11C.mp4", 
-  "FAB 67 DES 2C.mp4", "FAB 68 DES 10B.mp4", "FAB 69 DES 12B.mp4", "FAB 7 DES 7A.mp4", 
-  "FAB 70 DES 8B.mp4", "FAB 71 DES 9C.mp4", "FAB 72 DES 20A.mp4", "FAB 73 DES 5B.mp4", 
-  "FAB 74 DES 2C.mp4", "FAB 75 DES 9C.mp4", "FAB 76 DES 11B.mp4", "FAB 76 DES 21B.mp4", 
-  "FAB 77 DES 8C.mp4", "FAB 78 DES 1B.mp4", "FAB 79 DES 12A.mp4", "FAB 8 DES 8A.mp4", 
-  "FAB 80 DES 2B.mp4", "FAB 81 DES 19C.mp4", "FAB 82 DES 17C.mp4", "FAB 83 DES 8B.mp4", 
-  "FAB 84 DES 15B.mp4", "FAB 85 DES 20C.mp4", "FAB 86 DES 21C.mp4", "FAB 87 DES 2C.mp4", 
-  "FAB 88 DES 10A.mp4", "FAB 88 DES 20C.mp4", "FAB 89 DES 10B.mp4", "FAB 9 DES 9A.mp4", 
+  "1.mp4", "10.mp4", "11.mp4", "12.mp4", "13.mp4", "14.mp4", "15.mp4", "16.mp4", "17.mp4",
+  "18.mp4", "19.mp4", "2.mp4", "20.mp4", "21.mp4", "22.mp4", "23.mp4", "24.mp4", "25.mp4",
+  "26.mp4", "27.mp4", "28.mp4", "29.mp4", "3.mp4", "30.mp4", "31.mp4", "32.mp4", "33.mp4",
+  "34.mp4", "4.mp4", "5.mp4", "6.mp4", "7.mp4", "8.mp4", "9.mp4", "FAB 10 DES 10A.mp4",
+  "FAB 11 DES 11A.mp4", "FAB 12 DES 12A.mp4", "FAB 13 DES 13A.mp4", "FAB 14 DES 14B.mp4",
+  "FAB 15 DES 15A.mp4", "FAB 16 DES 16A.mp4", "FAB 17 DES 17A.mp4", "FAB 18 DES 18A.mp4",
+  "FAB 19 DES19A.mp4", "FAB 2 DES 2A.mp4", "FAB 20 DES 20A.mp4", "FAB 21 DES 21A.mp4",
+  "FAB 22 DES 10B.mp4", "FAB 23 DES 16A.mp4", "FAB 24 DES 2B.mp4", "FAB 25 DES 8C.mp4",
+  "FAB 26 DES 15B.mp4", "FAB 27 DES 2C.mp4", "FAB 28  DES 9C.mp4", "FAB 29 DES 21A.mp4",
+  "FAB 3 DES 3A.mp4", "FAB 30 DES 10A.mp4", "FAB 30 DES 20B.mp4", "FAB 31 DES 15C.mp4",
+  "FAB 32 DES 11C.mp4", "FAB 32 DES 15C.mp4", "FAB 33 DES 20A.mp4", "FAB 34 DES 5C.mp4",
+  "FAB 35 DES 15B.mp4", "FAB 36 DES 2A.mp4", "FAB 37 DES 17A.mp4", "FAB 38 DES 2C.mp4",
+  "FAB 39 DES 16C.mp4", "FAB 4 DES 4A.mp4", "FAB 40 DES 18B.mp4", "FAB 41 DES 9B.mp4",
+  "FAB 42 DES 7C.mp4", "FAB 43 DES 7A.mp4", "FAB 44 DES 12C.mp4", "FAB 44 DES 8A.mp4",
+  "FAB 45 DES 11A.mp4", "FAB 46 DES 3B.mp4", "FAB 47 DES 13A.mp4", "FAB 48 DES 2A.mp4",
+  "FAB 49 DES 17C.mp4", "FAB 5 DES 5A.mp4", "FAB 50 DES 5C.mp4", "FAB 51 DES 2A.mp4",
+  "FAB 52 DES 1B.mp4", "FAB 53 DES 2A.mp4", "FAB 54 DES 2A.mp4", "FAB 55 DES 2A.mp4",
+  "FAB 56 DES 2C.mp4", "FAB 57 DES 2B.mp4", "FAB 58 DES 12C.mp4", "FAB 59 DES 15B.mp4",
+  "FAB 6 DES 6A.mp4", "FAB 60 DES 8B.mp4", "FAB 61 DES 10A.mp4", "FAB 62 DES 10B.mp4",
+  "FAB 63 DES 3A.mp4", "FAB 64 DES 18B.mp4", "FAB 65 DES 10C.mp4", "FAB 66 DES 11C.mp4",
+  "FAB 67 DES 2C.mp4", "FAB 68 DES 10B.mp4", "FAB 69 DES 12B.mp4", "FAB 7 DES 7A.mp4",
+  "FAB 70 DES 8B.mp4", "FAB 71 DES 9C.mp4", "FAB 72 DES 20A.mp4", "FAB 73 DES 5B.mp4",
+  "FAB 74 DES 2C.mp4", "FAB 75 DES 9C.mp4", "FAB 76 DES 11B.mp4", "FAB 76 DES 21B.mp4",
+  "FAB 77 DES 8C.mp4", "FAB 78 DES 1B.mp4", "FAB 79 DES 12A.mp4", "FAB 8 DES 8A.mp4",
+  "FAB 80 DES 2B.mp4", "FAB 81 DES 19C.mp4", "FAB 82 DES 17C.mp4", "FAB 83 DES 8B.mp4",
+  "FAB 84 DES 15B.mp4", "FAB 85 DES 20C.mp4", "FAB 86 DES 21C.mp4", "FAB 87 DES 2C.mp4",
+  "FAB 88 DES 10A.mp4", "FAB 88 DES 20C.mp4", "FAB 89 DES 10B.mp4", "FAB 9 DES 9A.mp4",
   "FAB 90 DES 7C.mp4", "FAB 90 DES 8C.mp4", "FAB 91 DES 13A.mp4"
 ];
 
@@ -189,8 +190,15 @@ function FashionCard({ fileName, onClick }: { fileName: string; onClick: (src: s
     return () => clearTimeout(timer);
   }, [isLoaded, isError]);
 
-  const handleMouseEnter = () => { if (videoRef.current && isLoaded) videoRef.current.play().catch(() => {}); };
+  const handleMouseEnter = () => { if (videoRef.current && isLoaded) videoRef.current.play().catch(() => { }); };
   const handleMouseLeave = () => { if (videoRef.current) videoRef.current.pause(); };
+
+  const [showWatermark, setShowWatermark] = useState(false);
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    setShowWatermark(true);
+    setTimeout(() => setShowWatermark(false), 2000);
+  };
 
   if (isError) return null;
 
@@ -203,6 +211,7 @@ function FashionCard({ fileName, onClick }: { fileName: string; onClick: (src: s
       onClick={() => onClick(videoSrc, fileName, fabricData.name, fabricData.sku)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onContextMenu={handleContextMenu}
       className="relative aspect-[4/5] bg-white overflow-hidden group cursor-pointer border border-black/5"
     >
       {!isLoaded && (
@@ -223,7 +232,14 @@ function FashionCard({ fileName, onClick }: { fileName: string; onClick: (src: s
           className={`w-full h-full object-cover transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
       )}
-      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-all duration-500">
+
+      <div className={`absolute inset-0 pointer-events-none z-[50] overflow-hidden transition-opacity duration-300 ${showWatermark ? 'opacity-100' : 'opacity-0'}`}>
+        <WatermarkOverlay />
+      </div>
+
+      <VideoBadge />
+
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-100 transition-all duration-500">
         <div className="absolute bottom-0 left-0 p-5 w-full pointer-events-none z-10">
           <div className="flex flex-col gap-1.5 items-start">
             <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} className="h-[1px] w-12 bg-white/60 origin-left" />
@@ -342,6 +358,8 @@ export default function DigitalFashionPage() {
                   playsInline
                   className="w-full h-full object-contain bg-black"
                 />
+
+                <VideoBadge />
 
                 {/* Lightbox Badge Overlay */}
                 <div className="absolute bottom-8 left-8 pointer-events-none z-10 flex flex-col gap-3">

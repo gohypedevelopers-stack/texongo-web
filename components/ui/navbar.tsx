@@ -148,36 +148,40 @@ export function Navbar() {
       <AnimatePresence>
         {isVisible && (
           <motion.nav
-            initial={{ y: -132, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -132, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: isScrolled ? 10 : 0, opacity: 1 }}
+            exit={{ y: -100, opacity: 0 }}
+            transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className="fixed top-0 left-0 w-full bg-white border-b border-gray-100 z-[1000]"
+            className={`fixed left-1/2 -translate-x-1/2 w-[95%] max-w-[1200px] z-[1000] transition-all duration-500 ${isScrolled
+              ? "top-0"
+              : "top-6"
+              }`}
           >
-            {/* Top Bar: Logo, Search, Icons */}
-            <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-10 h-16 md:h-20 flex items-center justify-between gap-2 md:gap-8">
+            {/* Glassmorphism Pill Container */}
+            <div className="relative flex items-center justify-between px-8 md:px-12 h-12 md:h-14 bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.06)] rounded-full transition-all duration-500">
+
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="md:hidden p-2 text-gray-600"
               >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
 
               {/* Logo */}
               <Link href="/" className="flex-shrink-0" onClick={() => setIsMobileMenuOpen(false)}>
                 <img
-                  src="https://texongo.com/wp-content/uploads/2025/09/Untitled-design-2-1-e1758707290987.png"
+                  src="/logos/logo.png"
                   alt="Texongo"
-                  className="h-8 md:h-10 w-auto mix-blend-multiply"
+                  className="h-5 md:h-6.5 w-auto object-contain"
                 />
               </Link>
 
-              {/* Desktop Navigation Links - Integrated into top bar */}
-              <div className="hidden md:flex flex-1 items-center justify-center">
-                <ul className="flex items-center gap-8 h-full">
+              {/* Desktop Navigation Links */}
+              <div className="hidden md:flex flex-1 items-center justify-center px-12">
+                <ul className="flex items-center gap-10 h-full">
                   {navItems.map((item) => (
                     <li
                       key={item.name}
@@ -186,27 +190,29 @@ export function Navbar() {
                       onMouseLeave={() => setHoveredItem(null)}
                     >
                       {item.href === "#" ? (
-                        <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:text-black transition-colors h-full cursor-default">
+                        <span className="group relative flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-black transition-colors h-full cursor-default">
                           {item.name}
                           {(item.dropdown || item.megaMenu) && (
                             <ChevronDown
-                              size={12}
+                              size={10}
                               className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`}
                             />
                           )}
+                          <span className="absolute bottom-[-6px] left-0 w-0 h-[2px] bg-[#57AD43] group-hover:w-full transition-all duration-500 ease-out" />
                         </span>
                       ) : (
                         <Link
                           href={item.href}
-                          className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:text-black transition-colors h-full"
+                          className="group relative flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-black transition-colors h-full"
                         >
                           {item.name}
                           {(item.dropdown || item.megaMenu) && (
                             <ChevronDown
-                              size={12}
+                              size={10}
                               className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`}
                             />
                           )}
+                          <span className="absolute bottom-[-6px] left-0 w-0 h-[2px] bg-[#57AD43] group-hover:w-full transition-all duration-500 ease-out" />
                         </Link>
                       )}
 
@@ -218,8 +224,8 @@ export function Navbar() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 10 }}
                             transition={{ duration: 0.2, ease: "easeOut" }}
-                            className={`absolute top-full z-[1100] bg-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] border border-gray-100 ${item.megaMenu
-                              ? "fixed md:absolute left-0 right-0 mx-auto w-[calc(100vw-3rem)] max-w-[1440px]"
+                            className={`absolute top-[calc(100%+12px)] z-[1100] bg-white/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-white/20 rounded-3xl overflow-hidden ${item.megaMenu
+                              ? "fixed md:absolute left-1/2 -translate-x-1/2 w-[calc(100vw-4rem)] max-w-[1100px]"
                               : "left-0 min-w-48"
                               }`}
                           >
@@ -229,9 +235,10 @@ export function Navbar() {
                                   <li key={subItem.name}>
                                     <Link
                                       href={subItem.href}
-                                      className="block px-6 py-3 text-[12px] font-medium text-gray-400 hover:text-black hover:bg-black/5 transition-all"
+                                      className="group relative block px-6 py-3 text-[12px] font-medium text-gray-400 hover:text-black hover:bg-black/5 transition-all"
                                     >
                                       {subItem.name}
+                                      <span className="absolute bottom-[-2px] left-6 right-6 w-0 h-[1.5px] bg-[#57AD43] group-hover:w-[calc(100%-3rem)] transition-all duration-500 ease-out" />
                                     </Link>
                                   </li>
                                 ))}
@@ -239,20 +246,29 @@ export function Navbar() {
                             )}
 
                             {item.megaMenu && (
-                              <div className="flex flex-wrap justify-between gap-x-12 gap-y-10 p-10">
-                                {item.megaMenu.map((category) => (
-                                  <div key={category.title} className="flex flex-col gap-5 min-w-[160px]">
-                                    <h3 className="text-[12px] font-black uppercase tracking-[0.2em] text-[#121212] border-b border-gray-100 pb-3">
-                                      {category.title}
-                                    </h3>
-                                    <ul className={`grid gap-x-10 gap-y-1.5 ${category.items.length > 10 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                              <div className="grid grid-cols-5 divide-x divide-gray-100 p-0 overflow-hidden">
+                                {item.megaMenu.map((category, idx) => (
+                                  <div
+                                    key={category.title}
+                                    className="flex flex-col gap-6 p-10 hover:bg-gray-50/50 transition-colors duration-300"
+                                  >
+                                    <div className="space-y-1.5">
+                                      <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-black flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 bg-[#57AD43] rounded-full"></span>
+                                        {category.title}
+                                      </h3>
+                                      <div className="h-[1px] w-full bg-gray-100"></div>
+                                    </div>
+
+                                    <ul className={`grid gap-x-6 gap-y-2.5 ${category.items.length > 10 ? 'grid-cols-2' : 'grid-cols-1'}`}>
                                       {category.items.map((subItem) => (
-                                        <li key={subItem}>
+                                        <li key={subItem} className="group/item">
                                           <Link
                                             href={`/fabrics?category=${subItem.toLowerCase().replace(/ /g, '-')}`}
-                                            className="text-[11px] font-medium text-gray-500 hover:text-[#57AD43] transition-colors whitespace-nowrap"
+                                            className="group/link relative text-[10px] font-bold text-gray-400 hover:text-[#57AD43] transition-all flex items-center py-1"
                                           >
-                                            {subItem}
+                                            <span>{subItem}</span>
+                                            <span className="absolute bottom-[-4px] left-0 w-0 h-[1.5px] bg-[#57AD43] group-hover/link:w-full transition-all duration-500 ease-out" />
                                           </Link>
                                         </li>
                                       ))}
@@ -270,12 +286,12 @@ export function Navbar() {
               </div>
 
               {/* Icons */}
-              <div className="flex items-center gap-3 sm:gap-6">
+              <div className="flex items-center gap-3 sm:gap-5">
                 <button
                   onClick={() => setIsSearchOpen(true)}
                   className="text-gray-600 hover:text-black transition-colors"
                 >
-                  <Search size={22} />
+                  <Search size={18} />
                 </button>
 
                 <div
@@ -285,12 +301,9 @@ export function Navbar() {
                 >
                   <button
                     onClick={() => !isLoggedIn && openAuthModal()}
-                    className="text-gray-600 hover:text-black transition-colors flex items-center gap-2 h-16 md:h-20"
+                    className="text-gray-600 hover:text-black transition-colors flex items-center justify-center h-12 md:h-14"
                   >
-                    <User size={22} />
-                    {isLoggedIn && user && (
-                      <span className="text-[10px] font-black uppercase tracking-widest hidden xl:block">Hi, {user.name}</span>
-                    )}
+                    <User size={18} />
                   </button>
 
                   <AnimatePresence>
@@ -328,7 +341,7 @@ export function Navbar() {
                   onClick={() => toggleCart(true)}
                   className="text-gray-600 hover:text-black transition-colors relative"
                 >
-                  <ShoppingBag size={22} />
+                  <ShoppingBag size={18} />
                   {isMounted && itemCount > 0 && (
                     <span className="absolute -top-1.5 -right-1.5 bg-[#57AD43] text-[8px] md:text-[9px] text-white font-black w-3.5 h-3.5 md:w-4 md:h-4 flex items-center justify-center rounded-full">
                       {itemCount}
@@ -338,27 +351,24 @@ export function Navbar() {
               </div>
             </div>
 
-
-
             {/* Mobile Navigation Drawer */}
             <AnimatePresence>
               {isMobileMenuOpen && (
                 <motion.div
-                  initial={{ x: "-100%" }}
-                  animate={{ x: 0 }}
-                  exit={{ x: "-100%" }}
-                  transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                  className="fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-white z-[90] md:hidden overflow-y-auto"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="fixed top-[80px] left-1/2 -translate-x-1/2 w-[95%] max-w-[500px] bg-white rounded-3xl shadow-2xl z-[90] md:hidden overflow-hidden"
                 >
-                  <div className="p-6 space-y-4">
+                  <div className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
                     {/* Mobile Search */}
                     <div className="relative mb-8">
                       <input
                         type="text"
                         placeholder="Search fabrics..."
-                        className="w-full h-12 bg-gray-50 border border-gray-100 rounded-full px-6 text-sm focus:outline-none"
+                        className="w-full h-12 bg-gray-50 border border-gray-100 rounded-2xl px-6 text-sm focus:outline-none"
                       />
-                      <button className="absolute right-2 top-1 h-10 w-10 flex items-center justify-center bg-black text-white rounded-full">
+                      <button className="absolute right-2 top-1 h-10 w-10 flex items-center justify-center bg-black text-white rounded-xl">
                         <Search size={16} />
                       </button>
                     </div>
@@ -487,9 +497,9 @@ export function Navbar() {
               {/* Header with Logo and Close Button */}
               <div className="flex justify-between items-center mb-20 md:mb-32">
                 <img
-                  src="https://texongo.com/wp-content/uploads/2025/09/Untitled-design-2-1-e1758707290987.png"
+                  src="/logos/logo.png"
                   alt="Texongo"
-                  className="h-8 md:h-10 w-auto mix-blend-multiply"
+                  className="h-8 md:h-10 w-auto object-contain"
                 />
                 <button
                   onClick={() => setIsSearchOpen(false)}
