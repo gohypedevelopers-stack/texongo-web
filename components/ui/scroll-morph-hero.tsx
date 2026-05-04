@@ -217,23 +217,6 @@ export function IntroAnimation({ scrollProgress }: { scrollProgress: MotionValue
                     <h2 className="text-xl md:text-3xl font-black text-black uppercase tracking-tight">Our Premium Knit Collection</h2>
                 </motion.div>
 
-                {/* Decorative UI */}
-                <motion.div
-                    style={{ opacity: arrowOpacity }}
-                    className="absolute inset-y-0 left-8 md:left-12 flex items-center z-30 pointer-events-none"
-                >
-                    <div className="w-10 h-10 md:w-16 md:h-16 bg-white/95 backdrop-blur-md rounded-full shadow-2xl flex items-center justify-center border border-black/5 transform-gpu">
-                        <ChevronLeft className="w-5 h-5 md:w-10 md:h-10 text-black" />
-                    </div>
-                </motion.div>
-                <motion.div
-                    style={{ opacity: arrowOpacity }}
-                    className="absolute inset-y-0 right-8 md:right-12 flex items-center z-30 pointer-events-none"
-                >
-                    <div className="w-10 h-10 md:w-16 md:h-16 bg-white/95 backdrop-blur-md rounded-full shadow-2xl flex items-center justify-center border border-black/5 transform-gpu">
-                        <ChevronRight className="w-5 h-5 md:w-10 md:h-10 text-black" />
-                    </div>
-                </motion.div>
 
                 {/* Hero Header */}
                 <motion.div
@@ -320,23 +303,6 @@ export function BlendAnimation({ scrollProgress }: { scrollProgress: MotionValue
                     <h2 className="text-xl md:text-3xl font-black text-black uppercase tracking-tight">Our Premium Blend Collection</h2>
                 </motion.div>
 
-                {/* Decorative UI */}
-                <motion.div
-                    style={{ opacity: arrowOpacity }}
-                    className="absolute inset-y-0 left-8 md:left-12 flex items-center z-30 pointer-events-none"
-                >
-                    <div className="w-10 h-10 md:w-16 md:h-16 bg-white/95 backdrop-blur-md rounded-full shadow-2xl flex items-center justify-center border border-black/5 transform-gpu">
-                        <ChevronLeft className="w-5 h-5 md:w-10 md:h-10 text-black" />
-                    </div>
-                </motion.div>
-                <motion.div
-                    style={{ opacity: arrowOpacity }}
-                    className="absolute inset-y-0 right-8 md:right-12 flex items-center z-30 pointer-events-none"
-                >
-                    <div className="w-10 h-10 md:w-16 md:h-16 bg-white/95 backdrop-blur-md rounded-full shadow-2xl flex items-center justify-center border border-black/5 transform-gpu">
-                        <ChevronRight className="w-5 h-5 md:w-10 md:h-10 text-black" />
-                    </div>
-                </motion.div>
 
                 {/* Hero Header */}
                 <motion.div
