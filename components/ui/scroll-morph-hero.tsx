@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { motion, useTransform, useSpring, useMotionValue, MotionValue } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import type { Fabric } from "../../lib/shopify";
 
 // --- Types ---
 interface FabricCardProps {
@@ -119,7 +120,7 @@ const FabricCard = React.memo(({
                                 display: "inline-block"
                             }}
                         >
-                            {label}
+                            {label.split(/[\s-]+/)[0]}
                         </span>
                     </div>
                 </div>
@@ -251,7 +252,7 @@ export function IntroAnimation({ scrollProgress }: { scrollProgress: MotionValue
     );
 }
 
-export function BlendAnimation({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
+export function BlendAnimation({ scrollProgress, products }: { scrollProgress: MotionValue<number>, products?: Fabric[] }) {
     const [isMobile, setIsMobile] = useState(false);
     const [containerSize, setContainerSize] = useState({ w: 1200, h: 800 });
     const containerRef = useRef<HTMLDivElement>(null);
@@ -317,13 +318,16 @@ export function BlendAnimation({ scrollProgress }: { scrollProgress: MotionValue
 
                 {/* Cards Layer */}
                 <div className="relative flex items-center justify-center w-full h-full perspective-1000 transform-gpu">
-                    {(isMobile ? BLEND_DATA.slice(0, 6) : BLEND_DATA).map((item, i) => (
+                    {(products && products.length > 0 
+                        ? (isMobile ? products.slice(0, 6) : products.slice(0, 10))
+                        : (isMobile ? BLEND_DATA.slice(0, 6) : BLEND_DATA)
+                    ).map((item, i) => (
                         <FabricCard
                             key={i}
                             index={i}
-                            src={item.src}
+                            src={item.image || (item as any).src}
                             label={item.name}
-                            totalCount={isMobile ? 6 : BLEND_DATA.length}
+                            totalCount={products && products.length > 0 ? (isMobile ? 6 : Math.min(products.length, 10)) : (isMobile ? 6 : BLEND_DATA.length)}
                             smoothProgress={smoothProgress}
                             isMobile={isMobile}
                             containerSize={containerSize}

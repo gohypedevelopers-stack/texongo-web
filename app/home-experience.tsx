@@ -10,6 +10,7 @@ import styles from "./page.module.css";
 import { LazyVideo } from "./lazy-video";
 import ScrollExpandMedia from "../components/ui/scroll-expansion-hero";
 import { LazySection } from "../components/ui/lazy-section";
+import type { Fabric } from "../lib/shopify";
 
 // Dynamic imports for performance (Separate files)
 const CategorySlider = dynamic(() => import("./category-slider").then(mod => mod.CategorySlider), { ssr: false });
@@ -209,7 +210,7 @@ function KnitStylesSection() {
   );
 }
 
-function BlendStylesSection() {
+function BlendStylesSection({ products }: { products?: Fabric[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -219,7 +220,7 @@ function BlendStylesSection() {
   return (
     <section ref={containerRef} className="relative h-[600vh] bg-white">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        <BlendAnimation scrollProgress={scrollYProgress} />
+        <BlendAnimation scrollProgress={scrollYProgress} products={products} />
       </div>
     </section>
   );
@@ -527,7 +528,7 @@ function TestimonialsSection() {
   );
 }
 
-export function HomeExperience() {
+export function HomeExperience({ products }: { products?: Fabric[] }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -613,7 +614,7 @@ export function HomeExperience() {
         </LazySection>
 
         <LazySection y={0}>
-          <BlendStylesSection />
+          <BlendStylesSection products={products} />
         </LazySection>
 
         <LazySection>
@@ -644,12 +645,15 @@ export function HomeExperience() {
 
               <div className="-mx-6 lg:-mx-10 overflow-hidden">
                 <div className={styles.productTrack}>
-                  {[...marqueeProducts, ...marqueeProducts].slice(0, 24).map((product, index) => (
+                  {(products && products.length > 0
+                    ? [...products, ...products].slice(0, 24)
+                    : [...marqueeProducts, ...marqueeProducts].slice(0, 24)
+                  ).map((product, index) => (
                     <MarqueeProductCard
                       key={`${product.name}-${index}`}
                       name={product.name}
-                      price={product.price}
-                      href={product.href}
+                      price={typeof product.price === 'string' ? (product.price.startsWith('₹') ? product.price : `₹${product.price}`) : `₹${product.price}`}
+                      href={product.href || `/fabrics/${product.id}`}
                       image={product.image}
                     />
                   ))}
