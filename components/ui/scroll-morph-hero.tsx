@@ -75,7 +75,7 @@ const FabricCard = React.memo(({
         const finalS = 0.4 * (1 - morph) + ts * morph;
 
         return `translate3d(${finalX.toFixed(2)}px, ${finalY.toFixed(2)}px, 0) rotate(${finalR.toFixed(2)}deg) scale(${finalS.toFixed(3)})`;
-    }, { usePassive: true });
+    });
 
     const opacity = useTransform(smoothProgress, [0, 0.1, 1.0], [0, 1, 1]);
 
