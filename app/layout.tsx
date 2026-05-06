@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "../components/ui/navbar";
 import { Footer } from "../components/ui/footer";
 import { CartDrawer } from "@/components/ui/cart-drawer";
+import { Preloader } from "../components/ui/preloader";
 
 
 const montserrat = Montserrat({
@@ -36,6 +37,7 @@ export default function RootLayout({
         className="min-h-screen bg-[#F9FAFB] text-[#111111] antialiased"
         suppressHydrationWarning
       >
+        <Preloader />
         <Navbar />
         <CartDrawer />
         {children}
