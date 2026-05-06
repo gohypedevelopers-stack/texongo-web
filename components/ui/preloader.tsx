@@ -16,9 +16,9 @@ export function Preloader() {
 
     const animate = () => {
       if (currentProgress < targetProgress) {
-        // Smoothly approach the target
+        // Slowed down for stability and premium feel
         const diff = targetProgress - currentProgress;
-        currentProgress += diff * 0.02; // Adjust speed here
+        currentProgress += diff * 0.01; // Slower approach (0.01 instead of 0.02)
         setProgress(currentProgress);
         animationFrameId = requestAnimationFrame(animate);
       }
@@ -27,25 +27,28 @@ export function Preloader() {
     animationFrameId = requestAnimationFrame(animate);
 
     const handleLoad = () => {
-      targetProgress = 100;
-      
-      const finishAnimation = () => {
-        if (currentProgress < 99.9) {
-          const diff = 100.1 - currentProgress;
-          currentProgress += diff * 0.15; // Faster finish
-          setProgress(currentProgress);
-          animationFrameId = requestAnimationFrame(finishAnimation);
-        } else {
-          setProgress(100);
-          setTimeout(() => {
-            setIsLoading(false);
-            document.body.style.overflow = "";
-          }, 600);
-        }
-      };
-      
-      cancelAnimationFrame(animationFrameId);
-      animationFrameId = requestAnimationFrame(finishAnimation);
+      // Small delay before finishing to ensure it feels stable
+      setTimeout(() => {
+        targetProgress = 100;
+        
+        const finishAnimation = () => {
+          if (currentProgress < 99.95) {
+            const diff = 100.05 - currentProgress;
+            currentProgress += diff * 0.08; // Smoother finish
+            setProgress(currentProgress);
+            animationFrameId = requestAnimationFrame(finishAnimation);
+          } else {
+            setProgress(100);
+            setTimeout(() => {
+              setIsLoading(false);
+              document.body.style.overflow = "";
+            }, 800);
+          }
+        };
+        
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(finishAnimation);
+      }, 500);
     };
 
     if (document.readyState === "complete") {
@@ -73,52 +76,61 @@ export function Preloader() {
           }}
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0a0a0a]"
         >
-          <div className="relative w-full max-w-[400px] flex flex-col items-center px-10">
-            {/* Logo Image & Text */}
+          <div className="relative w-full max-w-[1200px] flex flex-col items-center px-10">
+            {/* Text Overlay Container */}
             <motion.div
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col items-center mb-16"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ 
+                y: 0, 
+                opacity: 1,
+              }}
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col items-center w-full"
             >
-              <img
-                src="/logos/logo.png"
-                alt="Texongo"
-                className="h-6 md:h-8 w-auto object-contain brightness-0 invert opacity-50 mb-6"
-              />
-              <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white mb-2">
-                Texongo
-              </h1>
-              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/20">
-                Premium Fabrics
-              </span>
+              <motion.div
+                animate={{
+                  opacity: [0.8, 1, 0.8],
+                  scale: [0.98, 1, 0.98],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="flex flex-col items-center w-full"
+              >
+                {/* Text Loader Container */}
+                <div className="relative inline-block py-20 px-10">
+                  {/* Green Text with Breathing Effect (Fills from 0 to 100%) */}
+                  <motion.div 
+                    className="overflow-hidden py-10"
+                    style={{ 
+                      width: `${progress}%`,
+                    }}
+                  >
+                    <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-[#57AD43] to-[#61CE70] select-none font-sans whitespace-nowrap leading-[1.5] py-4 px-10">
+                      Texongo
+                    </h1>
+                  </motion.div>
+                </div>
+              </motion.div>
             </motion.div>
-
-            {/* Progress Bar Container */}
-            <div className="w-full">
-              <div className="w-full h-[2px] bg-white/5 relative mb-4">
-                <motion.div
-                  initial={{ width: "0%" }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.1, ease: "linear" }}
-                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#57AD43] to-[#61CE70] shadow-[0_0_15px_rgba(87,173,67,0.4)]"
-                />
-              </div>
-
-              {/* Percentage */}
-              <div className="flex justify-start">
-                <motion.span
-                  className="text-lg font-medium text-white/40 tracking-tight"
-                >
-                  {Math.round(progress)}%
-                </motion.span>
-              </div>
-            </div>
           </div>
           
           {/* Subtle Ambient Glows */}
           <div className="absolute inset-0 pointer-events-none">
-             <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#57AD43]/10 blur-[150px] rounded-full opacity-50" />
+             <motion.div 
+               animate={{
+                 opacity: [0.3, 0.6, 0.3],
+                 scale: [1, 1.2, 1],
+               }}
+               transition={{
+                 duration: 4,
+                 repeat: Infinity,
+                 ease: "easeInOut"
+               }}
+               className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#57AD43]/10 blur-[150px] rounded-full" 
+             />
              <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent" />
           </div>
         </motion.div>
