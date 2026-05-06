@@ -84,12 +84,6 @@ export default function AboutUsPage() {
                 As the business flourished, the next generation stepped in. Manoj Gupta, his son, joined the company and, by the late 1990s, expanded operations into knitted fabrics, exports, dyeing, and knitting units, transforming the company into a fully integrated textile powerhouse.
               </p>
             </div>
-            <div>
-              <h3 className="text-2xl font-black text-black mb-4 uppercase tracking-tighter">A New Chapter with Texongo</h3>
-              <p className="text-sm font-medium text-gray-500 leading-relaxed">
-                In 2017, Aman Gupta took the helm, bringing a fresh perspective and technological innovation. Recognizing the challenges of fabric sourcing, he launched Texongo, a pioneering platform designed to simplify fabric procurement through curated swatches and a unique subscription-based model. Today, Texongo serves 150+ brands and 50+ export & buying houses, making fabric sourcing more efficient and hassle-free.
-              </p>
-            </div>
           </motion.div>
           <div className="order-1 lg:order-2 space-y-6">
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl group">
@@ -107,27 +101,46 @@ export default function AboutUsPage() {
           </div>
         </section>
 
-        {/* Section 3: Commitment */}
+        {/* Section 3: A New Chapter */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <motion.div {...fadeIn} className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl">
-            <img 
-              src="https://i.postimg.cc/vZm5xzFP/new-one.png" 
-              alt="Our Commitment" 
-              className="w-full h-full object-cover transition-all duration-700"
-            />
-          </motion.div>
+          <div className="space-y-6">
+            <motion.div {...fadeIn} className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl group">
+              <img 
+                src="https://i.postimg.cc/vZm5xzFP/new-one.png" 
+                alt="Aman Gupta" 
+                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </motion.div>
+            <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.1 }} className="text-center md:text-left space-y-1 px-4">
+              <h3 className="text-2xl font-black text-black uppercase tracking-tighter">Aman Gupta</h3>
+              <p className="text-[#57AD43] font-bold text-xs uppercase tracking-[0.3em]">Managing Director</p>
+            </motion.div>
+          </div>
           <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="space-y-8">
-            <h2 className="text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">Our Commitment</h2>
-            <div className="space-y-4">
-              <p className="text-sm font-medium text-gray-500 leading-relaxed">
+            <h2 className="text-4xl md:text-5xl font-black text-black mb-6 tracking-tight uppercase">A New Chapter with Texongo</h2>
+            <p className="text-sm font-medium text-gray-500 leading-relaxed">
+              In 2017, Aman Gupta took the helm, bringing a fresh perspective and technological innovation. Recognizing the challenges of fabric sourcing, he launched Texongo, a pioneering platform designed to simplify fabric procurement through curated swatches and a unique subscription-based model. Today, Texongo serves 150+ brands and 50+ export & buying houses, making fabric sourcing more efficient and hassle-free.
+            </p>
+          </motion.div>
+        </section>
+
+        {/* Section 4: Commitment (Text Only) */}
+        <section className="max-w-4xl mx-auto">
+          <motion.div {...fadeIn} className="space-y-8">
+            <h2 className="text-4xl md:text-5xl font-black text-black mb-10 tracking-tight text-center uppercase">Our Commitment</h2>
+            <div className="space-y-6">
+              <p className="text-lg font-medium text-gray-600 leading-relaxed text-center">
                 At Syndicate Cloth House Pvt. Ltd. & Texongo, we believe in more than just business—we believe in relationships, reliability, and continuous innovation. Our commitment extends beyond providing high-quality fabrics; we strive to deliver an exceptional customer experience by offering transparency, efficiency, and personalized solutions tailored to our clients' needs.
               </p>
-              <p className="text-sm font-medium text-gray-500 leading-relaxed">
+              <p className="text-lg font-medium text-gray-600 leading-relaxed text-center">
                 We understand that the textile industry is ever-evolving, and we embrace change by integrating technology, sustainability, and creative sourcing methods to stay ahead. Our goal is to bridge the gap between traditional textile trading and modern digital solutions, ensuring that our clients have access to the best fabrics with unmatched ease and convenience.
               </p>
-              <p className="text-sm font-bold text-black border-l-4 border-[#57AD43] pl-6 italic leading-relaxed py-2">
-                With a legacy built on trust and a future driven by technology, we continue to redefine fabric sourcing for the modern era.
-              </p>
+              <div className="pt-8">
+                <p className="text-xl font-bold text-black border-l-4 border-[#57AD43] pl-8 italic leading-relaxed py-4 bg-gray-50 rounded-r-2xl shadow-sm">
+                  With a legacy built on trust and a future driven by technology, we continue to redefine fabric sourcing for the modern era.
+                </p>
+              </div>
             </div>
           </motion.div>
         </section>
