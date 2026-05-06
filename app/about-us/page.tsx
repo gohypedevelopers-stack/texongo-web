@@ -111,7 +111,7 @@ export default function AboutUsPage() {
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div {...fadeIn} className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl">
             <img 
-              src="/category/fabric-single-jersey.png" 
+              src="https://i.postimg.cc/vZm5xzFP/new-one.png" 
               alt="Our Commitment" 
               className="w-full h-full object-cover transition-all duration-700"
             />
