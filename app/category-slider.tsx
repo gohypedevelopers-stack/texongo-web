@@ -145,7 +145,7 @@ export function CategorySlider() {
               <Link href={card.href} className={styles.categoryCardLink}>
                 <div className={styles.categoryCardVisual}>
                   <img
-                    src={card.image || null}
+                    src={card.image || undefined}
                     alt={`${card.title} fabric texture`}
                     className={styles.categoryFabricImage}
                     draggable={false}
