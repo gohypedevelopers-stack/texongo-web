@@ -122,7 +122,7 @@ function MarqueeProductCard({
     >
       <div className={`${styles.productVisual} relative overflow-hidden bg-[#f5f3f0]`}>
         <img
-          src={image}
+          src={image || null}
           alt={name}
           loading="lazy"
           decoding="async"
@@ -377,7 +377,7 @@ function SustainableBlendSection() {
                   className="h-32 md:h-48 flex flex-col items-center justify-center w-full group"
                 >
                   <img
-                    src={logo.src}
+                    src={logo.src || null}
                     alt={logo.name}
                     className={`max-h-24 md:max-h-36 max-w-full object-contain transition-all duration-500 ${activeIndex === (i % baseLogos.length) ? 'scale-110 grayscale-0 opacity-100' : 'scale-90 grayscale opacity-40 group-hover:opacity-60'}`}
                   />
@@ -753,7 +753,7 @@ function ProductCatalogSection() {
                 <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
                   <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
                     <img
-                      src={p.image}
+                      src={p.image || null}
                       alt={p.name}
                       loading="lazy"
                       decoding="async"
@@ -796,7 +796,7 @@ function ProductCatalogSection() {
                 <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
                   <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
                     <img
-                      src={p.image}
+                      src={p.image || null}
                       alt={p.name}
                       loading="lazy"
                       decoding="async"
@@ -866,7 +866,7 @@ function BlogSection() {
               className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-black/5 flex flex-col h-full"
             >
               <div className="aspect-[16/10] overflow-hidden relative">
-                <img src={b.image} alt={b.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                <img src={b.image || null} alt={b.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
               </div>
               <div className="p-10 space-y-6 flex flex-col flex-1">
                 <span className="inline-block bg-[#007bff] text-white text-[9px] font-black px-4 py-1.5 rounded-sm uppercase tracking-widest w-fit shadow-md">

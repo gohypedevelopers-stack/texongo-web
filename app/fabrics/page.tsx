@@ -1,14 +1,19 @@
 "use client";
 
 import { FabricCard } from "../../components/ui/fabric-card";
-import { ChevronDown, Filter, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ChevronDown, Filter, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useState, useMemo } from "react";
 import { Fabric, mapShopifyProduct } from "@/lib/shopify";
+
+const ITEMS_PER_PAGE = 12;
 
 export default function FabricsListingPage() {
   const [fabrics, setFabrics] = useState<Fabric[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Filter States
   const [selectedGsm, setSelectedGsm] = useState<string>("");
@@ -37,37 +42,56 @@ export default function FabricsListingPage() {
     fetchProducts();
   }, []);
 
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedGsm, selectedColor, sortBy]);
+
   // Derived Data
   const gsmOptions = ["All GSM", "Light (<200)", "Medium (200-300)", "Heavy (>300)"];
   
-  const colorOptions = ["All Colors", ...Array.from(new Set(fabrics.map(f => f.shade).filter((val): val is string => !!val && val !== 'N/A')))].sort();
+  const colorOptions = useMemo(() => {
+    return ["All Colors", ...Array.from(new Set(fabrics.map(f => f.shade).filter((val): val is string => !!val && val !== 'N/A')))].sort();
+  }, [fabrics]);
 
   const sortOptions = ["Latest Selection", "Price: Low to High", "Price: High to Low", "GSM: Low to High"];
 
   // Filtering & Sorting Logic
-  const filteredFabrics = fabrics
-    .filter(f => {
-      const rawValue = typeof f.gsm === 'string' ? f.gsm : '';
-      const rawGsm = parseInt(rawValue.replace(/[^0-9]/g, ''));
-      const gsmMatch = !selectedGsm || selectedGsm === "All GSM" || (() => {
-        if (isNaN(rawGsm)) return false;
-        if (rawGsm < 200) return selectedGsm === "Light (<200)";
-        if (rawGsm <= 300) return selectedGsm === "Medium (200-300)";
-        return selectedGsm === "Heavy (>300)";
-      })();
-      const colorMatch = !selectedColor || selectedColor === "All Colors" || f.shade === selectedColor;
-      return gsmMatch && colorMatch;
-    })
-    .sort((a, b) => {
-      if (sortBy === "Price: Low to High") return parseFloat(a.price) - parseFloat(b.price);
-      if (sortBy === "Price: High to Low") return parseFloat(b.price) - parseFloat(a.price);
-      if (sortBy === "GSM: Low to High") {
-        const gsmA = parseInt(a.gsm.replace(/[^0-9]/g, '')) || 0;
-        const gsmB = parseInt(b.gsm.replace(/[^0-9]/g, '')) || 0;
-        return gsmA - gsmB;
-      }
-      return 0; // Latest Selection is default order from API
-    });
+  const filteredFabrics = useMemo(() => {
+    return fabrics
+      .filter(f => {
+        const rawValue = typeof f.gsm === 'string' ? f.gsm : '';
+        const rawGsm = parseInt(rawValue.replace(/[^0-9]/g, ''));
+        const gsmMatch = !selectedGsm || selectedGsm === "All GSM" || (() => {
+          if (isNaN(rawGsm)) return false;
+          if (rawGsm < 200) return selectedGsm === "Light (<200)";
+          if (rawGsm <= 300) return selectedGsm === "Medium (200-300)";
+          return selectedGsm === "Heavy (>300)";
+        })();
+        const colorMatch = !selectedColor || selectedColor === "All Colors" || f.shade === selectedColor;
+        return gsmMatch && colorMatch;
+      })
+      .sort((a, b) => {
+        if (sortBy === "Price: Low to High") return parseFloat(a.price) - parseFloat(b.price);
+        if (sortBy === "Price: High to Low") return parseFloat(b.price) - parseFloat(a.price);
+        if (sortBy === "GSM: Low to High") {
+          const gsmA = parseInt(a.gsm.replace(/[^0-9]/g, '')) || 0;
+          const gsmB = parseInt(b.gsm.replace(/[^0-9]/g, '')) || 0;
+          return gsmA - gsmB;
+        }
+        return 0; // Latest Selection is default order from API
+      });
+  }, [fabrics, selectedGsm, selectedColor, sortBy]);
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredFabrics.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedFabrics = filteredFabrics.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 400, behavior: 'smooth' });
+  };
 
   return (
     <main className="min-h-screen bg-white">
@@ -156,7 +180,7 @@ export default function FabricsListingPage() {
                 Retry
               </button>
             </div>
-          ) : filteredFabrics.length === 0 ? (
+          ) : paginatedFabrics.length === 0 ? (
             <div className="flex flex-col items-center justify-center min-h-[400px] w-full gap-6 text-center">
               <p className="text-xl font-black uppercase tracking-tighter text-gray-300">No matches found for these filters</p>
               <button
@@ -167,26 +191,65 @@ export default function FabricsListingPage() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 mt-16">
-              {filteredFabrics.map((fabric) => (
-                <FabricCard
-                  key={fabric.id}
-                  id={fabric.id}
-                  name={fabric.name}
-                  price={fabric.price}
-                  gsm={fabric.gsm}
-                  image={fabric.image}
-                />
-              ))}
-            </div>
-          )}
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 mt-16">
+                {paginatedFabrics.map((fabric) => (
+                  <FabricCard
+                    key={fabric.id}
+                    id={fabric.id}
+                    name={fabric.name}
+                    price={fabric.price}
+                    gsm={fabric.gsm}
+                    image={fabric.image}
+                  />
+                ))}
+              </div>
 
-          {/* Pagination */}
-          {filteredFabrics.length > 20 && (
-            <div className="flex justify-center items-center gap-2 mt-24 mb-12">
-              <PaginationButton label="1" active />
-              <PaginationButton isNext />
-            </div>
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-3 mt-24 mb-12">
+                  <button
+                    onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                    disabled={currentPage === 1}
+                    className="h-10 w-10 flex items-center justify-center rounded-sm border border-gray-100 text-gray-400 hover:border-black hover:text-black transition-all disabled:opacity-30 disabled:hover:border-gray-100 disabled:hover:text-gray-400"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(p => {
+                      // Show first page, last page, and pages around current page
+                      return p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1;
+                    })
+                    .map((page, index, array) => {
+                      const showEllipsis = index > 0 && page - array[index - 1] > 1;
+                      return (
+                        <div key={page} className="flex items-center gap-3">
+                          {showEllipsis && <span className="text-gray-300">...</span>}
+                          <button
+                            onClick={() => handlePageChange(page)}
+                            className={`h-10 w-10 flex items-center justify-center text-[11px] font-black transition-all rounded-sm border ${
+                              currentPage === page
+                                ? "bg-black text-white border-black"
+                                : "bg-white text-gray-400 border-gray-100 hover:border-black hover:text-black"
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        </div>
+                      );
+                    })}
+
+                  <button
+                    onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                    disabled={currentPage === totalPages}
+                    className="h-10 w-10 flex items-center justify-center rounded-sm border border-gray-100 text-gray-400 hover:border-black hover:text-black transition-all disabled:opacity-30 disabled:hover:border-gray-100 disabled:hover:text-gray-400"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </main>
@@ -265,18 +328,5 @@ function SortDropdown({ label, options, onSelect }: { label: string, options: st
         </div>
       )}
     </div>
-  );
-}
-
-function PaginationButton({ label, active, isNext }: { label?: string, active?: boolean, isNext?: boolean }) {
-  return (
-    <button
-      className={`h-10 w-10 flex items-center justify-center text-[11px] font-black transition-all rounded-sm border ${active
-          ? "bg-black text-white border-black"
-          : "bg-white text-gray-400 border-gray-100 hover:border-black hover:text-black"
-        }`}
-    >
-      {isNext ? "→" : label}
-    </button>
   );
 }

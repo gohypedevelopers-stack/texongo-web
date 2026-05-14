@@ -17,6 +17,14 @@ interface FabricCardProps {
     scatterPos: { x: number; y: number; r: number };
 }
 
+const FALLBACK_IMAGES = [
+    "/placeholders/cotton.png",
+    "/placeholders/viscose.png",
+    "/placeholders/linen.png",
+    "/placeholders/wool.png",
+    "/placeholders/silk.png",
+];
+
 // --- Optimized FabricCard Component ---
 const FabricCard = React.memo(({
     src,
@@ -101,7 +109,7 @@ const FabricCard = React.memo(({
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
             >
                 <img
-                    src={src}
+                    src={src || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]}
                     alt={label}
                     className="h-full w-full object-cover transform-gpu"
                     loading="lazy"
