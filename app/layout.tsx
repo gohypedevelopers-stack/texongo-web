@@ -10,7 +10,7 @@ import { Preloader } from "../components/ui/preloader";
 const roboto = Roboto({
   subsets: ["latin"],
   variable: "--font-sans",
-  weight: ["400", "500", "700", "900"],
+  weight: ["300", "400", "500", "700", "900"],
   display: "swap",
 });
 

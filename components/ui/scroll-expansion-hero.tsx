@@ -111,16 +111,16 @@ const ScrollExpandMedia = ({
                 }}
               >
                 {mediaType === 'video' ? (
-                  <video 
-                    src={mediaSrc} 
-                    poster={posterSrc} 
-                    autoPlay 
-                    muted 
-                    loop 
-                    playsInline 
-                    preload="auto" 
-                    {...{ fetchPriority: "high" }} 
-                    className='w-full h-full object-cover' 
+                  <video
+                    src={mediaSrc}
+                    poster={posterSrc}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                    {...{ fetchPriority: "high" }}
+                    className='w-full h-full object-cover'
                   />
                 ) : (
                   <Image src={mediaSrc} alt={title || ''} fill className='object-cover' priority />

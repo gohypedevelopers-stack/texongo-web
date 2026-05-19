@@ -435,7 +435,7 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
             <h2 className="text-2xl md:text-4xl font-black mb-6 md:mb-8 tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
             <p className="text-base md:text-xl text-[#475467] font-medium leading-relaxed">
               Texongo combines traditional craftsmanship with cutting-edge 3D visualization.
-              Our digital-first approach allows designers to experience the texture, drape,
+              <br />Our digital-first approach allows designers to experience the texture, drape,
               and movement of high-performance textiles before the first thread is even woven.
             </p>
           </div>

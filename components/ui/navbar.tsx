@@ -182,7 +182,7 @@ export function Navbar() {
                       onMouseLeave={() => setHoveredItem(null)}
                     >
                       {item.href === "#" ? (
-                        <span className="group relative flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-black transition-colors h-full cursor-default">
+                        <span className="group relative flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-black transition-colors h-full cursor-default">
                           {item.name}
                           {(item.dropdown || item.megaMenu) && (
                             <ChevronDown
@@ -195,7 +195,7 @@ export function Navbar() {
                       ) : (
                         <Link
                           href={item.href}
-                          className={`group relative flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 text-black h-full`}
+                          className={`group relative flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.15em] transition-all duration-300 text-black h-full`}
                         >
                           {item.name}
                           {(item.dropdown || item.megaMenu) && (
@@ -245,7 +245,7 @@ export function Navbar() {
                                     className="flex flex-col gap-6 p-10 hover:bg-gray-50/50 transition-colors duration-300"
                                   >
                                     <div className="space-y-1.5">
-                                      <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-black flex items-center gap-2">
+                                      <h3 className="text-[13px] font-medium uppercase tracking-[0.2em] text-black flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#57AD43] rounded-full"></span>
                                         {category.title}
                                       </h3>
@@ -257,7 +257,7 @@ export function Navbar() {
                                         <li key={subItem} className="group/item">
                                           <Link
                                             href={`/fabrics?category=${subItem.toLowerCase().replace(/ /g, '-')}`}
-                                            className="group/link relative text-[10px] font-bold text-gray-400 hover:text-[#57AD43] transition-all flex items-center py-1"
+                                            className="group/link relative text-[12px] font-normal text-gray-400 hover:text-[#57AD43] transition-all flex items-center py-1"
                                           >
                                             <span>{subItem}</span>
                                             <span className="absolute bottom-[-4px] left-0 w-0 h-[1.5px] bg-[#57AD43] group-hover/link:w-full transition-all duration-500 ease-out" />
@@ -434,7 +434,7 @@ export function Navbar() {
                                   <div className="pl-4 py-4 space-y-6">
                                     {item.megaMenu.map((cat) => (
                                       <div key={cat.title}>
-                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-black mb-3">
+                                        <h4 className="text-[12px] font-black uppercase tracking-widest text-black mb-3">
                                           {cat.title}
                                         </h4>
                                         <ul className="grid grid-cols-2 gap-y-2 gap-x-4">
@@ -442,7 +442,7 @@ export function Navbar() {
                                             <li key={sub}>
                                               <Link
                                                 href={`/fabrics?category=${sub.toLowerCase().replace(/ /g, '-')}`}
-                                                className="text-[10px] font-bold text-gray-400"
+                                                className="text-[12px] font-bold text-gray-400"
                                                 onClick={() => setIsMobileMenuOpen(false)}
                                               >
                                                 {sub}

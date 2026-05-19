@@ -56,7 +56,8 @@ select {
   color: #f6f1e7;
 }
 
-html.lenis, html.lenis body {
+html.lenis,
+html.lenis body {
   height: auto;
 }
 
@@ -91,9 +92,9 @@ html.lenis, html.lenis body {
   color: #374151;
 }
 
-.blog-content h1, 
-.blog-content h2, 
-.blog-content h3, 
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
 .blog-content h4 {
   color: #111111;
   font-weight: 900;
@@ -103,8 +104,13 @@ html.lenis, html.lenis body {
   margin-bottom: 1rem;
 }
 
-.blog-content h2 { font-size: 1.875rem; }
-.blog-content h3 { font-size: 1.5rem; }
+.blog-content h2 {
+  font-size: 1.875rem;
+}
+
+.blog-content h3 {
+  font-size: 1.5rem;
+}
 
 .blog-content p {
   margin-bottom: 1.5rem;
@@ -121,7 +127,8 @@ html.lenis, html.lenis body {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-.blog-content ul, .blog-content ol {
+.blog-content ul,
+.blog-content ol {
   margin-bottom: 1.5rem;
   padding-left: 1.5rem;
 }
@@ -145,7 +152,7 @@ html.lenis, html.lenis body {
   font-size: 17px;
 }
 
-.blog-content-v3 h2, 
+.blog-content-v3 h2,
 .blog-content-v3 h3 {
   color: #121212;
   font-weight: 900;
@@ -156,14 +163,20 @@ html.lenis, html.lenis body {
   line-height: 1.1;
 }
 
-.blog-content-v3 h2 { font-size: 28px; }
-.blog-content-v3 h3 { font-size: 22px; }
+.blog-content-v3 h2 {
+  font-size: 28px;
+}
+
+.blog-content-v3 h3 {
+  font-size: 22px;
+}
 
 .blog-content-v3 p {
   margin-bottom: 1.75rem;
 }
 
-.blog-content-v3 ul, .blog-content-v3 ol {
+.blog-content-v3 ul,
+.blog-content-v3 ol {
   margin-bottom: 2rem;
   padding-left: 1.5rem;
 }
@@ -187,7 +200,7 @@ html.lenis, html.lenis body {
 .blog-content-v3 img {
   border-radius: 4px;
   margin: 3.5rem 0;
-  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
 }
 
 /* Homepage Headings Override for Premium Bold and Title Case Aesthetic */
@@ -208,7 +221,7 @@ p {
   color: #000000 !important;
 }
 
-/* Preserve light text in dark backgrounds (e.g. Testimonials, Hero overlay, Footer) */
+/* Preserve light text in dark backgrounds (e.g. Testimonials, Hero overlay, Footer) and white/light class paragraphs */
 .bg-black p,
 .bg-brand-black p,
 .text-white p,
@@ -216,18 +229,29 @@ p {
 .text-white\/60 p,
 [class*="bg-black"] p,
 [class*="text-white"] p,
-[class*="bg-brand-black"] p {
+[class*="bg-brand-black"] p,
+p.text-white,
+p[class*="text-white"] {
   color: #ffffff !important;
 }
 
-/* Preserve button and badges style rules that should be bold */
+/* Preserve explicit font weight classes on paragraphs */
 p.font-bold,
-p.font-semibold,
-p.font-black,
-p[class*="font-bold"],
-p[class*="font-semibold"],
-p[class*="font-black"] {
-  font-weight: inherit !important;
+p[class*="font-bold"] {
+  font-weight: 700 !important;
 }
 
+p.font-semibold,
+p[class*="font-semibold"] {
+  font-weight: 600 !important;
+}
 
+p.font-black,
+p[class*="font-black"] {
+  font-weight: 900 !important;
+}
+
+p.font-medium,
+p[class*="font-medium"] {
+  font-weight: 500 !important;
+}
