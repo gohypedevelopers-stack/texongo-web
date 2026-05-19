@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat, Roboto } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "../components/ui/navbar";
 import { Footer } from "../components/ui/footer";
@@ -7,16 +7,9 @@ import { CartDrawer } from "@/components/ui/cart-drawer";
 import { Preloader } from "../components/ui/preloader";
 
 
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
 const roboto = Roboto({
   subsets: ["latin"],
-  variable: "--font-display",
+  variable: "--font-sans",
   weight: ["400", "500", "700", "900"],
   display: "swap",
 });
@@ -32,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${roboto.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${roboto.variable}`} suppressHydrationWarning>
       <body
         className="min-h-screen bg-[#F9FAFB] text-[#111111] antialiased"
         suppressHydrationWarning

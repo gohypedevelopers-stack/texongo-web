@@ -261,7 +261,7 @@ function SustainableBlendSection() {
   const logos = [...baseLogos, ...baseLogos, ...baseLogos, ...baseLogos, ...baseLogos, ...baseLogos];
 
   return (
-    <section className="py-16 md:py-24 bg-white border-b border-black/5 overflow-hidden">
+    <section className="py-12 md:py-16 bg-white border-b border-black/5 overflow-hidden">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-8 md:mb-16 text-center">
         <h2 className="text-2xl md:text-5xl font-black tracking-tight text-[#111111]">Sustainable Brand</h2>
       </div>
@@ -324,7 +324,7 @@ function TestimonialsSection() {
   ];
 
   return (
-    <section className="relative py-28 overflow-hidden bg-black text-white">
+    <section className="relative py-12 md:py-16 overflow-hidden bg-black text-white">
       {/* Background Image with Dark Overlay */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -509,7 +509,7 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
 
         {/* ── NEW ARRIVALS ─────────────────────────────────── */}
         <LazySection>
-          <section id="menswear" className="py-16 md:py-24 bg-white border-y border-black/5">
+          <section id="menswear" className="py-12 md:py-16 bg-white border-y border-black/5">
             <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
               <div className="relative mb-10 md:mb-16 w-full">
                 <div className="text-center">
@@ -623,7 +623,7 @@ function ProductCatalogSection() {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-white border-b border-black/5 overflow-hidden">
+    <section className="py-12 md:py-16 bg-white border-b border-black/5 overflow-hidden">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-8 md:mb-16 text-center">
         <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">Collection</span>
         <h2 className="text-2xl md:text-5xl font-black tracking-tight text-[#111111]">Product Catalog</h2>
@@ -750,7 +750,7 @@ function BlogSection() {
   ];
 
   return (
-    <section className="py-28 bg-[#F9FAFB]">
+    <section className="py-12 md:py-16 bg-[#F9FAFB]">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
         <div className="flex flex-col items-center mb-20">
           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Latest Insights</span>

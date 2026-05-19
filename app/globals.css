@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-sans);
 }
 
 :root {
@@ -11,6 +12,7 @@
   --brand-green: #57AD43;
   --brand-green-light: #61CE70;
   --text-secondary: #475467;
+  --font-display: var(--font-sans);
 }
 
 * {
@@ -199,4 +201,33 @@ html.lenis, html.lenis body {
   text-transform: capitalize !important;
   letter-spacing: -0.01em !important;
 }
+
+/* Global paragraph styling overrides */
+p {
+  font-weight: 400 !important;
+  color: #000000 !important;
+}
+
+/* Preserve light text in dark backgrounds (e.g. Testimonials, Hero overlay, Footer) */
+.bg-black p,
+.bg-brand-black p,
+.text-white p,
+.text-white\/80 p,
+.text-white\/60 p,
+[class*="bg-black"] p,
+[class*="text-white"] p,
+[class*="bg-brand-black"] p {
+  color: #ffffff !important;
+}
+
+/* Preserve button and badges style rules that should be bold */
+p.font-bold,
+p.font-semibold,
+p.font-black,
+p[class*="font-bold"],
+p[class*="font-semibold"],
+p[class*="font-black"] {
+  font-weight: inherit !important;
+}
+
 

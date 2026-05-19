@@ -42,7 +42,7 @@ const Card: FC<iCardProps> = ({
   const isEven = i % 2 === 0;
 
   return (
-    <div ref={container} className="relative w-full h-[85vh] lg:h-[90vh] sticky top-0 overflow-hidden bg-white flex items-center justify-center border-b border-black/5 transform-gpu">
+    <div ref={container} className="relative w-full h-[65vh] lg:h-[60vh] sticky top-[10vh] lg:top-[15vh] overflow-hidden bg-white flex items-center justify-center border-b border-black/5 transform-gpu">
 
       {/* 1. Large Faint Background Marquee (z-10) */}
       <div className="absolute inset-0 z-10 flex items-center pointer-events-none select-none overflow-hidden hidden lg:flex">
@@ -68,7 +68,7 @@ const Card: FC<iCardProps> = ({
       <div className="relative w-full h-full max-w-[1440px] px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 xl:gap-16 pt-12 lg:pt-0">
 
         {/* Media Block (Alternating order on desktop) */}
-        <div className={`relative z-0 w-full lg:w-[45%] h-[40vh] lg:h-[70vh] flex items-center justify-center overflow-hidden bg-white group transition-transform duration-500 ${isEven ? 'lg:order-1' : 'lg:order-2 lg:-translate-x-16'}`}>
+        <div className={`relative z-0 w-full lg:w-[45%] h-[30vh] lg:h-[50vh] flex items-center justify-center overflow-hidden bg-white group transition-transform duration-500 ${isEven ? 'lg:order-1' : 'lg:order-2 lg:-translate-x-16'}`}>
           {videoUrl ? (
             <LazyVideo
               src={videoUrl}
@@ -124,10 +124,10 @@ interface iCardSlideProps {
 
 export const CardsParallax: FC<iCardSlideProps> = ({ items }) => {
   const container = useRef(null);
-  const [mt, setMt] = useState(90);
+  const [mt, setMt] = useState(70);
 
   useEffect(() => {
-    if (window.innerWidth < 1024) setMt(100);
+    if (window.innerWidth < 1024) setMt(80);
   }, []);
 
   const { scrollYProgress } = useScroll({
