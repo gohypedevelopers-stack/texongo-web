@@ -18,15 +18,12 @@ export default async function BlogListingPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero Banner Section (Subtitle/Breadcrumb Feel) */}
-      <section className="py-20 bg-gray-50 border-b border-gray-100">
+      <section className="pt-32 pb-16 md:pt-40 md:pb-20 bg-gray-50 border-b border-gray-100">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10 text-center">
-          <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-[#121212]">
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Latest Insights</span>
+          <h1 className="text-3xl md:text-6xl font-bold tracking-tight text-[#121212]">
             Our Blog
           </h1>
-          <p className="mt-6 text-sm font-bold text-gray-400 uppercase tracking-widest">
-            Latest Industry Insights & Textile Innovation
-          </p>
         </div>
       </section>
 

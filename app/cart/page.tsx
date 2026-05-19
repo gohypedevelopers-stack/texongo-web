@@ -71,7 +71,8 @@ export default function CartPage() {
           <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8">
             <ShoppingBag size={40} className="text-gray-300" />
           </div>
-          <h1 className="text-3xl font-black uppercase tracking-tighter mb-4">Your bag is empty</h1>
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Your Selection</span>
+          <h1 className="text-3xl md:text-6xl font-bold tracking-tight mb-4">Your Bag Is Empty</h1>
           <p className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-10">Start adding some premium fabrics to your collection.</p>
           <Link 
             href="/fabrics" 
@@ -87,13 +88,19 @@ export default function CartPage() {
   return (
     <main className="min-h-screen bg-gray-50/50 pb-32">
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10 pt-16">
+        
+        {/* Centered Page Title */}
+        <div className="text-center mb-16">
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Your Selection</span>
+          <h1 className="text-3xl md:text-6xl font-bold tracking-tight">Your Bag</h1>
+        </div>
+
         <div className="flex flex-col lg:flex-row gap-16">
           
           {/* Left: Items List */}
           <div className="flex-1">
-            <div className="flex items-center justify-between mb-12">
-              <h1 className="text-4xl font-black uppercase tracking-tighter">Your Bag</h1>
-              <span className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em]">{getItemCount()} Items</span>
+            <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
+              <span className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em]">{getItemCount()} Items In Bag</span>
             </div>
 
             <div className="space-y-8">

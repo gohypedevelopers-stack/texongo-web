@@ -104,11 +104,11 @@ export default function FabricsListingPage() {
           className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-        <div className="relative z-10 text-center px-6">
-           <span className="text-[10px] font-black uppercase tracking-[0.6em] text-[#57AD43] mb-4 block">Exquisite Curation</span>
-           <h1 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none">
-              KNIT <span className="text-[#57AD43]">STYLE</span>
-           </h1>
+         <div className="relative z-10 text-center px-6">
+           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Exquisite Curation</span>
+            <h1 className="text-3xl md:text-6xl font-bold tracking-tight leading-none text-white">
+              Knit <span className="text-[#57AD43]">Style</span>
+            </h1>
         </div>
       </section>
 
@@ -116,7 +116,8 @@ export default function FabricsListingPage() {
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-12 relative z-[100]">
         <div className="flex flex-col items-center gap-12 text-center">
           <div className="space-y-4">
-            <h2 className="text-4xl lg:text-7xl font-black uppercase tracking-tighter text-black">Curation <span className="text-[#57AD43]">Filters</span></h2>
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Curate Selection</span>
+            <h2 className="text-2xl md:text-5xl font-bold tracking-tight text-black">Curation <span className="text-[#57AD43]">Filters</span></h2>
             <div className="h-px bg-gray-100 w-24 mx-auto" />
           </div>
           

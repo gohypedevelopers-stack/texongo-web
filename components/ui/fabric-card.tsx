@@ -15,6 +15,34 @@ interface FabricCardProps {
   isNew?: boolean;
 }
 
+const FALLBACK_PRODUCT_IMAGES = [
+  "/arrivals/prod-cotton-spandex-interlock.png",
+  "/arrivals/prod-cotton-indigo-terry.png",
+  "/arrivals/prod-poly-viscose-spandex.png",
+  "/arrivals/prod-nylon-spandex.png",
+  "/arrivals/prod-slub-melange.png",
+  "/category/fabric-french-terry.png",
+  "/category/fabric-pique.png",
+  "/category/fabric-rib.png",
+  "/category/fabric-single-jersey.png",
+  "/category/fabric-waffle.png",
+  "/placeholders/cotton.png",
+  "/placeholders/viscose.png",
+  "/placeholders/linen.png",
+  "/placeholders/wool.png",
+  "/placeholders/silk.png"
+];
+
+function getFallbackImage(name: string, id: string) {
+  const str = name + id;
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % FALLBACK_PRODUCT_IMAGES.length;
+  return FALLBACK_PRODUCT_IMAGES[index];
+}
+
 export function FabricCard({ id, name, gsm, price, image }: FabricCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
@@ -27,9 +55,11 @@ export function FabricCard({ id, name, gsm, price, image }: FabricCardProps) {
       name,
       price: parseInt(price),
       gsm,
-      image
+      image: image && image !== "" ? image : getFallbackImage(name, id)
     });
   };
+
+  const finalImage = image && image !== "" ? image : getFallbackImage(name, id);
 
   return (
     <motion.div 
@@ -43,18 +73,12 @@ export function FabricCard({ id, name, gsm, price, image }: FabricCardProps) {
       <Link href={`/fabrics/${id}`} className="w-full">
         {/* Product Image Container */}
         <div className="relative aspect-[4/5] w-full overflow-hidden bg-gray-50 mb-6">
-          {image && image !== "" ? (
-            <Image
-              src={image}
-              alt={name}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-100">
-              <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">No Image</span>
-            </div>
-          )}
+          <Image
+            src={finalImage}
+            alt={name}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
           
           {/* GSM Badge */}
           <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[9px] font-black uppercase tracking-widest px-2 py-1 z-10">

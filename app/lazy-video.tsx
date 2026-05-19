@@ -5,13 +5,14 @@ interface LazyVideoProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
   src: string;
   /** How much of the video needs to be visible before it starts playing (0–1). Default: 0.15 */
   threshold?: number;
+  objectFit?: "cover" | "contain";
 }
 
 /**
  * A video that only loads + plays once it scrolls into view,
  * and pauses (saving CPU/GPU) when it scrolls out of view.
  */
-export function LazyVideo({ src, threshold = 0.15, style, className, ...props }: LazyVideoProps) {
+export function LazyVideo({ src, threshold = 0.15, objectFit = "cover", style, className, ...props }: LazyVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [videoSrc, setVideoSrc] = useState<string>("");
@@ -91,8 +92,8 @@ export function LazyVideo({ src, threshold = 0.15, style, className, ...props }:
 
   return (
     <div
-      className={`relative h-full w-full overflow-hidden bg-black/20 ${className || ""}`}
-      style={{ ...style, width: '100%', maxWidth: '100%', height: 'auto' }}
+      className={`relative h-full w-full overflow-hidden bg-white ${className || ""}`}
+      style={{ width: '100%', height: '100%', ...style }}
     >
       {isLoading && !error && !vimeoId && (
         <div className="absolute inset-0 flex items-center justify-center z-10 bg-white/5 backdrop-blur-sm">
@@ -109,11 +110,11 @@ export function LazyVideo({ src, threshold = 0.15, style, className, ...props }:
       {vimeoId ? (
         <iframe
           src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&muted=1&background=1&transparent=1`}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full"
           frameBorder="0"
           allow="autoplay; fullscreen; picture-in-picture"
           allowFullScreen
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: '100%', height: '100%', objectFit: objectFit }}
         ></iframe>
       ) : (
         <video
@@ -125,7 +126,7 @@ export function LazyVideo({ src, threshold = 0.15, style, className, ...props }:
           preload="metadata"
           onLoadedData={() => setIsLoading(false)}
           onError={handleVideoError}
-          className={`w-full h-full ${props.controls ? 'aspect-video' : 'object-cover'}`}
+          className="w-full h-full"
           style={{
             opacity: isLoading ? 0.01 : 1,
             transition: "opacity 0.6s ease-in-out",
@@ -133,6 +134,8 @@ export function LazyVideo({ src, threshold = 0.15, style, className, ...props }:
             width: '100%',
             maxWidth: '100%',
             height: props.controls ? 'auto' : '100%',
+            objectFit: objectFit,
+            backgroundColor: '#ffffff',
           }}
           {...props}
         >

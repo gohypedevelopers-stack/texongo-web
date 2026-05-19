@@ -188,3 +188,15 @@ html.lenis, html.lenis body {
   box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1);
 }
 
+/* Homepage Headings Override for Premium Bold and Title Case Aesthetic */
+.homepage-container h1,
+.homepage-container h2,
+.homepage-container h3,
+.homepage-container h4,
+.homepage-container h5,
+.homepage-container h6 {
+  font-weight: 700 !important;
+  text-transform: capitalize !important;
+  letter-spacing: -0.01em !important;
+}
+

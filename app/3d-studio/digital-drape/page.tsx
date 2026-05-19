@@ -306,14 +306,14 @@ export default function DigitalDrapePage() {
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-[10px] font-black uppercase tracking-[0.5em] text-[#57AD43] mb-4 block"
+          className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block"
         >
           3D Studio
         </motion.span>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-3xl md:text-5xl font-black uppercase tracking-[0.2em] mb-6"
+          className="text-3xl md:text-6xl font-bold tracking-tight mb-6"
         >
           Digital Drape
         </motion.h1>

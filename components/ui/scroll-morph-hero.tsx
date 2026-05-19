@@ -71,7 +71,8 @@ const FabricCard = React.memo(({
             const lineX = (direction === "clockwise" ? 1 : -1) * (initialLineX - (slideProgress * slideTarget));
 
             tx = tx * (1 - lineProgress) + lineX * lineProgress;
-            ty = ty * (1 - lineProgress);
+            const shiftY = isMobile ? -15 : -30;
+            ty = ty * (1 - lineProgress) + (shiftY * lineProgress);
             tr = tr * (1 - lineProgress);
             const maxCardH = isMobile ? 220 : 380;
             const safeTs = containerSize.h < maxCardH ? (containerSize.h / 140) * 0.8 : (isMobile ? 1.4 : 2.7);
@@ -112,7 +113,8 @@ const FabricCard = React.memo(({
                     src={src || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]}
                     alt={label}
                     className="h-full w-full object-cover transform-gpu"
-                    loading="lazy"
+                    loading="eager"
+                    {...{ fetchPriority: "high" }}
                     decoding="async"
                 />
 
@@ -216,14 +218,14 @@ export function IntroAnimation({ scrollProgress }: { scrollProgress: MotionValue
 
     return (
         <div ref={containerRef} className="relative w-full h-full bg-white overflow-hidden font-sans select-none transform-gpu">
-            <div className="flex h-full w-full items-center justify-center pt-10 md:pt-14">
+            <div className="flex h-full w-full items-center justify-center pt-12 md:pt-18">
 
                 {/* Showroom Header */}
                 <motion.div
                     style={{ opacity: arrowOpacity }}
-                    className="absolute top-24 left-0 w-full text-center z-20 pointer-events-none"
+                    className="absolute top-20 md:top-28 left-0 w-full text-center z-20 pointer-events-none px-6"
                 >
-                    <h2 className="text-xl md:text-3xl font-black text-black uppercase tracking-tight">Our Premium Knit Collection</h2>
+                    <h2 className="text-2xl md:text-5xl font-black text-black uppercase tracking-tight leading-tight">Our Premium Knit Collection</h2>
                 </motion.div>
 
 
@@ -302,14 +304,14 @@ export function BlendAnimation({ scrollProgress, products }: { scrollProgress: M
 
     return (
         <div ref={containerRef} className="relative w-full h-full bg-white overflow-hidden font-sans select-none transform-gpu">
-            <div className="flex h-full w-full items-center justify-center pt-10 md:pt-14">
+            <div className="flex h-full w-full items-center justify-center pt-12 md:pt-18">
 
                 {/* Showroom Header */}
                 <motion.div
                     style={{ opacity: arrowOpacity }}
-                    className="absolute top-24 left-0 w-full text-center z-20 pointer-events-none"
+                    className="absolute top-20 md:top-28 left-0 w-full text-center z-20 pointer-events-none px-6"
                 >
-                    <h2 className="text-xl md:text-3xl font-black text-black uppercase tracking-tight">Our Premium Blend Collection</h2>
+                    <h2 className="text-2xl md:text-5xl font-semibold text-black tracking-tight leading-tight">Our Premium Blend Collection</h2>
                 </motion.div>
 
 
@@ -318,7 +320,7 @@ export function BlendAnimation({ scrollProgress, products }: { scrollProgress: M
                     style={{ opacity: titleOpacity, y: titleY }}
                     className="absolute z-10 text-center pointer-events-none"
                 >
-                    <h1 className="text-5xl font-black tracking-tighter text-black md:text-7xl uppercase leading-[0.9] mb-6">
+                    <h1 className="text-5xl font-semibold tracking-tighter text-black md:text-7xl leading-[0.9] mb-6">
                         Choose Your <br />
                         <span className="text-[#57AD43]">Blend Style</span>
                     </h1>
@@ -326,7 +328,7 @@ export function BlendAnimation({ scrollProgress, products }: { scrollProgress: M
 
                 {/* Cards Layer */}
                 <div className="relative flex items-center justify-center w-full h-full perspective-1000 transform-gpu">
-                    {(products && products.length > 0 
+                    {(products && products.length > 0
                         ? (isMobile ? products.slice(0, 6) : products.slice(0, 10))
                         : (isMobile ? BLEND_DATA.slice(0, 6) : BLEND_DATA)
                     ).map((item, i) => (

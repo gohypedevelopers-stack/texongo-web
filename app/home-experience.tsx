@@ -102,17 +102,38 @@ const storyProducts = [
   },
 ];
 
+const FALLBACK_PRODUCT_IMAGES = [
+  "/arrivals/prod-cotton-spandex-interlock.png",
+  "/arrivals/prod-cotton-indigo-terry.png",
+  "/arrivals/prod-poly-viscose-spandex.png",
+  "/arrivals/prod-nylon-spandex.png",
+  "/arrivals/prod-slub-melange.png",
+  "/category/fabric-french-terry.png",
+  "/category/fabric-pique.png",
+  "/category/fabric-rib.png",
+  "/category/fabric-single-jersey.png",
+  "/category/fabric-waffle.png",
+  "/placeholders/cotton.png",
+  "/placeholders/viscose.png",
+  "/placeholders/linen.png",
+  "/placeholders/wool.png",
+  "/placeholders/silk.png"
+];
+
 function MarqueeProductCard({
   name,
   price,
   href,
   image,
+  index,
 }: {
   name: string;
   price: string;
   href: string;
   image: string;
+  index: number;
 }) {
+  const finalImage = image && image !== "" ? image : FALLBACK_PRODUCT_IMAGES[index % FALLBACK_PRODUCT_IMAGES.length];
   return (
     <a
       href={href}
@@ -122,7 +143,7 @@ function MarqueeProductCard({
     >
       <div className={`${styles.productVisual} relative overflow-hidden bg-[#f5f3f0]`}>
         <img
-          src={image || undefined}
+          src={finalImage}
           alt={name}
           loading="lazy"
           decoding="async"
@@ -228,13 +249,6 @@ function BlendStylesSection({ products }: { products?: Fabric[] }) {
 
 
 function SustainableBlendSection() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeftState, setScrollLeftState] = useState(0);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
   const baseLogos = [
     { name: "Banana Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Banana_f7269dad-a9d2-4553-8572-9fb18786d287_360x.webp", href: "https://texongo.com/product-category/sustainable-blends/banana-fabric/" },
     { name: "Supima", src: "https://texongo.com/wp-content/uploads/2025/12/Supiima_360x-1.webp", href: "https://texongo.com/product-category/blends/supima/" },
@@ -243,174 +257,40 @@ function SustainableBlendSection() {
     { name: "BCI Cotton", src: "https://texongo.com/wp-content/uploads/2025/12/BCI_a1b34c70-fc29-4342-9c45-a8f95375fa51_360x.webp", href: "https://texongo.com/product-category/sustainable-blends/organic-cotton/" },
   ];
 
-  const logos = [...baseLogos, ...baseLogos, ...baseLogos];
-
-  const scrollToLogo = (index: number) => {
-    if (scrollRef.current) {
-      const container = scrollRef.current;
-      const items = Array.from(container.children) as HTMLElement[];
-      const targetIndex = index + baseLogos.length;
-      const targetItem = items[targetIndex];
-      if (targetItem) {
-        const scrollLeft = targetItem.offsetLeft - (container.clientWidth / 2) + (targetItem.offsetWidth / 2);
-        container.scrollTo({
-          left: scrollLeft,
-          behavior: 'smooth'
-        });
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (isDragging || isPaused) return;
-
-    const interval = setInterval(() => {
-      setActiveIndex((current) => {
-        const next = (current + 1) % baseLogos.length;
-        scrollToLogo(next);
-        return next;
-      });
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [baseLogos.length, isPaused, isDragging]);
-
-  useEffect(() => {
-    setTimeout(() => scrollToLogo(activeIndex), 100);
-  }, []);
-
-  const handleScroll = () => {
-    if (scrollRef.current) {
-      const container = scrollRef.current;
-      const scrollCenterX = container.scrollLeft + container.clientWidth / 2;
-
-      const items = Array.from(container.children) as HTMLElement[];
-      let closestIndex = 0;
-      let minDistance = Infinity;
-
-      items.forEach((item, index) => {
-        const itemCenterX = item.offsetLeft + item.offsetWidth / 2;
-        const distance = Math.abs(scrollCenterX - itemCenterX);
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      const mappedIndex = closestIndex % baseLogos.length;
-      if (mappedIndex !== activeIndex) {
-        setActiveIndex(mappedIndex);
-      }
-    }
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!scrollRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - scrollRef.current.offsetLeft);
-    setScrollLeftState(scrollRef.current.scrollLeft);
-    scrollRef.current.style.scrollBehavior = 'auto';
-    scrollRef.current.style.scrollSnapType = 'none';
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !scrollRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX);
-    scrollRef.current.scrollLeft = scrollLeftState - walk;
-
-    // Update active index in real-time while dragging
-    handleScroll();
-  };
-
-  const handleMouseUpOrLeave = () => {
-    if (isDragging && scrollRef.current) {
-      setIsDragging(false);
-      scrollRef.current.style.scrollBehavior = 'smooth';
-      scrollRef.current.style.scrollSnapType = 'x mandatory';
-
-      handleScroll();
-      scrollToLogo(activeIndex);
-    }
-  };
+  // Repeat the logos enough times to create a seamless infinite scroll effect
+  const logos = [...baseLogos, ...baseLogos, ...baseLogos, ...baseLogos, ...baseLogos, ...baseLogos];
 
   return (
-    <section className="py-12 md:py-24 bg-white overflow-hidden">
-      <div className="mx-auto max-w-[1440px] px-6 lg:px-12 text-center">
-        <h2 className="text-2xl md:text-3xl font-bold mb-12 md:mb-20 tracking-tight text-black">Sustainable Brand</h2>
+    <section className="py-16 md:py-24 bg-white border-b border-black/5 overflow-hidden">
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-8 md:mb-16 text-center">
+        <h2 className="text-2xl md:text-5xl font-black tracking-tight text-[#111111]">Sustainable Brand</h2>
+      </div>
 
-        <div className="relative max-w-full mx-auto">
-          <div
-            ref={scrollRef}
-            onScroll={handleScroll}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUpOrLeave}
-            onMouseLeave={handleMouseUpOrLeave}
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseOut={() => !isDragging && setIsPaused(false)}
-            className={`flex items-center gap-8 md:gap-24 overflow-x-auto hide-scroll snap-x snap-mandatory px-6 md:px-[20%] pb-12 pt-4 transition-all duration-300 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
-            style={{ scrollSnapType: isDragging ? 'none' : 'x mandatory' }}
-          >
-            {logos.map((logo, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0.01, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "100px" }}
-                transition={{ duration: 0.4, delay: (i % baseLogos.length) * 0.05, ease: "easeOut" }}
-                onClick={(e) => {
-                  if (Math.abs(startX - (e.pageX - (scrollRef.current?.offsetLeft || 0))) > 5) {
-                    e.preventDefault();
-                    return;
-                  }
-                  setActiveIndex(i % baseLogos.length);
-                  scrollToLogo(i % baseLogos.length);
-                }}
-                className="flex flex-col items-center justify-center min-w-[200px] md:min-w-[280px] shrink-0 snap-center transition-all duration-300 cursor-pointer"
-              >
-                <a
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
+        <div className="-mx-6 lg:-mx-12 overflow-hidden">
+          <div className={styles.marqueeViewport}>
+            <div className={styles.productTrack} style={{ animationDuration: '35s' }}>
+              {logos.map((logo, idx) => (
+                <Link
+                  key={idx}
                   href={logo.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="h-32 md:h-48 flex flex-col items-center justify-center w-full group"
+                  className="w-[clamp(11rem,16vw,18rem)] shrink-0 group block"
                 >
-                  <img
-                    src={logo.src || undefined}
-                    alt={logo.name}
-                    className={`max-h-24 md:max-h-36 max-w-full object-contain transition-all duration-500 ${activeIndex === (i % baseLogos.length) ? 'scale-110 grayscale-0 opacity-100' : 'scale-90 grayscale opacity-40 group-hover:opacity-60'}`}
-                  />
-                  <span className={`text-[10px] md:text-xs font-black tracking-[0.3em] mt-8 uppercase transition-all duration-300 ${activeIndex === (i % baseLogos.length) ? 'text-black opacity-100' : 'text-black/20 opacity-40'}`}>
-                    {logo.name}
-                  </span>
-                </a>
-              </motion.div>
-            ))}
+                  <div className="aspect-square relative flex items-center justify-center p-8 transition-all duration-700">
+                    <img
+                      src={logo.src || undefined}
+                      alt={logo.name}
+                      loading="lazy"
+                      decoding="async"
+                      className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-1000"
+                    />
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
-
-
-          {/* Hidden left/right gradient overlaps (optional, based on design) */}
-          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none hidden md:block" />
-          <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none hidden md:block" />
-        </div>
-
-        {/* Pagination Dots (Points) */}
-        <div className="flex justify-center items-center gap-3 mt-4">
-          {baseLogos.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => {
-                setActiveIndex(i);
-                scrollToLogo(i);
-              }}
-              className={`h-1.5 transition-all duration-500 rounded-full cursor-pointer ${activeIndex === i
-                ? 'w-10 bg-black'
-                : 'w-1.5 bg-[#E5E5E5] hover:bg-black/40'
-                }`}
-              aria-label={`Go to slide ${i + 1}`}
-            />
-          ))}
         </div>
       </div>
     </section>
@@ -539,20 +419,20 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
 
   return (
     <ReactLenis root>
-      <main className="relative overflow-clip bg-[#F9FAFB] text-[#121212]">
+      <main className="homepage-container relative overflow-clip bg-[#F9FAFB] text-[#121212]">
         {/* ── HERO ─────────────────────────────────────────── */}
         <ScrollExpandMedia
           mediaType="video"
           mediaSrc="/video/new.mp4"
           bgImageSrc="/knit-fabric-hero.png"
-          title="PREMIUM KNITS"
-          date="COLLECTION 2026"
+          title="Premium Knits"
+          date="Collection 2026"
           scrollToExpand="Scroll to Explore"
           textBlend={true}
         >
           <div className="max-w-4xl mx-auto text-center pt-4 pb-4 px-6">
 
-            <h2 className="text-2xl md:text-4xl font-black mb-6 md:mb-8 uppercase tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
+            <h2 className="text-2xl md:text-4xl font-black mb-6 md:mb-8 tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
             <p className="text-base md:text-xl text-[#475467] font-medium leading-relaxed">
               Texongo combines traditional craftsmanship with cutting-edge 3D visualization.
               Our digital-first approach allows designers to experience the texture, drape,
@@ -631,16 +511,29 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
         <LazySection>
           <section id="menswear" className="py-16 md:py-24 bg-white border-y border-black/5">
             <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
-              <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-16 gap-6 md:gap-8 text-center md:text-left">
-                <div className="max-w-xl">
+              <div className="relative mb-10 md:mb-16 w-full">
+                <div className="text-center">
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">New Additions</span>
-                  <h2 className="text-3xl md:text-6xl font-black leading-none tracking-tight"> Fabric Collection.</h2>
+                  <h2 className="text-3xl md:text-6xl font-black leading-none tracking-tight">Fabric Collection.</h2>
                 </div>
-                <Link href="/fabrics" className="inline-block">
-                  <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
-                    View All Fabrics
-                  </p>
-                </Link>
+
+                {/* Right-aligned Link on desktop */}
+                <div className="absolute right-0 bottom-0 translate-y-1 hidden md:block">
+                  <Link href="/fabrics" className="inline-block">
+                    <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
+                      View All Fabrics
+                    </p>
+                  </Link>
+                </div>
+
+                {/* Centered on mobile */}
+                <div className="text-center mt-6 md:hidden">
+                  <Link href="/fabrics" className="inline-block">
+                    <p className="text-xs font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 cursor-pointer hover:text-[#57AD43] transition-colors">
+                      View All Fabrics
+                    </p>
+                  </Link>
+                </div>
               </div>
 
               <div className="-mx-6 lg:-mx-10 overflow-hidden">
@@ -655,6 +548,7 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
                       price={typeof product.price === 'string' ? (product.price.startsWith('₹') ? product.price : `₹${product.price}`) : `₹${product.price}`}
                       href={('href' in product && (product as any).href) ? (product as any).href : ('id' in product ? `/fabrics/${(product as any).id}` : '#')}
                       image={product.image}
+                      index={index}
                     />
                   ))}
                 </div>
@@ -730,16 +624,16 @@ function ProductCatalogSection() {
 
   return (
     <section className="py-16 md:py-24 bg-white border-b border-black/5 overflow-hidden">
-      <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-8 md:mb-16 text-center md:text-left">
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-8 md:mb-16 text-center">
+        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">Collection</span>
         <h2 className="text-2xl md:text-5xl font-black tracking-tight text-[#111111]">Product Catalog</h2>
       </div>
 
       <div className="space-y-20">
         {/* Row 1 - Women's Wear */}
         <div>
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-10 flex items-center justify-between">
+          <div className="mx-auto max-w-[1440px] px-[clamp(0.9rem,1.4vw,1.9rem)] mb-10 flex items-center justify-between">
             <div className="space-y-1">
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43]">Collection</span>
               <h3 className="text-xl md:text-3xl font-black tracking-tight text-[#111111] uppercase">Womens Wear</h3>
             </div>
             <Link href="#womenswear" className="text-xs font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
@@ -747,42 +641,45 @@ function ProductCatalogSection() {
             </Link>
           </div>
 
-          <div className={styles.marqueeViewport}>
-            <div className={styles.productTrack} style={{ animationDuration: '40s' }}>
-              {[...row1, ...row1, ...row1, ...row1].slice(0, 20).map((p, idx) => (
-                <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
-                  <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
-                    <img
-                      src={p.image || undefined}
-                      alt={p.name}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                    />
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
+            <div className="-mx-6 lg:-mx-12 overflow-hidden">
+              <div className={styles.marqueeViewport}>
+                <div className={styles.productTrack} style={{ animationDuration: '40s' }}>
+                  {[...row1, ...row1, ...row1, ...row1].slice(0, 20).map((p, idx) => (
+                    <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
+                      <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
+                        <img
+                          src={p.image || undefined}
+                          alt={p.name}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                        />
 
-                    {/* Add to Cart Overlay */}
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
-                        Add to cart
-                      </button>
-                    </div>
-                  </div>
-                  <div className="space-y-1 text-center px-2">
-                    <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
-                    <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
-                  </div>
-                </Link>
-              ))}
+                        {/* Add to Cart Overlay */}
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
+                            Add to cart
+                          </button>
+                        </div>
+                      </div>
+                      <div className="space-y-1 text-center px-2">
+                        <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
+                        <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Row 2 - Men's Wear */}
         <div>
-          <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-10 flex items-center justify-between">
+          <div className="mx-auto max-w-[1440px] px-[clamp(0.9rem,1.4vw,1.9rem)] mb-10 flex items-center justify-between">
             <div className="space-y-1">
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43]">Collection</span>
               <h3 className="text-xl md:text-3xl font-black tracking-tight text-[#111111] uppercase">Mens Wear</h3>
             </div>
             <Link href="#menswear" className="text-xs font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
@@ -790,33 +687,37 @@ function ProductCatalogSection() {
             </Link>
           </div>
 
-          <div className={styles.marqueeViewport}>
-            <div className={styles.productTrack} style={{ animationDuration: '45s', animationDirection: 'reverse' }}>
-              {[...row2, ...row2, ...row2, ...row2].slice(0, 20).map((p, idx) => (
-                <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
-                  <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
-                    <img
-                      src={p.image || undefined}
-                      alt={p.name}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                    />
+          <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
+            <div className="-mx-6 lg:-mx-12 overflow-hidden">
+              <div className={styles.marqueeViewport}>
+                <div className={styles.productTrack} style={{ animationDuration: '45s', animationDirection: 'reverse' }}>
+                  {[...row2, ...row2, ...row2, ...row2].slice(0, 20).map((p, idx) => (
+                    <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
+                      <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
+                        <img
+                          src={p.image || undefined}
+                          alt={p.name}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                        />
 
-                    {/* Add to Cart Overlay */}
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
-                        Add to cart
-                      </button>
-                    </div>
-                  </div>
-                  <div className="space-y-1 text-center px-2">
-                    <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
-                    <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
-                  </div>
-                </Link>
-              ))}
+                        {/* Add to Cart Overlay */}
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
+                            Add to cart
+                          </button>
+                        </div>
+                      </div>
+                      <div className="space-y-1 text-center px-2">
+                        <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
+                        <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -852,8 +753,8 @@ function BlogSection() {
     <section className="py-28 bg-[#F9FAFB]">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
         <div className="flex flex-col items-center mb-20">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#007bff] mb-4">Latest insights</span>
-          <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-center text-[#111111]">Our Stories</h2>
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Latest Insights</span>
+          <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter text-center text-[#111111]">Our Stories</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {blogs.map((b, idx) => (
@@ -869,17 +770,17 @@ function BlogSection() {
                 <img src={b.image || undefined} alt={b.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
               </div>
               <div className="p-10 space-y-6 flex flex-col flex-1">
-                <span className="inline-block bg-[#007bff] text-white text-[9px] font-black px-4 py-1.5 rounded-sm uppercase tracking-widest w-fit shadow-md">
+                <span className="inline-block bg-[#57AD43] text-white text-[9px] font-black px-4 py-1.5 rounded-sm uppercase tracking-widest w-fit shadow-md">
                   {b.category}
                 </span>
-                <h3 className="text-xl md:text-2xl font-bold leading-[1.3] flex-1 text-[#111111] group-hover:text-[#007bff] transition-colors duration-300">
+                <h3 className="text-xl md:text-2xl font-semibold leading-[1.3] flex-1 text-[#111111] group-hover:text-[#57AD43] transition-colors duration-300">
                   {b.title}
                 </h3>
                 <Link
                   href={b.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-[#007bff] font-black text-[10px] group/btn w-fit pt-8 uppercase tracking-[0.2em] border-t border-black/5 w-full"
+                  className="flex items-center gap-3 text-[#57AD43] font-black text-[10px] group/btn w-fit pt-8 uppercase tracking-[0.2em] border-t border-black/5 w-full"
                 >
                   Read Full Story
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="group-hover/btn:translate-x-1.5 transition-transform duration-300">

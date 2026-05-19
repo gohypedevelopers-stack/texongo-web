@@ -25,12 +25,13 @@ export default function AboutUsPage() {
           />
           <div className="absolute inset-0 bg-black/50 backdrop-blur-[1px]"></div>
         </div>
-        <div className="relative z-10 h-full flex items-center justify-center">
+        <div className="relative z-10 h-full flex flex-col items-center justify-center">
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Our Story</span>
           <motion.h1 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1 }}
-            className="text-white text-5xl md:text-8xl font-black uppercase tracking-tighter"
+            className="text-white text-3xl md:text-6xl font-bold tracking-tight text-center"
           >
             About Us
           </motion.h1>
@@ -52,13 +53,14 @@ export default function AboutUsPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </motion.div>
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.1 }} className="text-center md:text-left space-y-1 px-4">
-              <h3 className="text-2xl font-black text-black uppercase tracking-tighter">Mr. Jagdish Chand Gupta</h3>
+              <h3 className="text-2xl font-bold text-black tracking-tighter">Mr. Jagdish Chand Gupta</h3>
               <p className="text-[#57AD43] font-bold text-xs uppercase tracking-[0.3em]">Founder</p>
             </motion.div>
           </div>
           <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="space-y-8">
             <div>
-              <h2 className="text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">About Us</h2>
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Legacy & Journey</span>
+              <h2 className="text-2xl md:text-5xl font-bold text-black mb-6 tracking-tight">About Us</h2>
               <p className="text-sm font-medium text-gray-400 leading-relaxed uppercase tracking-widest">
                 Syndicate Cloth House Pvt. Ltd. & Texongo – A Legacy of Innovation and Trust. 
               </p>
@@ -67,7 +69,7 @@ export default function AboutUsPage() {
               </p>
             </div>
             <div>
-              <h3 className="text-2xl font-black text-black mb-4 uppercase tracking-tighter">Our Journey</h3>
+              <h3 className="text-2xl font-bold text-black mb-4 tracking-tighter">Our Journey</h3>
               <p className="text-sm font-medium text-gray-500 leading-relaxed">
                 In 1975, Mr. Jagdish Chand Gupta founded Syndicate Cloth House with a vision to revolutionize fabric trading. Leaving behind a stable career in the auto parts industry, he embarked on an entrepreneurial journey, sourcing and supplying premium woven fabrics. In an era without digital connectivity, he built his business through personal relationships, traveling extensively to establish strong and lasting bonds with clients and vendors.
               </p>
@@ -79,7 +81,8 @@ export default function AboutUsPage() {
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div {...fadeIn} className="order-2 lg:order-1 space-y-8">
             <div>
-              <h2 className="text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">Growth & Expansion</h2>
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Timeline</span>
+              <h2 className="text-2xl md:text-5xl font-bold text-black mb-6 tracking-tight">Growth & Expansion</h2>
               <p className="text-sm font-medium text-gray-500 leading-relaxed">
                 As the business flourished, the next generation stepped in. Manoj Gupta, his son, joined the company and, by the late 1990s, expanded operations into knitted fabrics, exports, dyeing, and knitting units, transforming the company into a fully integrated textile powerhouse.
               </p>
@@ -95,7 +98,7 @@ export default function AboutUsPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </motion.div>
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.3 }} className="text-center md:text-left space-y-1 px-4">
-              <h3 className="text-2xl font-black text-black uppercase tracking-tighter">Mr. Manoj Gupta</h3>
+              <h3 className="text-2xl font-bold text-black tracking-tighter">Mr. Manoj Gupta</h3>
               <p className="text-[#57AD43] font-bold text-xs uppercase tracking-[0.3em]">Managing Director</p>
             </motion.div>
           </div>
@@ -113,12 +116,13 @@ export default function AboutUsPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </motion.div>
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.1 }} className="text-center md:text-left space-y-1 px-4">
-              <h3 className="text-2xl font-black text-black uppercase tracking-tighter">Aman Gupta</h3>
+              <h3 className="text-2xl font-bold text-black tracking-tighter">Aman Gupta</h3>
               <p className="text-[#57AD43] font-bold text-xs uppercase tracking-[0.3em]">Managing Director</p>
             </motion.div>
           </div>
           <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="space-y-8">
-            <h2 className="text-4xl md:text-5xl font-black text-black mb-6 tracking-tight uppercase">A New Chapter with Texongo</h2>
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Innovation</span>
+            <h2 className="text-2xl md:text-5xl font-bold text-black mb-6 tracking-tight">A New Chapter</h2>
             <p className="text-sm font-medium text-gray-500 leading-relaxed">
               In 2017, Aman Gupta took the helm, bringing a fresh perspective and technological innovation. Recognizing the challenges of fabric sourcing, he launched Texongo, a pioneering platform designed to simplify fabric procurement through curated swatches and a unique subscription-based model. Today, Texongo serves 150+ brands and 50+ export & buying houses, making fabric sourcing more efficient and hassle-free.
             </p>
@@ -128,7 +132,10 @@ export default function AboutUsPage() {
         {/* Section 4: Commitment (Text Only) */}
         <section className="max-w-4xl mx-auto">
           <motion.div {...fadeIn} className="space-y-8">
-            <h2 className="text-4xl md:text-5xl font-black text-black mb-10 tracking-tight text-center uppercase">Our Commitment</h2>
+            <div className="text-center mb-10">
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Our Promise</span>
+              <h2 className="text-2xl md:text-5xl font-bold text-black tracking-tight">Our Commitment</h2>
+            </div>
             <div className="space-y-6">
               <p className="text-lg font-medium text-gray-600 leading-relaxed text-center">
                 At Syndicate Cloth House Pvt. Ltd. & Texongo, we believe in more than just business—we believe in relationships, reliability, and continuous innovation. Our commitment extends beyond providing high-quality fabrics; we strive to deliver an exceptional customer experience by offering transparency, efficiency, and personalized solutions tailored to our clients' needs.

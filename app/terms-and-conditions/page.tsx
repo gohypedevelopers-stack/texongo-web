@@ -19,16 +19,17 @@ export default function TermsAndConditions() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-20"
+          className="mb-20 text-center"
         >
           <Link
             href="/"
-            className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors mb-12 w-fit"
+            className="group inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors mb-12"
           >
             <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-1" />
             Back to Home
           </Link>
-          <h1 className="text-4xl lg:text-6xl font-bold uppercase tracking-tighter text-black mb-6">
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Legal Agreement</span>
+          <h1 className="text-3xl md:text-6xl font-bold tracking-tight text-black mb-6">
             Terms & <span className="text-[#57AD43]">Conditions</span>
           </h1>
           <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-gray-400">

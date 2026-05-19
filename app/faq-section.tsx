@@ -387,7 +387,7 @@ export function FaqSection() {
         {/* Left Side: Header */}
         <div className={styles.faqSideHeader}>
           <span className={styles.eyebrow}>Need Help?</span>
-          <h2>Frequently<br />Asked<br />Questions</h2>
+          <h2>Frequently Asked Questions</h2>
           <p>Everything you need to know about Texongo textiles, shipping, and our digital studio services.</p>
         </div>
 

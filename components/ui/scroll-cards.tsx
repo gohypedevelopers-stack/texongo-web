@@ -37,89 +37,83 @@ const Card: FC<iCardProps> = ({
 }) => {
   const container = useRef(null);
 
-  // Minimal opacity fade - disabling purely dynamic transforms on mobile for better FPS
+  // Minimal opacity fade for parallax stacking effect
   const opacity = useTransform(progress, range, [1, 0.7]);
+  const isEven = i % 2 === 0;
 
   return (
-    <div ref={container} className="relative w-full h-[75vh] md:h-[80vh] sticky top-0 overflow-hidden bg-white flex items-center justify-center border-b border-gray-50 transform-gpu">
+    <div ref={container} className="relative w-full h-[85vh] lg:h-[90vh] sticky top-0 overflow-hidden bg-white flex items-center justify-center border-b border-black/5 transform-gpu">
 
-      {/* 1. Large Faint Background Marquee (z-10) - Hidden on smaller screens for performance */}
-      <div className="absolute inset-0 z-99 flex items-center pointer-events-none select-none overflow-hidden hidden lg:flex">
+      {/* 1. Large Faint Background Marquee (z-10) */}
+      <div className="absolute inset-0 z-10 flex items-center pointer-events-none select-none overflow-hidden hidden lg:flex">
         <motion.div
-          animate={{ x: ["0%", "-50%"] }}
+          animate={{ x: isEven ? ["0%", "-50%"] : ["-50%", "0%"] }}
           transition={{
-            duration: 40, // Slower is easier on GPU
+            duration: 50,
             repeat: Infinity,
             ease: "linear"
           }}
           className="flex whitespace-nowrap"
         >
-          <span className="text-[20vw] font-black tracking-tighter uppercase text-black opacity-[0.03] pr-20">
+          <span className="text-[18vw] font-black tracking-tighter uppercase text-black/[0.02] pr-20">
             {title} &nbsp; {title} &nbsp; {title} &nbsp;
           </span>
-          <span className="text-[20vw] font-black tracking-tighter uppercase text-black opacity-[0.03] pr-20">
+          <span className="text-[18vw] font-black tracking-tighter uppercase text-black/[0.02] pr-20">
             {title} &nbsp; {title} &nbsp; {title} &nbsp;
           </span>
         </motion.div>
       </div>
 
-      {/* 2. Primary Model Composition */}
-      <div className="relative z-0 h-full w-full max-w-5xl flex items-center justify-center pt-10 md:pt-0">
-        <motion.div
-          initial={{ opacity: 0.01 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 1.5, ease: "circOut" }}
-          className="relative h-[85%] md:h-[90%] aspect-[3/4] md:aspect-square flex items-center justify-center overflow-hidden"
-        >
+      {/* 2. Content Layout (2-Column Editorial Grid) */}
+      <div className="relative w-full h-full max-w-[1440px] px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 xl:gap-16 pt-12 lg:pt-0">
+
+        {/* Media Block (Alternating order on desktop) */}
+        <div className={`relative z-0 w-full lg:w-[45%] h-[40vh] lg:h-[70vh] flex items-center justify-center overflow-hidden bg-white group transition-transform duration-500 ${isEven ? 'lg:order-1' : 'lg:order-2 lg:-translate-x-16'}`}>
           {videoUrl ? (
             <LazyVideo
               src={videoUrl}
-              className="w-full h-full"
-              style={{ objectFit: 'contain' }} // Ensure realism for the 3D models
-              threshold={0.15} // Don't start until nicely in view
+              className="w-full h-full group-hover:scale-105 transition-transform duration-[2000ms]"
+              objectFit="contain"
+              threshold={0.1}
             />
           ) : src ? (
-            <div className="relative w-full h-full">
-              <Image
-                className="object-contain"
-                src={src}
-                alt={title}
-                fill
-                priority={i === 0}
-                sizes="(max-width: 768px) 100vw, 80vw"
-              />
-            </div>
+            <Image
+              className="object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
+              src={src}
+              alt={title}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
           ) : null}
-        </motion.div>
-      </div>
+        </div>
 
-      {/* 3. High-Contrast Text Overlay */}
-      <motion.div
-        style={{ opacity: i === 0 ? 1 : opacity }} // Only fade non-primary cards
-        className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-6 bg-gradient-to-t from-white/10 via-transparent to-transparent"
-      >
-        <div className="max-w-2xl mt-auto mb-12 md:mb-16 flex flex-col items-center">
-          <span className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4 text-black/40">
+        {/* Text Details Block (Alternating order on desktop) */}
+        <motion.div
+          style={{ opacity: i === 0 ? 1 : opacity }}
+          className={`relative z-20 w-full lg:w-[40%] flex flex-col items-center lg:items-start text-center lg:text-left py-4 transition-transform duration-500 ${isEven ? 'lg:order-2 lg:mr-auto' : 'lg:order-1 lg:ml-auto lg:translate-x-16'}`}
+        >
+          <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-4 text-[#57AD43]">
             {tag || "Collection"}
           </span>
 
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-4 md:mb-6 tracking-tighter uppercase leading-[0.85] text-black">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 md:mb-6 tracking-tight leading-tight text-[#111111]">
             {title}
           </h2>
 
-          <p className="text-sm md:text-base font-medium text-black/60 mb-8 md:mb-10 max-w-md leading-relaxed px-4">
+          <p className="text-sm md:text-base font-medium text-black/60 mb-6 md:mb-8 max-w-md leading-relaxed">
             {description}
           </p>
 
           <Link
             href={link}
-            style={{ color: '#ffffff', backgroundColor: '#000000' }}
-            className="relative z-30 inline-flex items-center justify-center h-12 md:h-16 px-10 md:px-16 text-[12px] md:text-[14px] font-black uppercase tracking-[0.4em] rounded-full hover:scale-105 transition-all shadow-2xl active:scale-95"
+            style={{ color: '#ffffff' }}
+            className="inline-flex items-center justify-center h-12 md:h-14 px-8 md:px-12 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.3em] bg-black text-white hover:bg-[#57AD43] rounded-full hover:scale-105 active:scale-95 transition-all duration-300 shadow-md"
           >
-            Explore
+            Explore Collection
           </Link>
-        </div>
-      </motion.div>
+        </motion.div>
+
+      </div>
     </div>
   );
 };
@@ -130,7 +124,7 @@ interface iCardSlideProps {
 
 export const CardsParallax: FC<iCardSlideProps> = ({ items }) => {
   const container = useRef(null);
-  const [mt, setMt] = useState(85);
+  const [mt, setMt] = useState(90);
 
   useEffect(() => {
     if (window.innerWidth < 1024) setMt(100);

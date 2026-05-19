@@ -27,7 +27,7 @@ export default function ShippingAndReturnPolicy() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-32 text-center lg:text-left"
+          className="mb-32 text-center"
         >
           <Link
             href="/"
@@ -36,11 +36,11 @@ export default function ShippingAndReturnPolicy() {
             <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-2" />
             Return to Store
           </Link>
-          <h1 className="text-5xl lg:text-8xl font-black uppercase tracking-tighter text-black mb-8 leading-[0.9]">
-            Shipping & <br className="hidden lg:block" />
-            <span className="text-[#57AD43]">Returns</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Store Policies</span>
+          <h1 className="text-3xl md:text-6xl font-bold tracking-tight text-black mb-8 leading-none">
+            Shipping & <span className="text-[#57AD43]">Returns</span>
           </h1>
-          <p className="max-w-2xl text-gray-500 text-lg lg:text-xl font-medium leading-relaxed italic border-l-4 border-[#57AD43] pl-8 mt-12 py-2">
+          <p className="max-w-2xl text-gray-500 text-sm font-medium leading-relaxed italic border-l-4 border-[#57AD43] pl-8 mt-12 py-2 mx-auto text-center">
             "Delivering premium knitted fabrics worldwide with accuracy, care, and total transparency."
           </p>
         </motion.div>

@@ -18,11 +18,12 @@ export default function ContactUsPage() {
           />
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
         </div>
-        <div className="relative z-10 h-full flex items-center justify-center">
+        <div className="relative z-10 h-full flex flex-col items-center justify-center">
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Get In Touch</span>
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-white text-5xl md:text-7xl font-black uppercase tracking-tighter"
+            className="text-white text-3xl md:text-6xl font-bold tracking-tight text-center"
           >
             Contact Us
           </motion.h1>

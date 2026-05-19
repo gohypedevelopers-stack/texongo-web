@@ -285,15 +285,14 @@ export default function DigitalFashionPage() {
     <main className="min-h-screen bg-white">
       {/* Dynamic Header */}
       <div className="pt-32 pb-16 px-6 text-center bg-[#F9FAFB] border-b border-black/5">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 border border-black/5 mb-6"
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block"
         >
-          <span className="w-2 h-2 rounded-full bg-[#57AD43] animate-pulse" />
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-black/60">3D Studio Experience</span>
-        </motion.div>
-        <h1 className="text-4xl md:text-7xl font-black text-black uppercase tracking-tighter mb-4">
+          3D Studio
+        </motion.span>
+        <h1 className="text-3xl md:text-6xl font-bold text-black tracking-tight mb-4">
           Digital Fashion
         </h1>
         <p className="text-[#475467]/60 text-[10px] md:text-xs uppercase tracking-[0.3em] max-w-2xl mx-auto font-bold leading-relaxed">

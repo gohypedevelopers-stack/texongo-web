@@ -173,7 +173,7 @@ export function Navbar() {
 
               {/* Desktop Navigation Links */}
               <div className="hidden md:flex flex-1 items-center justify-center px-12">
-                <ul className="flex items-center gap-10 h-full">
+                <ul className="flex items-center gap-7 h-full">
                   {navItems.map((item) => (
                     <li
                       key={item.name}
@@ -182,7 +182,7 @@ export function Navbar() {
                       onMouseLeave={() => setHoveredItem(null)}
                     >
                       {item.href === "#" ? (
-                        <span className="group relative flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-black transition-colors h-full cursor-default">
+                        <span className="group relative flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-black transition-colors h-full cursor-default">
                           {item.name}
                           {(item.dropdown || item.megaMenu) && (
                             <ChevronDown
@@ -195,7 +195,7 @@ export function Navbar() {
                       ) : (
                         <Link
                           href={item.href}
-                          className={`group relative flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${pathname === item.href ? "text-black" : "text-gray-500 hover:text-black"} h-full`}
+                          className={`group relative flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 text-black h-full`}
                         >
                           {item.name}
                           {(item.dropdown || item.megaMenu) && (

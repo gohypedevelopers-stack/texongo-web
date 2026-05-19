@@ -11,56 +11,28 @@ export function Preloader() {
     document.body.style.overflow = "hidden";
 
     let currentProgress = 0;
-    let targetProgress = 90; // Aim for 90% while loading
     let animationFrameId: number;
 
     const animate = () => {
-      if (currentProgress < targetProgress) {
-        // Slowed down for stability and premium feel
-        const diff = targetProgress - currentProgress;
-        currentProgress += diff * 0.01; // Slower approach (0.01 instead of 0.02)
-        setProgress(currentProgress);
+      if (currentProgress < 99.9) {
+        // Smooth, luxurious progress curve that completes in less than 1 second
+        const diff = 100.1 - currentProgress;
+        currentProgress += diff * 0.08;
+        setProgress(Math.min(currentProgress, 100));
         animationFrameId = requestAnimationFrame(animate);
+      } else {
+        setProgress(100);
+        setTimeout(() => {
+          setIsLoading(false);
+          document.body.style.overflow = "";
+        }, 300); // snappier fade out for high performance feel
       }
     };
 
     animationFrameId = requestAnimationFrame(animate);
 
-    const handleLoad = () => {
-      // Small delay before finishing to ensure it feels stable
-      setTimeout(() => {
-        targetProgress = 100;
-        
-        const finishAnimation = () => {
-          if (currentProgress < 99.95) {
-            const diff = 100.05 - currentProgress;
-            currentProgress += diff * 0.08; // Smoother finish
-            setProgress(currentProgress);
-            animationFrameId = requestAnimationFrame(finishAnimation);
-          } else {
-            setProgress(100);
-            setTimeout(() => {
-              setIsLoading(false);
-              document.body.style.overflow = "";
-            }, 800);
-          }
-        };
-        
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = requestAnimationFrame(finishAnimation);
-      }, 500);
-    };
-
-    if (document.readyState === "complete") {
-      // If already loaded, still show a quick smooth progress to 100
-      setTimeout(handleLoad, 500);
-    } else {
-      window.addEventListener("load", handleLoad);
-    }
-
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("load", handleLoad);
       document.body.style.overflow = "";
     };
   }, []);
