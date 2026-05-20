@@ -44,7 +44,7 @@ export default function AboutUsPage() {
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="space-y-8">
               <div>
                 <span className="text-[10px] font-black uppercase text-[#57AD43] mb-1 block">Legacy &amp; Journey</span>
-                <h2 className="text-2xl md:text-5xl font-bold text-black mb-6 tracking-tight">About Us</h2>
+                <h2 className="text-2xl md:text-5xl font-bold text-black mb-6 tracking-tight">Our Legacy</h2>
                 <p className="text-sm font-medium text-gray-400 leading-relaxed uppercase">
                   Syndicate Cloth House Pvt. Ltd. &amp; Texongo – A Legacy of Innovation and Trust.
                 </p>
