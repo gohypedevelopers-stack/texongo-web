@@ -5,6 +5,7 @@ import { Navbar } from "../components/ui/navbar";
 import { Footer } from "../components/ui/footer";
 import { CartDrawer } from "@/components/ui/cart-drawer";
 import { Preloader } from "../components/ui/preloader";
+import { SmoothScroll } from "../components/ui/smooth-scroll";
 
 
 const roboto = Roboto({
@@ -27,13 +28,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${roboto.variable}`} suppressHydrationWarning>
       <body
-        className="min-h-screen bg-[#F9FAFB] text-[#111111] antialiased"
+        className={`${roboto.className} min-h-screen bg-[#F9FAFB] text-[#111111] antialiased`}
         suppressHydrationWarning
       >
+        <SmoothScroll />
         <Preloader />
         <Navbar />
         <CartDrawer />
-        {children}
+        <div className="pt-16">
+          {children}
+        </div>
         <Footer />
       </body>
 

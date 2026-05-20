@@ -3,10 +3,18 @@
 import { Mail, Globe, Phone, MapPin, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { sendContactEmail } from "../../app/actions/send-email";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  const fadeIn = {
+    initial: { opacity: 0, y: -40 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.8, ease: "easeOut" as const }
+  };
 
   async function handleSubmit(formData: FormData) {
     setIsSubmitting(true);
@@ -17,115 +25,104 @@ export function ContactForm() {
     setIsSubmitting(false);
     if (result.success) {
       setFeedback({ type: "success", message: "Your message has been sent successfully!" });
-      // Reset form if needed, but since it's a server action, the browser might handle some of it
-      // For better UX, we could reset manually if we used a ref
     } else {
       setFeedback({ type: "error", message: result.error || "Something went wrong." });
     }
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-6 lg:px-10 py-20">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-3xl overflow-hidden shadow-2xl">
-        {/* Left Column: Form Card (Lilac) */}
-        <div className="bg-[#E9D5FF] p-10 md:p-16">
-          <h2 className="text-4xl font-extrabold text-black mb-10 tracking-tight">Fill the Form</h2>
+    <div className="w-full max-w-[1440px] mx-auto px-6 lg:px-20 py-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] bg-white">
+        
+        {/* Left Column: Form Card */}
+        <div className="p-10 lg:p-16 lg:pr-24 flex flex-col justify-center">
+          <motion.div {...fadeIn}>
+            <span className="text-[10px] font-black uppercase text-[#57AD43] mb-2 block tracking-widest">Connect</span>
+            <h2 className="text-3xl lg:text-5xl font-bold text-black mb-10 tracking-tight">Send a Message</h2>
+          </motion.div>
           
-          <form action={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
+          <form action={handleSubmit} className="space-y-8">
+            <motion.div {...fadeIn} transition={{ delay: 0.1 }} className="space-y-2 relative group">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Name</label>
               <input 
-                name="name"
-                type="text" 
-                required
-                className="w-full bg-white border-none rounded-sm h-12 px-4 shadow-sm focus:ring-2 focus:ring-black outline-none transition-all"
+                name="name" type="text" required
+                className="w-full bg-[#F9FAFB] border border-gray-100 rounded-xl h-14 px-5 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all group-hover:bg-gray-50"
               />
-            </div>
+            </motion.div>
 
-            <div className="space-y-2">
+            <motion.div {...fadeIn} transition={{ delay: 0.2 }} className="space-y-2 relative group">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Email</label>
               <input 
-                name="email"
-                type="email" 
-                required
-                className="w-full bg-white border-none rounded-sm h-12 px-4 shadow-sm focus:ring-2 focus:ring-black outline-none transition-all"
+                name="email" type="email" required
+                className="w-full bg-[#F9FAFB] border border-gray-100 rounded-xl h-14 px-5 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all group-hover:bg-gray-50"
               />
-            </div>
+            </motion.div>
 
-            <div className="space-y-2">
+            <motion.div {...fadeIn} transition={{ delay: 0.3 }} className="space-y-2 relative group">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Contact Number</label>
               <input 
-                name="phone"
-                type="tel" 
-                className="w-full bg-white border-none rounded-sm h-12 px-4 shadow-sm focus:ring-2 focus:ring-black outline-none transition-all"
+                name="phone" type="tel" 
+                className="w-full bg-[#F9FAFB] border border-gray-100 rounded-xl h-14 px-5 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all group-hover:bg-gray-50"
               />
-            </div>
+            </motion.div>
 
-            <div className="space-y-2">
+            <motion.div {...fadeIn} transition={{ delay: 0.4 }} className="space-y-2 relative group">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Message</label>
               <textarea 
-                name="message"
-                rows={4}
-                required
-                className="w-full bg-white border-none rounded-sm px-4 py-3 shadow-sm focus:ring-2 focus:ring-black outline-none transition-all resize-none"
+                name="message" rows={4} required
+                className="w-full bg-[#F9FAFB] border border-gray-100 rounded-xl px-5 py-4 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all resize-none group-hover:bg-gray-50"
               />
-            </div>
+            </motion.div>
 
             {feedback && (
-              <div className={`p-4 rounded-lg flex items-center gap-3 ${
-                feedback.type === "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`p-4 rounded-xl flex items-center gap-3 ${
+                feedback.type === "success" ? "bg-green-50 text-green-800 border border-green-200" : "bg-red-50 text-red-800 border border-red-200"
               }`}>
                 {feedback.type === "success" ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
                 <span className="text-sm font-bold">{feedback.message}</span>
-              </div>
+              </motion.div>
             )}
 
-            <button 
-              type="submit" 
-              disabled={isSubmitting}
-              className="mt-6 px-12 py-4 bg-[#D9F99D] hover:bg-[#57AD43] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed text-black font-black uppercase tracking-[0.3em] text-[11px] rounded-full transition-all shadow-md transform active:scale-95 flex items-center justify-center gap-2"
+            <motion.button 
+              {...fadeIn} transition={{ delay: 0.5 }}
+              type="submit" disabled={isSubmitting}
+              className="w-full lg:w-auto px-12 py-5 bg-black hover:bg-[#57AD43] disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-full transition-all shadow-xl hover:shadow-[0_10px_30px_rgba(87,173,67,0.3)] transform active:scale-95 flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
-                <>
-                  <Loader2 className="animate-spin" size={16} />
-                  Sending...
-                </>
-              ) : "Submit"}
-            </button>
+                <><Loader2 className="animate-spin" size={16} /> Sending...</>
+              ) : "Send Message"}
+            </motion.button>
           </form>
         </div>
 
-        {/* Right Column: Info Section (White) */}
-        <div className="bg-white p-10 md:p-16 flex flex-col items-start justify-center">
-          <h2 className="text-4xl font-extrabold text-black mb-6 tracking-tight">Contact Us</h2>
-          <p className="text-sm font-medium text-gray-500 mb-12 max-w-md leading-relaxed">
-            Have questions, need assistance, or want to share your feedback? Our team is here to help you feel free to reach out anytime.
-          </p>
+        {/* Right Column: Info Section (Green Gradient) */}
+        <div className="relative bg-gradient-to-br from-[#57AD43] via-[#4a9a38] to-[#2d6e20] p-10 lg:p-16 flex flex-col justify-center overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+          <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-[80px] pointer-events-none" />
+          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-black/10 rounded-full blur-[80px] pointer-events-none" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 w-full">
-            <ContactInfoItem 
-              icon={<Mail className="text-black" size={20} />}
-              label="Email"
-              value="contact@texongo.com"
-              href="mailto:contact@texongo.com"
-            />
-            <ContactInfoItem 
-              icon={<Globe className="text-black" size={20} />}
-              label="Website"
-              value="https://texongo.com/"
-              href="https://texongo.com/"
-            />
-            <ContactInfoItem 
-              icon={<Phone className="text-black" size={20} />}
-              label="Phone"
-              value="+91 9910048498"
-              href="tel:+919910048498"
-            />
-            <ContactInfoItem 
-              icon={<MapPin className="text-black" size={20} />}
-              label="Location"
-              value="D 10/1, Pocket D, Okhla Industrial Area Phase II, New Delhi, Delhi 110020"
-            />
+          <div className="relative z-10">
+            <motion.div {...fadeIn}>
+              <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6 tracking-tight">Contact Information</h2>
+              <p className="text-sm font-medium text-white/80 mb-12 max-w-md leading-relaxed">
+                Have questions, need assistance, or want to share your feedback? Our team is here to help you. Feel free to reach out anytime.
+              </p>
+            </motion.div>
+
+            <div className="flex flex-col gap-8 w-full">
+              <motion.div {...fadeIn} transition={{ delay: 0.1 }}>
+                <ContactInfoItem icon={<Mail size={22} />} label="Email" value="contact@texongo.com" href="mailto:contact@texongo.com" />
+              </motion.div>
+              <motion.div {...fadeIn} transition={{ delay: 0.2 }}>
+                <ContactInfoItem icon={<Globe size={22} />} label="Website" value="https://texongo.com/" href="https://texongo.com/" />
+              </motion.div>
+              <motion.div {...fadeIn} transition={{ delay: 0.3 }}>
+                <ContactInfoItem icon={<Phone size={22} />} label="Phone" value="+91 9910048498" href="tel:+919910048498" />
+              </motion.div>
+              <motion.div {...fadeIn} transition={{ delay: 0.4 }}>
+                <ContactInfoItem icon={<MapPin size={22} />} label="Location" value="D 10/1, Pocket D, Okhla Industrial Area Phase II, New Delhi, Delhi 110020" />
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>
@@ -135,13 +132,13 @@ export function ContactForm() {
 
 function ContactInfoItem({ icon, label, value, href }: { icon: React.ReactNode, label: string, value: string, href?: string }) {
   const content = (
-    <div className="flex items-start gap-4 group cursor-pointer">
-      <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 group-hover:bg-black group-hover:text-white transition-all duration-300 shadow-sm border border-gray-100 overflow-hidden">
+    <div className="flex items-start gap-5 group cursor-pointer">
+      <div className="w-14 h-14 flex-shrink-0 flex items-center justify-center rounded-2xl bg-white/10 text-white group-hover:bg-white group-hover:text-[#57AD43] transition-all duration-500 shadow-sm overflow-hidden backdrop-blur-sm border border-white/5 group-hover:scale-110">
         {icon}
       </div>
-      <div className="flex flex-col">
-        <span className="text-[10px] font-black uppercase tracking-widest text-black">{label}</span>
-        <span className="text-xs font-bold text-gray-400 mt-1 max-w-[200px] leading-tight break-words group-hover:text-black transition-colors">{value}</span>
+      <div className="flex flex-col justify-center pt-1">
+        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 mb-1">{label}</span>
+        <span className="text-sm font-semibold text-white/95 max-w-[250px] leading-relaxed group-hover:text-white transition-colors">{value}</span>
       </div>
     </div>
   );
@@ -149,6 +146,5 @@ function ContactInfoItem({ icon, label, value, href }: { icon: React.ReactNode, 
   if (href) {
     return <a href={href} target="_blank" rel="noopener noreferrer">{content}</a>;
   }
-
   return content;
 }

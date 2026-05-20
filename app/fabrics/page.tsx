@@ -96,21 +96,8 @@ export default function FabricsListingPage() {
   return (
     <main className="min-h-screen bg-white">
 
-      {/* Hero Banner Section */}
-      <section className="relative h-[25vh] md:h-[50vh] w-full overflow-hidden bg-gray-900 border-b border-gray-100 flex items-center justify-center">
-        <img
-          src="/hero/hero-fabrics.jpg"
-          alt="Our Fabrics"
-          className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-         <div className="relative z-10 text-center px-6">
-           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Exquisite Curation</span>
-            <h1 className="text-3xl md:text-6xl font-bold tracking-tight leading-none text-white">
-              Knit <span className="text-[#57AD43]">Style</span>
-            </h1>
-        </div>
-      </section>
+
+
 
       {/* Filter Bar */}
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-12 relative z-[100]">

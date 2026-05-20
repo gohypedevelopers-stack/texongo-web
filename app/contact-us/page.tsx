@@ -2,50 +2,54 @@
 
 import { ContactForm } from "../../components/ui/contact-form";
 import { motion } from "framer-motion";
-import { FaInstagram, FaXTwitter, FaYoutube, FaFacebookF } from "react-icons/fa6";
 
 export default function ContactUsPage() {
-  return (
-    <main className="min-h-screen bg-white">
+  const fadeIn = {
+    initial: { opacity: 0, y: -40 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.8, ease: "easeOut" as const }
+  };
 
-      {/* Hero Banner Section */}
-      <section className="relative h-[25vh] md:h-[40vh] w-full overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="https://texongo.com/wp-content/uploads/2025/06/jordi-pujadas-6Ju76xzahY-unsplash-1-scaled-1.jpg" 
-            alt="Contact Us" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
-        </div>
-        <div className="relative z-10 h-full flex flex-col items-center justify-center">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Get In Touch</span>
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-white text-3xl md:text-6xl font-bold tracking-tight text-center"
-          >
+  return (
+    <main className="min-h-screen bg-white -mt-16 pt-28 lg:pt-32 pb-12 lg:pb-24">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-20 mb-8 lg:mb-16">
+        <motion.div {...fadeIn} className="text-center space-y-4">
+          <span className="text-[10px] md:text-xs font-black uppercase text-[#57AD43] block tracking-widest">
+            Get In Touch
+          </span>
+          <h1 className="text-4xl md:text-7xl font-bold text-black tracking-tight mb-6">
             Contact Us
-          </motion.h1>
-        </div>
-      </section>
+          </h1>
+          <p className="text-gray-500 font-medium max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+            We'd love to hear from you. Whether you have a question about our fabrics, pricing, or anything else, our team is ready to answer all your questions.
+          </p>
+        </motion.div>
+      </div>
 
       {/* Main Form & Info Section */}
-      <section className="bg-gray-50">
+      <section className="bg-white w-full">
         <ContactForm />
       </section>
 
       {/* Map Section */}
-      <section className="w-full h-[450px] bg-gray-200 grayscale hover:grayscale-0 transition-all duration-700">
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3505.518608465177!2d77.27301037617637!3d28.524103988448833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce36bef41bf97%3A0xc3f83769cda4479e!2sD%2010%2F1%2C%20Okhla%20Industrial%20Estate%20Phase%20III%2C%20Okhla%20Phase%20III%2C%20Okhla%20Industrial%20Estate%2C%20New%20Delhi%2C%20Delhi%20110020!5e0!3m2!1sen!2sin!4v1712745000000!5m2!1sen!2sin" 
-          width="100%" 
-          height="100%" 
-          style={{ border: 0 }} 
-          allowFullScreen 
-          loading="lazy" 
-          referrerPolicy="no-referrer-when-downgrade"
-        ></iframe>
+      <section className="w-full max-w-[1440px] mx-auto px-6 lg:px-20 mt-16 lg:mt-32">
+        <motion.div 
+          {...fadeIn} 
+          className="w-full h-[400px] lg:h-[500px] rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] relative group"
+        >
+          <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700 pointer-events-none z-10" />
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3505.518608465177!2d77.27301037617637!3d28.524103988448833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce36bef41bf97%3A0xc3f83769cda4479e!2sD%2010%2F1%2C%20Okhla%20Industrial%20Estate%20Phase%20III%2C%20Okhla%20Phase%20III%2C%20Okhla%20Industrial%20Estate%2C%20New%20Delhi%2C%20Delhi%20110020!5e0!3m2!1sen!2sin!4v1712745000000!5m2!1sen!2sin" 
+            width="100%" 
+            height="100%" 
+            style={{ border: 0 }} 
+            allowFullScreen 
+            loading="lazy" 
+            referrerPolicy="no-referrer-when-downgrade"
+            className="grayscale group-hover:grayscale-0 transition-all duration-700"
+          ></iframe>
+        </motion.div>
       </section>
     </main>
   );

@@ -58,16 +58,11 @@ export function ScrollingFeatureShowcase() {
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
-      {/* Import Serif Font for that premium look from the screenshot */}
+      {/* Use Roboto globally to match the site-wide font */}
       <style dangerouslySetInnerHTML={{
         __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;700&display=swap');
-        
-        .font-serif-premium {
-          font-family: 'Playfair Display', serif;
-        }
         .font-sans-clean {
-          font-family: 'Inter', sans-serif;
+          font-family: 'Roboto', sans-serif;
         }
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
@@ -122,8 +117,8 @@ export function ScrollingFeatureShowcase() {
                 >
                   <span className="text-[11px] font-bold uppercase tracking-[0.4em] opacity-50 mb-6 block">Texongo Story {activeIndex + 1}</span>
 
-                  {/* Title: Premium Bold Serif as seen in "Trendy Fabrics" */}
-                  <h2 className="text-6xl lg:text-8xl font-serif-premium leading-tight mb-8 tracking-tight">
+                  {/* Title: Bold Roboto matching site-wide font */}
+                  <h2 className="text-6xl lg:text-8xl font-sans-clean font-bold leading-tight mb-8 tracking-tight">
                     {slidesData[activeIndex].title}
                   </h2>
 
