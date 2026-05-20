@@ -32,7 +32,7 @@ export function ContactForm() {
 
   return (
     <div className="w-full max-w-[1440px] mx-auto px-6 lg:px-20 py-10">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] bg-white">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] bg-white">
         
         {/* Left Column: Form Card */}
         <div className="p-10 lg:p-16 lg:pr-24 flex flex-col justify-center">
@@ -41,12 +41,12 @@ export function ContactForm() {
             <h2 className="text-3xl lg:text-5xl font-bold text-black mb-10 tracking-tight">Send a Message</h2>
           </motion.div>
           
-          <form action={handleSubmit} className="space-y-8">
+          <form action={handleSubmit} className="space-y-5">
             <motion.div {...fadeIn} transition={{ delay: 0.1 }} className="space-y-2 relative group">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Name</label>
               <input 
                 name="name" type="text" required
-                className="w-full bg-[#F9FAFB] border border-gray-100 rounded-xl h-14 px-5 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all group-hover:bg-gray-50"
+                className="w-full bg-[#F9FAFB] border border-gray-200 rounded-lg h-12 px-5 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all group-hover:bg-gray-50"
               />
             </motion.div>
 
@@ -54,7 +54,7 @@ export function ContactForm() {
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Email</label>
               <input 
                 name="email" type="email" required
-                className="w-full bg-[#F9FAFB] border border-gray-100 rounded-xl h-14 px-5 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all group-hover:bg-gray-50"
+                className="w-full bg-[#F9FAFB] border border-gray-200 rounded-lg h-12 px-5 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all group-hover:bg-gray-50"
               />
             </motion.div>
 
@@ -62,15 +62,15 @@ export function ContactForm() {
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Contact Number</label>
               <input 
                 name="phone" type="tel" 
-                className="w-full bg-[#F9FAFB] border border-gray-100 rounded-xl h-14 px-5 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all group-hover:bg-gray-50"
+                className="w-full bg-[#F9FAFB] border border-gray-200 rounded-lg h-12 px-5 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all group-hover:bg-gray-50"
               />
             </motion.div>
 
             <motion.div {...fadeIn} transition={{ delay: 0.4 }} className="space-y-2 relative group">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Message</label>
               <textarea 
-                name="message" rows={4} required
-                className="w-full bg-[#F9FAFB] border border-gray-100 rounded-xl px-5 py-4 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all resize-none group-hover:bg-gray-50"
+                name="message" rows={3} required
+                className="w-full bg-[#F9FAFB] border border-gray-200 rounded-lg px-5 py-4 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all resize-none group-hover:bg-gray-50"
               />
             </motion.div>
 
@@ -86,7 +86,7 @@ export function ContactForm() {
             <motion.button 
               {...fadeIn} transition={{ delay: 0.5 }}
               type="submit" disabled={isSubmitting}
-              className="w-full lg:w-auto px-12 py-5 bg-black hover:bg-[#57AD43] disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-full transition-all shadow-xl hover:shadow-[0_10px_30px_rgba(87,173,67,0.3)] transform active:scale-95 flex items-center justify-center gap-2"
+              className="w-fit px-8 py-3 bg-black hover:bg-[#57AD43] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold uppercase tracking-wider text-[11px] rounded-full transition-all shadow-lg hover:shadow-[0_8px_20px_rgba(87,173,67,0.3)] transform active:scale-95 flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <><Loader2 className="animate-spin" size={16} /> Sending...</>

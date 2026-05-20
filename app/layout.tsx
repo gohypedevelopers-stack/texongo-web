@@ -35,7 +35,7 @@ export default function RootLayout({
         <Preloader />
         <Navbar />
         <CartDrawer />
-        <div className="pt-16">
+        <div>
           {children}
         </div>
         <Footer />

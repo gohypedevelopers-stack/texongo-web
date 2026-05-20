@@ -12,7 +12,7 @@ export default function ContactUsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white -mt-16 pt-28 lg:pt-32 pb-12 lg:pb-24">
+    <main className="min-h-screen bg-white -mt-16 pt-28 lg:pt-32 pb-0">
       <div className="max-w-[1440px] mx-auto px-6 lg:px-20 mb-8 lg:mb-16">
         <motion.div {...fadeIn} className="text-center space-y-4">
           <span className="text-[10px] md:text-xs font-black uppercase text-[#57AD43] block tracking-widest">
@@ -33,10 +33,10 @@ export default function ContactUsPage() {
       </section>
 
       {/* Map Section */}
-      <section className="w-full max-w-[1440px] mx-auto px-6 lg:px-20 mt-16 lg:mt-32">
+      <section className="w-full mt-16 lg:mt-32">
         <motion.div 
           {...fadeIn} 
-          className="w-full h-[400px] lg:h-[500px] rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] relative group"
+          className="w-full h-[400px] lg:h-[500px] relative group"
         >
           <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700 pointer-events-none z-10" />
           <iframe 

@@ -18,12 +18,15 @@ export default async function BlogListingPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      <section className="pt-32 pb-16 md:pt-40 md:pb-20 bg-gray-50 border-b border-gray-100">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 text-center">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Latest Insights</span>
-          <h1 className="text-3xl md:text-6xl font-bold tracking-tight text-[#121212]">
+      <section className="pt-24 pb-12 md:pt-32 md:pb-16 bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 text-center space-y-4">
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] block">Latest Insights</span>
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-[#121212]">
             Our Blog
           </h1>
+          <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto mt-6">
+            Discover the latest trends, insights, and stories from the world of fabrics and fashion.
+          </p>
         </div>
       </section>
 

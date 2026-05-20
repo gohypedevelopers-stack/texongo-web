@@ -95,9 +95,18 @@ export default function FabricsListingPage() {
 
   return (
     <main className="min-h-screen bg-white">
-
-
-
+      {/* Hero Section */}
+      <section className="pt-24 pb-12 md:pt-32 md:pb-16 bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 text-center space-y-4">
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] block">Our Collection</span>
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-[#121212]">
+            Knit Style
+          </h1>
+          <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto mt-6">
+            Explore our premium collection of fabrics curated for modern fashion and design.
+          </p>
+        </div>
+      </section>
 
       {/* Filter Bar */}
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-12 relative z-[100]">
