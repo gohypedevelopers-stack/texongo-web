@@ -86,6 +86,26 @@ html.lenis body {
   display: none;
 }
 
+/* Breathing Animation for Logo */
+@keyframes breathing {
+  0% {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+}
+
+.breathing-logo {
+  animation: breathing 3s ease-in-out infinite;
+}
+
 /* Blog Content Styles */
 .blog-content {
   line-height: 1.8;

@@ -49,7 +49,7 @@ export function Preloader() {
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0a0a0a]"
         >
           <div className="relative w-full max-w-[1200px] flex flex-col items-center px-10">
-            {/* Text Overlay Container */}
+            {/* Logo Overlay Container */}
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ 
@@ -61,29 +61,58 @@ export function Preloader() {
             >
               <motion.div
                 animate={{
-                  opacity: [0.8, 1, 0.8],
-                  scale: [0.98, 1, 0.98],
+                  opacity: [0.85, 1, 0.85],
+                  scale: [0.99, 1.01, 0.99],
                 }}
                 transition={{
-                  duration: 4,
+                  duration: 3.5,
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
                 className="flex flex-col items-center w-full"
+                style={{
+                  transformStyle: "preserve-3d",
+                  backfaceVisibility: "hidden",
+                  willChange: "transform",
+                }}
               >
-                {/* Text Loader Container */}
-                <div className="relative inline-block py-20 px-10">
-                  {/* Green Text with Breathing Effect (Fills from 0 to 100%) */}
-                  <motion.div 
-                    className="overflow-hidden py-10"
-                    style={{ 
-                      width: `${progress}%`,
-                    }}
-                  >
-                    <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-[#57AD43] to-[#61CE70] select-none font-sans whitespace-nowrap leading-[1.5] py-4 px-10">
-                      Texongo
-                    </h1>
-                  </motion.div>
+                {/* Logo Image Loader Container */}
+                <div className="relative py-16 px-6 flex items-center justify-center">
+                  <div className="relative w-[150px] md:w-[200px] h-[30px] md:h-[39px] flex items-center justify-center">
+                    {/* Background silhouette/outline of the logo - Muted Grey & Dark Green */}
+                    <img
+                      src="/logos/logo.png"
+                      alt="Texongo Background"
+                      className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none"
+                      style={{ 
+                        imageRendering: '-webkit-optimize-contrast',
+                        transform: 'translateZ(0)',
+                        backfaceVisibility: 'hidden',
+                        willChange: 'transform',
+                        filter: 'invert(1) hue-rotate(180deg) brightness(0.35)'
+                      }}
+                    />
+                    
+                    {/* Filled/Colored Logo that expands horizontally from left to right as progress increases */}
+                    <motion.div
+                      className="absolute inset-y-0 left-0 overflow-hidden select-none pointer-events-none"
+                      style={{ width: `${progress}%` }}
+                    >
+                      <img
+                        src="/logos/logo.png"
+                        alt="Texongo"
+                        className="w-[150px] md:w-[200px] h-[30px] md:h-[39px] absolute top-0 left-0 object-contain"
+                        style={{ 
+                          maxWidth: 'none', 
+                          imageRendering: '-webkit-optimize-contrast',
+                          transform: 'translateZ(0)',
+                          backfaceVisibility: 'hidden',
+                          willChange: 'transform',
+                          filter: 'invert(1) hue-rotate(180deg)'
+                        }}
+                      />
+                    </motion.div>
+                  </div>
                 </div>
               </motion.div>
             </motion.div>

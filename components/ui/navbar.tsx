@@ -257,7 +257,7 @@ export function Navbar() {
                                         <li key={subItem} className="group/item">
                                           <Link
                                             href={`/fabrics?category=${subItem.toLowerCase().replace(/ /g, '-')}`}
-                                            className="group/link relative text-[12px] font-normal text-gray-400 hover:text-[#57AD43] transition-all flex items-center py-1"
+                                            className="group/link relative text-[12px] font-medium text-gray-400 hover:text-[#57AD43] transition-all flex items-center py-1"
                                           >
                                             <span>{subItem}</span>
                                             <span className="absolute bottom-[-4px] left-0 w-0 h-[1.5px] bg-[#57AD43] group-hover/link:w-full transition-all duration-500 ease-out" />
@@ -309,7 +309,7 @@ export function Navbar() {
                       >
                         <Link
                           href="/orders"
-                          className="flex items-center gap-3 px-6 py-4 text-[11px] font-black uppercase tracking-widest text-gray-500 hover:text-black hover:bg-gray-50 transition-all border-b border-gray-50"
+                          className="flex items-center gap-3 px-6 py-4 text-[11px] font-medium uppercase tracking-widest text-gray-500 hover:text-black hover:bg-gray-50 transition-all border-b border-gray-50"
                           onClick={() => setIsAccountOpen(false)}
                         >
                           My Orders
@@ -320,7 +320,7 @@ export function Navbar() {
                             setIsAccountOpen(false);
                             window.location.href = "/";
                           }}
-                          className="w-full flex items-center justify-between px-6 py-4 text-[9px] font-black uppercase tracking-widest text-red-500 hover:bg-red-50 transition-all"
+                          className="w-full flex items-center justify-between px-6 py-4 text-[9px] font-medium uppercase tracking-widest text-red-500 hover:bg-red-50 transition-all"
                         >
                           Logout
                         </button>
@@ -379,7 +379,7 @@ export function Navbar() {
                           <div className="flex items-center justify-between">
                             {item.href === "#" ? (
                               <span
-                                className="text-sm font-black uppercase tracking-[0.1em] py-3 block cursor-pointer flex-1"
+                                className="text-sm font-medium uppercase tracking-[0.1em] py-3 block cursor-pointer flex-1"
                                 onClick={() => setActiveAccordion(activeAccordion === item.name ? null : item.name)}
                               >
                                 {item.name}
@@ -387,7 +387,7 @@ export function Navbar() {
                             ) : (
                               <Link
                                 href={item.href}
-                                className="text-sm font-black uppercase tracking-[0.1em] py-3 block flex-1"
+                                className="text-sm font-medium uppercase tracking-[0.1em] py-3 block flex-1"
                                 onClick={() => setIsMobileMenuOpen(false)}
                               >
                                 {item.name}
@@ -421,7 +421,7 @@ export function Navbar() {
                                       <li key={sub.name}>
                                         <Link
                                           href={sub.href}
-                                          className="text-xs font-bold text-gray-400 uppercase tracking-widest"
+                                          className="text-xs font-medium text-gray-400 uppercase tracking-widest"
                                           onClick={() => setIsMobileMenuOpen(false)}
                                         >
                                           {sub.name}
@@ -434,7 +434,7 @@ export function Navbar() {
                                   <div className="pl-4 py-4 space-y-6">
                                     {item.megaMenu.map((cat) => (
                                       <div key={cat.title}>
-                                        <h4 className="text-[12px] font-black uppercase tracking-widest text-black mb-3">
+                                        <h4 className="text-[12px] font-medium uppercase tracking-widest text-black mb-3">
                                           {cat.title}
                                         </h4>
                                         <ul className="grid grid-cols-2 gap-y-2 gap-x-4">
@@ -442,7 +442,7 @@ export function Navbar() {
                                             <li key={sub}>
                                               <Link
                                                 href={`/fabrics?category=${sub.toLowerCase().replace(/ /g, '-')}`}
-                                                className="text-[12px] font-bold text-gray-400"
+                                                className="text-[12px] font-medium text-gray-400"
                                                 onClick={() => setIsMobileMenuOpen(false)}
                                               >
                                                 {sub}
@@ -465,15 +465,15 @@ export function Navbar() {
                     <div className="pt-8 border-t border-gray-100 flex flex-col gap-4">
                       {isLoggedIn ? (
                         <>
-                          <Link href="/orders" className="text-sm font-black uppercase tracking-widest text-[#57AD43]" onClick={() => setIsMobileMenuOpen(false)}>
+                          <Link href="/orders" className="text-sm font-medium uppercase tracking-widest text-[#57AD43]" onClick={() => setIsMobileMenuOpen(false)}>
                             My Orders
                           </Link>
-                          <button onClick={() => { logout(); setIsMobileMenuOpen(false); }} className="text-sm font-black uppercase tracking-widest text-red-500 text-left">
+                          <button onClick={() => { logout(); setIsMobileMenuOpen(false); }} className="text-sm font-medium uppercase tracking-widest text-red-500 text-left">
                             Logout
                           </button>
                         </>
                       ) : (
-                        <button onClick={() => { openAuthModal(); setIsMobileMenuOpen(false); }} className="text-sm font-black uppercase tracking-widest text-black text-left">
+                        <button onClick={() => { openAuthModal(); setIsMobileMenuOpen(false); }} className="text-sm font-medium uppercase tracking-widest text-black text-left">
                           Sign In
                         </button>
                       )}

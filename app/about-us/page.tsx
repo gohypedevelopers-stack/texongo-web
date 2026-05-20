@@ -54,7 +54,7 @@ export default function AboutUsPage() {
             </motion.div>
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.1 }} className="text-center md:text-left space-y-1 px-4">
               <h3 className="text-2xl font-bold text-black tracking-tighter">Mr. Jagdish Chand Gupta</h3>
-              <p className="text-[#57AD43] font-bold text-xs uppercase tracking-[0.3em]">Founder</p>
+              <span className="text-[#57AD43] font-bold text-xs uppercase tracking-[0.3em] block">Founder</span>
             </motion.div>
           </div>
           <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="space-y-8">
@@ -79,13 +79,21 @@ export default function AboutUsPage() {
 
         {/* Section 2: Growth & Expansion (Inverted) */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <motion.div {...fadeIn} className="order-2 lg:order-1 space-y-8">
+          <motion.div {...fadeIn} className="order-2 lg:order-1 space-y-6">
             <div>
               <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Timeline</span>
               <h2 className="text-2xl md:text-5xl font-bold text-black mb-6 tracking-tight">Growth & Expansion</h2>
-              <p className="text-sm font-medium text-gray-500 leading-relaxed">
-                As the business flourished, the next generation stepped in. Manoj Gupta, his son, joined the company and, by the late 1990s, expanded operations into knitted fabrics, exports, dyeing, and knitting units, transforming the company into a fully integrated textile powerhouse.
-              </p>
+              <div className="space-y-4">
+                <p className="text-sm font-medium text-gray-500 leading-relaxed">
+                  As the business flourished under the visionary foundation laid by our founder, the next generation stepped in to scale the brand to new heights. Manoj Gupta, his son, joined the company with a mandate to diversify, modernize, and institutionalize operations. By the late 1990s, under his dynamic leadership, Syndicate Cloth House took a massive leap forward by expanding its core operations into knitted fabrics, specialized dyeing, modern processing, and advanced knitting units.
+                </p>
+                <p className="text-sm font-medium text-gray-500 leading-relaxed">
+                  This bold diversification successfully transformed the company from a traditional fabric trading house into a fully integrated textile powerhouse. Under his direction, the company built state-of-the-art facilities that streamlined the entire manufacturing cycle—from raw yarn selection to complex finishing processes. This high level of vertical integration ensured unparalleled quality control, rapid turnaround times, and the capability to cater to the demanding needs of global export markets and premium domestic brands.
+                </p>
+                <p className="text-sm font-medium text-gray-500 leading-relaxed">
+                  Today, this robust infrastructure forms the backbone of our manufacturing prowess. Manoj Gupta's insistence on upgrading technology, investing in green manufacturing practices, and nurturing long-term relationships with weavers and processors has cemented Syndicate's reputation as a reliable and progressive leader in the highly competitive knitted fabrics sector.
+                </p>
+              </div>
             </div>
           </motion.div>
           <div className="order-1 lg:order-2 space-y-6">
@@ -99,7 +107,7 @@ export default function AboutUsPage() {
             </motion.div>
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.3 }} className="text-center md:text-left space-y-1 px-4">
               <h3 className="text-2xl font-bold text-black tracking-tighter">Mr. Manoj Gupta</h3>
-              <p className="text-[#57AD43] font-bold text-xs uppercase tracking-[0.3em]">Managing Director</p>
+              <span className="text-[#57AD43] font-bold text-xs uppercase tracking-[0.3em] block">Managing Director</span>
             </motion.div>
           </div>
         </section>
@@ -117,15 +125,23 @@ export default function AboutUsPage() {
             </motion.div>
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.1 }} className="text-center md:text-left space-y-1 px-4">
               <h3 className="text-2xl font-bold text-black tracking-tighter">Aman Gupta</h3>
-              <p className="text-[#57AD43] font-bold text-xs uppercase tracking-[0.3em]">Managing Director</p>
+              <span className="text-[#57AD43] font-bold text-xs uppercase tracking-[0.3em] block">Managing Director</span>
             </motion.div>
           </div>
-          <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="space-y-8">
+          <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="space-y-6">
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Innovation</span>
             <h2 className="text-2xl md:text-5xl font-bold text-black mb-6 tracking-tight">A New Chapter</h2>
-            <p className="text-sm font-medium text-gray-500 leading-relaxed">
-              In 2017, Aman Gupta took the helm, bringing a fresh perspective and technological innovation. Recognizing the challenges of fabric sourcing, he launched Texongo, a pioneering platform designed to simplify fabric procurement through curated swatches and a unique subscription-based model. Today, Texongo serves 150+ brands and 50+ export & buying houses, making fabric sourcing more efficient and hassle-free.
-            </p>
+            <div className="space-y-4">
+              <p className="text-sm font-medium text-gray-500 leading-relaxed">
+                In 2017, Aman Gupta took the helm of the legacy business, bringing a fresh, global perspective and a passion for technological innovation. Recognizing the traditional, fragmented nature of fabric sourcing and the high friction points faced by designers and brands, he realized the industry was ripe for a digital transformation. With a bold vision to bridge the gap between traditional textile expertise and digital speed, he launched Texongo.
+              </p>
+              <p className="text-sm font-medium text-gray-500 leading-relaxed">
+                Texongo was built as a pioneering B2B platform designed to completely simplify and modernize fabric procurement. By introducing curated swatch kits, transparent pricing, and a unique, highly convenient subscription-based model, Texongo eliminated the endless back-and-forth typical of fabric sourcing. Aman's embrace of cutting-edge tech—including interactive digital fall simulators and 3D fashion studio drapes—has enabled designers to visualize fabrics in real-time, drastically reducing physical waste and product development cycles.
+              </p>
+              <p className="text-sm font-medium text-gray-500 leading-relaxed">
+                Today, Texongo has grown into a highly trusted digital partner, proudly serving over 150+ leading brands and 50+ prestigious export & buying houses worldwide. By combining half a century of textile heritage with frictionless digital experiences, Aman is driving Texongo to establish a new global standard for the fabric supply chain, making it more efficient, creative, and completely hassle-free.
+              </p>
+            </div>
           </motion.div>
         </section>
 
