@@ -4,6 +4,8 @@ import { FabricCard } from "../../components/ui/fabric-card";
 import { ChevronDown, Filter, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState, useMemo } from "react";
 import { Fabric, mapShopifyProduct } from "@/lib/shopify";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -90,31 +92,18 @@ export default function FabricsListingPage() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 400, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="pt-24 pb-12 md:pt-32 md:pb-16 bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 text-center space-y-4">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] block">Our Collection</span>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-[#121212]">
-            Knit Style
-          </h1>
-          <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto mt-6">
-            Explore our premium collection of fabrics curated for modern fashion and design.
-          </p>
-        </div>
-      </section>
-
       {/* Filter Bar */}
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-12 relative z-[100]">
+      <div id="filters-section" className="max-w-[1440px] mx-auto px-6 lg:px-10 pt-28 md:pt-36 pb-12 relative z-[100]">
         <div className="flex flex-col items-center gap-12 text-center">
           <div className="space-y-4">
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Curate Selection</span>
-            <h2 className="text-2xl md:text-5xl font-bold tracking-tight text-black">Curation <span className="text-[#57AD43]">Filters</span></h2>
-            <div className="h-px bg-gray-100 w-24 mx-auto" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Premium Collection</span>
+            <h1 className="text-3xl md:text-6xl font-bold tracking-tight text-black">Fabrics <span className="text-[#57AD43]">Catalog</span></h1>
+            <div className="h-px bg-emerald-100/60 w-24 mx-auto" />
           </div>
           
           <div className="flex flex-wrap justify-center items-center gap-6 relative">
@@ -172,7 +161,7 @@ export default function FabricsListingPage() {
               <p className="text-sm font-bold text-red-400 uppercase tracking-widest">{error}</p>
               <button
                 onClick={() => window.location.reload()}
-                className="px-6 py-2 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-sm"
+                className="px-8 py-3 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-full transition-all hover:bg-[#57AD43] shadow-[0_8px_20px_rgba(0,0,0,0.15)]"
               >
                 Retry
               </button>
@@ -208,7 +197,7 @@ export default function FabricsListingPage() {
                   <button
                     onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="h-10 w-10 flex items-center justify-center rounded-sm border border-gray-100 text-gray-400 hover:border-black hover:text-black transition-all disabled:opacity-30 disabled:hover:border-gray-100 disabled:hover:text-gray-400"
+                    className="h-10 w-10 flex items-center justify-center rounded-full border border-emerald-100/60 text-[#435C46]/60 hover:border-[#57AD43] hover:text-[#57AD43] transition-all disabled:opacity-30 disabled:hover:border-emerald-100/60 disabled:hover:text-[#435C46]/60"
                   >
                     <ChevronLeft size={16} />
                   </button>
@@ -225,10 +214,10 @@ export default function FabricsListingPage() {
                           {showEllipsis && <span className="text-gray-300">...</span>}
                           <button
                             onClick={() => handlePageChange(page)}
-                            className={`h-10 w-10 flex items-center justify-center text-[11px] font-black transition-all rounded-sm border ${
+                            className={`h-10 w-10 flex items-center justify-center text-[11px] font-black transition-all rounded-full border ${
                               currentPage === page
-                                ? "bg-black text-white border-black"
-                                : "bg-white text-gray-400 border-gray-100 hover:border-black hover:text-black"
+                                ? "bg-black text-white border-black shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
+                                : "bg-white text-[#435C46]/60 border-emerald-100/60 hover:border-[#57AD43] hover:text-[#57AD43]"
                             }`}
                           >
                             {page}
@@ -240,7 +229,7 @@ export default function FabricsListingPage() {
                   <button
                     onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
-                    className="h-10 w-10 flex items-center justify-center rounded-sm border border-gray-100 text-gray-400 hover:border-black hover:text-black transition-all disabled:opacity-30 disabled:hover:border-gray-100 disabled:hover:text-gray-400"
+                    className="h-10 w-10 flex items-center justify-center rounded-full border border-emerald-100/60 text-[#435C46]/60 hover:border-[#57AD43] hover:text-[#57AD43] transition-all disabled:opacity-30 disabled:hover:border-emerald-100/60 disabled:hover:text-[#435C46]/60"
                   >
                     <ChevronRight size={16} />
                   </button>
@@ -261,15 +250,17 @@ function FilterDropdown({ label, options, onSelect, active }: { label: string, o
       <div 
         onClick={() => setIsOpen(!isOpen)}
         className={`flex items-center gap-8 border rounded-full px-8 py-4 min-w-[240px] justify-between cursor-pointer transition-all group ${
-          active ? 'border-[#57AD43] bg-[#57AD43]/5' : 'border-gray-100 hover:border-[#57AD43] hover:bg-gray-50'
+          active 
+            ? 'border-[#57AD43] bg-[#57AD43]/5' 
+            : 'border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] hover:border-[#57AD43] hover:bg-emerald-50/20 backdrop-blur-sm'
         }`}
       >
-        <span className={`text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] ${active ? 'text-[#57AD43]' : 'text-[#121212]'}`}>{label}</span>
-        <ChevronDown size={14} className={`${active ? 'text-[#57AD43]' : 'text-gray-400'} group-hover:text-black transition-all ${isOpen ? 'rotate-180' : ''}`} />
+        <span className={`text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] ${active ? 'text-[#57AD43]' : 'text-black'}`}>{label}</span>
+        <ChevronDown size={14} className={`${active ? 'text-[#57AD43]' : 'text-[#435C46]/60'} group-hover:text-black transition-all ${isOpen ? 'rotate-180' : ''}`} />
       </div>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-4 w-full bg-white border border-gray-100 rounded-2xl shadow-2xl z-[500] overflow-hidden py-2 max-h-[300px] overflow-y-auto min-w-[240px]">
+        <div className="absolute top-full left-0 mt-4 w-full bg-white/95 backdrop-blur-lg border border-emerald-100/60 rounded-2xl shadow-[0_20px_40px_rgba(87,173,67,0.12)] z-[500] overflow-hidden py-2 max-h-[300px] overflow-y-auto min-w-[240px]">
           {options.map((opt) => (
             <div 
               key={opt}
@@ -279,7 +270,7 @@ function FilterDropdown({ label, options, onSelect, active }: { label: string, o
                 setIsOpen(false); 
               }}
               className={`px-8 py-4 text-[10px] font-black uppercase tracking-widest cursor-pointer transition-colors ${
-                label === opt ? 'bg-[#57AD43] text-white' : 'text-gray-500 hover:bg-gray-50 hover:text-black'
+                label === opt ? 'bg-[#57AD43] text-white' : 'text-[#435C46] hover:bg-emerald-50/40 hover:text-black'
               }`}
             >
               {opt}
@@ -300,13 +291,13 @@ function SortDropdown({ label, options, onSelect }: { label: string, options: st
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-3 cursor-pointer group"
       >
-        <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Sort Matrix:</span>
+        <span className="text-[11px] font-bold text-[#435C46]/60 uppercase tracking-widest">Sort Matrix:</span>
         <span className="text-[11px] font-black text-black uppercase tracking-widest">{label}</span>
         <ChevronDown size={14} className={`text-black transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </div>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-100 rounded-lg shadow-2xl z-[500] overflow-hidden py-2">
+        <div className="absolute top-full left-0 mt-2 w-full bg-white/95 backdrop-blur-lg border border-emerald-100/60 rounded-xl shadow-[0_20px_40px_rgba(87,173,67,0.12)] z-[500] overflow-hidden py-2">
           {options.map((opt) => (
             <div 
               key={opt}
@@ -316,7 +307,7 @@ function SortDropdown({ label, options, onSelect }: { label: string, options: st
                 setIsOpen(false); 
               }}
               className={`px-4 py-3 text-[10px] font-black uppercase tracking-widest cursor-pointer transition-colors ${
-                label === opt ? 'bg-[#57AD43] text-white' : 'text-gray-500 hover:bg-gray-50 hover:text-black'
+                label === opt ? 'bg-[#57AD43] text-white' : 'text-[#435C46] hover:bg-emerald-50/40 hover:text-black'
               }`}
             >
               {opt}
