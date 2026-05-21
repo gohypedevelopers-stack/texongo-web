@@ -337,8 +337,8 @@ function TestimonialsSection() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-6 lg:px-12 text-center">
-        <div className="mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-white">What Our Customers Say</h2>
+        <div className="mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-1.5 text-white">What Our Customers Say</h2>
 
           <div className="flex items-center justify-center gap-4">
             <div className="h-[1px] w-12 bg-white/30"></div>
@@ -432,7 +432,7 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
         >
           <div className="max-w-4xl mx-auto text-center pt-4 pb-4 px-6">
 
-            <h2 className="text-2xl md:text-4xl font-black mb-6 md:mb-8 tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
+            <h2 className="text-2xl md:text-4xl font-black mb-1.5 md:mb-2 tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
             <p className="text-base md:text-xl text-[#475467] font-medium leading-relaxed">
               Texongo combines traditional craftsmanship with cutting-edge 3D visualization.
               <br />Our digital-first approach allows designers to experience the texture, drape,
@@ -462,8 +462,8 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
               </div>
 
               <div className="w-full md:w-1/2 flex flex-col justify-center p-8 md:p-12 lg:p-16 bg-[#F9FAFB]">
-                <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[#57AD43] mb-4 md:mb-6 block">Innovation</span>
-                <h2 className="text-3xl md:text-5xl font-black mb-4 md:mb-6 leading-tight tracking-tight text-black">
+                <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 md:mb-2 block">Innovation</span>
+                <h2 className="text-3xl md:text-5xl font-black mb-2 md:mb-3 leading-tight tracking-tight text-black">
                   Streamline Your<br />Fabric Journey
                 </h2>
                 <p className="text-sm md:text-base text-black/70 leading-relaxed font-medium max-w-xl">
@@ -752,8 +752,8 @@ function BlogSection() {
   return (
     <section className="py-12 md:py-16 bg-[#F9FAFB]">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
-        <div className="flex flex-col items-center mb-20">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Latest Insights</span>
+        <div className="flex flex-col items-center mb-6">
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-0.5 block">Latest Insights</span>
           <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter text-center text-[#111111]">Our Stories</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">

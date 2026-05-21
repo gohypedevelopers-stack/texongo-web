@@ -17,6 +17,7 @@
 
 * {
   box-sizing: border-box;
+  font-family: var(--font-sans), sans-serif;
 }
 
 html {
@@ -31,7 +32,7 @@ body {
   overflow-x: hidden;
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Roboto', var(--font-sans), sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 
 a {

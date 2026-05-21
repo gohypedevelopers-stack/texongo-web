@@ -3,39 +3,35 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { PageHero } from "../../components/ui/page-hero";
 
 export default function TermsAndConditions() {
   return (
-    <main className="min-h-screen bg-white pb-32 pt-24 lg:pt-44">
+    <main className="min-h-screen bg-white pb-32">
       {/* Background Decor */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute -top-[10%] -right-[10%] w-[40%] h-[40%] bg-[#57AD43]/5 rounded-full blur-[120px]" />
         <div className="absolute -bottom-[10%] -left-[10%] w-[40%] h-[40%] bg-gray-100/50 rounded-full blur-[120px]" />
       </div>
 
-      <div className="max-w-[1000px] mx-auto px-6 lg:px-10 relative z-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-20 text-center"
+      <div className="max-w-[1000px] mx-auto px-6 lg:px-10 relative z-10 pt-12 text-center">
+        <Link
+          href="/"
+          className="group inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors mb-4"
         >
-          <Link
-            href="/"
-            className="group inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors mb-12"
-          >
-            <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-1" />
-            Back to Home
-          </Link>
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Legal Agreement</span>
-          <h1 className="text-3xl md:text-6xl font-bold tracking-tight text-black mb-6">
-            Terms & <span className="text-[#57AD43]">Conditions</span>
-          </h1>
+          <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-1" />
+          Back to Home
+        </Link>
+      </div>
+
+      <PageHero subtitle="Legal Agreement" mainTitle="Terms &" accentTitle="Conditions" />
+
+      <div className="max-w-[1000px] mx-auto px-6 lg:px-10 relative z-10">
+        <div className="text-center mb-16">
           <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-gray-400">
             Last Updated: April 2026
           </p>
-        </motion.div>
+        </div>
 
         {/* Content */}
         <motion.div

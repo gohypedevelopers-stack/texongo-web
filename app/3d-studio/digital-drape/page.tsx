@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { X, Loader2, ArrowRight } from "lucide-react";
 import { WatermarkOverlay, VideoBadge } from "@/components/ui/watermark";
+import { PageHero } from "@/components/ui/page-hero";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -301,28 +302,21 @@ export default function DigitalDrapePage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#F9FAFB] text-[#111111] pt-24 lg:pt-32">
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-16 text-center">
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block"
-        >
-          3D Studio
-        </motion.span>
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
+    <main className="min-h-screen bg-white text-[#111111]">
+      <PageHero subtitle="3D Studio" mainTitle="Digital" accentTitle="Drape" />
+      
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 text-center mt-2">
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-3xl md:text-6xl font-bold tracking-tight mb-6"
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-[#475467]/60 text-[10px] md:text-xs uppercase tracking-[0.3em] max-w-2xl mx-auto font-bold leading-relaxed"
         >
-          Digital Drape
-        </motion.h1>
-        <p className="text-[#475467]/60 text-[10px] md:text-xs uppercase tracking-[0.3em] max-w-2xl mx-auto font-bold leading-relaxed">
           Digital Drape, Real-World Sourcing. Explore hyper-realistic 3D simulations of fabrics you can buy and use today.
-        </p>
+        </motion.p>
       </div>
 
-      <section className="max-w-[1440px] mx-auto px-6 lg:px-10 pb-24">
+      <section className="max-w-[1440px] mx-auto px-6 lg:px-10 pb-24 mt-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
           <AnimatePresence mode="popLayout">
             {currentIds.map((id) => (

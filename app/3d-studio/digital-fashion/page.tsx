@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { X, Loader2 } from "lucide-react";
 import { WatermarkOverlay, VideoBadge } from "@/components/ui/watermark";
+import { PageHero } from "@/components/ui/page-hero";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -283,21 +284,17 @@ export default function DigitalFashionPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Dynamic Header */}
-      <div className="pt-32 pb-16 px-6 text-center bg-[#F9FAFB] border-b border-black/5">
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block"
+      <PageHero subtitle="3D Studio" mainTitle="Digital" accentTitle="Fashion" />
+      
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 text-center mt-2">
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-[#475467]/60 text-[10px] md:text-xs uppercase tracking-[0.3em] max-w-2xl mx-auto font-bold leading-relaxed"
         >
-          3D Studio
-        </motion.span>
-        <h1 className="text-3xl md:text-6xl font-bold text-black tracking-tight mb-4">
-          Digital Fashion
-        </h1>
-        <p className="text-[#475467]/60 text-[10px] md:text-xs uppercase tracking-[0.3em] max-w-2xl mx-auto font-bold leading-relaxed">
           The Future of Fashion, Digitized. High-fidelity 3D simulations of fabrics available in our inventory
-        </p>
+        </motion.p>
       </div>
 
       <section className="max-w-[1440px] mx-auto px-6 lg:px-10 pb-24 mt-12">

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { PageHero } from "../../components/ui/page-hero";
 
 export default function AboutUsPage() {
   const fadeIn = {
@@ -19,13 +20,14 @@ export default function AboutUsPage() {
 
   return (
     <main className="min-h-screen bg-white">
+      <PageHero subtitle="Legacy & Journey" mainTitle="About" accentTitle="Us" />
       <div className="relative h-[100vh]">
         <section className="sticky top-0 h-screen bg-white z-10 flex items-center w-full overflow-hidden pt-16 md:pt-20">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-[1440px] mx-auto px-6 lg:px-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full"
+            className="max-w-[1440px] mx-auto px-6 lg:px-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full -mt-16 md:-mt-28 lg:-mt-36"
           >
             <div className="space-y-3">
               <motion.div {...imageReveal} className="relative aspect-square md:aspect-[6/7] rounded-2xl overflow-hidden shadow-xl group">

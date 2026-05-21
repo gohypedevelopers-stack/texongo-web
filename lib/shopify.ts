@@ -45,9 +45,14 @@ export async function shopifyFetch<T>({
 }
 
 export const PRODUCTS_QUERY = `
-  query getProducts($first: Int!) {
-    products(first: $first) {
+  query getProducts($first: Int!, $after: String) {
+    products(first: $first, after: $after) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
       edges {
+        cursor
         node {
           id
           title
@@ -237,11 +242,11 @@ export function mapShopifyProduct(node: any): Fabric {
   };
 }
 
-export async function getShopifyProducts(limit: number = 20): Promise<Fabric[]> {
+export async function getShopifyProducts(limit: number = 20, after: string | null = null): Promise<Fabric[]> {
   try {
     const response = await shopifyFetch<any>({
       query: PRODUCTS_QUERY,
-      variables: { first: limit },
+      variables: { first: limit, after },
     });
 
     if (!response.data || !response.data.products) {
@@ -252,6 +257,40 @@ export async function getShopifyProducts(limit: number = 20): Promise<Fabric[]> 
   } catch (err) {
     return [];
   }
+}
+
+export async function getAllShopifyProducts(): Promise<Fabric[]> {
+  const allProducts: Fabric[] = [];
+  let hasNextPage = true;
+  let cursor: string | null = null;
+
+  try {
+    while (hasNextPage) {
+      const response = await shopifyFetch<any>({
+        query: PRODUCTS_QUERY,
+        variables: { first: 250, after: cursor },
+      });
+
+      if (!response.data || !response.data.products) {
+        break;
+      }
+
+      const { edges, pageInfo } = response.data.products;
+      const products = edges.map(({ node }: any) => mapShopifyProduct(node));
+      allProducts.push(...products);
+
+      hasNextPage = pageInfo?.hasNextPage || false;
+      cursor = pageInfo?.endCursor || null;
+
+      if (edges.length === 0) {
+        break;
+      }
+    }
+  } catch (err) {
+    console.error('Error fetching all products:', err);
+  }
+
+  return allProducts;
 }
 
 export const PRODUCT_BY_HANDLE_QUERY = `

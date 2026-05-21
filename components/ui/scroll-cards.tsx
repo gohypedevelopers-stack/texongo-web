@@ -92,15 +92,15 @@ const Card: FC<iCardProps> = ({
           style={{ opacity: i === 0 ? 1 : opacity }}
           className={`relative z-20 w-full lg:w-[40%] flex flex-col items-center lg:items-start text-center lg:text-left py-4 transition-transform duration-500 ${isEven ? 'lg:order-2 lg:mr-auto' : 'lg:order-1 lg:ml-auto lg:translate-x-16'}`}
         >
-          <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-4 text-[#57AD43]">
+          <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-1.5 text-[#57AD43]">
             {tag || "Collection"}
           </span>
 
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 md:mb-6 tracking-tight leading-tight text-[#111111]">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-2 md:mb-3 tracking-tight leading-tight text-[#111111]">
             {title}
           </h2>
 
-          <p className="text-sm md:text-base font-medium text-black/60 mb-6 md:mb-8 max-w-md leading-relaxed">
+          <p className="text-sm md:text-base font-medium text-black/60 mb-3 md:mb-4 max-w-md leading-relaxed">
             {description}
           </p>
 

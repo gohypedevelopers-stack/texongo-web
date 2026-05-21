@@ -17,10 +17,8 @@ if (typeof window !== "undefined") {
 // 1. THEME-ADAPTIVE INLINE STYLES
 // -------------------------------------------------------------------------
 const STYLES = `
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
-
 .cinematic-footer-wrapper {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-sans), sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -64,15 +62,11 @@ const STYLES = `
 
 /* Giant Background Text Masking */
 .footer-giant-bg-text {
-  font-size: 26vw;
-  line-height: 0.75;
+  font-size: 23vw;
+  line-height: 0.5;
   font-weight: 900;
   letter-spacing: -0.05em;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(87, 173, 67, 0.08);
-  background: linear-gradient(180deg, rgba(87, 173, 67, 0.1) 0%, transparent 60%);
-  -webkit-background-clip: text;
-  background-clip: text;
+  color: #57AD43;
 }
 
 /* Metallic Text Glow */
@@ -103,7 +97,7 @@ const STYLES = `
 // -------------------------------------------------------------------------
 // 2. MAGNETIC BUTTON PRIMITIVE
 // -------------------------------------------------------------------------
-export type MagneticButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & 
+export type MagneticButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   React.AnchorHTMLAttributes<HTMLAnchorElement> & {
     as?: React.ElementType;
   };
@@ -158,7 +152,7 @@ const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
       }, element);
 
       return () => ctx.revert();
-    },[]);
+    }, []);
 
     return (
       <Component
@@ -220,6 +214,15 @@ export function MotionFooter() {
     if (typeof window === "undefined") return;
     if (!wrapperRef.current) return;
 
+    // Safety fallback: if ScrollTrigger never fires (e.g. page too tall from many products),
+    // force the elements visible after 1.5 seconds.
+    const safetyTimer = setTimeout(() => {
+      if (headingRef.current) gsap.set(headingRef.current, { opacity: 1, y: 0 });
+      if (linksRef.current) gsap.set(linksRef.current, { opacity: 1, y: 0 });
+      if (giantTextRef.current) gsap.set(giantTextRef.current, { opacity: 1, y: 0, scale: 1 });
+      ScrollTrigger.refresh();
+    }, 1500);
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
         giantTextRef.current,
@@ -231,7 +234,7 @@ export function MotionFooter() {
           ease: "power1.out",
           scrollTrigger: {
             trigger: wrapperRef.current,
-            start: "top 80%",
+            start: "top 95%",
             end: "bottom bottom",
             scrub: 1,
           },
@@ -248,7 +251,7 @@ export function MotionFooter() {
           ease: "power3.out",
           scrollTrigger: {
             trigger: wrapperRef.current,
-            start: "top 40%",
+            start: "top 95%",
             end: "bottom bottom",
             scrub: 1,
           },
@@ -256,8 +259,19 @@ export function MotionFooter() {
       );
     }, wrapperRef);
 
-    return () => ctx.revert();
-  },[]);
+    // Re-refresh ScrollTrigger whenever the document height changes
+    // (critical when 1100+ product cards finish rendering)
+    const resizeObserver = new ResizeObserver(() => {
+      ScrollTrigger.refresh();
+    });
+    resizeObserver.observe(document.body);
+
+    return () => {
+      clearTimeout(safetyTimer);
+      resizeObserver.disconnect();
+      ctx.revert();
+    };
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -266,14 +280,14 @@ export function MotionFooter() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
-      
+
       <div
         ref={wrapperRef}
         className="relative h-screen w-full"
         style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
       >
         <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-black text-white cinematic-footer-wrapper">
-          
+
           {/* Ambient Light & Grid Background */}
           <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[80px] pointer-events-none z-0" />
           <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none" />
@@ -281,7 +295,7 @@ export function MotionFooter() {
           {/* Giant background text */}
           <div
             ref={giantTextRef}
-            className="footer-giant-bg-text absolute -bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none"
+            className="footer-giant-bg-text absolute bottom-[3vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none"
           >
             TEXONGO
           </div>
@@ -297,7 +311,7 @@ export function MotionFooter() {
 
             {/* Content Grid */}
             <div ref={linksRef} className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full">
-              
+
               {/* About Us */}
               <div className="space-y-4">
                 <h4 className="text-white font-bold uppercase tracking-widest text-sm">About Us</h4>
@@ -376,7 +390,7 @@ export function MotionFooter() {
 
           {/* 3. Bottom Bar / Credits */}
           <div className="relative z-20 w-full pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
-            
+
             {/* Copyright */}
             <div className="text-white/40 text-[10px] md:text-xs font-semibold tracking-widest uppercase order-2 md:order-1">
               © 2026 Texongo Fabrics. All rights reserved.

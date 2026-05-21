@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useCartStore } from "@/lib/store";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, Minus, Plus, ShoppingBag, ArrowRight, ArrowLeft } from "lucide-react";
+import { PageHero } from "../../components/ui/page-hero";
 import { useEffect, useState } from "react";
 import { createCheckout } from "@/lib/shopify";
 import { Loader2 } from "lucide-react";
@@ -62,39 +63,36 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <main className="min-h-screen bg-white flex flex-col items-center justify-center p-6 pb-40">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center"
-        >
-          <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8">
-            <ShoppingBag size={40} className="text-gray-300" />
-          </div>
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Your Selection</span>
-          <h1 className="text-3xl md:text-6xl font-bold tracking-tight mb-4">Your Bag Is Empty</h1>
-          <p className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-10">Start adding some premium fabrics to your collection.</p>
-          <Link 
-            href="/fabrics" 
-            className="inline-flex items-center gap-3 bg-black text-white px-10 py-5 text-[10px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] transition-all rounded-sm"
+      <main className="min-h-screen bg-white pb-40">
+        <PageHero subtitle="Your Selection" mainTitle="Your" accentTitle="Bag" />
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 text-center mt-12">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="text-center"
           >
-            Explore Fabrics
-          </Link>
-        </motion.div>
+            <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8">
+              <ShoppingBag size={40} className="text-gray-300" />
+            </div>
+            <h2 className="text-2xl md:text-4xl font-bold tracking-tight mb-4 text-black">Your Bag Is Empty</h2>
+            <p className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-10">Start adding some premium fabrics to your collection.</p>
+            <Link 
+              href="/fabrics" 
+              className="inline-flex items-center gap-3 bg-black text-white px-10 py-5 text-[10px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] transition-all rounded-sm"
+            >
+              Explore Fabrics
+            </Link>
+          </motion.div>
+        </div>
       </main>
     );
   }
 
   return (
     <main className="min-h-screen bg-gray-50/50 pb-32">
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 pt-16">
-        
-        {/* Centered Page Title */}
-        <div className="text-center mb-16">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Your Selection</span>
-          <h1 className="text-3xl md:text-6xl font-bold tracking-tight">Your Bag</h1>
-        </div>
-
+      <PageHero subtitle="Your Selection" mainTitle="Your" accentTitle="Bag" />
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-10 mt-8">
         <div className="flex flex-col lg:flex-row gap-16">
           
           {/* Left: Items List */}

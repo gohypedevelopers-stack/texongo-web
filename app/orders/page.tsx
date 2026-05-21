@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Package, Clock, CheckCircle2, Truck, XCircle, ShoppingBag, ArrowRight } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import Link from "next/link";
+import { PageHero } from "@/components/ui/page-hero";
 
 export default function OrdersPage() {
   const { isLoggedIn, orders, user } = useAuthStore();
@@ -50,24 +51,28 @@ export default function OrdersPage() {
   };
 
   return (
-    <main className="min-h-screen pt-32 pb-24 bg-gray-50/30">
+    <main className="min-h-screen bg-gray-50/30 pb-24">
+      <PageHero subtitle="Order History" mainTitle="Your" accentTitle="Orders" />
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 pb-12 border-b border-gray-100">
+        {/* User Greeting & Stats Bar */}
+        <div className="bg-white border border-gray-100 p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 shadow-sm rounded-sm">
           <div>
-            <h1 className="text-3xl font-black uppercase tracking-[0.3em] text-black mb-4">Order History</h1>
-            <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400">
-              Welcome back, <span className="text-black">{user?.name}</span>. Managing your textile archive.
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#57AD43] mb-1">Archive Member</p>
+            <h2 className="text-lg font-black uppercase tracking-wider text-black">
+              Welcome Back, {user?.name}
+            </h2>
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+              Managing your curated textile archive.
             </p>
           </div>
-          <div className="flex items-center gap-12">
+          <div className="flex items-center gap-12 border-t md:border-t-0 pt-4 md:pt-0 w-full md:w-auto border-gray-50">
             <div>
-              <p className="text-[9px] font-black uppercase tracking-widest text-gray-300 mb-2">Total Orders</p>
-              <p className="text-xl font-black">{orders.length}</p>
+              <p className="text-[9px] font-black uppercase tracking-widest text-gray-300 mb-1">Total Orders</p>
+              <p className="text-xl font-black text-black">{orders.length}</p>
             </div>
             <div>
-              <p className="text-[9px] font-black uppercase tracking-widest text-gray-300 mb-2">Member Since</p>
-              <p className="text-xl font-black uppercase tracking-widest text-sm">2024</p>
+              <p className="text-[9px] font-black uppercase tracking-widest text-gray-300 mb-1">Member Since</p>
+              <p className="text-xl font-black text-black uppercase tracking-widest text-sm">2024</p>
             </div>
           </div>
         </div>

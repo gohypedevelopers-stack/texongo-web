@@ -2,6 +2,7 @@
 
 import { ContactForm } from "../../components/ui/contact-form";
 import { motion } from "framer-motion";
+import { PageHero } from "../../components/ui/page-hero";
 
 export default function ContactUsPage() {
   const fadeIn = {
@@ -12,20 +13,9 @@ export default function ContactUsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white -mt-16 pt-28 lg:pt-32 pb-0">
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-20 mb-8 lg:mb-16">
-        <motion.div {...fadeIn} className="text-center space-y-4">
-          <span className="text-[10px] md:text-xs font-black uppercase text-[#57AD43] block tracking-widest">
-            Get In Touch
-          </span>
-          <h1 className="text-4xl md:text-7xl font-bold text-black tracking-tight mb-6">
-            Contact Us
-          </h1>
-          <p className="text-gray-500 font-medium max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
-            We'd love to hear from you. Whether you have a question about our fabrics, pricing, or anything else, our team is ready to answer all your questions.
-          </p>
-        </motion.div>
-      </div>
+    <main className="min-h-screen bg-white pb-0">
+      <PageHero subtitle="Get In Touch" mainTitle="Contact" accentTitle="Us" />
+
 
       {/* Main Form & Info Section */}
       <section className="bg-white w-full">

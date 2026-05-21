@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Truck, Package, Clock, ShieldCheck, Globe } from "lucide-react";
+import { PageHero } from "../../components/ui/page-hero";
 
 const FeatureCard = ({ icon: Icon, title, content }: any) => (
   <div className="bg-gray-50/50 p-8 border border-gray-100 space-y-4">
@@ -14,33 +15,34 @@ const FeatureCard = ({ icon: Icon, title, content }: any) => (
 
 export default function ShippingAndReturnPolicy() {
   return (
-    <main className="min-h-screen bg-white pb-32 pt-24 lg:pt-48">
+    <main className="min-h-screen bg-white pb-32">
       {/* Background Decor */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute top-[15%] -left-[10%] w-[40%] h-[40%] bg-[#57AD43]/5 rounded-full blur-[120px]" />
         <div className="absolute bottom-[15%] -right-[10%] w-[40%] h-[40%] bg-blue-50/40 rounded-full blur-[120px]" />
       </div>
 
+      <div className="max-w-[1240px] mx-auto px-8 lg:px-12 relative z-10 pt-12 text-center">
+        <Link
+          href="/"
+          className="group inline-flex items-center gap-3 text-[12px] font-black uppercase tracking-[0.3em] text-gray-400 hover:text-black transition-all mb-4"
+        >
+          <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-2" />
+          Return to Store
+        </Link>
+      </div>
+
+      <PageHero subtitle="Store Policies" mainTitle="Shipping &" accentTitle="Returns" />
+
       <div className="max-w-[1240px] mx-auto px-8 lg:px-12 relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-32 text-center"
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+          className="mb-24 text-center"
         >
-          <Link
-            href="/"
-            className="group inline-flex items-center gap-3 text-[12px] font-black uppercase tracking-[0.3em] text-gray-400 hover:text-black transition-all mb-16"
-          >
-            <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-2" />
-            Return to Store
-          </Link>
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 block">Store Policies</span>
-          <h1 className="text-3xl md:text-6xl font-bold tracking-tight text-black mb-8 leading-none">
-            Shipping & <span className="text-[#57AD43]">Returns</span>
-          </h1>
-          <p className="max-w-2xl text-gray-500 text-sm font-medium leading-relaxed italic border-l-4 border-[#57AD43] pl-8 mt-12 py-2 mx-auto text-center">
+          <p className="max-w-2xl text-gray-500 text-sm font-medium leading-relaxed italic border-l-4 border-[#57AD43] pl-8 py-2 mx-auto text-center">
             "Delivering premium knitted fabrics worldwide with accuracy, care, and total transparency."
           </p>
         </motion.div>
