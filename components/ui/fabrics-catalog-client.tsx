@@ -310,6 +310,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
                     price={fabric.price}
                     gsm={fabric.gsm}
                     image={fabric.image}
+                    variantId={fabric.variantId}
                   />
                 ))}
               </div>

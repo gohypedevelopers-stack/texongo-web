@@ -160,7 +160,7 @@ export function Navbar() {
               }`}
           >
             {/* Glassmorphism Pill Container */}
-            <div className="relative flex items-center justify-between px-8 md:px-12 h-12 md:h-14 bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.06)] rounded-full transition-all duration-500">
+            <div className="relative flex items-center justify-between px-8 md:px-12 h-12 md:h-14 bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.06)] rounded-full transition-all duration-500" id="navbar-pill">
 
               {/* Logo */}
               <Link href="/" className="flex-shrink-0" onClick={() => setIsMobileMenuOpen(false)}>
@@ -177,7 +177,7 @@ export function Navbar() {
                   {navItems.map((item) => (
                     <li
                       key={item.name}
-                      className={`${item.megaMenu ? "" : "relative"} h-full flex items-center`}
+                      className={`relative h-full flex items-center`}
                       onMouseEnter={() => setHoveredItem(item.name)}
                       onMouseLeave={() => setHoveredItem(null)}
                     >
@@ -208,6 +208,11 @@ export function Navbar() {
                         </Link>
                       )}
 
+                      {/* Invisible hover bridge - fills the gap so mouse doesn't trigger onMouseLeave */}
+                      {hoveredItem === item.name && (item.dropdown || item.megaMenu) && (
+                        <div className="absolute top-full left-0 w-full h-[32px] z-[1099]" />
+                      )}
+
                       {/* Dropdown or Mega Menu */}
                       <AnimatePresence>
                         {hoveredItem === item.name && (item.dropdown || item.megaMenu) && (
@@ -216,9 +221,9 @@ export function Navbar() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 10 }}
                             transition={{ duration: 0.2, ease: "easeOut" }}
-                            className={`absolute top-[calc(100%+12px)] z-[1100] bg-white/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-white/20 rounded-3xl overflow-hidden ${item.megaMenu
-                              ? "fixed md:absolute left-1/2 -translate-x-1/2 w-[calc(100vw-4rem)] max-w-[1100px]"
-                              : "left-0 min-w-48"
+                            className={`absolute top-[calc(100%+28px)] z-[1100] bg-white/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] border border-gray-100 rounded-2xl ${item.megaMenu
+                              ? "left-1/2 -translate-x-1/2 w-[min(calc(100vw-4rem),1100px)]"
+                              : "left-1/2 -translate-x-1/2 min-w-48"
                               }`}
                           >
                             {item.dropdown && (
@@ -238,29 +243,29 @@ export function Navbar() {
                             )}
 
                             {item.megaMenu && (
-                              <div className="grid grid-cols-5 divide-x divide-gray-100 p-0 overflow-hidden">
-                                {item.megaMenu.map((category, idx) => (
+                              <div className="flex divide-x divide-gray-100 rounded-2xl overflow-hidden">
+                                {item.megaMenu.map((category) => (
                                   <div
                                     key={category.title}
-                                    className="flex flex-col gap-6 p-10 hover:bg-gray-50/50 transition-colors duration-300"
+                                    className="flex flex-col gap-5 p-6 flex-1 min-w-0 hover:bg-gray-50/60 transition-colors duration-300"
                                   >
-                                    <div className="space-y-1.5">
-                                      <h3 className="text-[13px] font-medium uppercase tracking-[0.2em] text-black flex items-center gap-2">
-                                        <span className="w-1.5 h-1.5 bg-[#57AD43] rounded-full"></span>
+                                    <div className="space-y-2">
+                                      <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black flex items-center gap-2 whitespace-nowrap">
+                                        <span className="w-1.5 h-1.5 bg-[#57AD43] rounded-full flex-shrink-0"></span>
                                         {category.title}
                                       </h3>
                                       <div className="h-[1px] w-full bg-gray-100"></div>
                                     </div>
 
-                                    <ul className={`grid gap-x-6 gap-y-2.5 ${category.items.length > 10 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                                    <ul className="grid gap-y-2 grid-cols-1">
                                       {category.items.map((subItem) => (
-                                        <li key={subItem} className="group/item">
+                                        <li key={subItem}>
                                           <Link
                                             href={`/fabrics?category=${subItem.toLowerCase().replace(/ /g, '-')}`}
-                                            className="group/link relative text-[12px] font-medium text-gray-400 hover:text-[#57AD43] transition-all flex items-center py-1"
+                                            className="relative text-[11px] font-medium text-gray-400 hover:text-[#57AD43] transition-all flex items-center py-0.5 group/link"
                                           >
                                             <span>{subItem}</span>
-                                            <span className="absolute bottom-[-4px] left-0 w-0 h-[1.5px] bg-[#57AD43] group-hover/link:w-full transition-all duration-500 ease-out" />
+                                            <span className="absolute bottom-[-2px] left-0 w-0 h-[1px] bg-[#57AD43] group-hover/link:w-full transition-all duration-400 ease-out" />
                                           </Link>
                                         </li>
                                       ))}

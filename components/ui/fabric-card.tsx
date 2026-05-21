@@ -12,6 +12,7 @@ interface FabricCardProps {
   price: string;
   gsm: string;
   image: string;
+  variantId?: string;
   isNew?: boolean;
 }
 
@@ -43,7 +44,7 @@ function getFallbackImage(name: string, id: string) {
   return FALLBACK_PRODUCT_IMAGES[index];
 }
 
-export function FabricCard({ id, name, gsm, price, image }: FabricCardProps) {
+export function FabricCard({ id, name, gsm, price, image, variantId }: FabricCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
 
@@ -52,6 +53,7 @@ export function FabricCard({ id, name, gsm, price, image }: FabricCardProps) {
     e.stopPropagation();
     addItem({
       id,
+      variantId,
       name,
       price: parseInt(price),
       gsm,

@@ -328,7 +328,7 @@ function TestimonialsSection() {
       {/* Background Image with Dark Overlay */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/hero/hero-fabrics.jpg"
+          src="/fabric-bg-clean.png"
           alt="Testimonials Background"
           fill
           className="object-cover opacity-60 mix-blend-overlay grayscale-[30%]"
@@ -536,7 +536,7 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
                 </div>
               </div>
 
-              <div className="-mx-6 lg:-mx-10 overflow-hidden">
+              <div className={`-mx-6 lg:-mx-10 overflow-hidden ${styles.marqueeViewport}`}>
                 <div className={styles.productTrack}>
                   {(products && products.length > 0
                     ? [...products, ...products].slice(0, 24)
