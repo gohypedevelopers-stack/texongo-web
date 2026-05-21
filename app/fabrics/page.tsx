@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { FabricsCatalogClient } from "../../components/ui/fabrics-catalog-client";
 import { getAllShopifyProducts } from "@/lib/shopify";
 
@@ -17,7 +18,13 @@ export default async function FabricsListingPage() {
         </div>
       </div>
 
-      <FabricsCatalogClient initialFabrics={fabrics} />
+      <Suspense fallback={
+        <div className="flex items-center justify-center min-h-[400px]">
+          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest animate-pulse">Loading Fabrics Catalog...</span>
+        </div>
+      }>
+        <FabricsCatalogClient initialFabrics={fabrics} />
+      </Suspense>
     </main>
   );
 }

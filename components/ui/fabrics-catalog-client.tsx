@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { FabricCard } from "./fabric-card";
 import { ChevronDown, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
@@ -18,6 +19,11 @@ interface FabricsCatalogClientProps {
 }
 
 export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const categoryParam = searchParams.get("category") || "";
+
   // Use initialFabrics directly for instant load!
   const [fabrics] = useState<Fabric[]>(initialFabrics);
 
@@ -32,7 +38,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedGsm, selectedColor, sortBy]);
+  }, [selectedGsm, selectedColor, sortBy, categoryParam]);
 
   // Whenever the filtered list or page changes, refresh ScrollTrigger to ensure the footer triggers correctly!
   useEffect(() => {
@@ -42,7 +48,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
       }, 150);
       return () => clearTimeout(timer);
     }
-  }, [currentPage, selectedGsm, selectedColor, sortBy]);
+  }, [currentPage, selectedGsm, selectedColor, sortBy, categoryParam]);
 
   // Derived Data
   const gsmOptions = ["All GSM", "Light (<200)", "Medium (200-300)", "Heavy (>300)"];
@@ -53,10 +59,24 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
 
   const sortOptions = ["Latest Selection", "Price: Low to High", "Price: High to Low", "GSM: Low to High"];
 
+  // Human-readable Category Formatter
+  const formatCategoryName = (slug: string) => {
+    return slug
+      .split("-")
+      .map(word => {
+        if (word === "tshirt") return "T-Shirt";
+        if (word === "coords") return "Co-Ords";
+        if (word === "coord") return "Co-Ord";
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(" ");
+  };
+
   // Filtering & Sorting Logic
   const filteredFabrics = useMemo(() => {
     return fabrics
       .filter(f => {
+        // GSM Filter Match
         const rawValue = typeof f.gsm === 'string' ? f.gsm : '';
         const rawGsm = parseInt(rawValue.replace(/[^0-9]/g, ''));
         const gsmMatch = !selectedGsm || selectedGsm === "All GSM" || (() => {
@@ -65,8 +85,104 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
           if (rawGsm <= 300) return selectedGsm === "Medium (200-300)";
           return selectedGsm === "Heavy (>300)";
         })();
+
+        // Color Filter Match
         const colorMatch = !selectedColor || selectedColor === "All Colors" || f.shade === selectedColor;
-        return gsmMatch && colorMatch;
+
+        // Category Filter Match from MegaMenu URL parameter
+        let categoryMatch = true;
+        if (categoryParam) {
+          const normParam = categoryParam.toLowerCase().replace(/[^a-z0-9]/g, '');
+          const ignoredDescriptors = ["blend", "blends", "fabric", "fabrics", "knit", "knits", "style", "styles", "wear", "wears"];
+
+          // Helper to normalize and check for containing or being contained (handles singular/plural and partial words)
+          const checkMatch = (val: string | undefined | null) => {
+            if (!val || val === 'N/A') return false;
+            const normVal = val.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return normVal.includes(normParam) || normParam.includes(normVal);
+          };
+
+          // Group categories to apply precise filtering rules
+          const knitStyles = [
+            "singlejersey", "frenchterry", "fleece", "rib", "spandexknits",
+            "pique", "interlock", "waffle", "jacquard", "stripes",
+            "corduroy", "vellour", "corduroyvellour", "printed", "shiffly", "ponte", "yarn", "neps", "popcorn"
+          ];
+
+          const blends = [
+            "cotton", "viscose", "cottonmodal", "giza", "egyptian", "gizagyptian", "melange",
+            "nylon", "polycotton", "polyester", "slubs", "spandexblends", "australian",
+            "wool", "supima", "bananafabric", "ecovero", "hemp",
+            "linen", "lotus", "modal", "organiccotton", "recycledcotton", "tencel", "bci"
+          ];
+
+          const isKnitStyleCat = knitStyles.some(style => normParam.includes(style) || style.includes(normParam));
+          const isBlendCat = blends.some(blend => normParam.includes(blend) || blend.includes(normParam));
+
+          if (isKnitStyleCat) {
+            // For Knit Styles:
+            // 1. If product has an explicit knit style metafield, it MUST match the category.
+            // 2. Otherwise, if it has a product type (other than generic 'Knit Fabric'), it MUST match.
+            // 3. Otherwise fall back to title or fabric metafield.
+            // We intentionally do NOT match description or composition to avoid false positives (e.g. Corduroy showing under Jersey).
+            const productKnit = (f.knit_style && f.knit_style !== 'N/A')
+              ? f.knit_style
+              : (f.type && f.type !== 'N/A' && f.type !== 'Knit Fabric')
+                ? f.type
+                : null;
+
+            if (productKnit) {
+              categoryMatch = checkMatch(productKnit);
+            } else {
+              categoryMatch = checkMatch(f.fabric) || checkMatch(f.name);
+            }
+          } else if (isBlendCat) {
+            // For Blends (e.g., Cotton, Viscose, Poly Cotton):
+            // Check composition, fabric, or title using split OR/AND logic
+            const checkBlendMatch = (val: string | undefined | null) => {
+              if (!val || val === 'N/A') return false;
+              const normVal = val.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+              if (normVal.includes(normParam)) return true;
+
+              // Handle composite blend queries like poly-cotton or giza/-egyptian
+              const orGroups = categoryParam.toLowerCase().split(/[\/]/);
+              return orGroups.some(group => {
+                const cleanGroup = group.replace(/^-+|-+$/g, '');
+                const andParts = cleanGroup.split('-').filter(p => p.length > 1 && !ignoredDescriptors.includes(p));
+                if (andParts.length > 0) {
+                  return andParts.every(part => normVal.includes(part));
+                }
+                return false;
+              });
+            };
+
+            categoryMatch = checkBlendMatch(f.composition) || checkBlendMatch(f.fabric) || checkBlendMatch(f.name);
+          } else {
+            // For Garment / Usage / Wear categories:
+            // Check usage, product type, or title using OR logic for parts (e.g. tshirt/tops)
+            const checkUsageMatch = (val: string | undefined | null) => {
+              if (!val || val === 'N/A') return false;
+              const normVal = val.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+              if (normVal.includes(normParam) || normParam.includes(normVal)) return true;
+
+              const orGroups = categoryParam.toLowerCase().split(/[\/]/);
+              return orGroups.some(group => {
+                const cleanGroup = group.replace(/^-+|-+$/g, '');
+                const parts = cleanGroup.split('-').filter(p => p.length > 1 && !ignoredDescriptors.includes(p));
+                if (parts.length > 0) {
+                  return parts.some(part => normVal.includes(part) || part.includes(normVal));
+                }
+                return false;
+              });
+            };
+
+            categoryMatch = checkUsageMatch(f.usage) || checkUsageMatch(f.type) || checkUsageMatch(f.name);
+          }
+        }
+
+        return gsmMatch && colorMatch && categoryMatch;
       })
       .sort((a, b) => {
         if (sortBy === "Price: Low to High") return parseFloat(a.price) - parseFloat(b.price);
@@ -78,7 +194,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
         }
         return 0; // Latest Selection is default order from API
       });
-  }, [fabrics, selectedGsm, selectedColor, sortBy]);
+  }, [fabrics, selectedGsm, selectedColor, sortBy, categoryParam]);
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredFabrics.length / ITEMS_PER_PAGE);
@@ -138,7 +254,14 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
 
             <div className="pt-4">
               <button
-                onClick={() => { setSelectedGsm(""); setSelectedColor(""); setSortBy("Latest Selection"); }}
+                onClick={() => {
+                  setSelectedGsm("");
+                  setSelectedColor("");
+                  setSortBy("Latest Selection");
+                  if (categoryParam) {
+                    router.push(pathname);
+                  }
+                }}
                 className="w-full flex items-center justify-center gap-2 border border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] rounded-xl px-5 py-3 text-[9px] font-bold text-[#435C46] uppercase tracking-[0.2em] hover:border-[#57AD43] hover:bg-emerald-50/20 backdrop-blur-sm transition-all cursor-pointer"
               >
                 Reset Filters
@@ -149,6 +272,23 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
 
         {/* Product Grid (Right Column on Desktop, stacked underneath filters on Mobile) */}
         <div className="lg:col-span-3 order-2 lg:order-2">
+          {categoryParam && (
+            <div className="mb-8 flex flex-wrap items-center gap-3 bg-emerald-50/20 border border-emerald-100/60 rounded-2xl px-5 py-3 backdrop-blur-sm">
+              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Active Category:</span>
+              <span className="text-[10px] font-black text-[#57AD43] uppercase tracking-widest bg-[#57AD43]/10 px-3 py-1 rounded-full">
+                {formatCategoryName(categoryParam)}
+              </span>
+              <button
+                onClick={() => {
+                  router.push(pathname);
+                }}
+                className="ml-auto text-[8px] font-bold uppercase tracking-widest text-[#435C46] hover:text-[#57AD43] transition-colors border-b border-transparent hover:border-[#57AD43] pb-0.5"
+              >
+                Clear Category
+              </button>
+            </div>
+          )}
+
           {paginatedFabrics.length === 0 ? (
             <div className="flex flex-col items-center justify-center min-h-[400px] w-full gap-6 text-center">
               <p className="text-xl font-black uppercase tracking-tighter text-gray-300">No matches found for these filters</p>
@@ -197,8 +337,8 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
                           <button
                             onClick={() => handlePageChange(page)}
                             className={`h-10 w-10 flex items-center justify-center text-[11px] font-black transition-all rounded-full border ${currentPage === page
-                                ? "bg-black text-white border-black shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
-                                : "bg-white text-[#435C46]/60 border-emerald-100/60 hover:border-[#57AD43] hover:text-[#57AD43]"
+                              ? "bg-black text-white border-black shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
+                              : "bg-white text-[#435C46]/60 border-emerald-100/60 hover:border-[#57AD43] hover:text-[#57AD43]"
                               }`}
                           >
                             {page}
@@ -240,8 +380,8 @@ function FilterDropdown({ label, options, onSelect, active }: FilterDropdownProp
       <div
         onClick={() => setIsOpen(!isOpen)}
         className={`flex items-center gap-4 border rounded-xl px-5 py-3 w-full justify-between cursor-pointer transition-all group ${active
-            ? 'border-[#57AD43] bg-[#57AD43]/5'
-            : 'border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] hover:border-[#57AD43] hover:bg-emerald-50/20 backdrop-blur-sm'
+          ? 'border-[#57AD43] bg-[#57AD43]/5'
+          : 'border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] hover:border-[#57AD43] hover:bg-emerald-50/20 backdrop-blur-sm'
           }`}
       >
         <span className={`text-[9px] font-bold uppercase tracking-[0.2em] truncate ${active ? 'text-[#57AD43]' : 'text-black'}`}>{label}</span>
