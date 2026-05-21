@@ -242,6 +242,11 @@ p {
   color: #000000 !important;
 }
 
+/* Ensure all paragraphs inside the homepage container have exactly font-weight 400 in every section */
+.homepage-container p {
+  font-weight: 400 !important;
+}
+
 /* Preserve light text in dark backgrounds (e.g. Testimonials, Hero overlay, Footer) and white/light class paragraphs */
 .bg-black p,
 .bg-brand-black p,
@@ -274,5 +279,5 @@ p[class*="font-black"] {
 
 p.font-medium,
 p[class*="font-medium"] {
-  font-weight: 500 !important;
+  font-weight: 400 !important;
 }

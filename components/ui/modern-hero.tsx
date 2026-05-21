@@ -215,7 +215,7 @@ const ScheduleItem = ({ title, date, location, desc }: { title: string; date: st
           <FiMapPin />
         </div>
       </div>
-      <p className="max-w-xl text-sm leading-relaxed text-black/60 font-medium">
+      <p className="max-w-xl text-sm leading-relaxed text-[#121212] font-medium">
         {desc}
       </p>
     </motion.div>

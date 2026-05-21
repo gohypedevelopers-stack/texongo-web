@@ -3,7 +3,7 @@ import { FC, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { LazyVideo } from "../../app/lazy-video";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 
 // Types
 export interface iCardItem {
@@ -37,8 +37,6 @@ const Card: FC<iCardProps> = ({
 }) => {
   const container = useRef(null);
 
-  // Minimal opacity fade for parallax stacking effect
-  const opacity = useTransform(progress, range, [1, 0.7]);
   const isEven = i % 2 === 0;
 
   return (
@@ -89,7 +87,6 @@ const Card: FC<iCardProps> = ({
 
         {/* Text Details Block (Alternating order on desktop) */}
         <motion.div
-          style={{ opacity: i === 0 ? 1 : opacity }}
           className={`relative z-20 w-full lg:w-[40%] flex flex-col items-center lg:items-start text-center lg:text-left py-4 transition-transform duration-500 ${isEven ? 'lg:order-2 lg:mr-auto' : 'lg:order-1 lg:ml-auto lg:translate-x-16'}`}
         >
           <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-1.5 text-[#57AD43]">
@@ -100,7 +97,7 @@ const Card: FC<iCardProps> = ({
             {title}
           </h2>
 
-          <p className="text-sm md:text-base font-medium text-black/60 mb-3 md:mb-4 max-w-md leading-relaxed">
+          <p className="text-sm md:text-base font-medium text-[#111111] mb-3 md:mb-4 max-w-md leading-relaxed">
             {description}
           </p>
 

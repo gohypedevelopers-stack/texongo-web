@@ -29,7 +29,7 @@ export default function OrdersPage() {
           <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-10 leading-relaxed">
             Please sign in to view your order history and track your latest fabric deliveries.
           </p>
-          <Link 
+          <Link
             href="/"
             className="inline-flex items-center gap-3 px-10 py-5 bg-black text-white text-[11px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] transition-all rounded-sm group"
           >
@@ -85,7 +85,7 @@ export default function OrdersPage() {
             </div>
           ) : (
             orders.map((order, idx) => (
-              <motion.div 
+              <motion.div
                 key={order.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -130,14 +130,14 @@ export default function OrdersPage() {
                             <p className="text-[11px] font-bold text-gray-600">Price: ₹{item.price}/unit</p>
                           </div>
                         </div>
-                          <Link 
-                            href={`/fabrics/${item.id}`} // Dummy link
-                            className="bg-transparent text-black border border-gray-100 px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 hover:bg-black hover:text-white flex items-center gap-2 group"
-                          >
-                            <span className="group-hover:text-white transition-colors">Buy Again</span>
-                            <ArrowRight size={12} className="group-hover:text-white group-hover:translate-x-1 transition-all" />
-                          </Link>
-                        </div>
+                        <Link
+                          href={`/fabrics/${item.id}`} // Dummy link
+                          className="bg-transparent text-black border border-gray-100 px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 hover:bg-black hover:text-white flex items-center gap-2 group"
+                        >
+                          <span className="group-hover:text-white transition-colors">Buy Again</span>
+                          <ArrowRight size={12} className="group-hover:text-white group-hover:translate-x-1 transition-all" />
+                        </Link>
+                      </div>
                     ))}
                   </div>
                 </div>

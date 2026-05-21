@@ -166,7 +166,7 @@ const ScrollExpandMedia = ({
         </div>
       </div>
 
-      <div className="relative z-10 pt-10 pb-10 w-full px-8 md:px-16 bg-[#F9FAFB]">
+      <div className="relative z-10 pt-3 pb-8 w-full px-8 md:px-16 bg-[#F9FAFB]">
         {children}
       </div>
     </>

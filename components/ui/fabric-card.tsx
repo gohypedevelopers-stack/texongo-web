@@ -64,7 +64,7 @@ export function FabricCard({ id, name, gsm, price, image, variantId }: FabricCar
   const finalImage = image && image !== "" ? image : getFallbackImage(name, id);
 
   return (
-    <motion.div 
+    <motion.div
       className="group relative flex flex-col items-center text-center bg-white p-4"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -81,7 +81,7 @@ export function FabricCard({ id, name, gsm, price, image, variantId }: FabricCar
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
-          
+
           {/* GSM Badge */}
           <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[9px] font-black uppercase tracking-widest px-2 py-1 z-10">
             GSM: {gsm} g/m²
@@ -90,13 +90,13 @@ export function FabricCard({ id, name, gsm, price, image, variantId }: FabricCar
           {/* Hover Action Overlay */}
           <AnimatePresence>
             {isHovered && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 className="absolute bottom-4 left-4 right-4 z-20"
               >
-                <button 
+                <button
                   onClick={handleAddToCart}
                   className="w-full bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] py-3 hover:bg-[#57AD43] transition-colors rounded-sm shadow-xl"
                 >

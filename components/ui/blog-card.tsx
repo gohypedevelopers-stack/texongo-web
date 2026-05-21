@@ -14,7 +14,7 @@ interface BlogCardProps {
 
 export function BlogCard({ title, date, excerpt, image, href }: BlogCardProps) {
   return (
-    <motion.article 
+    <motion.article
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -37,7 +37,7 @@ export function BlogCard({ title, date, excerpt, image, href }: BlogCardProps) {
             {title}
           </h2>
         </Link>
-        
+
         <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
           <span>{date}</span>
           <span className="opacity-30">//</span>
@@ -48,7 +48,7 @@ export function BlogCard({ title, date, excerpt, image, href }: BlogCardProps) {
           {excerpt}
         </p>
 
-        <Link 
+        <Link
           href={href}
           className="text-xs font-black uppercase tracking-widest text-[#57AD43] border-b border-transparent hover:border-[#57AD43] transition-all w-fit pb-1 mt-2"
         >

@@ -42,7 +42,7 @@ export function Preloader() {
       {isLoading && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ 
+          exit={{
             opacity: 0,
             transition: { duration: 1, ease: [0.76, 0, 0.24, 1] }
           }}
@@ -52,8 +52,8 @@ export function Preloader() {
             {/* Logo Overlay Container */}
             <motion.div
               initial={{ y: 20, opacity: 0 }}
-              animate={{ 
-                y: 0, 
+              animate={{
+                y: 0,
                 opacity: 1,
               }}
               transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
@@ -84,7 +84,7 @@ export function Preloader() {
                       src="/logos/logo.png"
                       alt="Texongo Background"
                       className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none"
-                      style={{ 
+                      style={{
                         imageRendering: '-webkit-optimize-contrast',
                         transform: 'translateZ(0)',
                         backfaceVisibility: 'hidden',
@@ -92,7 +92,7 @@ export function Preloader() {
                         filter: 'invert(1) hue-rotate(180deg) brightness(0.35)'
                       }}
                     />
-                    
+
                     {/* Filled/Colored Logo that expands horizontally from left to right as progress increases */}
                     <motion.div
                       className="absolute inset-y-0 left-0 overflow-hidden select-none pointer-events-none"
@@ -102,8 +102,8 @@ export function Preloader() {
                         src="/logos/logo.png"
                         alt="Texongo"
                         className="w-[150px] md:w-[200px] h-[30px] md:h-[39px] absolute top-0 left-0 object-contain"
-                        style={{ 
-                          maxWidth: 'none', 
+                        style={{
+                          maxWidth: 'none',
                           imageRendering: '-webkit-optimize-contrast',
                           transform: 'translateZ(0)',
                           backfaceVisibility: 'hidden',
@@ -117,22 +117,22 @@ export function Preloader() {
               </motion.div>
             </motion.div>
           </div>
-          
+
           {/* Subtle Ambient Glows */}
           <div className="absolute inset-0 pointer-events-none">
-             <motion.div 
-               animate={{
-                 opacity: [0.3, 0.6, 0.3],
-                 scale: [1, 1.2, 1],
-               }}
-               transition={{
-                 duration: 4,
-                 repeat: Infinity,
-                 ease: "easeInOut"
-               }}
-               className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#57AD43]/10 blur-[150px] rounded-full" 
-             />
-             <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent" />
+            <motion.div
+              animate={{
+                opacity: [0.3, 0.6, 0.3],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#57AD43]/10 blur-[150px] rounded-full"
+            />
+            <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent" />
           </div>
         </motion.div>
       )}

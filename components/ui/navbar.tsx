@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Search, User, ShoppingBag, ChevronDown, Menu, X, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -84,6 +84,40 @@ export function Navbar() {
   const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
   const [isDesktop, setIsDesktop] = useState(true);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const handleItemMouseEnter = (itemName: string) => {
+    if (hoverTimeout.current) {
+      clearTimeout(hoverTimeout.current);
+      hoverTimeout.current = null;
+    }
+    setHoveredItem(itemName);
+  };
+
+  const handleItemMouseLeave = () => {
+    if (hoverTimeout.current) {
+      clearTimeout(hoverTimeout.current);
+    }
+    hoverTimeout.current = setTimeout(() => {
+      setHoveredItem(null);
+    }, 200);
+  };
+
+  const handleDropdownMouseEnter = () => {
+    if (hoverTimeout.current) {
+      clearTimeout(hoverTimeout.current);
+      hoverTimeout.current = null;
+    }
+  };
+
+  const handleDropdownMouseLeave = () => {
+    if (hoverTimeout.current) {
+      clearTimeout(hoverTimeout.current);
+    }
+    hoverTimeout.current = setTimeout(() => {
+      setHoveredItem(null);
+    }, 200);
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -178,8 +212,8 @@ export function Navbar() {
                     <li
                       key={item.name}
                       className={`relative h-full flex items-center`}
-                      onMouseEnter={() => setHoveredItem(item.name)}
-                      onMouseLeave={() => setHoveredItem(null)}
+                      onMouseEnter={() => handleItemMouseEnter(item.name)}
+                      onMouseLeave={handleItemMouseLeave}
                     >
                       {item.href === "#" ? (
                         <span className="group relative flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-black transition-colors h-full cursor-default">
@@ -208,73 +242,42 @@ export function Navbar() {
                         </Link>
                       )}
 
-                      {/* Invisible hover bridge - fills the gap so mouse doesn't trigger onMouseLeave */}
-                      {hoveredItem === item.name && (item.dropdown || item.megaMenu) && (
-                        <div className="absolute top-full left-0 w-full h-[32px] z-[1099]" />
-                      )}
-
-                      {/* Dropdown or Mega Menu */}
+                      {/* Desktop simple dropdown centered under the item itself */}
                       <AnimatePresence>
-                        {hoveredItem === item.name && (item.dropdown || item.megaMenu) && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 10 }}
-                            transition={{ duration: 0.2, ease: "easeOut" }}
-                            className={`absolute top-[calc(100%+28px)] z-[1100] bg-white/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] border border-gray-100 rounded-2xl ${item.megaMenu
-                              ? "left-1/2 -translate-x-1/2 w-[min(calc(100vw-4rem),1100px)]"
-                              : "left-1/2 -translate-x-1/2 min-w-48"
-                              }`}
+                        {hoveredItem === item.name && item.dropdown && (
+                          <div
+                            className="absolute top-full left-1/2 -translate-x-1/2 pt-[28px] z-[1100]"
+                            onMouseEnter={handleDropdownMouseEnter}
+                            onMouseLeave={handleDropdownMouseLeave}
                           >
-                            {item.dropdown && (
-                              <ul className="flex flex-col py-4">
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: 10 }}
+                              transition={{ duration: 0.2, ease: "easeOut" }}
+                              className="bg-white/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] border border-gray-100 rounded-2xl min-w-[200px]"
+                            >
+                              {/* Small heading on top */}
+                              <div className="pt-4 px-6 mb-0 text-center">
+                                <h3 className="text-[9px] font-black uppercase tracking-[0.18em] text-[#57AD43]">
+                                  Studio
+                                </h3>
+                                <div className="h-[1px] w-full bg-gray-100 mt-1"></div>
+                              </div>
+                              <ul className="flex flex-col pb-4 pt-0">
                                 {item.dropdown.map((subItem) => (
                                   <li key={subItem.name}>
                                     <Link
                                       href={subItem.href}
-                                      className="group relative block px-6 py-3 text-[12px] font-medium text-gray-400 hover:text-black hover:bg-black/5 transition-all"
+                                      className="block px-6 py-3 text-[12px] font-medium text-gray-400 hover:text-black hover:font-bold hover:bg-black/5 transition-all text-center whitespace-nowrap"
                                     >
                                       {subItem.name}
-                                      <span className="absolute bottom-[-2px] left-6 right-6 w-0 h-[1.5px] bg-[#57AD43] group-hover:w-[calc(100%-3rem)] transition-all duration-500 ease-out" />
                                     </Link>
                                   </li>
                                 ))}
                               </ul>
-                            )}
-
-                            {item.megaMenu && (
-                              <div className="flex divide-x divide-gray-100 rounded-2xl overflow-hidden">
-                                {item.megaMenu.map((category) => (
-                                  <div
-                                    key={category.title}
-                                    className="flex flex-col gap-5 p-6 flex-1 min-w-0 hover:bg-gray-50/60 transition-colors duration-300"
-                                  >
-                                    <div className="space-y-2">
-                                      <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black flex items-center gap-2 whitespace-nowrap">
-                                        <span className="w-1.5 h-1.5 bg-[#57AD43] rounded-full flex-shrink-0"></span>
-                                        {category.title}
-                                      </h3>
-                                      <div className="h-[1px] w-full bg-gray-100"></div>
-                                    </div>
-
-                                    <ul className="grid gap-y-2 grid-cols-1">
-                                      {category.items.map((subItem) => (
-                                        <li key={subItem}>
-                                          <Link
-                                            href={`/fabrics?category=${subItem.toLowerCase().replace(/ /g, '-')}`}
-                                            className="relative text-[11px] font-medium text-gray-400 hover:text-[#57AD43] transition-all flex items-center py-0.5 group/link"
-                                          >
-                                            <span>{subItem}</span>
-                                            <span className="absolute bottom-[-2px] left-0 w-0 h-[1px] bg-[#57AD43] group-hover/link:w-full transition-all duration-400 ease-out" />
-                                          </Link>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </motion.div>
+                            </motion.div>
+                          </div>
                         )}
                       </AnimatePresence>
                     </li>
@@ -354,6 +357,69 @@ export function Navbar() {
                   {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
                 </button>
               </div>
+
+              {/* Desktop Mega-Menus positioned in the middle of the navbar */}
+              <AnimatePresence>
+                {hoveredItem && (
+                  (() => {
+                    const activeItem = navItems.find(item => item.name === hoveredItem);
+                    if (!activeItem || !activeItem.megaMenu) return null;
+                    return (
+                      <>
+                        {/* Global Invisible Hover Bridge */}
+                        <div
+                          onMouseEnter={handleDropdownMouseEnter}
+                          onMouseLeave={handleDropdownMouseLeave}
+                          className="absolute top-full left-0 w-full h-[16px] z-[1099] bg-transparent"
+                        />
+                        <div
+                          className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 z-[1100]"
+                          onMouseEnter={handleDropdownMouseEnter}
+                          onMouseLeave={handleDropdownMouseLeave}
+                        >
+                          <motion.div
+                            key={activeItem.name}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                            className="bg-white/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] border border-gray-100 rounded-2xl w-[min(calc(100vw-4rem),1100px)]"
+                          >
+                            <div className="flex divide-x divide-gray-100 rounded-2xl overflow-hidden">
+                              {activeItem.megaMenu.map((category) => (
+                                <div
+                                  key={category.title}
+                                  className="flex flex-col gap-2.5 p-6 flex-1 min-w-0 hover:bg-gray-50/60 transition-colors duration-300"
+                                >
+                                  <div className="space-y-1">
+                                    <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#57AD43] flex items-center whitespace-nowrap">
+                                      {category.title}
+                                    </h3>
+                                    <div className="h-[1px] w-full bg-gray-100"></div>
+                                  </div>
+
+                                  <ul className="grid gap-y-0.5 grid-cols-1">
+                                    {category.items.map((subItem) => (
+                                      <li key={subItem}>
+                                        <Link
+                                          href={`/fabrics?category=${subItem.toLowerCase().replace(/ /g, '-')}`}
+                                          className="flex items-center px-3 py-1.5 text-[11px] font-medium text-gray-400 hover:text-[#57AD43] hover:font-bold hover:bg-black/5 rounded-lg transition-all w-full"
+                                        >
+                                          {subItem}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              ))}
+                            </div>
+                          </motion.div>
+                        </div>
+                      </>
+                    );
+                  })()
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Mobile Navigation Drawer */}
