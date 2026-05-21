@@ -636,7 +636,7 @@ function ProductCatalogSection() {
             <div className="space-y-1">
               <h3 className="text-xl md:text-3xl font-black tracking-tight text-[#111111] uppercase">Womens Wear</h3>
             </div>
-            <Link href="#womenswear" className="text-xs font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
+            <Link href="/fabrics?category=womenwear" className="text-xs font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
               Explore Section
             </Link>
           </div>
@@ -682,7 +682,7 @@ function ProductCatalogSection() {
             <div className="space-y-1">
               <h3 className="text-xl md:text-3xl font-black tracking-tight text-[#111111] uppercase">Mens Wear</h3>
             </div>
-            <Link href="#menswear" className="text-xs font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
+            <Link href="/fabrics?category=menwear" className="text-xs font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
               Explore Section
             </Link>
           </div>

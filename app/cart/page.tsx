@@ -22,7 +22,7 @@ export default function CartPage() {
 
   const handleCheckout = async () => {
     if (items.length === 0) return;
-    
+
     setIsCheckingOut(true);
     try {
       const checkoutItems = items.map(item => ({
@@ -66,7 +66,7 @@ export default function CartPage() {
       <main className="min-h-screen bg-white pb-40">
         <PageHero subtitle="Your Selection" mainTitle="Your" accentTitle="Bag" />
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10 text-center mt-12">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
@@ -77,8 +77,8 @@ export default function CartPage() {
             </div>
             <h2 className="text-2xl md:text-4xl font-bold tracking-tight mb-4 text-black">Your Bag Is Empty</h2>
             <p className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-10">Start adding some premium fabrics to your collection.</p>
-            <Link 
-              href="/fabrics" 
+            <Link
+              href="/fabrics"
               className="inline-flex items-center gap-3 bg-black text-white px-10 py-5 text-[10px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] transition-all rounded-sm"
             >
               Explore Fabrics
@@ -94,7 +94,7 @@ export default function CartPage() {
       <PageHero subtitle="Your Selection" mainTitle="Your" accentTitle="Bag" />
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10 mt-8">
         <div className="flex flex-col lg:flex-row gap-16">
-          
+
           {/* Left: Items List */}
           <div className="flex-1">
             <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
@@ -104,7 +104,7 @@ export default function CartPage() {
             <div className="space-y-8">
               <AnimatePresence mode='popLayout'>
                 {items.map((item) => (
-                  <motion.div 
+                  <motion.div
                     key={item.id}
                     layout
                     initial={{ opacity: 0, y: 20 }}
@@ -138,14 +138,14 @@ export default function CartPage() {
 
                       <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-50">
                         <div className="flex items-center gap-1 border border-gray-100 rounded-sm bg-gray-50/50 p-1">
-                          <button 
+                          <button
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
                             className="w-8 h-8 flex items-center justify-center hover:bg-white rounded-sm transition-colors text-gray-500 hover:text-black"
                           >
                             <Minus size={14} />
                           </button>
                           <span className="w-10 text-center text-xs font-black">{item.quantity}</span>
-                          <button 
+                          <button
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
                             className="w-8 h-8 flex items-center justify-center hover:bg-white rounded-sm transition-colors text-gray-500 hover:text-black"
                           >
@@ -153,7 +153,7 @@ export default function CartPage() {
                           </button>
                         </div>
 
-                        <button 
+                        <button
                           onClick={() => removeItem(item.id)}
                           className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-red-400 hover:text-red-600 transition-colors"
                         >
@@ -167,8 +167,8 @@ export default function CartPage() {
               </AnimatePresence>
             </div>
 
-            <Link 
-              href="/fabrics" 
+            <Link
+              href="/fabrics"
               className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-black mt-12 transition-colors"
             >
               <ArrowLeft size={14} />
@@ -180,7 +180,7 @@ export default function CartPage() {
           <aside className="w-full lg:w-[400px]">
             <div className="bg-black text-white p-10 lg:sticky lg:top-32 rounded-sm shadow-2xl">
               <h2 className="text-xl font-black uppercase tracking-[0.2em] mb-10 pb-6 border-b border-white/10 text-center">Order Summary</h2>
-              
+
               <div className="space-y-6 mb-10">
                 <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-white/40">
                   <span>Subtotal</span>
@@ -196,7 +196,7 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={handleCheckout}
                 disabled={isCheckingOut}
                 className="w-full h-16 bg-white flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] hover:text-white transition-all rounded-sm group disabled:opacity-50 disabled:cursor-not-allowed"
@@ -205,7 +205,7 @@ export default function CartPage() {
                 {!isCheckingOut && <ArrowRight size={18} className="text-black group-hover:text-white transition-all group-hover:translate-x-1" />}
                 {isCheckingOut && <Loader2 size={18} className="text-black group-hover:text-white animate-spin" />}
               </button>
-              
+
               <div className="mt-8 pt-8 border-t border-white/5 flex flex-col gap-4">
                 <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] italic text-center leading-relaxed">
                   Complimentary worldwide shipping applies to all textile orders during launch phase.

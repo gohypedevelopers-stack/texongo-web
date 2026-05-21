@@ -95,31 +95,70 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
           const normParam = categoryParam.toLowerCase().replace(/[^a-z0-9]/g, '');
           const ignoredDescriptors = ["blend", "blends", "fabric", "fabrics", "knit", "knits", "style", "styles", "wear", "wears"];
 
-          // Helper to normalize and check for containing or being contained (handles singular/plural and partial words)
-          const checkMatch = (val: string | undefined | null) => {
-            if (!val || val === 'N/A') return false;
-            const normVal = val.toLowerCase().replace(/[^a-z0-9]/g, '');
-            return normVal.includes(normParam) || normParam.includes(normVal);
-          };
+          // Handle broad heading categories explicitly
+          if (normParam === "knitstyle" || normParam === "knitstyles") {
+            const knitKeywords = [
+              "jersey", "terry", "fleece", "rib", "spandex", "knit", "knits", "pique", "interlock",
+              "waffle", "jacquard", "stripe", "stripes", "corduroy", "vellour", "printed", "shiffly",
+              "ponte", "yarn", "neps", "popcorn"
+            ];
+            const searchStr = `${f.knit_style || ""} ${f.composition || ""} ${f.fabric || ""} ${f.name || ""} ${f.type || ""}`.toLowerCase();
+            categoryMatch = knitKeywords.some(keyword => searchStr.includes(keyword));
+          } else if (normParam === "blends" || normParam === "blend") {
+            const blendKeywords = [
+              "cotton", "viscose", "modal", "giza", "egyptian", "melange",
+              "nylon", "poly", "polyester", "slub", "spandex", "australian", "blend"
+            ];
+            const searchStr = `${f.composition || ""} ${f.fabric || ""} ${f.name || ""}`.toLowerCase();
+            categoryMatch = blendKeywords.some(keyword => searchStr.includes(keyword));
+          } else if (normParam === "menwear" || normParam === "menswear" || normParam === "men") {
+            const menKeywords = [
+              "cargo", "hoodie", "hoodies", "coord", "coords", "tshirt", "t-shirt", "jogger", "joggers",
+              "loungewear", "polo", "polos", "sweatshirt", "sweatshirts", "men", "mens", "boy", "boys"
+            ];
+            const searchStr = `${f.composition || ""} ${f.fabric || ""} ${f.name || ""} ${f.type || ""} ${f.usage || ""}`.toLowerCase();
+            categoryMatch = menKeywords.some(keyword => searchStr.includes(keyword));
+          } else if (normParam === "womenwear" || normParam === "womenswear" || normParam === "women") {
+            const womenKeywords = [
+              "tshirt", "t-shirt", "top", "tops", "athleisure", "coord", "coords", "dress", "dresses", "hoodie",
+              "hoodies", "jumpsuit", "jumpsuits", "lining", "polo", "polos", "scarf", "scarves", "skirt", "skirts",
+              "sweatshirt", "sweatshirts", "women", "womens", "girl", "girls"
+            ];
+            const searchStr = `${f.composition || ""} ${f.fabric || ""} ${f.name || ""} ${f.type || ""} ${f.usage || ""}`.toLowerCase();
+            categoryMatch = womenKeywords.some(keyword => searchStr.includes(keyword));
+          } else if (normParam === "sustainableblends" || normParam === "sustainableblend" || normParam === "sustainable") {
+            const sustKeywords = [
+              "wool", "supima", "banana", "ecovero", "eco vero", "hemp",
+              "linen", "lotus", "modal", "organic", "recycled", "tencel", "bci", "sustainable", "eco"
+            ];
+            const searchStr = `${f.composition || ""} ${f.fabric || ""} ${f.name || ""}`.toLowerCase();
+            categoryMatch = sustKeywords.some(keyword => searchStr.includes(keyword));
+          } else {
+            // Helper to normalize and check for containing or being contained (handles singular/plural and partial words)
+            const checkMatch = (val: string | undefined | null) => {
+              if (!val || val === 'N/A') return false;
+              const normVal = val.toLowerCase().replace(/[^a-z0-9]/g, '');
+              return normVal.includes(normParam) || normParam.includes(normVal);
+            };
 
-          // Group categories to apply precise filtering rules
-          const knitStyles = [
-            "singlejersey", "frenchterry", "fleece", "rib", "spandexknits",
-            "pique", "interlock", "waffle", "jacquard", "stripes",
-            "corduroy", "vellour", "corduroyvellour", "printed", "shiffly", "ponte", "yarn", "neps", "popcorn"
-          ];
+            // Group categories to apply precise filtering rules
+            const knitStyles = [
+              "singlejersey", "frenchterry", "fleece", "rib", "spandexknits",
+              "pique", "interlock", "waffle", "jacquard", "stripes",
+              "corduroy", "vellour", "corduroyvellour", "printed", "shiffly", "ponte", "yarn", "neps", "popcorn"
+            ];
 
-          const blends = [
-            "cotton", "viscose", "cottonmodal", "giza", "egyptian", "gizagyptian", "melange",
-            "nylon", "polycotton", "polyester", "slubs", "spandexblends", "australian",
-            "wool", "supima", "bananafabric", "ecovero", "hemp",
-            "linen", "lotus", "modal", "organiccotton", "recycledcotton", "tencel", "bci"
-          ];
+            const blends = [
+              "cotton", "viscose", "cottonmodal", "giza", "egyptian", "gizagyptian", "melange",
+              "nylon", "polycotton", "polyester", "slubs", "spandexblends", "australian",
+              "wool", "supima", "bananafabric", "ecovero", "hemp",
+              "linen", "lotus", "modal", "organiccotton", "recycledcotton", "tencel", "bci"
+            ];
 
-          const isKnitStyleCat = knitStyles.some(style => normParam.includes(style) || style.includes(normParam));
-          const isBlendCat = blends.some(blend => normParam.includes(blend) || blend.includes(normParam));
+            const isKnitStyleCat = knitStyles.some(style => normParam.includes(style) || style.includes(normParam));
+            const isBlendCat = blends.some(blend => normParam.includes(blend) || blend.includes(normParam));
 
-          if (isKnitStyleCat) {
+            if (isKnitStyleCat) {
             // For Knit Styles:
             // 1. If product has an explicit knit style metafield, it MUST match the category.
             // 2. Otherwise, if it has a product type (other than generic 'Knit Fabric'), it MUST match.
@@ -181,6 +220,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
             categoryMatch = checkUsageMatch(f.usage) || checkUsageMatch(f.type) || checkUsageMatch(f.name);
           }
         }
+      }
 
         return gsmMatch && colorMatch && categoryMatch;
       })

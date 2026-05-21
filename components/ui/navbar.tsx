@@ -392,9 +392,12 @@ export function Navbar() {
                                   className="flex flex-col gap-2.5 p-6 flex-1 min-w-0 hover:bg-gray-50/60 transition-colors duration-300"
                                 >
                                   <div className="space-y-1">
-                                    <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#57AD43] flex items-center whitespace-nowrap">
+                                    <Link
+                                      href={`/fabrics?category=${category.title.toLowerCase().replace(/ /g, '-')}`}
+                                      className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#57AD43] hover:text-black transition-colors flex items-center whitespace-nowrap block"
+                                    >
                                       {category.title}
-                                    </h3>
+                                    </Link>
                                     <div className="h-[1px] w-full bg-gray-100"></div>
                                   </div>
 
@@ -505,9 +508,13 @@ export function Navbar() {
                                   <div className="pl-4 py-4 space-y-6">
                                     {item.megaMenu.map((cat) => (
                                       <div key={cat.title}>
-                                        <h4 className="text-[12px] font-medium uppercase tracking-widest text-black mb-3">
+                                        <Link
+                                          href={`/fabrics?category=${cat.title.toLowerCase().replace(/ /g, '-')}`}
+                                          className="text-[12px] font-bold uppercase tracking-widest text-[#57AD43] hover:text-black mb-3 block"
+                                          onClick={() => setIsMobileMenuOpen(false)}
+                                        >
                                           {cat.title}
-                                        </h4>
+                                        </Link>
                                         <ul className="grid grid-cols-2 gap-y-2 gap-x-4">
                                           {cat.items.map((sub) => (
                                             <li key={sub}>
