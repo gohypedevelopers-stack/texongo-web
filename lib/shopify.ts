@@ -266,7 +266,7 @@ export async function getAllShopifyProducts(): Promise<Fabric[]> {
 
   try {
     while (hasNextPage) {
-      const response = await shopifyFetch<any>({
+      const response: { data: any } = await shopifyFetch<any>({
         query: PRODUCTS_QUERY,
         variables: { first: 250, after: cursor },
       });
