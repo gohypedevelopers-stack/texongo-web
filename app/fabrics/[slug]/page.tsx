@@ -164,7 +164,21 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
             </div>
 
             <button
-              onClick={() => document.getElementById('related-products')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                const element = document.getElementById('related-products');
+                if (element) {
+                  const offset = 140; // height of sticky header + spacing
+                  const bodyRect = document.body.getBoundingClientRect().top;
+                  const elementRect = element.getBoundingClientRect().top;
+                  const elementPosition = elementRect - bodyRect;
+                  const offsetPosition = elementPosition - offset;
+
+                  window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                  });
+                }
+              }}
               className="w-full bg-[#57AD43] text-white py-4 lg:py-3 text-[11px] font-bold uppercase tracking-widest hover:bg-[#489936] transition-colors"
             >
               View Possible Variations
@@ -349,7 +363,7 @@ Minor GSM, width, and color variations may occur—acceptable as per industry st
         </div>
 
         {/* Related Products */}
-        <div id="related-products" className="mt-24 lg:mt-32">
+        <div id="related-products" className="mt-24 lg:mt-32 scroll-mt-40">
           <h2 className="text-xl font-bold uppercase tracking-tight mb-12">Related products</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {relatedProducts.map((fabric) => (

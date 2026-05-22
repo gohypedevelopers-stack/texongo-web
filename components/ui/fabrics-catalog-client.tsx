@@ -54,7 +54,8 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
   const gsmOptions = ["All GSM", "Light (<200)", "Medium (200-300)", "Heavy (>300)"];
 
   const colorOptions = useMemo(() => {
-    return ["All Colors", ...Array.from(new Set(fabrics.map(f => f.shade).filter((val): val is string => !!val && val !== 'N/A')))].sort();
+    const shades = Array.from(new Set(fabrics.map(f => f.shade).filter((val): val is string => !!val && val !== 'N/A'))).sort();
+    return ["All Colors", ...shades];
   }, [fabrics]);
 
   const sortOptions = ["Latest Selection", "Price: Low to High", "Price: High to Low", "GSM: Low to High"];
@@ -159,68 +160,68 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
             const isBlendCat = blends.some(blend => normParam.includes(blend) || blend.includes(normParam));
 
             if (isKnitStyleCat) {
-            // For Knit Styles:
-            // 1. If product has an explicit knit style metafield, it MUST match the category.
-            // 2. Otherwise, if it has a product type (other than generic 'Knit Fabric'), it MUST match.
-            // 3. Otherwise fall back to title or fabric metafield.
-            // We intentionally do NOT match description or composition to avoid false positives (e.g. Corduroy showing under Jersey).
-            const productKnit = (f.knit_style && f.knit_style !== 'N/A')
-              ? f.knit_style
-              : (f.type && f.type !== 'N/A' && f.type !== 'Knit Fabric')
-                ? f.type
-                : null;
+              // For Knit Styles:
+              // 1. If product has an explicit knit style metafield, it MUST match the category.
+              // 2. Otherwise, if it has a product type (other than generic 'Knit Fabric'), it MUST match.
+              // 3. Otherwise fall back to title or fabric metafield.
+              // We intentionally do NOT match description or composition to avoid false positives (e.g. Corduroy showing under Jersey).
+              const productKnit = (f.knit_style && f.knit_style !== 'N/A')
+                ? f.knit_style
+                : (f.type && f.type !== 'N/A' && f.type !== 'Knit Fabric')
+                  ? f.type
+                  : null;
 
-            if (productKnit) {
-              categoryMatch = checkMatch(productKnit);
+              if (productKnit) {
+                categoryMatch = checkMatch(productKnit);
+              } else {
+                categoryMatch = checkMatch(f.fabric) || checkMatch(f.name);
+              }
+            } else if (isBlendCat) {
+              // For Blends (e.g., Cotton, Viscose, Poly Cotton):
+              // Check composition, fabric, or title using split OR/AND logic
+              const checkBlendMatch = (val: string | undefined | null) => {
+                if (!val || val === 'N/A') return false;
+                const normVal = val.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+                if (normVal.includes(normParam)) return true;
+
+                // Handle composite blend queries like poly-cotton or giza/-egyptian
+                const orGroups = categoryParam.toLowerCase().split(/[\/]/);
+                return orGroups.some(group => {
+                  const cleanGroup = group.replace(/^-+|-+$/g, '');
+                  const andParts = cleanGroup.split('-').filter(p => p.length > 1 && !ignoredDescriptors.includes(p));
+                  if (andParts.length > 0) {
+                    return andParts.every(part => normVal.includes(part));
+                  }
+                  return false;
+                });
+              };
+
+              categoryMatch = checkBlendMatch(f.composition) || checkBlendMatch(f.fabric) || checkBlendMatch(f.name);
             } else {
-              categoryMatch = checkMatch(f.fabric) || checkMatch(f.name);
+              // For Garment / Usage / Wear categories:
+              // Check usage, product type, or title using OR logic for parts (e.g. tshirt/tops)
+              const checkUsageMatch = (val: string | undefined | null) => {
+                if (!val || val === 'N/A') return false;
+                const normVal = val.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+                if (normVal.includes(normParam) || normParam.includes(normVal)) return true;
+
+                const orGroups = categoryParam.toLowerCase().split(/[\/]/);
+                return orGroups.some(group => {
+                  const cleanGroup = group.replace(/^-+|-+$/g, '');
+                  const parts = cleanGroup.split('-').filter(p => p.length > 1 && !ignoredDescriptors.includes(p));
+                  if (parts.length > 0) {
+                    return parts.some(part => normVal.includes(part) || part.includes(normVal));
+                  }
+                  return false;
+                });
+              };
+
+              categoryMatch = checkUsageMatch(f.usage) || checkUsageMatch(f.type) || checkUsageMatch(f.name);
             }
-          } else if (isBlendCat) {
-            // For Blends (e.g., Cotton, Viscose, Poly Cotton):
-            // Check composition, fabric, or title using split OR/AND logic
-            const checkBlendMatch = (val: string | undefined | null) => {
-              if (!val || val === 'N/A') return false;
-              const normVal = val.toLowerCase().replace(/[^a-z0-9]/g, '');
-
-              if (normVal.includes(normParam)) return true;
-
-              // Handle composite blend queries like poly-cotton or giza/-egyptian
-              const orGroups = categoryParam.toLowerCase().split(/[\/]/);
-              return orGroups.some(group => {
-                const cleanGroup = group.replace(/^-+|-+$/g, '');
-                const andParts = cleanGroup.split('-').filter(p => p.length > 1 && !ignoredDescriptors.includes(p));
-                if (andParts.length > 0) {
-                  return andParts.every(part => normVal.includes(part));
-                }
-                return false;
-              });
-            };
-
-            categoryMatch = checkBlendMatch(f.composition) || checkBlendMatch(f.fabric) || checkBlendMatch(f.name);
-          } else {
-            // For Garment / Usage / Wear categories:
-            // Check usage, product type, or title using OR logic for parts (e.g. tshirt/tops)
-            const checkUsageMatch = (val: string | undefined | null) => {
-              if (!val || val === 'N/A') return false;
-              const normVal = val.toLowerCase().replace(/[^a-z0-9]/g, '');
-
-              if (normVal.includes(normParam) || normParam.includes(normVal)) return true;
-
-              const orGroups = categoryParam.toLowerCase().split(/[\/]/);
-              return orGroups.some(group => {
-                const cleanGroup = group.replace(/^-+|-+$/g, '');
-                const parts = cleanGroup.split('-').filter(p => p.length > 1 && !ignoredDescriptors.includes(p));
-                if (parts.length > 0) {
-                  return parts.some(part => normVal.includes(part) || part.includes(normVal));
-                }
-                return false;
-              });
-            };
-
-            categoryMatch = checkUsageMatch(f.usage) || checkUsageMatch(f.type) || checkUsageMatch(f.name);
           }
         }
-      }
 
         return gsmMatch && colorMatch && categoryMatch;
       })
@@ -430,7 +431,7 @@ function FilterDropdown({ label, options, onSelect, active }: FilterDropdownProp
       </div>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-full bg-white/95 backdrop-blur-lg border border-emerald-100/60 rounded-xl shadow-[0_20px_40px_rgba(87,173,67,0.12)] z-[500] overflow-hidden py-2 max-h-[300px] overflow-y-auto">
+        <div className="absolute top-full left-0 mt-2 w-full bg-white/95 backdrop-blur-lg border border-emerald-100/60 rounded-xl shadow-[0_20px_40px_rgba(87,173,67,0.12)] z-[500] overflow-hidden py-2 max-h-[300px] overflow-y-auto overscroll-contain">
           {options.map((opt) => (
             <div
               key={opt}
@@ -471,7 +472,7 @@ function SortDropdown({ label, options, onSelect }: SortDropdownProps) {
       </div>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-full bg-white/95 backdrop-blur-lg border border-emerald-100/60 rounded-xl shadow-[0_20px_40px_rgba(87,173,67,0.12)] z-[500] overflow-hidden py-2 max-h-[300px] overflow-y-auto">
+        <div className="absolute top-full left-0 mt-2 w-full bg-white/95 backdrop-blur-lg border border-emerald-100/60 rounded-xl shadow-[0_20px_40px_rgba(87,173,67,0.12)] z-[500] overflow-hidden py-2 max-h-[300px] overflow-y-auto overscroll-contain">
           {options.map((opt) => (
             <div
               key={opt}
