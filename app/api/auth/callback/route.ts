@@ -60,7 +60,20 @@ export async function GET(request: Request) {
         const payloadBase64 = idToken.split(".")[1];
         const decodedPayload = JSON.parse(Buffer.from(payloadBase64, "base64").toString("utf-8"));
         email = decodedPayload.email || "";
-        name = decodedPayload.name || decodedPayload.given_name || "Shopify Member";
+        
+        const firstName = decodedPayload.given_name || "";
+        const lastName = decodedPayload.family_name || "";
+        const fullName = decodedPayload.name || "";
+        
+        if (fullName) {
+          name = fullName;
+        } else if (firstName || lastName) {
+          name = `${firstName} ${lastName}`.trim();
+        } else if (email) {
+          name = email.split("@")[0];
+        } else {
+          name = "Shopify Member";
+        }
       } catch (err) {
         console.error("Failed to decode ID token:", err);
       }

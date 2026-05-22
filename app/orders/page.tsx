@@ -131,10 +131,10 @@ export default function OrdersPage() {
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#57AD43] mb-1">Authenticated Member</p>
             <h2 className="text-lg font-black uppercase tracking-wider text-black">
-              Welcome Back, {user?.name}
+              Welcome Back, {(!user?.name || user?.name === "Shopify Member") ? (user?.email ? user.email.split("@")[0] : "Member") : user.name}
             </h2>
             <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-1">
-              Managing your curated textile archive.
+              {user?.email || "Managing your curated textile archive."}
             </p>
           </div>
           <div className="flex items-center gap-12 border-t md:border-t-0 pt-4 md:pt-0 w-full md:w-auto border-gray-50">
