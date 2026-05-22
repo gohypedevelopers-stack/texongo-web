@@ -6,7 +6,6 @@ import { Search, User, ShoppingBag, ChevronDown, Menu, X, ChevronRight } from "l
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useCartStore, useAuthStore } from "@/lib/store";
-import { AuthModal } from "./auth-modal";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -300,7 +299,11 @@ export function Navbar() {
                   onMouseLeave={() => setIsAccountOpen(false)}
                 >
                   <button
-                    onClick={() => !isLoggedIn && openAuthModal()}
+                    onClick={() => {
+                      if (!isLoggedIn) {
+                        window.location.href = "/api/auth/login";
+                      }
+                    }}
                     className="text-gray-600 hover:text-black transition-colors flex items-center justify-center h-12 md:h-14 focus:outline-none"
                   >
                     <User size={18} />
@@ -326,7 +329,7 @@ export function Navbar() {
                           onClick={() => {
                             logout();
                             setIsAccountOpen(false);
-                            window.location.href = "/";
+                            window.location.href = "/api/auth/logout";
                           }}
                           className="w-full flex items-center justify-between px-6 py-4 text-[9px] font-medium uppercase tracking-widest text-red-500 hover:bg-red-50 transition-all"
                         >
@@ -546,12 +549,12 @@ export function Navbar() {
                           <Link href="/orders" className="text-sm font-medium uppercase tracking-widest text-[#57AD43]" onClick={() => setIsMobileMenuOpen(false)}>
                             My Orders
                           </Link>
-                          <button onClick={() => { logout(); setIsMobileMenuOpen(false); }} className="text-sm font-medium uppercase tracking-widest text-red-500 text-left">
+                          <button onClick={() => { logout(); setIsMobileMenuOpen(false); window.location.href = "/api/auth/logout"; }} className="text-sm font-medium uppercase tracking-widest text-red-500 text-left">
                             Logout
                           </button>
                         </>
                       ) : (
-                        <button onClick={() => { openAuthModal(); setIsMobileMenuOpen(false); }} className="text-sm font-medium uppercase tracking-widest text-black text-left">
+                        <button onClick={() => { window.location.href = "/api/auth/login"; setIsMobileMenuOpen(false); }} className="text-sm font-medium uppercase tracking-widest text-black text-left">
                           Sign In
                         </button>
                       )}
@@ -670,7 +673,6 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-      <AuthModal />
     </>
   );
 }
