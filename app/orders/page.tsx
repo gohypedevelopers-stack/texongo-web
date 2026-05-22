@@ -126,28 +126,6 @@ export default function OrdersPage() {
       <PageHero subtitle="Order History" mainTitle="Your" accentTitle="Orders" />
       <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
         
-        {/* User Greeting & Stats Bar */}
-        <div className="bg-white border border-gray-100 p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 shadow-sm rounded-sm">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#57AD43] mb-1">Authenticated Member</p>
-            <h2 className="text-lg font-black uppercase tracking-wider text-black">
-              Welcome Back, {(!user?.name || user?.name === "Shopify Member") ? (user?.email ? user.email.split("@")[0] : "Member") : user.name}
-            </h2>
-            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-1">
-              {user?.email || "Managing your curated textile archive."}
-            </p>
-          </div>
-          <div className="flex items-center gap-12 border-t md:border-t-0 pt-4 md:pt-0 w-full md:w-auto border-gray-50">
-            <div>
-              <p className="text-[9px] font-black uppercase tracking-widest text-gray-300 mb-1">Live Orders</p>
-              <p className="text-xl font-black text-black">{orders.length}</p>
-            </div>
-            <div>
-              <p className="text-[9px] font-black uppercase tracking-widest text-gray-300 mb-1">Shopify Sync</p>
-              <p className="text-xl font-black text-[#57AD43] uppercase tracking-widest text-xs font-black">Active</p>
-            </div>
-          </div>
-        </div>
 
         {/* Orders List */}
         <div className="space-y-8">
