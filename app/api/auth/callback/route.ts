@@ -75,6 +75,17 @@ export async function GET(request: Request) {
       maxAge: tokenData.expires_in || 7200, // default 2 hours or what Shopify returns
     });
     
+    // Save the ID Token in a secure HTTP-Only cookie to use as id_token_hint during logout
+    if (idToken) {
+      cookieStore.set("shopify_id_token", idToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        path: "/",
+        maxAge: tokenData.expires_in || 7200,
+      });
+    }
+    
     // Clean up temporary authorization cookies
     cookieStore.delete("shopify_code_verifier");
     cookieStore.delete("shopify_auth_state");
