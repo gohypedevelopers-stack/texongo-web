@@ -381,7 +381,7 @@ export function MotionFooter() {
           </div>
 
           {/* 1. Marquee Between Navlinks and TEXONGO Text */}
-          <div className="absolute top-1/2 left-0 w-full overflow-hidden border-y border-white/10 bg-black/60 backdrop-blur-md py-4 z-10 -rotate-2 scale-110 shadow-2xl transform -translate-y-1/2">
+          <div className="hidden md:block absolute top-1/2 left-0 w-full overflow-hidden border-y border-white/10 bg-black/60 backdrop-blur-md py-4 z-10 -rotate-2 scale-110 shadow-2xl transform -translate-y-1/2">
             <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.3em] text-white/60 uppercase">
               <MarqueeItem />
               <MarqueeItem />
