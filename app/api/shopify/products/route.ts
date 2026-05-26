@@ -10,7 +10,7 @@ export async function GET() {
     let cursor = null;
 
     // Fetch in chunks of 250 (Shopify max)
-    while (hasNextPage && allProducts.length < 1000) {
+    while (hasNextPage) {
       const response: any = await shopifyFetch({
         query: `
           query getProducts($first: Int!, $after: String) {

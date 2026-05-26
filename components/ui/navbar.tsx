@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Search, User, ShoppingBag, ChevronDown, Menu, X, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useCartStore, useAuthStore } from "@/lib/store";
+import { Fabric, mapShopifyProduct } from "@/lib/shopify";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -66,6 +68,34 @@ const navItems = [
   { name: "Contact Us", href: "/contact-us" },
 ];
 
+const FALLBACK_PRODUCT_IMAGES = [
+  "/arrivals/prod-cotton-spandex-interlock.png",
+  "/arrivals/prod-cotton-indigo-terry.png",
+  "/arrivals/prod-poly-viscose-spandex.png",
+  "/arrivals/prod-nylon-spandex.png",
+  "/arrivals/prod-slub-melange.png",
+  "/category/fabric-french-terry.png",
+  "/category/fabric-pique.png",
+  "/category/fabric-rib.png",
+  "/category/fabric-single-jersey.png",
+  "/category/fabric-waffle.png",
+  "/placeholders/cotton.png",
+  "/placeholders/viscose.png",
+  "/placeholders/linen.png",
+  "/placeholders/wool.png",
+  "/placeholders/silk.png"
+];
+
+function getFallbackImage(name: string, id: string) {
+  const str = name + id;
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % FALLBACK_PRODUCT_IMAGES.length;
+  return FALLBACK_PRODUCT_IMAGES[index];
+}
+
 export function Navbar() {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isHoveredTop, setIsHoveredTop] = useState(false);
@@ -83,7 +113,50 @@ export function Navbar() {
   const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
   const [isDesktop, setIsDesktop] = useState(true);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [allProducts, setAllProducts] = useState<Fabric[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const closeSearch = () => {
+    setIsSearchOpen(false);
+    setSearchQuery("");
+  };
+
+  useEffect(() => {
+    if (isSearchOpen && allProducts.length === 0) {
+      setIsLoadingProducts(true);
+      fetch("/api/shopify/products")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.data?.products?.edges) {
+            const mapped = data.data.products.edges.map(({ node }: any) => mapShopifyProduct(node));
+            setAllProducts(mapped);
+          }
+        })
+        .catch((err) => console.error("Error fetching search products:", err))
+        .finally(() => setIsLoadingProducts(false));
+    }
+  }, [isSearchOpen, allProducts.length]);
+
+  const filteredProducts = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    const queryWords = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    return allProducts.filter((product) => {
+      return queryWords.every((word) => {
+        return (
+          product.name?.toLowerCase().includes(word) ||
+          product.description?.toLowerCase().includes(word) ||
+          product.sku?.toLowerCase().includes(word) ||
+          (product.knit_style && product.knit_style !== 'N/A' && product.knit_style.toLowerCase().includes(word)) ||
+          (product.composition && product.composition !== 'N/A' && product.composition.toLowerCase().includes(word)) ||
+          (product.shade && product.shade !== 'N/A' && product.shade.toLowerCase().includes(word)) ||
+          (product.usage && product.usage !== 'N/A' && product.usage.toLowerCase().includes(word)) ||
+          (product.type && product.type !== 'N/A' && product.type.toLowerCase().includes(word))
+        );
+      });
+    });
+  }, [searchQuery, allProducts]);
 
   const handleItemMouseEnter = (itemName: string) => {
     if (hoverTimeout.current) {
@@ -444,8 +517,21 @@ export function Navbar() {
                         type="text"
                         placeholder="Search fabrics..."
                         className="w-full h-12 bg-gray-50 border border-gray-100 rounded-2xl px-6 text-sm focus:outline-none"
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            setIsMobileMenuOpen(false);
+                            setIsSearchOpen(true);
+                          }
+                        }}
                       />
-                      <button className="absolute right-2 top-1 h-10 w-10 flex items-center justify-center bg-black text-white rounded-xl">
+                      <button 
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          setIsSearchOpen(true);
+                        }}
+                        className="absolute right-2 top-1 h-10 w-10 flex items-center justify-center bg-black text-white rounded-xl"
+                      >
                         <Search size={16} />
                       </button>
                     </div>
@@ -583,7 +669,7 @@ export function Navbar() {
                   className="h-8 md:h-10 w-auto object-contain"
                 />
                 <button
-                  onClick={() => setIsSearchOpen(false)}
+                  onClick={closeSearch}
                   className="group flex items-center gap-3 text-gray-400 hover:text-black transition-all"
                 >
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] hidden md:block">Close Escape</span>
@@ -601,73 +687,157 @@ export function Navbar() {
                     <input
                       autoFocus
                       type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Start typing..."
-                      className="w-full text-4xl md:text-7xl lg:text-8xl font-black placeholder:text-gray-100 focus:outline-none bg-transparent pb-6 border-b-[6px] border-gray-50 focus:border-black transition-all duration-700"
+                      className="w-full text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-black placeholder:text-gray-100 focus:outline-none bg-transparent pb-5 md:pb-6 pr-12 md:pr-20 border-b-4 md:border-b-[6px] border-gray-50 focus:border-black transition-all duration-700"
                     />
-                    <div className="absolute right-0 bottom-8">
-                      <Search className="text-gray-200" size={48} strokeWidth={3} />
+                    <div className="absolute right-0 bottom-7 md:bottom-8">
+                      <Search className="text-gray-200 w-8 h-8 md:w-12 md:h-12" strokeWidth={3} />
                     </div>
                   </div>
                 </div>
 
-                {/* Suggestions Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-24">
-                  {/* Left Column: Popular Tags */}
-                  <div className="lg:col-span-7">
-                    <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 mb-10 border-l-2 border-[#57AD43] pl-4">Trending Now</h3>
-                    <div className="flex flex-wrap gap-4 md:gap-6">
-                      {[
-                        { name: "Single Jersey", count: "120+" },
-                        { name: "French Terry", count: "85" },
-                        { name: "Organic Cotton", count: "可持续" },
-                        { name: "Rib Knits", count: "New" },
-                        { name: "Pique", count: "Classic" },
-                        { name: "Supima Blends", count: "Luxury" }
-                      ].map((item) => (
-                        <Link
-                          key={item.name}
-                          href={`/fabrics?category=${item.name.toLowerCase().replace(/ /g, '-')}`}
-                          onClick={() => setIsSearchOpen(false)}
-                          className="group relative flex items-center gap-4 bg-gray-50 hover:bg-black p-4 md:p-6 rounded-2xl transition-all duration-500 hover:-translate-y-1 shadow-sm hover:shadow-xl"
-                        >
-                          <div className="flex flex-col">
-                            <span className="text-xs md:text-sm font-black uppercase tracking-widest text-gray-900 group-hover:text-white transition-colors">{item.name}</span>
-                            <span className="text-[9px] font-bold text-gray-400 group-hover:text-white/50 uppercase tracking-[0.2em]">{item.count} items</span>
-                          </div>
-                          <div className="w-8 h-8 rounded-full bg-white group-hover:bg-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
-                            <ChevronRight size={14} className="text-black group-hover:text-white" />
-                          </div>
-                        </Link>
-                      ))}
+                {searchQuery.trim() !== "" ? (
+                  <div className="w-full min-h-[400px]">
+                    <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
+                      <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-2 border-[#57AD43] pl-4">
+                        {isLoadingProducts ? (
+                          <span>Searching Fabrics...</span>
+                        ) : (
+                          <span>Search Results ({filteredProducts.length})</span>
+                        )}
+                      </h3>
+                      <button
+                        onClick={() => setSearchQuery("")}
+                        className="text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-700 transition-colors"
+                      >
+                        Clear Search
+                      </button>
                     </div>
-                  </div>
 
-                  {/* Right Column: Quick Links & Help */}
-                  <div className="lg:col-span-5 space-y-16">
-                    <div>
-                      <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 mb-10 border-l-2 border-[#57AD43] pl-4">Quick Navigation</h3>
-                      <ul className="space-y-6">
-                        {[
-                          { name: "Explore New Arrivals", sub: "Latest fabric drops" },
-                          { name: "Shop Best Sellers", sub: "Most popular choices" },
-                          { name: "Sustainable Collection", sub: "Eco-friendly fabrics" },
-                          { name: "3D Digital Studio", sub: "Interactive visualization" }
-                        ].map((link) => (
-                          <li key={link.name}>
-                            <Link
-                              href="/fabrics"
-                              onClick={() => setIsSearchOpen(false)}
-                              className="group flex flex-col gap-1"
-                            >
-                              <span className="text-xl md:text-2xl font-black text-gray-900 group-hover:text-[#57AD43] transition-colors">{link.name}</span>
-                              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{link.sub}</span>
-                            </Link>
-                          </li>
+                    {isLoadingProducts ? (
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                          <div key={i} className="animate-pulse flex flex-col gap-4">
+                            <div className="aspect-[4/5] bg-gray-100 rounded-2xl w-full" />
+                            <div className="h-4 bg-gray-100 rounded w-3/4 mx-auto" />
+                            <div className="h-4 bg-gray-100 rounded w-1/4 mx-auto" />
+                          </div>
                         ))}
-                      </ul>
+                      </div>
+                    ) : filteredProducts.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-20 text-center">
+                        <p className="text-xl sm:text-2xl font-black uppercase tracking-tighter text-gray-300 mb-2">
+                          No fabrics match "{searchQuery}"
+                        </p>
+                        <p className="text-xs text-gray-400 font-medium max-w-md">
+                          Try searching for popular types like "Jersey", "Terry", "Cotton", or try another keywords.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+                        {filteredProducts.slice(0, 12).map((product) => {
+                          const productImg = product.image && product.image !== "" ? product.image : getFallbackImage(product.name, product.id);
+                          return (
+                            <motion.div
+                              key={product.id}
+                              initial={{ opacity: 0, y: 15 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className="group relative flex flex-col items-center text-center bg-gray-50/50 hover:bg-white p-4 rounded-3xl border border-transparent hover:border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 cursor-pointer"
+                            >
+                              <Link href={`/fabrics/${product.id}`} onClick={closeSearch} className="w-full h-full flex flex-col justify-between">
+                                <div className="relative aspect-[4/5] w-full overflow-hidden bg-gray-100 rounded-2xl mb-4">
+                                  <Image
+                                    src={productImg}
+                                    alt={product.name}
+                                    fill
+                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                  />
+                                  {product.gsm && product.gsm !== "N/A" && (
+                                    <div className="absolute top-3 left-3 bg-[#57AD43] text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-md shadow-md z-10">
+                                      GSM: {product.gsm}
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="flex flex-col items-center gap-1.5 pt-2 flex-grow">
+                                  <span className="text-[9px] font-black uppercase tracking-[0.15em] text-[#57AD43]">
+                                    {product.knit_style || product.type || "Fabric"}
+                                  </span>
+                                  <h4 className="text-xs sm:text-sm font-black uppercase tracking-widest text-gray-900 leading-tight max-w-[200px] line-clamp-2 group-hover:text-[#57AD43] transition-colors duration-300">
+                                    {product.name}
+                                  </h4>
+                                  <p className="text-sm font-black text-gray-900 mt-auto pt-2">
+                                    ₹{parseFloat(product.price).toFixed(2)}
+                                  </p>
+                                </div>
+                              </Link>
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-24">
+                    {/* Left Column: Popular Tags */}
+                    <div className="lg:col-span-7">
+                      <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 mb-10 border-l-2 border-[#57AD43] pl-4">Trending Now</h3>
+                      <div className="flex flex-wrap gap-4 md:gap-6">
+                        {[
+                          { name: "Single Jersey", count: "120+" },
+                          { name: "French Terry", count: "85" },
+                          { name: "Organic Cotton", count: "可持续" },
+                          { name: "Rib Knits", count: "New" },
+                          { name: "Pique", count: "Classic" },
+                          { name: "Supima Blends", count: "Luxury" }
+                        ].map((item) => (
+                          <Link
+                            key={item.name}
+                            href={`/fabrics?category=${item.name.toLowerCase().replace(/ /g, '-')}`}
+                            onClick={closeSearch}
+                            className="group relative flex items-center gap-4 bg-gray-50 hover:bg-black p-4 md:p-6 rounded-2xl transition-all duration-500 hover:-translate-y-1 shadow-sm hover:shadow-xl"
+                          >
+                            <div className="flex flex-col">
+                              <span className="text-xs md:text-sm font-black uppercase tracking-widest text-gray-900 group-hover:text-white transition-colors">{item.name}</span>
+                              <span className="text-[9px] font-bold text-gray-400 group-hover:text-white/50 uppercase tracking-[0.2em]">{item.count} items</span>
+                            </div>
+                            <div className="w-8 h-8 rounded-full bg-white group-hover:bg-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+                              <ChevronRight size={14} className="text-black group-hover:text-white" />
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Right Column: Quick Links & Help */}
+                    <div className="lg:col-span-5 space-y-16">
+                      <div>
+                        <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 mb-10 border-l-2 border-[#57AD43] pl-4">Quick Navigation</h3>
+                        <ul className="space-y-6">
+                          {[
+                            { name: "Explore New Arrivals", sub: "Latest fabric drops" },
+                            { name: "Shop Best Sellers", sub: "Most popular choices" },
+                            { name: "Sustainable Collection", sub: "Eco-friendly fabrics" },
+                            { name: "3D Digital Studio", sub: "Interactive visualization" }
+                          ].map((link) => (
+                            <li key={link.name}>
+                              <Link
+                                href="/fabrics"
+                                onClick={closeSearch}
+                                className="group flex flex-col gap-1"
+                              >
+                                <span className="text-xl md:text-2xl font-black text-gray-900 group-hover:text-[#57AD43] transition-colors">{link.name}</span>
+                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{link.sub}</span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </motion.div>
