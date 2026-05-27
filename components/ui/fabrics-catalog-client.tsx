@@ -32,13 +32,14 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
 
   // Filter States
   const [selectedGsm, setSelectedGsm] = useState<string>("");
+  const [gsmInput, setGsmInput] = useState<string>(""); // free-text GSM input
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("Latest Selection");
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedGsm, selectedColor, sortBy, categoryParam]);
+  }, [selectedGsm, gsmInput, selectedColor, sortBy, categoryParam]);
 
   // Whenever the filtered list or page changes, refresh ScrollTrigger to ensure the footer triggers correctly!
   useEffect(() => {
@@ -48,7 +49,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
       }, 150);
       return () => clearTimeout(timer);
     }
-  }, [currentPage, selectedGsm, selectedColor, sortBy, categoryParam]);
+  }, [currentPage, selectedGsm, gsmInput, selectedColor, sortBy, categoryParam]);
 
   // Derived Data
   const gsmOptions = ["All GSM", "Light (<200)", "Medium (200-300)", "Heavy (>300)"];
@@ -77,15 +78,24 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
   const filteredFabrics = useMemo(() => {
     return fabrics
       .filter(f => {
-        // GSM Filter Match
+        // GSM Filter Match — text input takes priority over dropdown range
         const rawValue = typeof f.gsm === 'string' ? f.gsm : '';
         const rawGsm = parseInt(rawValue.replace(/[^0-9]/g, ''));
-        const gsmMatch = !selectedGsm || selectedGsm === "All GSM" || (() => {
-          if (isNaN(rawGsm)) return false;
-          if (rawGsm < 200) return selectedGsm === "Light (<200)";
-          if (rawGsm <= 300) return selectedGsm === "Medium (200-300)";
-          return selectedGsm === "Heavy (>300)";
-        })();
+        let gsmMatch = true;
+        if (gsmInput.trim()) {
+          // Free-text: match if fabric GSM contains the typed value
+          gsmMatch = rawValue.replace(/[^0-9]/g, '').includes(gsmInput.trim().replace(/[^0-9]/g, ''));
+        } else if (selectedGsm && selectedGsm !== "All GSM") {
+          if (isNaN(rawGsm)) {
+            gsmMatch = false;
+          } else if (rawGsm < 200) {
+            gsmMatch = selectedGsm === "Light (<200)";
+          } else if (rawGsm <= 300) {
+            gsmMatch = selectedGsm === "Medium (200-300)";
+          } else {
+            gsmMatch = selectedGsm === "Heavy (>300)";
+          }
+        }
 
         // Color Filter Match
         const colorMatch = !selectedColor || selectedColor === "All Colors" || f.shade === selectedColor;
@@ -235,7 +245,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
         }
         return 0; // Latest Selection is default order from API
       });
-  }, [fabrics, selectedGsm, selectedColor, sortBy, categoryParam]);
+  }, [fabrics, selectedGsm, gsmInput, selectedColor, sortBy, categoryParam]);
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredFabrics.length / ITEMS_PER_PAGE);
@@ -263,18 +273,48 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
               {/* GSM Filter */}
               <div className="space-y-2">
                 <span className="text-[8.5px] font-bold text-gray-400 uppercase tracking-widest block">Gsm Range</span>
+                {/* Free-text GSM input */}
+                <div className={`flex items-center gap-2 border rounded-xl px-4 py-2.5 w-full transition-all ${
+                  gsmInput ? 'border-[#57AD43] bg-[#57AD43]/5' : 'border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] hover:border-[#57AD43] backdrop-blur-sm'
+                }`}>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="Type GSM e.g. 220"
+                    value={gsmInput}
+                    onChange={e => {
+                      setGsmInput(e.target.value);
+                      if (e.target.value) setSelectedGsm(""); // clear dropdown when typing
+                    }}
+                    className={`flex-1 bg-transparent text-[9px] font-bold uppercase tracking-[0.15em] outline-none placeholder:text-gray-300 ${
+                      gsmInput ? 'text-[#57AD43]' : 'text-black'
+                    }`}
+                  />
+                  {gsmInput && (
+                    <button
+                      onClick={() => setGsmInput("")}
+                      className="text-gray-300 hover:text-[#57AD43] transition-colors text-[10px] shrink-0"
+                    >✕</button>
+                  )}
+                </div>
+                {/* OR label */}
+                <div className="flex items-center gap-2 py-0.5">
+                  <div className="flex-1 h-px bg-gray-100" />
+                  <span className="text-[7px] font-bold text-gray-300 uppercase tracking-widest">or range</span>
+                  <div className="flex-1 h-px bg-gray-100" />
+                </div>
                 <FilterDropdown
                   label={selectedGsm || "All GSM"}
                   options={gsmOptions}
-                  onSelect={setSelectedGsm}
-                  active={!!selectedGsm && selectedGsm !== "All GSM"}
+                  onSelect={(val) => { setSelectedGsm(val); setGsmInput(""); }}
+                  active={!!selectedGsm && selectedGsm !== "All GSM" && !gsmInput}
                 />
               </div>
 
               {/* Color Filter */}
               <div className="space-y-2">
                 <span className="text-[8.5px] font-bold text-gray-400 uppercase tracking-widest block">Color Palette</span>
-                <FilterDropdown
+                <SearchableFilterDropdown
                   label={selectedColor || "All Colors"}
                   options={colorOptions}
                   onSelect={setSelectedColor}
@@ -297,6 +337,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
               <button
                 onClick={() => {
                   setSelectedGsm("");
+                  setGsmInput("");
                   setSelectedColor("");
                   setSortBy("Latest Selection");
                   if (categoryParam) {
@@ -487,6 +528,73 @@ function SortDropdown({ label, options, onSelect }: SortDropdownProps) {
               {opt}
             </div>
           ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Searchable color dropdown — has a live text input inside the dropdown menu
+interface SearchableFilterDropdownProps {
+  label: string;
+  options: string[];
+  onSelect: (val: string) => void;
+  active?: boolean;
+}
+
+function SearchableFilterDropdown({ label, options, onSelect, active }: SearchableFilterDropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const filtered = search.trim()
+    ? options.filter(opt => opt.toLowerCase().includes(search.toLowerCase()))
+    : options;
+
+  return (
+    <div className="relative w-full">
+      <div
+        onClick={() => { setIsOpen(!isOpen); if (!isOpen) setSearch(""); }}
+        className={`flex items-center gap-4 border rounded-xl px-5 py-3 w-full justify-between cursor-pointer transition-all group ${active
+          ? 'border-[#57AD43] bg-[#57AD43]/5'
+          : 'border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] hover:border-[#57AD43] hover:bg-emerald-50/20 backdrop-blur-sm'
+          }`}
+      >
+        <span className={`text-[9px] font-bold uppercase tracking-[0.2em] truncate ${active ? 'text-[#57AD43]' : 'text-black'}`}>{label}</span>
+        <ChevronDown size={14} className={`${active ? 'text-[#57AD43]' : 'text-[#435C46]/60'} group-hover:text-black transition-all ${isOpen ? 'rotate-180' : ''} shrink-0`} />
+      </div>
+
+      {isOpen && (
+        <div className="absolute top-full left-0 mt-2 w-full bg-white/95 backdrop-blur-lg border border-emerald-100/60 rounded-xl shadow-[0_20px_40px_rgba(87,173,67,0.12)] z-[500] overflow-hidden">
+          {/* Search input inside dropdown */}
+          <div className="px-4 py-2.5 border-b border-emerald-50" onClick={e => e.stopPropagation()}>
+            <input
+              autoFocus
+              type="text"
+              placeholder="Search color..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full bg-transparent text-[9px] font-bold uppercase tracking-[0.15em] outline-none text-black placeholder:text-gray-300"
+            />
+          </div>
+          <div className="max-h-[240px] overflow-y-auto overscroll-contain py-1">
+            {filtered.length === 0 ? (
+              <div className="px-5 py-3 text-[9px] font-bold uppercase tracking-widest text-gray-300">No matches</div>
+            ) : filtered.map((opt) => (
+              <div
+                key={opt}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSelect(opt);
+                  setIsOpen(false);
+                  setSearch("");
+                }}
+                className={`px-5 py-3 text-[9px] font-bold uppercase tracking-widest cursor-pointer transition-colors ${label === opt ? 'bg-[#57AD43] text-white' : 'text-[#435C46] hover:bg-emerald-50/40 hover:text-black'
+                  }`}
+              >
+                {opt}
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

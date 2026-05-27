@@ -49,7 +49,7 @@ const FabricCard = React.memo(({
     const minDim = Math.min(containerSize.w, containerSize.h);
     const radius = isMobile ? minDim * 0.44 : minDim * 0.36;
 
-    // Restored tighter spacing between images (as before)
+    // Spacing between cards in the horizontal line phase
     const hSpacing = isMobile ? 170 : 300;
     const totalW = (totalCount - 1) * hSpacing;
     const initialLineX = index * hSpacing;
@@ -64,7 +64,6 @@ const FabricCard = React.memo(({
         const angle = baseAngle + (directionMultiplier * shuffleProgress * 120);
         const rad = (angle * Math.PI) / 180;
 
-        // Base Position
         let tx = Math.cos(rad) * radius;
         let ty = Math.sin(rad) * radius;
         let tr = angle + 90;
@@ -90,6 +89,21 @@ const FabricCard = React.memo(({
         const finalS = 0.4 * (1 - morph) + ts * morph;
 
         return `translate3d(${finalX.toFixed(2)}px, ${finalY.toFixed(2)}px, 0) rotate(${finalR.toFixed(2)}deg) scale(${finalS.toFixed(3)})`;
+    });
+
+    // Counter-rotation for label pill — keeps text always upright so it never blurs during spin
+    const labelTransform = useTransform(smoothProgress, (p) => {
+        const morph = p < 0.15 ? 0 : (p < 0.30 ? (p - 0.15) / 0.15 : 1);
+        const shuffleProgress = p < 0.30 ? 0 : (p < 0.45 ? (p - 0.30) / 0.15 : 1);
+        const lineProgress = p < 0.45 ? 0 : (p < 0.55 ? (p - 0.45) / 0.1 : 1);
+
+        const angle = baseAngle + (directionMultiplier * shuffleProgress * 120);
+        let tr = angle + 90;
+        if (lineProgress > 0) tr = tr * (1 - lineProgress);
+        const finalR = scatterPos.r * (1 - morph) + tr * morph;
+
+        // Negate the card rotation so the label stays perfectly level
+        return `translate3d(0,0,0) rotate(${(-finalR).toFixed(2)}deg)`;
     });
 
     const opacity = useTransform(smoothProgress, [0, 0.1, 1.0], [0, 1, 1]);
@@ -129,19 +143,37 @@ const FabricCard = React.memo(({
                         decoding="async"
                     />
 
-                    <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 w-full px-2 flex justify-center transform-gpu">
-                        <div className="bg-white px-2 py-1 rounded-full shadow-lg border border-black/5 flex min-h-6 w-[88%] items-center justify-center transform-gpu will-change-transform">
+                    {/* Label pill — counter-rotated to stay upright during card spin */}
+                    <motion.div
+                        className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 w-full px-2 flex justify-center"
+                        style={{
+                            transform: labelTransform,
+                            backfaceVisibility: "hidden",
+                            WebkitBackfaceVisibility: "hidden",
+                            isolation: "isolate",
+                        }}
+                    >
+                        <div
+                            className="bg-white px-2 py-1 rounded-full shadow-lg border border-black/5 flex min-h-6 w-[88%] items-center justify-center"
+                            style={{
+                                backfaceVisibility: "hidden",
+                                WebkitBackfaceVisibility: "hidden",
+                            }}
+                        >
                             <span
-                                className="text-[6px] font-bold uppercase text-black tracking-[0.16em] leading-[1.05] text-center antialiased"
+                                className="text-[6px] font-bold uppercase text-black tracking-[0.16em] leading-[1.05] text-center"
                                 style={{
-                                    textRendering: "geometricPrecision",
+                                    textRendering: "optimizeLegibility",
                                     WebkitFontSmoothing: "antialiased",
+                                    MozOsxFontSmoothing: "grayscale",
+                                    backfaceVisibility: "hidden",
+                                    WebkitBackfaceVisibility: "hidden",
                                 }}
                             >
                                 {label}
                             </span>
                         </div>
-                    </div>
+                    </motion.div>
 
                     <motion.div
                         className="absolute inset-0 bg-black/5 pointer-events-none"
