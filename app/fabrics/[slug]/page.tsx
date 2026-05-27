@@ -17,7 +17,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
   const [error, setError] = useState(false);
 
   const addItem = useCartStore((state) => state.addItem);
-  const [activeTab, setActiveTab] = useState("description");
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState("");
 
@@ -100,6 +99,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
       image: product.image
     }, quantity);
   };
+  const liveQuantityText = typeof product.totalInventory === "number"
+    ? `${product.totalInventory} KG AVAILABLE`
+    : "CHECK AVAILABILITY";
 
   return (
     <main className="min-h-screen bg-white pb-16 pt-24 lg:pt-44 lg:pb-32">
@@ -200,13 +202,43 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               Shipping calculated at checkout
             </Link>
 
-            {/* Specifications Table moved up */}
+            {/* Selection & Add to Cart */}
+            <div className="flex flex-col gap-6 pt-6 border-t border-gray-100 mb-8">
+              <div className="flex flex-row items-start gap-6 lg:gap-12">
+                <div className="flex flex-col gap-2 w-full lg:w-auto">
+                  <div className="text-[10px] font-bold text-black uppercase tracking-widest">
+                    Live Quantity
+                  </div>
+                  <div className="h-12 flex items-center justify-center min-w-[160px] px-4 text-[11px] font-bold text-[#57AD43] uppercase tracking-widest border border-[#57AD43]/30 bg-[#57AD43]/5 whitespace-nowrap">
+                    {liveQuantityText}
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 w-full lg:w-auto">
+                  <div className="text-[10px] font-bold text-black uppercase tracking-widest">
+                    Quantity
+                  </div>
+                  <div className="flex items-center border border-gray-200 bg-white h-12 w-fit">
+                    <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className="w-12 h-full flex items-center justify-center hover:bg-gray-50 transition-colors border-r border-gray-200"><Minus size={14} /></button>
+                    <input type="text" value={quantity} readOnly className="w-16 h-full text-center text-sm font-bold outline-none" />
+                    <button onClick={() => setQuantity(prev => prev + 1)} className="w-12 h-full flex items-center justify-center hover:bg-gray-50 transition-colors border-l border-gray-200"><Plus size={14} /></button>
+                  </div>
+                </div>
+              </div>
+
+              <button onClick={handleAddToCart} className="w-full bg-[#121212] text-white h-14 flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-all duration-300 shadow-lg shadow-black/5 active:scale-[0.98]">
+                <ShoppingBag size={15} /> Add to cart
+              </button>
+            </div>
+
+            {/* Specifications Table */}
             <div className="space-y-1 border-t border-gray-100 pt-6 mb-8">
               <SpecRow label="KNIT STYLE" value={product.knit_style || "N/A"} />
               <SpecRow label="CONTENT" value={product.content || product.composition || "N/A"} />
               <SpecRow label="GSM" value={product.gsm === "N/A" ? "N/A" : `${product.gsm} g/m²`} />
               <SpecRow label="WIDTH" value={product.width !== "N/A" ? `${product.width}` : "N/A"} />
-              <SpecRow label="TYPE" value={product.type || "N/A"} />
+              <SpecRow label="WIDTH TYPE" value={product.type || "N/A"} />
+              <SpecRow label="LIVE QUANTITY" value={liveQuantityText} />
               <SpecRow label="SHADE" value={product.shade || "N/A"} />
               <SpecRow label="USAGE" value={product.usage || "N/A"} />
             </div>
@@ -216,8 +248,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               <AccordionItem title="Note" content={
                 <ul className="space-y-2 list-disc ml-4">
                   <li><strong>COLOR:</strong> Please note that color difference on website may vary due to lighting and environmental factors.</li>
-                  <li><strong>GSM Tolerance:</strong> ±10% variation from specified GSM is standard in knitted fabrics and not a defect.</li>
-                  <li><strong>Width Tolerance:</strong> Slight width variations due to knitting, finishing, and batch differences are normal and acceptable.</li>
+                  <li><strong>GSM Tolerance:</strong> ±5% variation up and down from specified GSM is standard in knitted fabrics and not a defect.</li>
+                  <li><strong>Width Tolerance:</strong> ±5% variation up and down from specified width is standard in knitted fabrics and not a defect.</li>
                   <li><strong>Blends:</strong> Fabric compositions mentioned on our website are approximate and may vary , as not all fabrics undergo detailed composition testing.</li>
                 </ul>
               } defaultOpen />
@@ -239,126 +271,27 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   </p>
                 </div>
               } />
-              <AccordionItem title="Shipping Info" content="We offer delivery services across India. Shipping charges are calculated based on the total weight of the fabric and the delivery pincode. We also provide international shipping options. For complete details, please refer to our Shipping & Return Policy." />
+              <AccordionItem title="Shipping Info" content={
+                <span>
+                  We offer delivery services across India. Shipping charges are calculated based on the total weight of the fabric and the delivery pincode. We also provide international shipping options. For complete details, please refer to our{" "}
+                  <Link href="/shipping-and-return-policy" className="text-[#57AD43] font-bold underline hover:text-black transition-colors">
+                    Shipping & Return Policy
+                  </Link>.
+                </span>
+              } />
               <AccordionItem title="Care Info" content="Hand wash or dry clean preferred; machine wash on mild cycle. Test before full wash.
 Minor GSM, width, and color variations may occur—acceptable as per industry standards." />
-            </div>
-
-            {/* Selection & Add to Cart moved to the bottom */}
-            <div className="flex flex-col gap-6 pt-6 border-t border-gray-100">
-              <div className="flex flex-row items-start gap-6 lg:gap-12">
-                <div className="flex flex-col gap-2 w-full lg:w-auto">
-                  <div className="text-[10px] font-bold text-black uppercase tracking-widest">
-                    Availability
-                  </div>
-                  <div className="h-12 flex items-center justify-center min-w-[160px] px-4 text-[11px] font-bold text-[#57AD43] uppercase tracking-widest border border-[#57AD43]/30 bg-[#57AD43]/5 whitespace-nowrap">
-                    {product.totalInventory !== undefined
-                      ? `${product.totalInventory} KG IN STOCK`
-                      : "IN STOCK"}
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2 w-full lg:w-auto">
-                  <div className="text-[10px] font-bold text-black uppercase tracking-widest">
-                    Quantity
-                  </div>
-                  <div className="flex items-center border border-gray-200 bg-white h-12 w-fit">
-                    <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className="w-12 h-full flex items-center justify-center hover:bg-gray-50 transition-colors border-r border-gray-200"><Minus size={14} /></button>
-                    <input type="text" value={quantity} readOnly className="w-16 h-full text-center text-sm font-bold outline-none" />
-                    <button onClick={() => setQuantity(prev => prev + 1)} className="w-12 h-full flex items-center justify-center hover:bg-gray-50 transition-colors border-l border-gray-200"><Plus size={14} /></button>
-                  </div>
-                </div>
-              </div>
-
-              <button onClick={handleAddToCart} className="w-full bg-[#121212] text-white h-14 flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-all duration-300 shadow-lg shadow-black/5 active:scale-[0.98]">
-                <ShoppingBag size={15} /> Add to cart
-              </button>
             </div>
           </div>
         </div>
 
-        {/* Tabs Section */}
-        <div className="mt-20 lg:mt-32 border-t border-gray-100">
-          <div className="flex overflow-x-auto no-scrollbar justify-start lg:justify-center gap-8 lg:gap-12 -mt-px pt-8 mb-16 px-4">
-            {["Description", "Reviews (0)"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab.toLowerCase())}
-                className={`py-6 lg:py-8 text-[11px] font-bold uppercase tracking-[0.2em] border-t-2 transition-all whitespace-nowrap ${activeTab === tab.toLowerCase() ? "border-black text-black" : "border-transparent text-gray-400 hover:text-black"
-                  }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-
-          <div className="max-w-4xl mx-auto px-6 mb-32">
-            <AnimatePresence mode="wait">
-              {activeTab === "description" && (
-                <motion.div key="desc" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="text-gray-600 leading-relaxed text-center italic text-sm">
-                  {product.description || "No description available."}
-                </motion.div>
-              )}
-              {/* {activeTab === "additional information" && (
-                <motion.div key="add" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="max-w-xl mx-auto border border-gray-100 divide-y divide-gray-100">
-                  <div className="grid grid-cols-3"><div className="bg-gray-50/50 p-4 text-[11px] font-bold uppercase tracking-widest text-black">Weight</div><div className="col-span-2 p-4 text-[11px] font-medium italic text-gray-500">{product.weight || "1 kg"}</div></div>
-                  <div className="grid grid-cols-3"><div className="bg-gray-50/50 p-4 text-[11px] font-bold uppercase tracking-widest text-black">Color</div><div className="col-span-2 p-4 text-[11px] font-medium italic text-gray-500 uppercase">{product.shade || "N/A"}</div></div>
-                  <div className="grid grid-cols-3"><div className="bg-gray-50/50 p-4 text-[11px] font-bold uppercase tracking-widest text-black">Composition</div><div className="col-span-2 p-4 text-[11px] font-medium italic text-gray-500">{product.content || product.composition || "N/A"}</div></div>
-                </motion.div>
-              )} */}
-              {activeTab === "reviews (0)" && (
-                <motion.div key="rev" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="max-w-2xl mx-auto py-4">
-                  <div className="space-y-6 text-[11px] lg:text-[13px] text-gray-600">
-                    <p>There are no reviews yet.</p>
-
-                    <div className="space-y-4 pt-4 border-t border-gray-100">
-                      <h3 className="text-sm font-bold uppercase tracking-tight text-black flex items-center gap-2">
-                        Be the first to review &ldquo;{product.name}&rdquo;
-                      </h3>
-                      <p className="italic">Your email address will not be published. Required fields are marked *</p>
-
-                      <form className="space-y-6 pt-4">
-                        <div className="space-y-2">
-                          <label className="font-bold uppercase tracking-widest text-[10px]">Your review *</label>
-                          <textarea
-                            rows={8}
-                            className="w-full border border-gray-200 p-4 outline-none focus:border-black transition-colors"
-                          ></textarea>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <div className="space-y-2">
-                            <label className="font-bold uppercase tracking-widest text-[10px]">Name *</label>
-                            <input
-                              type="text"
-                              className="w-full border border-gray-200 h-12 px-4 outline-none focus:border-black transition-colors"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <label className="font-bold uppercase tracking-widest text-[10px]">Email *</label>
-                            <input
-                              type="email"
-                              className="w-full border border-gray-200 h-12 px-4 outline-none focus:border-black transition-colors"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                          <input type="checkbox" id="save-info" className="w-4 h-4 border-gray-200 rounded-none accent-black" />
-                          <label htmlFor="save-info" className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">
-                            Save my name, email, and website in this browser for the next time I comment.
-                          </label>
-                        </div>
-
-                        <button type="submit" className="bg-black text-white px-10 py-4 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition-colors">
-                          Submit
-                        </button>
-                      </form>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+        {/* Description Section */}
+        <div className="mt-20 lg:mt-32 border-t border-gray-100 pt-16 mb-32">
+          <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-center mb-8 text-black">
+            Description
+          </h2>
+          <div className="max-w-4xl mx-auto px-6 text-gray-600 leading-relaxed text-center italic text-sm">
+            {product.description || "No description available."}
           </div>
         </div>
 
@@ -402,10 +335,10 @@ function AccordionItem({ title, content, defaultOpen = false }: { title: string,
     <div className="py-4">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 w-full text-left"
+        className="flex items-center gap-3 w-full text-left focus:outline-none"
       >
-        <span className="text-xs font-bold text-gray-400">{isOpen ? "−" : "+"}</span>
-        <span className="text-[13px] font-bold uppercase tracking-widest">{title}</span>
+        <span className="text-xl font-bold text-gray-400">{isOpen ? "−" : "+"}</span>
+        <span className="text-sm font-bold uppercase tracking-widest">{title}</span>
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -415,7 +348,7 @@ function AccordionItem({ title, content, defaultOpen = false }: { title: string,
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="mt-4 text-[13px] text-gray-800 leading-relaxed pl-6 whitespace-pre-line">{content}</div>
+            <div className="mt-4 text-sm text-gray-800 leading-relaxed pl-6 whitespace-pre-line">{content}</div>
           </motion.div>
         )}
       </AnimatePresence>

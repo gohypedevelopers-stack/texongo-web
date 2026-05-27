@@ -61,13 +61,13 @@ export default function TermsAndConditions() {
               <div className="space-y-4">
                 <h3 className="text-[11px] font-bold uppercase tracking-widest text-black">GSM Tolerance</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  All fabrics supplied by Texongo are subject to a GSM tolerance of ±10% from the specifications mentioned on the website, invoice, or order confirmation. Such variation is inherent to knitted fabric production and shall not be considered a defect.
+                  All fabrics supplied by Texongo are subject to a GSM tolerance of ±5% up and down from the specifications mentioned on the website, invoice, or order confirmation. Such variation is inherent to knitted fabric production and shall not be considered a defect.
                 </p>
               </div>
               <div className="space-y-4">
                 <h3 className="text-[11px] font-bold uppercase tracking-widest text-black">Width Tolerance</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  Fabric width may vary marginally due to knitting structure, finishing processes, and batch-to-batch production variations. Minor deviations in width are normal and acceptable within industry standards.
+                  All fabrics supplied by Texongo are subject to a width tolerance of ±5% up and down from the specifications mentioned on the website, invoice, or order confirmation. Such variation is inherent to knitted fabric production and shall not be considered a defect.
                 </p>
               </div>
             </div>

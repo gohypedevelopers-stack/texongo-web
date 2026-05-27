@@ -45,19 +45,19 @@ export default function AboutUsPage() {
             </div>
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="space-y-8">
               <div>
-                <span className="text-[10px] font-black uppercase text-[#57AD43] mb-1 block">Legacy &amp; Journey</span>
+                <span className="text-xs font-black uppercase text-[#57AD43] mb-1 block">Legacy &amp; Journey</span>
                 <h2 className="text-2xl md:text-5xl font-bold text-black mb-6 tracking-tight">Our Legacy</h2>
-                <p className="text-sm font-medium text-gray-400 leading-relaxed uppercase">
-                  Syndicate Cloth House Pvt. Ltd. &amp; Texongo – A Legacy of Innovation and Trust.
+                <p className="text-base font-medium text-gray-400 leading-relaxed uppercase">
+                  <strong className="font-extrabold text-black">Syndicate Cloth House Pvt. Ltd. &amp; Texongo</strong> – A Legacy of Innovation and Trust.
                 </p>
-                <p className="text-sm font-medium text-gray-500 leading-relaxed mt-4">
-                  For over 50 years, Syndicate Cloth House Pvt. Ltd. has been a trusted name in the textile industry, evolving with time while staying true to its core values of quality, trust, and innovation.
+                <p className="text-base font-medium text-gray-500 leading-relaxed mt-4">
+                  For over 50 years, <strong className="font-bold text-black">Syndicate Cloth House Pvt. Ltd.</strong> has been a trusted name in the textile industry, evolving with time while staying true to its core values of quality, trust, and innovation.
                 </p>
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-black mb-4 tracking-tighter">Our Journey</h3>
-                <p className="text-sm font-medium text-gray-500 leading-relaxed">
-                  In 1975, Mr. Jagdish Chand Gupta founded Syndicate Cloth House with a vision to revolutionize fabric trading. Leaving behind a stable career in the auto parts industry, he embarked on an entrepreneurial journey, sourcing and supplying premium woven fabrics. In an era without digital connectivity, he built his business through personal relationships, traveling extensively to establish strong and lasting bonds with clients and vendors.
+                <p className="text-base font-medium text-gray-500 leading-relaxed">
+                  In 1975, <strong className="font-bold text-black">Mr. Jagdish Chand Gupta</strong> founded <strong className="font-bold text-black">Syndicate Cloth House</strong> with a vision to revolutionize fabric trading. Leaving behind a stable career in the auto parts industry, he embarked on an entrepreneurial journey, sourcing and supplying premium woven fabrics. In an era without digital connectivity, he built his business through personal relationships, traveling extensively to establish strong and lasting bonds with clients and vendors.
                 </p>
               </div>
             </motion.div>
@@ -71,13 +71,13 @@ export default function AboutUsPage() {
           <div className="max-w-[1440px] mx-auto px-6 lg:px-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full">
             <motion.div {...fadeIn} className="order-2 lg:order-1 space-y-6">
               <div>
-                <span className="text-[10px] font-black uppercase text-[#57AD43] mb-1 block">Timeline</span>
+                <span className="text-xs font-black uppercase text-[#57AD43] mb-1 block">Timeline</span>
                 <h2 className="text-2xl md:text-5xl font-bold text-black mb-6 tracking-tight">Growth &amp; Expansion</h2>
                 <div className="space-y-4">
-                  <p className="text-sm font-medium text-gray-500 leading-relaxed">
-                    As the business flourished under the visionary foundation laid by our founder, the next generation stepped in to scale the brand to new heights. Manoj Gupta, his son, joined the company with a mandate to diversify, modernize, and institutionalize operations. By the late 1990s, under his dynamic leadership, Syndicate Cloth House took a massive leap forward by expanding its core operations into knitted fabrics, specialized dyeing, modern processing, and advanced knitting units.
+                  <p className="text-base font-medium text-gray-500 leading-relaxed">
+                    As the business flourished under the visionary foundation laid by our founder, the next generation stepped in to scale the brand to new heights. <strong className="font-bold text-black">Manoj Gupta</strong>, his son, joined the company with a mandate to diversify, modernize, and institutionalize operations. By the late 1990s, under his dynamic leadership, <strong className="font-bold text-black">Syndicate Cloth House</strong> took a massive leap forward by expanding its core operations into knitted fabrics, specialized dyeing, modern processing, and advanced knitting units.
                   </p>
-                  <p className="text-sm font-medium text-gray-500 leading-relaxed">
+                  <p className="text-base font-medium text-gray-500 leading-relaxed">
                     This bold diversification successfully transformed the company from a traditional fabric trading house into a fully integrated textile powerhouse. Under his direction, the company built state-of-the-art facilities that streamlined the entire manufacturing cycle—from raw yarn selection to complex finishing processes. This high level of vertical integration ensured unparalleled quality control, rapid turnaround times, and the capability to cater to the demanding needs of global export markets and premium domestic brands.
                   </p>
                 </div>
@@ -120,14 +120,14 @@ export default function AboutUsPage() {
               </motion.div>
             </div>
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }} className="space-y-6">
-              <span className="text-[10px] font-black uppercase text-[#57AD43] mb-1 block">Innovation</span>
+              <span className="text-xs font-black uppercase text-[#57AD43] mb-1 block">Innovation</span>
               <h2 className="text-2xl md:text-5xl font-bold text-black mb-6 tracking-tight">A New Chapter</h2>
               <div className="space-y-4">
-                <p className="text-sm font-medium text-gray-500 leading-relaxed">
-                  In 2017, Aman Gupta took the helm of the legacy business, bringing a fresh, global perspective and a passion for technological innovation. Recognizing the traditional, fragmented nature of fabric sourcing and the high friction points faced by designers and brands, he realized the industry was ripe for a digital transformation. With a bold vision to bridge the gap between traditional textile expertise and digital speed, he launched Texongo.
+                <p className="text-base font-medium text-gray-500 leading-relaxed">
+                  In 2017, <strong className="font-bold text-black">Aman Gupta</strong> took the helm of the legacy business, bringing a fresh, global perspective and a passion for technological innovation. Recognizing the traditional, fragmented nature of fabric sourcing and the high friction points faced by designers and brands, he realized the industry was ripe for a digital transformation. With a bold vision to bridge the gap between traditional textile expertise and digital speed, he launched <strong className="font-bold text-black">Texongo</strong>.
                 </p>
-                <p className="text-sm font-medium text-gray-500 leading-relaxed">
-                  Texongo was built as a pioneering B2B platform designed to completely simplify and modernize fabric procurement. By introducing curated swatch kits, transparent pricing, and a unique, highly convenient subscription-based model, Texongo eliminated the endless back-and-forth typical of fabric sourcing. Aman's embrace of cutting-edge tech—including interactive digital fall simulators and 3D fashion studio drapes—has enabled designers to visualize fabrics in real-time, drastically reducing physical waste and product development cycles.
+                <p className="text-base font-medium text-gray-500 leading-relaxed">
+                  <strong className="font-bold text-black">Texongo</strong> was built as a pioneering B2B platform designed to completely simplify and modernize fabric procurement. By introducing curated swatch kits, transparent pricing, and a unique, highly convenient subscription-based model, <strong className="font-bold text-black">Texongo</strong> eliminated the endless back-and-forth typical of fabric sourcing. <strong className="font-bold text-black">Aman's</strong> embrace of cutting-edge tech—including interactive digital fall simulators and 3D fashion studio drapes—has enabled designers to visualize fabrics in real-time, drastically reducing physical waste and product development cycles.
                 </p>
               </div>
             </motion.div>
@@ -140,7 +140,7 @@ export default function AboutUsPage() {
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           {/* Header */}
           <div className="text-center space-y-4 mb-16">
-            <span className="text-[10px] md:text-xs font-bold uppercase text-[#57AD43] block">
+            <span className="text-xs font-bold uppercase text-[#57AD43] block">
               Our Promise
             </span>
             <h2 className="text-3xl md:text-5xl font-bold text-black tracking-tight">
@@ -163,8 +163,8 @@ export default function AboutUsPage() {
               </div>
               <div className="relative z-10">
                 <div className="w-12 h-1 bg-white/30 rounded-full mb-8 transition-all duration-500 group-hover:w-20 group-hover:bg-white/60" />
-                <p className="text-white/95 text-sm lg:text-base leading-[2] font-normal relative z-10">
-                  At Syndicate Cloth House Pvt. Ltd. &amp; Texongo, we believe in more than just business—we believe in relationships, reliability, and continuous innovation. Our commitment extends beyond providing high-quality fabrics; we strive to deliver an exceptional customer experience by offering transparency, efficiency, and personalized solutions tailored to our clients' needs.
+                <p className="text-white/95 text-base leading-[2] font-normal relative z-10">
+                  At <strong className="font-bold text-white">Syndicate Cloth House Pvt. Ltd. &amp; Texongo</strong>, we believe in more than just business—we believe in relationships, reliability, and continuous innovation. Our commitment extends beyond providing high-quality fabrics; we strive to deliver an exceptional customer experience by offering transparency, efficiency, and personalized solutions tailored to our clients' needs.
                 </p>
               </div>
             </motion.div>
@@ -182,7 +182,7 @@ export default function AboutUsPage() {
               </div>
               <div className="relative z-10">
                 <div className="w-12 h-1 bg-white/30 rounded-full mb-8 transition-all duration-500 group-hover:w-20 group-hover:bg-white/60" />
-                <p className="text-white/95 text-sm lg:text-base leading-[2] font-normal relative z-10">
+                <p className="text-white/95 text-base leading-[2] font-normal relative z-10">
                   We understand that the textile industry is ever-evolving, and we embrace change by integrating technology, sustainability, and creative sourcing methods to stay ahead. Our goal is to bridge the gap between traditional textile trading and modern digital solutions, ensuring that our clients have access to the best fabrics with unmatched ease and convenience.
                 </p>
               </div>
@@ -201,7 +201,7 @@ export default function AboutUsPage() {
               </div>
               <div className="relative z-10">
                 <div className="w-12 h-1 bg-white/30 rounded-full mb-8 transition-all duration-500 group-hover:w-20 group-hover:bg-white/60" />
-                <p className="text-white/95 text-sm lg:text-base leading-[2] font-normal relative z-10">
+                <p className="text-white/95 text-base leading-[2] font-normal relative z-10">
                   With a legacy built on trust and a future driven by technology, we continue to redefine fabric sourcing for the modern era.
                 </p>
               </div>

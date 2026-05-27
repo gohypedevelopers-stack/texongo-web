@@ -33,18 +33,18 @@ export function ContactForm() {
   return (
     <div className="w-full max-w-[1440px] mx-auto px-6 lg:px-20 py-10">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] bg-white">
-        
+
         {/* Left Column: Form Card */}
         <div className="p-10 lg:p-16 lg:pr-24 flex flex-col justify-center">
           <motion.div {...fadeIn}>
             <span className="text-[10px] font-black uppercase text-[#57AD43] mb-2 block tracking-widest">Connect</span>
             <h2 className="text-3xl lg:text-5xl font-bold text-black mb-10 tracking-tight">Send a Message</h2>
           </motion.div>
-          
+
           <form action={handleSubmit} className="space-y-5">
             <motion.div {...fadeIn} transition={{ delay: 0.1 }} className="space-y-2 relative group">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Name</label>
-              <input 
+              <input
                 name="name" type="text" required
                 className="w-full bg-[#F9FAFB] border border-gray-200 rounded-lg h-12 px-5 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all group-hover:bg-gray-50"
               />
@@ -52,7 +52,7 @@ export function ContactForm() {
 
             <motion.div {...fadeIn} transition={{ delay: 0.2 }} className="space-y-2 relative group">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Email</label>
-              <input 
+              <input
                 name="email" type="email" required
                 className="w-full bg-[#F9FAFB] border border-gray-200 rounded-lg h-12 px-5 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all group-hover:bg-gray-50"
               />
@@ -60,30 +60,29 @@ export function ContactForm() {
 
             <motion.div {...fadeIn} transition={{ delay: 0.3 }} className="space-y-2 relative group">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Contact Number</label>
-              <input 
-                name="phone" type="tel" 
+              <input
+                name="phone" type="tel"
                 className="w-full bg-[#F9FAFB] border border-gray-200 rounded-lg h-12 px-5 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all group-hover:bg-gray-50"
               />
             </motion.div>
 
             <motion.div {...fadeIn} transition={{ delay: 0.4 }} className="space-y-2 relative group">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Message</label>
-              <textarea 
+              <textarea
                 name="message" rows={3} required
                 className="w-full bg-[#F9FAFB] border border-gray-200 rounded-lg px-5 py-4 focus:ring-2 focus:ring-[#57AD43] focus:border-transparent outline-none transition-all resize-none group-hover:bg-gray-50"
               />
             </motion.div>
 
             {feedback && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`p-4 rounded-xl flex items-center gap-3 ${
-                feedback.type === "success" ? "bg-green-50 text-green-800 border border-green-200" : "bg-red-50 text-red-800 border border-red-200"
-              }`}>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`p-4 rounded-xl flex items-center gap-3 ${feedback.type === "success" ? "bg-green-50 text-green-800 border border-green-200" : "bg-red-50 text-red-800 border border-red-200"
+                }`}>
                 {feedback.type === "success" ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
                 <span className="text-sm font-bold">{feedback.message}</span>
               </motion.div>
             )}
 
-            <motion.button 
+            <motion.button
               {...fadeIn} transition={{ delay: 0.5 }}
               type="submit" disabled={isSubmitting}
               className="w-fit px-8 py-3 bg-black hover:bg-[#57AD43] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold uppercase tracking-wider text-[11px] rounded-full transition-all shadow-lg hover:shadow-[0_8px_20px_rgba(87,173,67,0.3)] transform active:scale-95 flex items-center justify-center gap-2"
@@ -111,7 +110,7 @@ export function ContactForm() {
 
             <div className="flex flex-col gap-8 w-full">
               <motion.div {...fadeIn} transition={{ delay: 0.1 }}>
-                <ContactInfoItem icon={<Mail size={22} />} label="Email" value="contact@texongo.com" href="mailto:contact@texongo.com" />
+                <ContactInfoItem icon={<Mail size={22} />} label="Email" value="Connect@texongo.com" href="mailto:Connect@texongo.com" />
               </motion.div>
               <motion.div {...fadeIn} transition={{ delay: 0.2 }}>
                 <ContactInfoItem icon={<Globe size={22} />} label="Website" value="https://texongo.com/" href="https://texongo.com/" />

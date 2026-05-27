@@ -30,7 +30,7 @@ export default function ContactUsPage() {
         >
           <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700 pointer-events-none z-10" />
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3505.518608465177!2d77.27301037617637!3d28.524103988448833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce36bef41bf97%3A0xc3f83769cda4479e!2sD%2010%2F1%2C%20Okhla%20Industrial%20Estate%20Phase%20III%2C%20Okhla%20Phase%20III%2C%20Okhla%20Industrial%20Estate%2C%20New%20Delhi%2C%20Delhi%20110020!5e0!3m2!1sen!2sin!4v1712745000000!5m2!1sen!2sin" 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7010.67730394791!2d77.2705829458456!3d28.529539028952048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce11cbb1b65c1%3A0xcb19821f10705b22!2sTexongo%20(Syndicate%20Cloth%20House)!5e0!3m2!1sen!2sin!4v1779880942926!5m2!1sen!2sin" 
             width="100%" 
             height="100%" 
             style={{ border: 0 }} 

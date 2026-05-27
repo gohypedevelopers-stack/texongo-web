@@ -40,10 +40,12 @@ export async function GET() {
                       currencyCode
                     }
                   }
+                  totalInventory
                   variants(first: 1) {
                     nodes {
                       id
                       sku
+                      quantityAvailable
                       selectedOptions {
                         name
                         value

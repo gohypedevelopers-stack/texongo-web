@@ -2,7 +2,8 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { X, Loader2, ArrowRight } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { WatermarkOverlay, VideoBadge } from "@/components/ui/watermark";
 import { PageHero } from "@/components/ui/page-hero";
 
@@ -110,7 +111,7 @@ const getFabricData = (id: number) => {
   return FABRIC_INFO[fabKey] || { name: `Fabric #${id}`, sku: "SCH-0000" };
 };
 
-function FallCard({ id, onClick }: { id: number; onClick: (src: string, name: string, fabric: string, sku: string) => void }) {
+function FallCard({ id }: { id: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -118,7 +119,6 @@ function FallCard({ id, onClick }: { id: number; onClick: (src: string, name: st
   const [isError, setIsError] = useState(false);
 
   const fabricData = getFabricData(id);
-  const name = `Fall Analysis - ${fabricData.name}`;
   const [videoSrc, setVideoSrc] = useState("");
 
   useEffect(() => {
@@ -156,65 +156,69 @@ function FallCard({ id, onClick }: { id: number; onClick: (src: string, name: st
   if (isError) return null;
 
   return (
-    <motion.div
-      ref={containerRef}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      onClick={() => onClick(videoSrc, name, fabricData.name, fabricData.sku)}
+    <Link
+      href={`/fabrics?category=${encodeURIComponent(fabricData.name.toLowerCase().replace(/\s+/g, '-'))}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onContextMenu={handleContextMenu}
-      className="relative aspect-[3/4] bg-white overflow-hidden group cursor-pointer border border-black/5"
+      className="relative aspect-[3/4] bg-white overflow-hidden group cursor-pointer border border-black/5 block"
     >
-      {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#F9FAFB]">
-          <Loader2 className="w-5 h-5 text-zinc-200 animate-spin" />
+      <motion.div
+        ref={containerRef}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full h-full relative"
+      >
+        {!isLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#F9FAFB]">
+            <Loader2 className="w-5 h-5 text-zinc-200 animate-spin" />
+          </div>
+        )}
+
+        {isInView && (
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            onLoadedData={() => setIsLoaded(true)}
+            onError={handleError}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          />
+        )}
+
+        <div className={`absolute inset-0 pointer-events-none z-[50] overflow-hidden transition-opacity duration-300 ${showWatermark ? 'opacity-100' : 'opacity-0'}`}>
+          <WatermarkOverlay />
         </div>
-      )}
 
-      {isInView && (
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          onLoadedData={() => setIsLoaded(true)}
-          onError={handleError}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-        />
-      )}
+        <VideoBadge />
 
-      <div className={`absolute inset-0 pointer-events-none z-[50] overflow-hidden transition-opacity duration-300 ${showWatermark ? 'opacity-100' : 'opacity-0'}`}>
-        <WatermarkOverlay />
-      </div>
-
-      <VideoBadge />
-
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-100 transition-all duration-500">
-        {/* Bottom Left Label - Premium Editorial Style */}
-        <div className="absolute bottom-0 left-0 p-5 w-full pointer-events-none z-10">
-          <div className="flex flex-col gap-1.5 items-start">
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              className="h-[1px] w-12 bg-white/60 origin-left"
-            />
-            <div className="flex flex-col">
-              <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                {fabricData.name}
-              </span>
-              <span className="text-[9px] font-medium uppercase tracking-[0.3em] text-white/70 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] mt-0.5">
-                {fabricData.sku}
-              </span>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-100 transition-all duration-500">
+          {/* Bottom Left Label - Premium Editorial Style */}
+          <div className="absolute bottom-0 left-0 p-5 w-full pointer-events-none z-10">
+            <div className="flex flex-col gap-1.5 items-start">
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                className="h-[1px] w-12 bg-white/60 origin-left"
+              />
+              <div className="flex flex-col">
+                <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                  {fabricData.name}
+                </span>
+                <span className="text-[9px] font-medium uppercase tracking-[0.3em] text-white/70 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] mt-0.5">
+                  {fabricData.sku}
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </Link>
   );
 }
 
@@ -278,7 +282,6 @@ export default function DigitalFallPage() {
               <FallCard
                 key={`${currentPage}-${id}`}
                 id={id}
-                onClick={(src, name, fabric, sku) => setSelectedVideo({ src, name, fabric, sku })}
               />
             ))}
           </AnimatePresence>
@@ -303,63 +306,7 @@ export default function DigitalFallPage() {
         </div>
       </section>
 
-      <AnimatePresence>
-        {selectedVideo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-white/95 backdrop-blur-md p-4 md:p-10"
-            onClick={() => setSelectedVideo(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative max-w-4xl w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-black/5 flex flex-col"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="relative flex-1 bg-[#F9FAFB] flex items-center justify-center overflow-hidden">
-                <video
-                  src={selectedVideo.src}
-                  autoPlay
-                  controls
-                  loop
-                  playsInline
-                  className="w-full h-full object-contain bg-black"
-                />
 
-                <VideoBadge />
-
-                {/* Lightbox Badge Overlay */}
-                <div className="absolute bottom-8 left-8 pointer-events-none z-10 flex flex-col gap-3">
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    className="flex flex-col border-l-2 border-[#57AD43] pl-4 py-1"
-                  >
-                    <span className="text-[14px] font-black uppercase tracking-[0.3em] text-white drop-shadow-2xl">
-                      {selectedVideo.fabric || selectedVideo.name}
-                    </span>
-                    {selectedVideo.sku && (
-                      <span className="text-[12px] font-bold uppercase tracking-[0.1em] text-white/70 mt-1.5">
-                        {selectedVideo.sku}
-                      </span>
-                    )}
-                  </motion.div>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setSelectedVideo(null)}
-                className="absolute top-4 right-4 z-10 p-2 text-white/40 hover:text-white transition-colors"
-              >
-                <X size={24} />
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </main>
   );
 }

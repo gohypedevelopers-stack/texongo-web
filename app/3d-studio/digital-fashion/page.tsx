@@ -2,7 +2,8 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { X, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { WatermarkOverlay, VideoBadge } from "@/components/ui/watermark";
 import { PageHero } from "@/components/ui/page-hero";
 
@@ -159,7 +160,7 @@ const getFabricData = (fileName: string) => {
   return baseInfo;
 };
 
-function FashionCard({ fileName, onClick }: { fileName: string; onClick: (src: string, name: string, fabric: string, sku: string) => void }) {
+function FashionCard({ fileName }: { fileName: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -168,7 +169,6 @@ function FashionCard({ fileName, onClick }: { fileName: string; onClick: (src: s
 
   const videoSrc = `/digital-fashion-fixed/${fileName}`;
   const fabricData = getFabricData(fileName);
-  const displayName = fabricData.name;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -184,15 +184,9 @@ function FashionCard({ fileName, onClick }: { fileName: string; onClick: (src: s
     return () => observer.disconnect();
   }, [fileName]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!isLoaded && !isError) setIsError(true);
-    }, 2500);
-    return () => clearTimeout(timer);
-  }, [isLoaded, isError]);
 
   const handleMouseEnter = () => { if (videoRef.current && isLoaded) videoRef.current.play().catch(() => { }); };
-  const handleMouseLeave = () => { if (videoRef.current) videoRef.current.pause(); };
+  const handleMouseLeave = () => { if (videoRef.current) { videoRef.current.pause(); } };
 
   const [showWatermark, setShowWatermark] = useState(false);
 
@@ -204,83 +198,73 @@ function FashionCard({ fileName, onClick }: { fileName: string; onClick: (src: s
   if (isError) return null;
 
   return (
-    <motion.div
-      ref={containerRef}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={() => onClick(videoSrc, fileName, fabricData.name, fabricData.sku)}
+    <Link
+      href={`/fabrics?category=${encodeURIComponent(fabricData.name.toLowerCase().replace(/\s+/g, '-'))}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onContextMenu={handleContextMenu}
-      className="relative aspect-[4/5] bg-white overflow-hidden group cursor-pointer border border-black/5"
+      className="relative aspect-[4/5] bg-white overflow-hidden group cursor-pointer border border-black/5 block"
     >
-      {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#F9FAFB]">
-          <Loader2 className="w-5 h-5 text-zinc-200 animate-spin" />
+      <motion.div
+        ref={containerRef}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="w-full h-full relative"
+      >
+        {!isLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#F9FAFB]">
+            <Loader2 className="w-5 h-5 text-zinc-200 animate-spin" />
+          </div>
+        )}
+        {isInView && (
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            onLoadedData={() => setIsLoaded(true)}
+            onError={() => setIsError(true)}
+            className={`w-full h-full object-cover transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          />
+        )}
+
+        <div className={`absolute inset-0 pointer-events-none z-[50] overflow-hidden transition-opacity duration-300 ${showWatermark ? 'opacity-100' : 'opacity-0'}`}>
+          <WatermarkOverlay />
         </div>
-      )}
-      {isInView && (
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          onLoadedData={() => setIsLoaded(true)}
-          onError={() => setIsError(true)}
-          className={`w-full h-full object-cover transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-        />
-      )}
 
-      <div className={`absolute inset-0 pointer-events-none z-[50] overflow-hidden transition-opacity duration-300 ${showWatermark ? 'opacity-100' : 'opacity-0'}`}>
-        <WatermarkOverlay />
-      </div>
+        <VideoBadge />
 
-      <VideoBadge />
-
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-100 transition-all duration-500">
-        <div className="absolute bottom-0 left-0 p-5 w-full pointer-events-none z-10">
-          <div className="flex flex-col gap-1.5 items-start">
-            <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} className="h-[1px] w-12 bg-white/60 origin-left" />
-            <div className="flex flex-col">
-              <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                {fabricData.name}
-              </span>
-              <span className="text-[9px] font-medium uppercase tracking-[0.3em] text-white/70 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] mt-0.5">
-                {fabricData.sku}
-              </span>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-100 transition-all duration-500">
+          <div className="absolute bottom-0 left-0 p-5 w-full pointer-events-none z-10">
+            <div className="flex flex-col gap-1.5 items-start">
+              <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} className="h-[1px] w-12 bg-white/60 origin-left" />
+              <div className="flex flex-col">
+                <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                  {fabricData.name}
+                </span>
+                <span className="text-[9px] font-medium uppercase tracking-[0.3em] text-white/70 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] mt-0.5">
+                  {fabricData.sku}
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </Link>
   );
 }
 
 export default function DigitalFashionPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedVideo, setSelectedVideo] = useState<{
-    src: string;
-    name: string;
-    fabric?: string;
-    sku?: string;
-  } | null>(null);
 
   const totalPages = Math.ceil(FASHION_FILES.length / ITEMS_PER_PAGE);
   const currentFiles = FASHION_FILES.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
-
-  useEffect(() => {
-    if (selectedVideo) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [selectedVideo]);
 
   return (
     <main className="min-h-screen bg-white">
@@ -304,7 +288,6 @@ export default function DigitalFashionPage() {
               <FashionCard
                 key={`${currentPage}-${fileName}`}
                 fileName={fileName}
-                onClick={(src, name, fabric, sku) => setSelectedVideo({ src, name, fabric, sku })}
               />
             ))}
           </AnimatePresence>
@@ -329,63 +312,7 @@ export default function DigitalFashionPage() {
         </div>
       </section>
 
-      <AnimatePresence>
-        {selectedVideo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-white/95 backdrop-blur-md p-4 md:p-10"
-            onClick={() => setSelectedVideo(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative max-w-4xl w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-black/5 flex flex-col"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="relative flex-1 bg-[#F9FAFB] flex items-center justify-center overflow-hidden">
-                <video
-                  src={selectedVideo.src}
-                  autoPlay
-                  controls
-                  loop
-                  playsInline
-                  className="w-full h-full object-contain bg-black"
-                />
 
-                <VideoBadge />
-
-                {/* Lightbox Badge Overlay */}
-                <div className="absolute bottom-8 left-8 pointer-events-none z-10 flex flex-col gap-3">
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    className="flex flex-col border-l-2 border-[#57AD43] pl-4 py-1"
-                  >
-                    <span className="text-[14px] font-black uppercase tracking-[0.3em] text-white drop-shadow-2xl">
-                      {selectedVideo.fabric || selectedVideo.name}
-                    </span>
-                    {selectedVideo.sku && (
-                      <span className="text-[12px] font-bold uppercase tracking-[0.1em] text-white/70 mt-1.5">
-                        {selectedVideo.sku}
-                      </span>
-                    )}
-                  </motion.div>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setSelectedVideo(null)}
-                className="absolute top-4 right-4 z-10 p-2 text-white/40 hover:text-white transition-colors"
-              >
-                <X size={24} />
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <section className="max-w-[1440px] mx-auto px-6 lg:px-10 py-20 text-center border-t border-black/5">
         <p className="text-[#475467] text-[10px] font-black uppercase tracking-[0.3em]">

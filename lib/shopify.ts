@@ -77,10 +77,12 @@ export const PRODUCTS_QUERY = `
               currencyCode
             }
           }
+          totalInventory
           variants(first: 1) {
             nodes {
               id
               sku
+              quantityAvailable
               selectedOptions {
                 name
                 value
@@ -166,17 +168,22 @@ export function mapShopifyProduct(node: any): Fabric {
     return m?.value || 'N/A';
   };
 
-  const variantInventory = node.variants?.edges?.reduce((acc: number, edge: any) => {
-    return acc + (edge.node.quantityAvailable || 0);
-  }, 0);
+  const variantNodes = node.variants?.nodes || node.variants?.edges?.map((edge: any) => edge.node) || [];
+  const variantInventoryValues = variantNodes
+    .map((variant: any) => variant?.quantityAvailable)
+    .filter((quantity: any) => typeof quantity === 'number');
+  const variantInventory = variantInventoryValues.length > 0
+    ? variantInventoryValues.reduce((acc: number, quantity: number) => acc + quantity, 0)
+    : undefined;
 
   const qtyMeta = getMeta('qty');
-  const totalInventory = (variantInventory && variantInventory > 0)
+  const parsedQtyMeta = qtyMeta !== 'N/A' ? parseInt(qtyMeta, 10) : undefined;
+  const totalInventory = typeof variantInventory === 'number'
     ? variantInventory
-    : (typeof node.totalInventory === 'number' && node.totalInventory > 0
+    : (typeof node.totalInventory === 'number'
       ? node.totalInventory
-      : (qtyMeta !== 'N/A' ? parseInt(qtyMeta) : 0));
-  const firstVariant = node.variants?.nodes?.[0] || node.variants?.edges?.[0]?.node;
+      : (typeof parsedQtyMeta === 'number' && !Number.isNaN(parsedQtyMeta) ? parsedQtyMeta : undefined));
+  const firstVariant = variantNodes[0];
   const weight = firstVariant?.weight ? `${firstVariant.weight} ${firstVariant.weightUnit || 'kg'}` : undefined;
 
   const allImages = node.images?.edges?.map((e: any) => {

@@ -115,61 +115,6 @@ export default async function BlogPostPage({
           </div>
         )}
 
-        {/* Premium Leave a Reply Form */}
-        <section className="mt-24 bg-gray-50 p-10 lg:p-16 rounded-sm">
-          <h3 className="text-2xl font-bold uppercase tracking-tight text-[#121212] mb-3">Leave a Reply</h3>
-          <p className="text-[13px] font-medium text-gray-400 uppercase tracking-widest mb-12">
-            Your interaction helps our community grow
-          </p>
-
-          <form className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="md:col-span-2">
-              <label className="block text-[11px] font-medium uppercase tracking-widest text-[#121212] mb-4">Comment *</label>
-              <textarea 
-                rows={6}
-                className="w-full p-6 bg-white border border-gray-100 focus:border-[#57AD43] outline-none transition-all rounded-sm resize-none text-[16px]"
-                placeholder="Share your thoughts..."
-                required
-              ></textarea>
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-medium uppercase tracking-widest text-[#121212] mb-4">Name *</label>
-              <input 
-                type="text" 
-                className="w-full p-5 bg-white border border-gray-100 focus:border-[#57AD43] outline-none transition-all rounded-sm text-[16px]"
-                placeholder="Full Name"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-medium uppercase tracking-widest text-[#121212] mb-4">Email *</label>
-              <input 
-                type="email" 
-                className="w-full p-5 bg-white border border-gray-100 focus:border-[#57AD43] outline-none transition-all rounded-sm text-[16px]"
-                placeholder="email@example.com"
-                required
-              />
-            </div>
-
-            <div className="md:col-span-2 flex items-center gap-4 py-2">
-              <input type="checkbox" id="save-info" className="w-5 h-5 rounded-sm border-gray-300 text-[#57AD43] focus:ring-[#57AD43]" />
-              <label htmlFor="save-info" className="text-[12px] font-bold text-gray-500 uppercase tracking-wider cursor-pointer">
-                Save my details for next time
-              </label>
-            </div>
-
-            <div className="md:col-span-2">
-              <button 
-                type="submit"
-                className="px-16 py-6 bg-[#121212] text-white text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-all rounded-sm shadow-xl shadow-black/5"
-              >
-                Post Comment
-              </button>
-            </div>
-          </form>
-        </section>
       </div>
 
     </main>

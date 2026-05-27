@@ -171,18 +171,6 @@ const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
 );
 MagneticButton.displayName = "MagneticButton";
 
-// -------------------------------------------------------------------------
-// 3. MARQUEE COMPONENT
-// -------------------------------------------------------------------------
-const MarqueeItem = () => (
-  <div className="flex items-center space-x-12 px-6">
-    <span>Premium Fabrics</span> <span className="text-[#57AD43]/60">✦</span>
-    <span>Quality Assured</span> <span className="text-[#57AD43]/60">✦</span>
-    <span>Fast Delivery</span> <span className="text-[#57AD43]/60">✦</span>
-    <span>Global Shipping</span> <span className="text-[#57AD43]/60">✦</span>
-    <span>Expert Support</span> <span className="text-[#57AD43]/60">✦</span>
-  </div>
-);
 
 // -------------------------------------------------------------------------
 // 4. MAIN COMPONENT
@@ -380,13 +368,7 @@ export function MotionFooter() {
             </div>
           </div>
 
-          {/* 1. Marquee Between Navlinks and TEXONGO Text */}
-          <div className="hidden md:block absolute top-1/2 left-0 w-full overflow-hidden border-y border-white/10 bg-black/60 backdrop-blur-md py-4 z-10 -rotate-2 scale-110 shadow-2xl transform -translate-y-1/2">
-            <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.3em] text-white/60 uppercase">
-              <MarqueeItem />
-              <MarqueeItem />
-            </div>
-          </div>
+
 
           {/* 3. Bottom Bar / Credits */}
           <div className="relative z-20 w-full pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">

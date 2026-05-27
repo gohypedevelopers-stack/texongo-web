@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { motion, useTransform, useSpring, useMotionValue, MotionValue } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { motion, useTransform, useSpring, MotionValue } from "framer-motion";
 import type { Fabric } from "../../lib/shopify";
+import { BLEND_ITEMS, KNIT_STYLE_ITEMS, fabricCategoryHref } from "../../lib/fabric-navigation";
 
 // --- Types ---
 interface FabricCardProps {
@@ -15,6 +16,8 @@ interface FabricCardProps {
     isMobile: boolean;
     containerSize: { w: number; h: number };
     scatterPos: { x: number; y: number; r: number };
+    href: string;
+    attachedProductName?: string;
 }
 
 const FALLBACK_IMAGES = [
@@ -35,6 +38,8 @@ const FabricCard = React.memo(({
     isMobile,
     containerSize,
     scatterPos,
+    href,
+    attachedProductName,
     direction = "clockwise"
 }: FabricCardProps & { direction?: "clockwise" | "anticlockwise" }) => {
 
@@ -104,79 +109,216 @@ const FabricCard = React.memo(({
             }}
             className="group"
         >
-            <motion.div
-                className="relative h-full w-full overflow-hidden rounded-2xl shadow-2xl bg-gray-100 border border-black/5 transform-gpu"
-                whileHover={{ scale: 1.03 }}
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            <Link
+                href={href}
+                aria-label={attachedProductName ? `View ${attachedProductName}` : `Explore ${label}`}
+                title={attachedProductName ? `${label}: ${attachedProductName}` : label}
+                className="block h-full w-full"
             >
-                <img
-                    src={src || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]}
-                    alt={label}
-                    className="h-full w-full object-cover transform-gpu"
-                    loading="eager"
-                    {...{ fetchPriority: "high" }}
-                    decoding="async"
-                />
-
-                <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 w-full px-3 flex justify-center transform-gpu">
-                    <div className="bg-white px-2 py-1 rounded-full shadow-lg border border-black/5 flex items-center justify-center min-w-[65%] transform-gpu will-change-transform">
-                        <span
-                            className="text-[12px] font-bold uppercase text-black tracking-widest leading-none text-center antialiased whitespace-nowrap"
-                            style={{
-                                textRendering: "geometricPrecision",
-                                transform: "translateZ(0) scale(0.5)",
-                                transformOrigin: "center",
-                                WebkitFontSmoothing: "antialiased",
-                                display: "inline-block"
-                            }}
-                        >
-                            {label.split(/[\s-]+/)[0]}
-                        </span>
-                    </div>
-                </div>
-
                 <motion.div
-                    className="absolute inset-0 bg-black/5 pointer-events-none"
-                    initial={{ opacity: 1 }}
-                    whileHover={{ opacity: 0 }}
-                />
-            </motion.div>
+                    className="relative h-full w-full overflow-hidden rounded-2xl shadow-2xl bg-gray-100 border border-black/5 transform-gpu"
+                    whileHover={{ scale: 1.03 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                >
+                    <img
+                        src={src || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]}
+                        alt={label}
+                        className="h-full w-full object-cover transform-gpu"
+                        loading="eager"
+                        {...{ fetchPriority: "high" }}
+                        decoding="async"
+                    />
+
+                    <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 w-full px-2 flex justify-center transform-gpu">
+                        <div className="bg-white px-2 py-1 rounded-full shadow-lg border border-black/5 flex min-h-6 w-[88%] items-center justify-center transform-gpu will-change-transform">
+                            <span
+                                className="text-[6px] font-bold uppercase text-black tracking-[0.16em] leading-[1.05] text-center antialiased"
+                                style={{
+                                    textRendering: "geometricPrecision",
+                                    WebkitFontSmoothing: "antialiased",
+                                }}
+                            >
+                                {label}
+                            </span>
+                        </div>
+                    </div>
+
+                    <motion.div
+                        className="absolute inset-0 bg-black/5 pointer-events-none"
+                        initial={{ opacity: 1 }}
+                        whileHover={{ opacity: 0 }}
+                    />
+                </motion.div>
+            </Link>
         </motion.div>
     );
 });
 
 FabricCard.displayName = "FabricCard";
 
-const KNIT_DATA = [
-    { name: "Pique", src: "https://texongo.com/wp-content/uploads/2025/08/Pique_20241215064036pm.png" },
-    { name: "French Terry", src: "https://texongo.com/wp-content/uploads/2025/12/Terry_20241215064032pm.png" },
-    { name: "Waffle", src: "https://texongo.com/wp-content/uploads/2025/08/Waffle_20241215064033pm.png" },
-    { name: "Single Jersey", src: "https://texongo.com/wp-content/uploads/2025/12/Single-Jersey_20241215064031pm.png" },
-    { name: "Poly Cotton", src: "https://texongo.com/wp-content/uploads/2025/08/Poly-Cotton_20241215064036pm.png" },
-    { name: "Jacquard", src: "https://texongo.com/wp-content/uploads/2025/12/Jacquard_20241215064035pm.png" },
-    { name: "Polyester", src: "https://texongo.com/wp-content/uploads/2025/12/Polyester_20241215064037pm.png" },
-    { name: "Melange", src: "https://texongo.com/wp-content/uploads/2025/12/Melange_20241215064035pm.png" },
-    { name: "Fleece", src: "https://texongo.com/wp-content/uploads/2025/09/Fleece_20241215064034pm.png" },
-    { name: "Cotton Spandex", src: "https://texongo.com/wp-content/uploads/2025/12/Cotton-Spandex_20241215064033pm.png" },
-    { name: "Cotton", src: "https://texongo.com/wp-content/uploads/2025/12/Cotton_20241215064034pm.png" },
-    { name: "Viscose", src: "https://texongo.com/wp-content/uploads/2025/11/Viscose_20241215064032pm.png" },
-    { name: "Rib", src: "https://texongo.com/wp-content/uploads/2025/12/Rib_20241215064030pm.png" },
-];
+const KNIT_STYLE_IMAGE_BY_NAME: Record<(typeof KNIT_STYLE_ITEMS)[number], string> = {
+    "Single Jersey": "https://texongo.com/wp-content/uploads/2025/12/Single-Jersey_20241215064031pm.png",
+    "French Terry": "https://texongo.com/wp-content/uploads/2025/12/Terry_20241215064032pm.png",
+    "Fleece": "https://texongo.com/wp-content/uploads/2025/09/Fleece_20241215064034pm.png",
+    "Rib": "https://texongo.com/wp-content/uploads/2025/12/Rib_20241215064030pm.png",
+    "Spandex Knits": "https://texongo.com/wp-content/uploads/2025/12/Cotton-Spandex_20241215064033pm.png",
+    "Pique": "https://texongo.com/wp-content/uploads/2025/08/Pique_20241215064036pm.png",
+    "Interlock": "/arrivals/prod-cotton-spandex-interlock.png",
+    "Waffle": "https://texongo.com/wp-content/uploads/2025/08/Waffle_20241215064033pm.png",
+    "Jacquard": "https://texongo.com/wp-content/uploads/2025/12/Jacquard_20241215064035pm.png",
+    "Stripes": "/category/fabric-french-terry.png",
+    "Corduroy Vellour": "/category/fabric-single-jersey.png",
+    "Printed": "https://texongo.com/wp-content/uploads/2025/10/M9K4S107_3-600x600-1-300x300.jpg",
+    "Shiffly": "https://texongo.com/wp-content/uploads/2025/10/M9K4S107_3-600x600-1-300x300.jpg",
+    "Ponte": "/category/fabric-pique.png",
+    "Yarn": "/arrivals/prod-slub-melange.png",
+    "Neps": "/arrivals/prod-slub-melange.png",
+    "Popcorn": "https://texongo.com/wp-content/uploads/2025/10/A8K1S101-3-768x768-1-300x300.jpg",
+};
 
-const BLEND_DATA = [
-    { name: "Cotton Bamboo", src: "https://texongo.com/wp-content/uploads/2025/12/Banana_f7269dad-a9d2-4553-8572-9fb18786d287_360x.webp" },
-    { name: "Poly Cotton", src: "https://texongo.com/wp-content/uploads/2025/08/Poly-Cotton_20241215064036pm.png" },
-    { name: "Cotton Modal", src: "https://texongo.com/wp-content/uploads/2025/11/Viscose_20241215064032pm.png" },
-    { name: "Viscose Spandex", src: "https://texongo.com/wp-content/uploads/2025/12/Cotton-Spandex_20241215064033pm.png" },
-    { name: "Cotton Linen", src: "https://texongo.com/wp-content/uploads/2025/11/image_1a1e365a-2b74-4d96-8165-f7788358c9bd-768x768-1-300x300.jpg" },
-    { name: "Supima", src: "https://texongo.com/wp-content/uploads/2025/12/Supiima_360x-1.webp" },
-    { name: "Hemp", src: "https://texongo.com/wp-content/uploads/2025/12/Hemp_ee5107c1-6add-4868-bc46-6d9111850ba3_360x.webp" },
-    { name: "Lotus Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Lotus_360x.webp" },
-    { name: "Banana Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Banana_f7269dad-a9d2-4553-8572-9fb18786d287_360x.webp" },
-    { name: "Organic Cotton", src: "https://texongo.com/wp-content/uploads/2025/12/BCI_a1b34c70-fc29-4342-9c45-a8f95375fa51_360x.webp" },
-];
+const BLEND_IMAGE_BY_NAME: Record<(typeof BLEND_ITEMS)[number], string> = {
+    "Cotton": "https://texongo.com/wp-content/uploads/2025/12/Cotton_20241215064034pm.png",
+    "Viscose": "https://texongo.com/wp-content/uploads/2025/11/Viscose_20241215064032pm.png",
+    "Cotton Modal": "/placeholders/cotton.png",
+    "Giza/ Egyptian": "/placeholders/cotton.png",
+    "Melange": "https://texongo.com/wp-content/uploads/2025/12/Melange_20241215064035pm.png",
+    "Nylon": "/arrivals/prod-nylon-spandex.png",
+    "Poly Cotton": "https://texongo.com/wp-content/uploads/2025/08/Poly-Cotton_20241215064036pm.png",
+    "Polyester": "https://texongo.com/wp-content/uploads/2025/12/Polyester_20241215064037pm.png",
+    "Slubs": "/arrivals/prod-slub-melange.png",
+    "Spandex Blends": "https://texongo.com/wp-content/uploads/2025/12/Cotton-Spandex_20241215064033pm.png",
+    "Australian": "/placeholders/wool.png",
+};
 
-export function IntroAnimation({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
+const CATEGORY_KEYWORDS: Record<string, string[]> = {
+    "Single Jersey": ["single jersey", "jersey"],
+    "French Terry": ["french terry", "terry"],
+    "Rib": ["rib", "ribs"],
+    "Spandex Knits": ["spandex", "elastane", "lycra"],
+    "Stripes": ["stripes", "stripe"],
+    "Corduroy Vellour": ["corduroy vellour", "corduroy", "vellour", "velour"],
+    "Printed": ["printed", "print"],
+    "Shiffly": ["shiffly", "schiffli", "embroidery"],
+    "Yarn": ["yarn dyed", "yarn"],
+    "Neps": ["neps", "nep"],
+    "Cotton Modal": ["cotton modal", "modal cotton", "modal"],
+    "Giza/ Egyptian": ["giza", "egyptian"],
+    "Polyester": ["polyester", "poly"],
+    "Poly Cotton": ["poly cotton", "poly-cotton", "polyester cotton"],
+    "Slubs": ["slub", "slubs"],
+    "Spandex Blends": ["spandex", "elastane", "lycra"],
+};
+
+type CategoryKind = "knit" | "blend";
+
+interface CategoryCardData {
+    name: string;
+    src: string;
+    href: string;
+    attachedProductName?: string;
+}
+
+function seededUnit(seed: number) {
+    const value = Math.sin(seed) * 10000;
+    return value - Math.floor(value);
+}
+
+function getScatterPosition(index: number, salt: number) {
+    return {
+        x: (seededUnit(index * 11 + salt) - 0.5) * 1200,
+        y: (seededUnit(index * 17 + salt) - 0.5) * 800,
+        r: (seededUnit(index * 23 + salt) - 0.5) * 180,
+    };
+}
+
+function normalizeSearchText(value: string | undefined | null) {
+    return (value || "")
+        .toLowerCase()
+        .replace(/&/g, " and ")
+        .replace(/[^a-z0-9]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+function textHasKeyword(text: string, keyword: string) {
+    const cleanText = ` ${normalizeSearchText(text)} `;
+    const cleanKeyword = normalizeSearchText(keyword);
+
+    if (!cleanKeyword) return false;
+    return cleanText.includes(` ${cleanKeyword} `);
+}
+
+function keywordsForLabel(label: string) {
+    return CATEGORY_KEYWORDS[label] || [label];
+}
+
+function findProductForCategory(products: Fabric[] | undefined, label: string, kind: CategoryKind) {
+    if (!products?.length) return undefined;
+
+    const keywords = keywordsForLabel(label);
+    let bestProduct: Fabric | undefined;
+    let bestScore = 0;
+
+    products.forEach((product, index) => {
+        if (!product.id) return;
+
+        const primaryFields = kind === "knit"
+            ? [product.knit_style, product.fabric, product.type]
+            : [product.composition, product.content, product.fabric];
+        const secondaryFields = [
+            product.name,
+            product.description,
+            product.type,
+            product.knit_style,
+            product.composition,
+            product.content,
+            product.fabric,
+        ];
+
+        const primaryText = primaryFields.filter(Boolean).join(" ");
+        const secondaryText = secondaryFields.filter(Boolean).join(" ");
+
+        let score = 0;
+        if (textHasKeyword(primaryText, label)) score += 12;
+        if (textHasKeyword(secondaryText, label)) score += 6;
+
+        keywords.forEach((keyword) => {
+            if (textHasKeyword(primaryText, keyword)) score += 5;
+            if (textHasKeyword(secondaryText, keyword)) score += 2;
+        });
+
+        const tieBreaker = Math.max(0, 1 - index / 1000);
+        const finalScore = score + tieBreaker;
+
+        if (score > 0 && finalScore > bestScore) {
+            bestScore = finalScore;
+            bestProduct = product;
+        }
+    });
+
+    return bestProduct;
+}
+
+function buildCategoryCards(
+    labels: readonly string[],
+    imagesByName: Record<string, string>,
+    kind: CategoryKind,
+    products?: Fabric[]
+): CategoryCardData[] {
+    return labels.map((name, index) => {
+        const product = findProductForCategory(products, name, kind);
+        const productImage = product?.image && product.image !== "" ? product.image : undefined;
+
+        return {
+            name,
+            src: productImage || imagesByName[name] || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length],
+            href: product?.id ? `/fabrics/${product.id}` : fabricCategoryHref(name),
+            attachedProductName: product?.name,
+        };
+    });
+}
+
+export function IntroAnimation({ scrollProgress, products }: { scrollProgress: MotionValue<number>, products?: Fabric[] }) {
     const [isMobile, setIsMobile] = useState(false);
     const [containerSize, setContainerSize] = useState({ w: 1200, h: 800 });
     const containerRef = useRef<HTMLDivElement>(null);
@@ -203,13 +345,13 @@ export function IntroAnimation({ scrollProgress }: { scrollProgress: MotionValue
         restDelta: 0.001
     });
 
+    const cards = useMemo(() => {
+        return buildCategoryCards(KNIT_STYLE_ITEMS, KNIT_STYLE_IMAGE_BY_NAME, "knit", products);
+    }, [products]);
+
     const scatterPositions = useMemo(() => {
-        return KNIT_DATA.map(() => ({
-            x: (Math.random() - 0.5) * 1200,
-            y: (Math.random() - 0.5) * 800,
-            r: (Math.random() - 0.5) * 180,
-        }));
-    }, []);
+        return Array.from({ length: cards.length }, (_, index) => getScatterPosition(index, 7));
+    }, [cards.length]);
 
     const titleOpacity = useTransform(smoothProgress, [0, 0.1, 0.2, 0.4, 0.45], [0, 0, 1, 1, 0]);
     const titleY = useTransform(smoothProgress, [0, 0.1, 0.2, 0.4, 0.45], [20, 20, 0, 0, -30]);
@@ -242,17 +384,19 @@ export function IntroAnimation({ scrollProgress }: { scrollProgress: MotionValue
 
                 {/* Cards Layer */}
                 <div className="relative flex items-center justify-center w-full h-full perspective-1000 transform-gpu">
-                    {(isMobile ? KNIT_DATA.slice(0, 6) : KNIT_DATA).map((item, i) => (
+                    {cards.map((item, i) => (
                         <FabricCard
                             key={i}
                             index={i}
                             src={item.src}
                             label={item.name}
-                            totalCount={isMobile ? 6 : KNIT_DATA.length}
+                            href={item.href}
+                            attachedProductName={item.attachedProductName}
+                            totalCount={cards.length}
                             smoothProgress={smoothProgress}
                             isMobile={isMobile}
                             containerSize={containerSize}
-                            scatterPos={scatterPositions[i]}
+                            scatterPos={scatterPositions[i] || { x: 0, y: 0, r: 0 }}
                             direction="clockwise"
                         />
                     ))}
@@ -289,13 +433,13 @@ export function BlendAnimation({ scrollProgress, products }: { scrollProgress: M
         restDelta: 0.001
     });
 
+    const cards = useMemo(() => {
+        return buildCategoryCards(BLEND_ITEMS, BLEND_IMAGE_BY_NAME, "blend", products);
+    }, [products]);
+
     const scatterPositions = useMemo(() => {
-        return BLEND_DATA.map(() => ({
-            x: (Math.random() - 0.5) * 1200,
-            y: (Math.random() - 0.5) * 800,
-            r: (Math.random() - 0.5) * 180,
-        }));
-    }, []);
+        return Array.from({ length: cards.length }, (_, index) => getScatterPosition(index, 31));
+    }, [cards.length]);
 
     const titleOpacity = useTransform(smoothProgress, [0, 0.1, 0.2, 0.4, 0.45], [0, 0, 1, 1, 0]);
     const titleY = useTransform(smoothProgress, [0, 0.1, 0.2, 0.4, 0.45], [20, 20, 0, 0, -30]);
@@ -328,20 +472,19 @@ export function BlendAnimation({ scrollProgress, products }: { scrollProgress: M
 
                 {/* Cards Layer */}
                 <div className="relative flex items-center justify-center w-full h-full perspective-1000 transform-gpu">
-                    {(products && products.length > 0
-                        ? (isMobile ? products.slice(0, 6) : products.slice(0, 10))
-                        : (isMobile ? BLEND_DATA.slice(0, 6) : BLEND_DATA)
-                    ).map((item, i) => (
+                    {cards.map((item, i) => (
                         <FabricCard
                             key={i}
                             index={i}
-                            src={'image' in item ? (item as any).image : (item as any).src}
+                            src={item.src}
                             label={item.name}
-                            totalCount={products && products.length > 0 ? (isMobile ? 6 : Math.min(products.length, 10)) : (isMobile ? 6 : BLEND_DATA.length)}
+                            href={item.href}
+                            attachedProductName={item.attachedProductName}
+                            totalCount={cards.length}
                             smoothProgress={smoothProgress}
                             isMobile={isMobile}
                             containerSize={containerSize}
-                            scatterPos={scatterPositions[i]}
+                            scatterPos={scatterPositions[i] || { x: 0, y: 0, r: 0 }}
                             direction="anticlockwise"
                         />
                     ))}

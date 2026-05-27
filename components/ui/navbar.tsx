@@ -8,50 +8,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useCartStore, useAuthStore } from "@/lib/store";
 import { Fabric, mapShopifyProduct } from "@/lib/shopify";
+import { FABRICA_VISION_MENU, fabricCategoryHref } from "@/lib/fabric-navigation";
 
 const navItems = [
   { name: "Home", href: "/" },
   {
     name: "FabricaVision",
     href: "#",
-    megaMenu: [
-      {
-        title: "Knit Style",
-        items: [
-          "Single Jersey", "French Terry", "Fleece", "Rib", "Spandex Knits",
-          "Pique", "Interlock", "Waffle", "Jacquard", "Stripes",
-          "Corduroy Vellour", "Printed", "Shiffly", "Ponte", "Yarn", "Neps", "Popcorn"
-        ]
-      },
-      {
-        title: "Blends",
-        items: [
-          "Cotton", "Viscose", "Cotton Modal", "Giza/ Egyptian", "Melange",
-          "Nylon", "Poly Cotton", "Polyester", "Slubs", "Spandex Blends", "Australian"
-        ]
-      },
-      {
-        title: "Menwear",
-        items: [
-          "Cargo", "Hoodies", "Co-ord", "Tshirt", "Joggers",
-          "Loungewear", "Polos", "Sweatshirt"
-        ]
-      },
-      {
-        title: "Womenwear",
-        items: [
-          "Tshirt/ tops", "Athleisure", "Co-ords", "Dresses", "Hoodie",
-          "Jumpsuits", "Lining", "Polos", "Scarves", "Skirts", "Sweatshirt"
-        ]
-      },
-      {
-        title: "Sustainable Blends",
-        items: [
-          "Wool", "Supima", "Banana-Fabric", "Eco Vero", "Hemp",
-          "Linen", "Lotus", "Modal", "Organic Cotton", "Recycled Cotton", "Tencel", "BCI"
-        ]
-      }
-    ]
+    megaMenu: FABRICA_VISION_MENU
   },
   {
     name: "3D Studio",
@@ -469,7 +433,7 @@ export function Navbar() {
                                 >
                                   <div className="space-y-1">
                                     <Link
-                                      href={`/fabrics?category=${category.title.toLowerCase().replace(/ /g, '-')}`}
+                                      href={fabricCategoryHref(category.title)}
                                       className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#57AD43] hover:text-black transition-colors flex items-center whitespace-nowrap block"
                                     >
                                       {category.title}
@@ -481,7 +445,7 @@ export function Navbar() {
                                     {category.items.map((subItem) => (
                                       <li key={subItem}>
                                         <Link
-                                          href={`/fabrics?category=${subItem.toLowerCase().replace(/ /g, '-')}`}
+                                          href={fabricCategoryHref(subItem)}
                                           className="flex items-center px-3 py-1.5 text-[11px] font-medium text-gray-400 hover:text-[#57AD43] hover:font-bold hover:bg-black/5 rounded-lg transition-all w-full"
                                         >
                                           {subItem}
@@ -598,7 +562,7 @@ export function Navbar() {
                                     {item.megaMenu.map((cat) => (
                                       <div key={cat.title}>
                                         <Link
-                                          href={`/fabrics?category=${cat.title.toLowerCase().replace(/ /g, '-')}`}
+                                          href={fabricCategoryHref(cat.title)}
                                           className="text-[12px] font-bold uppercase tracking-widest text-[#57AD43] hover:text-black mb-3 block"
                                           onClick={() => setIsMobileMenuOpen(false)}
                                         >
@@ -608,7 +572,7 @@ export function Navbar() {
                                           {cat.items.map((sub) => (
                                             <li key={sub}>
                                               <Link
-                                                href={`/fabrics?category=${sub.toLowerCase().replace(/ /g, '-')}`}
+                                                href={fabricCategoryHref(sub)}
                                                 className="text-[12px] font-medium text-gray-400"
                                                 onClick={() => setIsMobileMenuOpen(false)}
                                               >

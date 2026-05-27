@@ -215,7 +215,7 @@ function StoryProductCard({
   );
 }
 
-function KnitStylesSection() {
+function KnitStylesSection({ products }: { products?: Fabric[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -225,7 +225,7 @@ function KnitStylesSection() {
   return (
     <section ref={containerRef} className="relative h-[600vh] bg-white">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        <IntroAnimation scrollProgress={scrollYProgress} />
+        <IntroAnimation scrollProgress={scrollYProgress} products={products} />
       </div>
     </section>
   );
@@ -490,7 +490,7 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
         </LazySection> */}
 
         <LazySection y={0}>
-          <KnitStylesSection />
+          <KnitStylesSection products={products} />
         </LazySection>
 
         <LazySection y={0}>
