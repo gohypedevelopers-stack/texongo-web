@@ -14,6 +14,7 @@ interface FabricCardProps {
   image: string;
   variantId?: string;
   isNew?: boolean;
+  catalogMode?: boolean;
 }
 
 const FALLBACK_PRODUCT_IMAGES = [
@@ -44,7 +45,7 @@ function getFallbackImage(name: string, id: string) {
   return FALLBACK_PRODUCT_IMAGES[index];
 }
 
-export function FabricCard({ id, name, gsm, price, image, variantId }: FabricCardProps) {
+export function FabricCard({ id, name, gsm, price, image, variantId, catalogMode }: FabricCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
 
@@ -65,7 +66,7 @@ export function FabricCard({ id, name, gsm, price, image, variantId }: FabricCar
 
   return (
     <motion.div
-      className="group relative flex flex-col items-center text-center bg-white p-4"
+      className={`group relative flex flex-col items-center text-center bg-white ${catalogMode ? 'p-1 md:p-4' : 'p-4'}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       initial={{ opacity: 0, y: 20 }}
@@ -74,7 +75,7 @@ export function FabricCard({ id, name, gsm, price, image, variantId }: FabricCar
     >
       <Link href={`/fabrics/${id}`} className="w-full">
         {/* Product Image Container */}
-        <div className="relative aspect-[4/5] w-full overflow-hidden bg-gray-50 mb-6">
+        <div className={`relative ${catalogMode ? 'aspect-[4/5]' : 'aspect-square md:aspect-[4/5]'} w-full overflow-hidden bg-gray-50 mb-2 md:mb-6 border border-gray-100 md:border-none`}>
           <Image
             src={finalImage}
             alt={name}
@@ -83,7 +84,7 @@ export function FabricCard({ id, name, gsm, price, image, variantId }: FabricCar
           />
 
           {/* GSM Badge */}
-          <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[9px] font-black uppercase tracking-widest px-2 py-1 z-10">
+          <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 z-10">
             GSM: {gsm} g/m²
           </div>
 
@@ -108,11 +109,11 @@ export function FabricCard({ id, name, gsm, price, image, variantId }: FabricCar
         </div>
 
         {/* Product Info */}
-        <div className="w-full flex flex-col items-center gap-3 py-2">
-          <h3 className="text-sm font-black uppercase tracking-widest text-black leading-tight max-w-[240px] group-hover:text-[#57AD43] transition-colors duration-300">
+        <div className="w-full flex flex-col items-center gap-1 md:gap-3 py-2">
+          <h3 className="text-[10px] md:text-sm font-black uppercase tracking-widest text-black leading-tight max-w-[240px] group-hover:text-[#57AD43] transition-colors duration-300">
             {name}
           </h3>
-          <p className="text-lg font-black text-black uppercase tracking-tighter flex items-center gap-2">
+          <p className="text-[10px] md:text-lg font-black text-black uppercase tracking-tighter flex items-center gap-1 md:gap-2">
             <span className="text-[#57AD43]">₹</span>{parseFloat(price).toFixed(2)}
           </p>
         </div>

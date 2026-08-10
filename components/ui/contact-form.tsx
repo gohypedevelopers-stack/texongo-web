@@ -35,13 +35,13 @@ export function ContactForm() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] bg-white">
 
         {/* Left Column: Form Card */}
-        <div className="p-10 lg:p-16 lg:pr-24 flex flex-col justify-center">
+        <div className="p-10 lg:p-16 lg:pr-24 flex flex-col justify-center text-center md:text-left">
           <motion.div {...fadeIn}>
             <span className="text-[10px] font-black uppercase text-[#57AD43] mb-2 block tracking-widest">Connect</span>
             <h2 className="text-3xl lg:text-5xl font-bold text-black mb-10 tracking-tight">Send a Message</h2>
           </motion.div>
 
-          <form action={handleSubmit} className="space-y-5">
+          <form action={handleSubmit} className="space-y-5 text-left">
             <motion.div {...fadeIn} transition={{ delay: 0.1 }} className="space-y-2 relative group">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-1">Name</label>
               <input
@@ -85,7 +85,8 @@ export function ContactForm() {
             <motion.button
               {...fadeIn} transition={{ delay: 0.5 }}
               type="submit" disabled={isSubmitting}
-              className="w-fit px-8 py-3 bg-black hover:bg-[#57AD43] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold uppercase tracking-wider text-[11px] rounded-full transition-all shadow-lg hover:shadow-[0_8px_20px_rgba(87,173,67,0.3)] transform active:scale-95 flex items-center justify-center gap-2"
+              className="contact-send-message-btn w-fit mx-auto md:mx-0 px-8 py-3 bg-black hover:bg-[#57AD43] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold uppercase tracking-wider !text-[11px] rounded-full transition-all shadow-lg hover:shadow-[0_8px_20px_rgba(87,173,67,0.3)] transform active:scale-95 flex items-center justify-center gap-2"
+              style={{ fontSize: '11px' }}
             >
               {isSubmitting ? (
                 <><Loader2 className="animate-spin" size={16} /> Sending...</>
@@ -101,9 +102,9 @@ export function ContactForm() {
           <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-black/10 rounded-full blur-[80px] pointer-events-none" />
 
           <div className="relative z-10">
-            <motion.div {...fadeIn}>
+            <motion.div {...fadeIn} className="text-center md:text-left">
               <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6 tracking-tight">Contact Information</h2>
-              <p className="text-sm font-medium text-white/80 mb-12 max-w-md leading-relaxed">
+              <p className="text-sm font-medium text-white/80 mb-12 max-w-md mx-auto md:mx-0 leading-relaxed">
                 Have questions, need assistance, or want to share your feedback? Our team is here to help you. Feel free to reach out anytime.
               </p>
             </motion.div>

@@ -17,7 +17,7 @@ export function PageHero({ subtitle, mainTitle, accentTitle, className = "" }: P
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-xs font-black uppercase tracking-[0.4em] text-[#57AD43] mb-0 block"
+          className="text-xs font-black uppercase tracking-widest text-[#57AD43] mb-0 block"
         >
           {subtitle}
         </motion.span>

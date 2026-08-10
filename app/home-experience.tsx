@@ -139,27 +139,20 @@ function MarqueeProductCard({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`${styles.productCard} shrink-0 block`}
+      className={`${styles.productCard} shrink-0 block group`}
     >
-      <div className={`${styles.productVisual} relative overflow-hidden bg-[#f5f3f0]`}>
+      <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl md:rounded-3xl overflow-hidden mb-4 shadow-sm md:shadow-md group-hover:shadow-2xl transition-all duration-500 relative">
         <img
           src={finalImage}
           alt={name}
           loading="lazy"
           decoding="async"
-          className={styles.productImage}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
         />
-        <div className={styles.productInfo}>
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <h3 className="text-sm font-semibold text-black uppercase tracking-wide">{name}</h3>
-              <p className="mt-0.5 text-xs text-black/60 font-medium">{price}</p>
-            </div>
-            <span className={styles.addButton}>
-              View
-            </span>
-          </div>
-        </div>
+      </div>
+      <div className="space-y-1 md:space-y-2 text-center px-2">
+        <h3 className="text-[14px] md:text-[16px] font-semibold leading-[1.3] text-[#111111]/50 uppercase tracking-widest">{name}</h3>
+        <p className="text-sm md:text-lg font-black text-[#111111]">{price}</p>
       </div>
     </a>
   );
@@ -433,10 +426,8 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
           <div className="max-w-4xl mx-auto text-center pt-0 pb-4 px-6">
 
             <h2 className="text-2xl md:text-4xl font-black mb-1.5 md:mb-2 tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
-            <p className="text-base md:text-xl text-[#475467] font-medium leading-relaxed">
-              Texongo combines traditional craftsmanship with cutting-edge 3D visualization.
-              <br />Our digital-first approach allows designers to experience the texture, drape,
-              and movement of high-performance textiles before the first thread is even woven.
+            <p className="!text-[14px] md:!text-[16px] text-[#475467] font-medium leading-normal md:leading-relaxed max-w-[340px] md:max-w-none mx-auto">
+              Texongo combines traditional craftsmanship with cutting-edge 3D visualization. Our digital-first approach allows designers to experience the texture, drape, and movement of high-performance textiles before the first thread is even woven.
             </p>
           </div>
         </ScrollExpandMedia>
@@ -450,31 +441,33 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
           </LazySection>
         </section>
 
-        {/* ── STREAMLINE ──────────────────────────────────── */}
         <LazySection>
-          <section className="bg-white overflow-hidden border-y border-black/5">
-            <div className="flex flex-col md:flex-row w-full">
-              <div className="w-full md:w-1/2 relative min-h-[250px] md:min-h-[400px]">
+          <section className="relative bg-white overflow-hidden border-y border-black/5">
+            {/* Split Backgrounds extending full width */}
+            <div className="absolute inset-y-0 right-0 w-1/2 bg-[#F9FAFB] hidden md:block z-0" />
+            
+            <div className="relative z-10 flex flex-col md:flex-row w-full max-w-[1440px] mx-auto">
+              <div className="w-full md:w-1/2 relative min-h-[250px] md:min-h-[400px] flex items-center justify-center p-8 lg:p-16">
                 <LazyVideo
                   src="https://cdn.shopify.com/videos/c/o/v/ebe78b4f20aa4b058686865135442659.webm"
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
 
-              <div className="w-full md:w-1/2 flex flex-col justify-center p-8 md:p-12 lg:p-16 bg-[#F9FAFB]">
-                <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[#57AD43] mb-1 md:mb-2 block">Innovation</span>
-                <h2 className="text-3xl md:text-5xl font-black mb-2 md:mb-3 leading-tight tracking-tight text-black">
-                  Streamline Your<br />Fabric Journey
-                </h2>
-                <p className="text-sm md:text-base text-black/70 leading-relaxed font-medium max-w-xl">
-                  Traditional sourcing often gets trapped in a cycle of physical sampling and endless reviews, creating costly conflicts and delays. Texongo solves this by introducing 3D Samples early in the journey. By reviewing and refining digitally before production, we eliminate friction and ensure a seamless path from design to market.
-                </p>
+              <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-12 lg:p-16 bg-[#F9FAFB] md:bg-transparent">
+                <div className="w-full max-w-xl pl-0 lg:pl-16 text-center md:text-left">
+                  <span className="hp-overline text-[#57AD43] mb-1 md:mb-2 block">Innovation</span>
+                  <h2 className="hp-heading mb-2 md:mb-3 text-black">
+                    Streamline Your<br className="hidden md:block" /> Fabric Journey
+                  </h2>
+                  <p className="text-sm md:text-base text-black/70 leading-relaxed font-medium">
+                    Traditional sourcing often gets trapped in a cycle of physical sampling and endless reviews, creating costly conflicts and delays. Texongo solves this by introducing 3D Samples early in the journey. By reviewing and refining digitally before production, we eliminate friction and ensure a seamless path from design to market.
+                  </p>
+                </div>
               </div>
             </div>
           </section>
         </LazySection>
-
-
 
         {/* ── CAMPAIGN STORY ─────────────────────────────── */}
         {/* <LazySection>
@@ -634,9 +627,9 @@ function ProductCatalogSection() {
         <div>
           <div className="mx-auto max-w-[1440px] px-[clamp(0.9rem,1.4vw,1.9rem)] mb-10 flex items-center justify-between">
             <div className="space-y-1">
-              <h3 className="text-xl md:text-3xl font-black tracking-tight text-[#111111] uppercase">Womens Wear</h3>
+              <h3 className="hp-heading text-[#111111] uppercase">Womens Wear</h3>
             </div>
-            <Link href="/fabrics?category=womenwear" className="text-xs font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
+            <Link href="/fabrics?category=womenwear" className="hp-link text-black/40 border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
               Explore Section
             </Link>
           </div>
@@ -665,7 +658,7 @@ function ProductCatalogSection() {
                         </div>
                       </div>
                       <div className="space-y-1 text-center px-2">
-                        <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
+                        <h3 className="text-[14px] md:text-[16px] font-semibold leading-[1.3] text-[#111111]/50 uppercase tracking-widest">{p.name}</h3>
                         <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
                       </div>
                     </Link>
@@ -680,9 +673,9 @@ function ProductCatalogSection() {
         <div>
           <div className="mx-auto max-w-[1440px] px-[clamp(0.9rem,1.4vw,1.9rem)] mb-10 flex items-center justify-between">
             <div className="space-y-1">
-              <h3 className="text-xl md:text-3xl font-black tracking-tight text-[#111111] uppercase">Mens Wear</h3>
+              <h3 className="hp-heading text-[#111111] uppercase">Mens Wear</h3>
             </div>
-            <Link href="/fabrics?category=menwear" className="text-xs font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
+            <Link href="/fabrics?category=menwear" className="hp-link text-black/40 border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
               Explore Section
             </Link>
           </div>
@@ -711,7 +704,7 @@ function ProductCatalogSection() {
                         </div>
                       </div>
                       <div className="space-y-1 text-center px-2">
-                        <h3 className="text-[10px] md:text-xs font-bold tracking-widest text-[#111111]/50 uppercase">{p.name}</h3>
+                        <h3 className="text-[14px] md:text-[16px] font-semibold leading-[1.3] text-[#111111]/50 uppercase tracking-widest">{p.name}</h3>
                         <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
                       </div>
                     </Link>
@@ -753,10 +746,10 @@ function BlogSection() {
     <section className="py-12 md:py-16 bg-[#F9FAFB]">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
         <div className="flex flex-col items-center mb-6">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-0.5 block">Latest Insights</span>
-          <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter text-center text-[#111111]">Our Stories</h2>
+          <span className="hp-overline text-[#57AD43] mb-0.5 block">Latest Insights</span>
+          <h2 className="hp-heading text-center text-[#111111]">Our Stories</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="flex md:grid md:grid-cols-3 overflow-x-auto snap-x snap-mandatory gap-4 md:gap-12 pb-4 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {blogs.map((b, idx) => (
             <motion.div
               key={idx}
@@ -764,26 +757,26 @@ function BlogSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: idx * 0.05, ease: "easeOut" }}
               viewport={{ once: true, margin: "100px" }}
-              className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-black/5 flex flex-col h-full"
+              className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-auto group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-black/5 flex flex-col h-full"
             >
               <div className="aspect-[16/10] overflow-hidden relative">
                 <img src={b.image || undefined} alt={b.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
               </div>
-              <div className="p-10 space-y-6 flex flex-col flex-1">
-                <span className="inline-block bg-[#57AD43] text-white text-[9px] font-black px-4 py-1.5 rounded-sm uppercase tracking-widest w-fit shadow-md">
+              <div className="p-4 sm:p-6 md:p-10 space-y-3 md:space-y-6 flex flex-col flex-1">
+                <span className="hp-badge inline-block bg-[#57AD43] text-white w-fit shadow-md line-clamp-1">
                   {b.category}
                 </span>
-                <h3 className="text-xl md:text-2xl font-semibold leading-[1.3] flex-1 text-[#111111] group-hover:text-[#57AD43] transition-colors duration-300">
+                <h3 className="hp-card-title flex-1 text-[#111111] group-hover:text-[#57AD43] transition-colors duration-300">
                   {b.title}
                 </h3>
                 <Link
                   href={b.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-[#57AD43] font-black text-[10px] group/btn w-fit pt-8 uppercase tracking-[0.2em] border-t border-black/5 w-full"
+                  className="hp-link flex items-center justify-between gap-1 md:gap-3 text-[#57AD43] group/btn pt-3 md:pt-8 border-t border-black/5 w-full"
                 >
-                  Read Full Story
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="group-hover/btn:translate-x-1.5 transition-transform duration-300">
+                  <span className="line-clamp-1">Read Full Story</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="group-hover/btn:translate-x-1.5 transition-transform duration-300 shrink-0">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
                   </svg>

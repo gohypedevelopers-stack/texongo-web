@@ -47,24 +47,7 @@ export default function ShippingAndReturnPolicy() {
           </p>
         </motion.div>
 
-        {/* Quick Info Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-32">
-          <FeatureCard
-            icon={ShieldCheck}
-            title="Inspection Ready"
-            content="Buyers are responsible for inspecting all fabrics immediately upon receipt. Quality testing must be completed prior to any cutting or production."
-          />
-          <FeatureCard
-            icon={Package}
-            title="No-Return Policy"
-            content="Cut fabric cannot be returned or exchanged. Any fabric that has been laundered or processed is deemed accepted by the buyer."
-          />
-          <FeatureCard
-            icon={Truck}
-            title="Tracked Shipping"
-            content="We provide reliable, real-time tracked delivery across India and international destinations through professional logistics partners."
-          />
-        </div>
+
 
         {/* Detailed Sections */}
         <div className="space-y-32">
@@ -167,6 +150,25 @@ export default function ShippingAndReturnPolicy() {
               "Orders returned due to incorrect address details or refusal will be treated as returns. Initial shipping costs and return handling fees will be deducted from your final credit."
             </p>
           </section>
+
+          {/* Quick Info Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-32">
+            <FeatureCard
+              icon={ShieldCheck}
+              title="Inspection Ready"
+              content="Buyers are responsible for inspecting all fabrics immediately upon receipt. Quality testing must be completed prior to any cutting or production."
+            />
+            <FeatureCard
+              icon={Package}
+              title="No-Return Policy"
+              content="Cut fabric cannot be returned or exchanged. Any fabric that has been laundered or processed is deemed accepted by the buyer."
+            />
+            <FeatureCard
+              icon={Truck}
+              title="Tracked Shipping"
+              content="We provide reliable, real-time tracked delivery across India and international destinations through professional logistics partners."
+            />
+          </div>
 
           {/* Support Info */}
           <section className="pt-32 border-t border-gray-200 text-center pb-24">

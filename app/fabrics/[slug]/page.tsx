@@ -181,7 +181,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   });
                 }
               }}
-              className="w-full bg-[#57AD43] text-white py-4 lg:py-3 text-[11px] font-bold uppercase tracking-widest hover:bg-[#489936] transition-colors"
+              className="w-full bg-[#57AD43] text-white py-4 lg:py-3 !text-[14px] lg:!text-[16px] font-bold uppercase tracking-widest hover:bg-[#489936] transition-colors"
             >
               View Possible Variations
             </button>
@@ -191,7 +191,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
           <div className="flex flex-col">
             <div className="space-y-2 mb-6">
               <p className="text-base font-bold text-black uppercase tracking-widest">SKU: {product.sku || "A1K15126"}</p>
-              <h1 className="text-3xl lg:text-4xl font-bold uppercase text-[#121212] tracking-tight">{product.name}</h1>
+              <h1 className="!text-[24px] font-bold uppercase text-[#121212] tracking-tight">{product.name}</h1>
             </div>
 
             <div className="mb-8 p-6 bg-gray-50/50 border-y border-gray-100 flex items-baseline gap-2">
@@ -226,7 +226,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 </div>
               </div>
 
-              <button onClick={handleAddToCart} className="w-full bg-[#121212] text-white h-14 flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-all duration-300 shadow-lg shadow-black/5 active:scale-[0.98]">
+              <button onClick={handleAddToCart} className="w-full bg-[#121212] text-white h-14 flex items-center justify-center gap-3 !text-[14px] lg:!text-[16px] font-bold uppercase tracking-[0.2em] hover:bg-[#57AD43] transition-all duration-300 shadow-lg shadow-black/5 active:scale-[0.98]">
                 <ShoppingBag size={15} /> Add to cart
               </button>
             </div>
@@ -286,7 +286,7 @@ Minor GSM, width, and color variations may occur—acceptable as per industry st
         </div>
 
         {/* Description Section */}
-        <div className="mt-20 lg:mt-32 border-t border-gray-100 pt-16 mb-32">
+        <div className="mt-10 lg:mt-32 border-t border-gray-100 pt-8 lg:pt-16 mb-12 lg:mb-32">
           <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-center mb-8 text-black">
             Description
           </h2>
@@ -296,8 +296,8 @@ Minor GSM, width, and color variations may occur—acceptable as per industry st
         </div>
 
         {/* Related Products */}
-        <div id="related-products" className="mt-24 lg:mt-32 scroll-mt-40">
-          <h2 className="text-xl font-bold uppercase tracking-tight mb-12">Related products</h2>
+        <div id="related-products" className="mt-12 lg:mt-32 scroll-mt-40">
+          <h2 className="!text-[14px] lg:!text-[16px] font-bold uppercase tracking-tight mb-12 text-center">Related products</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {relatedProducts.map((fabric) => (
               <Link key={fabric.id} href={`/fabrics/${fabric.id}`} className="group cursor-pointer">
@@ -309,8 +309,8 @@ Minor GSM, width, and color variations may occur—acceptable as per industry st
                   )}
                   <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[8px] font-black px-2 py-0.5 z-10">GSM: {fabric.gsm} g/m²</div>
                 </div>
-                <h3 className="text-[10px] font-bold uppercase tracking-widest text-center group-hover:text-[#57AD43] transition-colors">{fabric.name}</h3>
-                <p className="text-[10px] font-bold text-gray-400 text-center mt-1">₹{fabric.price}.00</p>
+                <h3 className="!text-[10px] lg:!text-[14px] font-bold uppercase tracking-widest text-center group-hover:text-[#57AD43] transition-colors">{fabric.name}</h3>
+                <p className="!text-[10px] lg:!text-[14px] font-bold text-gray-400 text-center mt-1">₹{fabric.price}.00</p>
               </Link>
             ))}
           </div>

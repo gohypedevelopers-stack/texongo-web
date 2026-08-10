@@ -230,7 +230,7 @@ export function Navbar() {
               }`}
           >
             {/* Glassmorphism Pill Container */}
-            <div className="relative flex items-center justify-between px-8 md:px-12 h-12 md:h-14 bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.06)] rounded-full transition-all duration-500" id="navbar-pill">
+            <div className="relative flex items-center justify-between px-6 md:px-8 lg:px-12 h-12 md:h-14 bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.06)] rounded-full transition-all duration-500" id="navbar-pill">
 
               {/* Logo */}
               <Link href="/" className="flex-shrink-0" onClick={() => setIsMobileMenuOpen(false)}>
@@ -242,8 +242,8 @@ export function Navbar() {
               </Link>
 
               {/* Desktop Navigation Links */}
-              <div className="hidden md:flex flex-1 items-center justify-center px-12">
-                <ul className="flex items-center gap-7 h-full">
+              <div className="hidden lg:flex flex-1 items-center justify-center px-4 xl:px-12">
+                <ul className="flex items-center gap-4 xl:gap-7 h-full">
                   {navItems.map((item) => (
                     <li
                       key={item.name}
@@ -392,7 +392,7 @@ export function Navbar() {
                 {/* Mobile Menu Button - Moved to the right */}
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="md:hidden p-2 text-gray-600 border-l border-gray-100 ml-2 focus:outline-none"
+                  className="lg:hidden p-2 text-gray-600 border-l border-gray-100 ml-2 focus:outline-none"
                 >
                   {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
                 </button>

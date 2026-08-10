@@ -25,7 +25,7 @@ export function WatermarkOverlay() {
 export function VideoBadge() {
   return (
     <div className="absolute top-4 left-4 z-[60] pointer-events-none">
-      <div className="bg-white px-3 py-1.5 rounded-full shadow-xl border border-black/5 flex items-center justify-center scale-[0.8] origin-top-left">
+      <div className="bg-white px-3 py-1.5 rounded-full shadow-xl border border-black/5 flex items-center justify-center scale-[0.5] md:scale-[0.8] origin-top-left">
         <img
           src="https://texongo.com/wp-content/uploads/2025/09/Untitled-design-2-1-e1758707290987.png"
           alt="Texongo"

@@ -152,13 +152,13 @@ const ScrollExpandMedia = ({
 
               <motion.div
                 style={{ opacity: titleOpacity }}
-                className={`absolute top-1/2 left-0 w-full -translate-y-1/2 flex items-center justify-center z-10 pointer-events-none transition-none ${textBlend ? 'mix-blend-difference' : ''}`}
+                className={`absolute top-1/2 left-0 w-full -translate-y-1/2 flex flex-col md:flex-row items-center justify-center z-10 pointer-events-none transition-none ${textBlend ? 'mix-blend-difference' : ''}`}
               >
-                <div className="flex-1 flex justify-end pr-8 md:pr-[160px]">
-                  <motion.h2 className='text-4xl md:text-6xl lg:text-8xl font-black text-white tracking-tighter mb-20 md:mb-32 lg:mb-48' style={{ x: textTranslateXLeft }}>{firstWord}</motion.h2>
+                <div className="w-full md:flex-1 flex justify-center md:justify-end pr-0 md:pr-[160px]">
+                  <motion.h2 className='hp-heading text-white mb-4 md:mb-32 lg:mb-48 text-center md:text-right' style={{ x: textTranslateXLeft }}>{firstWord}</motion.h2>
                 </div>
-                <div className="flex-1 flex justify-start pl-8 md:pl-[160px]">
-                  <motion.h2 className='text-4xl md:text-6xl lg:text-8xl font-black text-white tracking-tighter mt-20 md:mt-32 lg:mt-48' style={{ x: textTranslateXRight }}>{restOfTitle}</motion.h2>
+                <div className="w-full md:flex-1 flex justify-center md:justify-start pl-0 md:pl-[160px]">
+                  <motion.h2 className='hp-heading text-white mt-4 md:mt-32 lg:mt-48 text-center md:text-left' style={{ x: textTranslateXRight }}>{restOfTitle}</motion.h2>
                 </div>
               </motion.div>
             </div>

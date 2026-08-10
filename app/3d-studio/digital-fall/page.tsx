@@ -276,7 +276,7 @@ export default function DigitalFallPage() {
       </div>
 
       <section className="max-w-[1440px] mx-auto px-6 lg:px-10 pb-24 mt-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
           <AnimatePresence mode="popLayout">
             {currentIds.map((id) => (
               <FallCard
@@ -287,7 +287,7 @@ export default function DigitalFallPage() {
           </AnimatePresence>
         </div>
 
-        <div className="mt-16 flex items-center justify-center gap-4 flex-wrap">
+        <div className="mt-16 flex items-center justify-center gap-2 md:gap-4 flex-wrap">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
               key={page}
@@ -295,7 +295,7 @@ export default function DigitalFallPage() {
                 setCurrentPage(page);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className={`w-10 h-10 flex items-center justify-center text-[10px] font-black uppercase tracking-widest border transition-all ${currentPage === page
+              className={`w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-[10px] font-black uppercase tracking-widest border transition-all ${currentPage === page
                 ? "bg-black text-white border-black"
                 : "bg-transparent text-black/40 border-black/10 hover:border-black/40 hover:text-black"
                 }`}

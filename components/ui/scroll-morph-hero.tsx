@@ -47,10 +47,11 @@ const FabricCard = React.memo(({
     const directionMultiplier = direction === "clockwise" ? 1 : -1;
     const baseAngle = directionMultiplier * (index / totalCount) * 360;
     const minDim = Math.min(containerSize.w, containerSize.h);
-    const radius = isMobile ? minDim * 0.44 : minDim * 0.36;
+    const isTablet = containerSize.w >= 768 && containerSize.w < 1200;
+    const radius = isMobile ? minDim * 0.36 : (isTablet ? minDim * 0.42 : minDim * 0.36);
 
     // Spacing between cards in the horizontal line phase
-    const hSpacing = isMobile ? 170 : 300;
+    const hSpacing = isMobile ? 160 : (isTablet ? 220 : 300);
     const totalW = (totalCount - 1) * hSpacing;
     const initialLineX = index * hSpacing;
 
@@ -67,10 +68,10 @@ const FabricCard = React.memo(({
         let tx = Math.cos(rad) * radius;
         let ty = Math.sin(rad) * radius;
         let tr = angle + 90;
-        let ts = isMobile ? 0.7 : 0.9;
+        let ts = isMobile ? 0.55 : (isTablet ? 0.75 : 0.9);
 
         if (lineProgress > 0) {
-            const endSlideOffset = isMobile ? containerSize.w * 0.1 : containerSize.w * 0.35;
+            const endSlideOffset = isMobile ? containerSize.w * 0.1 : (isTablet ? containerSize.w * 0.2 : containerSize.w * 0.35);
             const slideTarget = totalW - endSlideOffset;
             const lineX = (direction === "clockwise" ? 1 : -1) * (initialLineX - (slideProgress * slideTarget));
 
@@ -79,7 +80,7 @@ const FabricCard = React.memo(({
             ty = ty * (1 - lineProgress) + (shiftY * lineProgress);
             tr = tr * (1 - lineProgress);
             const maxCardH = isMobile ? 220 : 380;
-            const safeTs = containerSize.h < maxCardH ? (containerSize.h / 140) * 0.8 : (isMobile ? 1.4 : 2.7);
+            const safeTs = containerSize.h < maxCardH ? (containerSize.h / 140) * 0.8 : (isMobile ? 1.4 : (isTablet ? 2.0 : 2.7));
             ts = ts * (1 - lineProgress) + safeTs * lineProgress;
         }
 
@@ -129,59 +130,77 @@ const FabricCard = React.memo(({
                 title={attachedProductName ? `${label}: ${attachedProductName}` : label}
                 className="block h-full w-full"
             >
-                <motion.div
-                    className="relative h-full w-full overflow-hidden rounded-2xl shadow-2xl bg-gray-100 border border-black/5 transform-gpu"
-                    whileHover={{ scale: 1.03 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                >
-                    <img
-                        src={src || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]}
-                        alt={label}
-                        className="h-full w-full object-cover transform-gpu"
-                        loading="eager"
-                        {...{ fetchPriority: "high" }}
-                        decoding="async"
-                    />
-
-                    {/* Label pill — counter-rotated to stay upright during card spin */}
                     <motion.div
-                        className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 w-full px-2 flex justify-center"
-                        style={{
-                            transform: labelTransform,
-                            backfaceVisibility: "hidden",
-                            WebkitBackfaceVisibility: "hidden",
-                            isolation: "isolate",
-                        }}
+                        className="relative h-full w-full rounded-2xl shadow-2xl bg-gray-100 border border-black/5 transform-gpu"
+                        style={{ transformStyle: "preserve-3d" }}
+                        initial={{ rotateY: 0 }}
+                        whileHover={{ scale: 1.05, rotateY: 180 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
                     >
-                        <div
-                            className="bg-white px-2 py-1 rounded-full shadow-lg border border-black/5 flex min-h-6 w-[88%] items-center justify-center"
-                            style={{
-                                backfaceVisibility: "hidden",
-                                WebkitBackfaceVisibility: "hidden",
+                        {/* Front Side - Image only */}
+                        <div 
+                            className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden" 
+                            style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
+                        >
+                            <img
+                                src={src || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]}
+                                alt={label}
+                                className="h-full w-full object-cover"
+                                loading="eager"
+                                {...{ fetchPriority: "high" }}
+                                decoding="async"
+                            />
+                            <motion.div
+                                className="absolute inset-0 bg-black/5 pointer-events-none"
+                                initial={{ opacity: 1 }}
+                                whileHover={{ opacity: 0 }}
+                            />
+                            {/* Mobile Label Overlay */}
+                            {isMobile && (
+                                <motion.div
+                                    style={{
+                                        position: "absolute",
+                                        inset: 0,
+                                        transform: labelTransform,
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "flex-end",
+                                        paddingBottom: "6px",
+                                        pointerEvents: "none"
+                                    }}
+                                >
+                                    <span className="text-[7px] font-bold uppercase text-white bg-black/60 px-1.5 py-0.5 rounded tracking-widest leading-tight text-center shadow-sm max-w-[90%]">
+                                        {label}
+                                    </span>
+                                </motion.div>
+                            )}
+                        </div>
+
+                        {/* Back Side - Text */}
+                        <div 
+                            className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden bg-[#57AD43] flex items-center justify-center border border-black/10 shadow-inner" 
+                            style={{ 
+                                backfaceVisibility: "hidden", 
+                                WebkitBackfaceVisibility: "hidden", 
+                                transform: "rotateY(180deg)" 
                             }}
                         >
-                            <span
-                                className="text-[6px] font-bold uppercase text-black tracking-[0.16em] leading-[1.05] text-center"
+                            <motion.div
                                 style={{
-                                    textRendering: "optimizeLegibility",
-                                    WebkitFontSmoothing: "antialiased",
-                                    MozOsxFontSmoothing: "grayscale",
-                                    backfaceVisibility: "hidden",
-                                    WebkitBackfaceVisibility: "hidden",
+                                    transform: labelTransform,
+                                    width: "100%",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center"
                                 }}
                             >
-                                {label}
-                            </span>
+                                <span className="text-[9px] md:text-[10px] font-bold uppercase text-white tracking-widest leading-[1.3] text-center px-2 drop-shadow-sm break-words whitespace-pre-wrap">
+                                    {label}
+                                </span>
+                            </motion.div>
                         </div>
                     </motion.div>
-
-                    <motion.div
-                        className="absolute inset-0 bg-black/5 pointer-events-none"
-                        initial={{ opacity: 1 }}
-                        whileHover={{ opacity: 0 }}
-                    />
-                </motion.div>
-            </Link>
+                </Link>
         </motion.div>
     );
 });
@@ -307,6 +326,17 @@ function findProductForCategory(products: Fabric[] | undefined, label: string, k
             product.fabric,
         ];
 
+        // STRICT MATCH: Ensure the product actually belongs to this category explicitly
+        // by checking if any primary field exactly matches the label or keywords.
+        const isStrictMatch = primaryFields.some(field => {
+            if (!field) return false;
+            const cleanField = field.trim().toLowerCase();
+            if (cleanField === label.toLowerCase()) return true;
+            return keywords.some(kw => cleanField === kw.toLowerCase() || cleanField.includes(kw.toLowerCase()));
+        });
+
+        if (!isStrictMatch) return;
+
         const primaryText = primaryFields.filter(Boolean).join(" ");
         const secondaryText = secondaryFields.filter(Boolean).join(" ");
 
@@ -378,8 +408,9 @@ export function IntroAnimation({ scrollProgress, products }: { scrollProgress: M
     });
 
     const cards = useMemo(() => {
-        return buildCategoryCards(KNIT_STYLE_ITEMS, KNIT_STYLE_IMAGE_BY_NAME, "knit", products);
-    }, [products]);
+        const allCards = buildCategoryCards(KNIT_STYLE_ITEMS, KNIT_STYLE_IMAGE_BY_NAME, "knit", products);
+        return isMobile ? allCards.slice(0, 10) : allCards;
+    }, [products, isMobile]);
 
     const scatterPositions = useMemo(() => {
         return Array.from({ length: cards.length }, (_, index) => getScatterPosition(index, 7));
@@ -388,34 +419,28 @@ export function IntroAnimation({ scrollProgress, products }: { scrollProgress: M
     const titleOpacity = useTransform(smoothProgress, [0, 0.1, 0.2, 0.4, 0.45], [0, 0, 1, 1, 0]);
     const titleY = useTransform(smoothProgress, [0, 0.1, 0.2, 0.4, 0.45], [20, 20, 0, 0, -30]);
 
+    const horizontalTitleOpacity = useTransform(smoothProgress, [0.45, 0.55, 0.85, 0.95], [0, 1, 1, 0]);
+    const horizontalTitleY = useTransform(smoothProgress, [0.45, 0.55, 0.85, 0.95], [20, 0, 0, -30]);
+
     const arrowOpacity = useTransform(smoothProgress, [0.45, 0.55, 0.9], [0, 1, 1]);
 
     return (
         <div ref={containerRef} className="relative w-full h-full bg-white overflow-hidden font-sans select-none transform-gpu">
             <div className="flex h-full w-full items-center justify-center pt-12 md:pt-18">
 
-                {/* Showroom Header */}
-                <motion.div
-                    style={{ opacity: arrowOpacity }}
-                    className="absolute top-20 md:top-28 left-0 w-full text-center z-20 pointer-events-none px-6"
-                >
-                    <h2 className="text-2xl md:text-5xl font-black text-black uppercase tracking-tight leading-tight">Our Premium Knit Collection</h2>
-                </motion.div>
-
-
                 {/* Hero Header */}
                 <motion.div
                     style={{ opacity: titleOpacity, y: titleY }}
                     className="absolute z-10 text-center pointer-events-none"
                 >
-                    <h1 className="text-5xl font-black tracking-tighter text-black md:text-7xl uppercase leading-[0.9] mb-6">
+                    <h1 className="hp-heading !text-3xl md:!text-6xl text-black uppercase mb-6">
                         Choose Your <br />
                         <span className="text-[#57AD43]">Knit Style</span>
                     </h1>
                 </motion.div>
 
                 {/* Cards Layer */}
-                <div className="relative flex items-center justify-center w-full h-full perspective-1000 transform-gpu">
+                <div className="relative flex items-center justify-center w-full h-full perspective-1000 transform-gpu z-20">
                     {cards.map((item, i) => (
                         <FabricCard
                             key={i}
@@ -433,6 +458,14 @@ export function IntroAnimation({ scrollProgress, products }: { scrollProgress: M
                         />
                     ))}
                 </div>
+
+                {/* Horizontal Phase Header */}
+                <motion.div 
+                    style={{ opacity: horizontalTitleOpacity, y: horizontalTitleY }} 
+                    className="absolute top-20 md:top-28 w-full flex justify-center items-center z-50 pointer-events-none px-6"
+                >
+                    <h2 className="hp-heading text-black text-center uppercase">Our Premium Knit Collection</h2>
+                </motion.div>
             </div>
         </div>
     );
@@ -466,8 +499,9 @@ export function BlendAnimation({ scrollProgress, products }: { scrollProgress: M
     });
 
     const cards = useMemo(() => {
-        return buildCategoryCards(BLEND_ITEMS, BLEND_IMAGE_BY_NAME, "blend", products);
-    }, [products]);
+        const allCards = buildCategoryCards(BLEND_ITEMS, BLEND_IMAGE_BY_NAME, "blend", products);
+        return isMobile ? allCards.slice(0, 8) : allCards;
+    }, [products, isMobile]);
 
     const scatterPositions = useMemo(() => {
         return Array.from({ length: cards.length }, (_, index) => getScatterPosition(index, 31));
@@ -476,34 +510,26 @@ export function BlendAnimation({ scrollProgress, products }: { scrollProgress: M
     const titleOpacity = useTransform(smoothProgress, [0, 0.1, 0.2, 0.4, 0.45], [0, 0, 1, 1, 0]);
     const titleY = useTransform(smoothProgress, [0, 0.1, 0.2, 0.4, 0.45], [20, 20, 0, 0, -30]);
 
-    const arrowOpacity = useTransform(smoothProgress, [0.45, 0.55, 0.9], [0, 1, 1]);
+    const horizontalTitleOpacity = useTransform(smoothProgress, [0.45, 0.55, 0.85, 0.95], [0, 1, 1, 0]);
+    const horizontalTitleY = useTransform(smoothProgress, [0.45, 0.55, 0.85, 0.95], [20, 0, 0, -30]);
 
     return (
         <div ref={containerRef} className="relative w-full h-full bg-white overflow-hidden font-sans select-none transform-gpu">
             <div className="flex h-full w-full items-center justify-center pt-12 md:pt-18">
-
-                {/* Showroom Header */}
-                <motion.div
-                    style={{ opacity: arrowOpacity }}
-                    className="absolute top-20 md:top-28 left-0 w-full text-center z-20 pointer-events-none px-6"
-                >
-                    <h2 className="text-2xl md:text-5xl font-semibold text-black tracking-tight leading-tight">Our Premium Blend Collection</h2>
-                </motion.div>
-
 
                 {/* Hero Header */}
                 <motion.div
                     style={{ opacity: titleOpacity, y: titleY }}
                     className="absolute z-10 text-center pointer-events-none"
                 >
-                    <h1 className="text-5xl font-semibold tracking-tighter text-black md:text-7xl leading-[0.9] mb-6">
+                    <h1 className="hp-heading !text-3xl md:!text-6xl text-black mb-6">
                         Choose Your <br />
                         <span className="text-[#57AD43]">Blend Style</span>
                     </h1>
                 </motion.div>
 
                 {/* Cards Layer */}
-                <div className="relative flex items-center justify-center w-full h-full perspective-1000 transform-gpu">
+                <div className="relative flex items-center justify-center w-full h-full perspective-1000 transform-gpu z-20">
                     {cards.map((item, i) => (
                         <FabricCard
                             key={i}
@@ -521,6 +547,14 @@ export function BlendAnimation({ scrollProgress, products }: { scrollProgress: M
                         />
                     ))}
                 </div>
+
+                {/* Horizontal Phase Header */}
+                <motion.div 
+                    style={{ opacity: horizontalTitleOpacity, y: horizontalTitleY }} 
+                    className="absolute top-20 md:top-28 w-full flex justify-center items-center z-50 pointer-events-none px-6"
+                >
+                    <h2 className="hp-heading text-black text-center uppercase">Our Premium Blend Collection</h2>
+                </motion.div>
             </div>
         </div>
     );

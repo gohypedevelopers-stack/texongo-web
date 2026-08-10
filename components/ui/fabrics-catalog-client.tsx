@@ -272,11 +272,10 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
             <div className="space-y-6">
               {/* GSM Filter */}
               <div className="space-y-2">
-                <span className="text-[8.5px] font-bold text-gray-400 uppercase tracking-widest block">Gsm Range</span>
+                <span className="gsm-range-label !text-[11px] font-bold text-gray-400 uppercase tracking-widest block" style={{ fontSize: '11px' }}>Gsm Range</span>
                 {/* Free-text GSM input */}
-                <div className={`flex items-center gap-2 border rounded-xl px-4 py-2.5 w-full transition-all ${
-                  gsmInput ? 'border-[#57AD43] bg-[#57AD43]/5' : 'border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] hover:border-[#57AD43] backdrop-blur-sm'
-                }`}>
+                <div className={`flex items-center gap-2 border rounded-xl px-4 py-2.5 w-full transition-all ${gsmInput ? 'border-[#57AD43] bg-[#57AD43]/5' : 'border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] hover:border-[#57AD43] backdrop-blur-sm'
+                  }`}>
                   <input
                     type="text"
                     inputMode="numeric"
@@ -286,9 +285,9 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
                       setGsmInput(e.target.value);
                       if (e.target.value) setSelectedGsm(""); // clear dropdown when typing
                     }}
-                    className={`flex-1 bg-transparent text-[9px] font-bold uppercase tracking-[0.15em] outline-none placeholder:text-gray-300 ${
-                      gsmInput ? 'text-[#57AD43]' : 'text-black'
-                    }`}
+                    className={`gsm-input-field flex-1 bg-transparent !text-[11px] font-medium uppercase tracking-wider outline-none placeholder:text-gray-300 ${gsmInput ? 'text-[#57AD43]' : 'text-black'
+                      }`}
+                    style={{ fontSize: '11px' }}
                   />
                   {gsmInput && (
                     <button
@@ -300,7 +299,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
                 {/* OR label */}
                 <div className="flex items-center gap-2 py-0.5">
                   <div className="flex-1 h-px bg-gray-100" />
-                  <span className="text-[7px] font-bold text-gray-300 uppercase tracking-widest">or range</span>
+                  <span className="gsm-or-range-label !text-[11px] font-bold text-gray-300 uppercase tracking-widest" style={{ fontSize: '11px' }}>or range</span>
                   <div className="flex-1 h-px bg-gray-100" />
                 </div>
                 <FilterDropdown
@@ -344,7 +343,8 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
                     router.push(pathname);
                   }
                 }}
-                className="w-full flex items-center justify-center gap-2 border border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] rounded-xl px-5 py-3 text-[9px] font-bold text-[#435C46] uppercase tracking-[0.2em] hover:border-[#57AD43] hover:bg-emerald-50/20 backdrop-blur-sm transition-all cursor-pointer"
+                className="reset-filters-btn w-full flex items-center justify-center gap-2 border border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] rounded-xl px-5 py-3 !text-[11px] font-medium text-[#435C46] uppercase tracking-wider hover:border-[#57AD43] hover:bg-emerald-50/20 backdrop-blur-sm transition-all cursor-pointer"
+                style={{ fontSize: '11px' }}
               >
                 Reset Filters
               </button>
@@ -383,7 +383,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 mt-4">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 md:gap-x-8 gap-y-4 md:gap-y-12 mt-4">
                 {paginatedFabrics.map((fabric) => (
                   <FabricCard
                     key={fabric.id}
@@ -393,19 +393,20 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
                     gsm={fabric.gsm}
                     image={fabric.image}
                     variantId={fabric.variantId}
+                    catalogMode={true}
                   />
                 ))}
               </div>
 
               {/* Pagination Controls */}
               {totalPages > 1 && (
-                <div className="flex justify-center items-center gap-3 mt-24 mb-12">
+                <div className="flex justify-center items-center gap-1.5 md:gap-3 mt-8 md:mt-24 mb-4 md:mb-12">
                   <button
                     onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="h-10 w-10 flex items-center justify-center rounded-full border border-emerald-100/60 text-[#435C46]/60 hover:border-[#57AD43] hover:text-[#57AD43] transition-all disabled:opacity-30 disabled:hover:border-emerald-100/60 disabled:hover:text-[#435C46]/60"
+                    className="h-7 w-7 md:h-10 md:w-10 flex items-center justify-center rounded-full border border-emerald-100/60 text-[#435C46]/60 hover:border-[#57AD43] hover:text-[#57AD43] transition-all disabled:opacity-30 disabled:hover:border-emerald-100/60 disabled:hover:text-[#435C46]/60"
                   >
-                    <ChevronLeft size={16} />
+                    <ChevronLeft className="w-3 h-3 md:w-4 md:h-4" />
                   </button>
 
                   {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -415,11 +416,11 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
                     .map((page, index, array) => {
                       const showEllipsis = index > 0 && page - array[index - 1] > 1;
                       return (
-                        <div key={page} className="flex items-center gap-3">
-                          {showEllipsis && <span className="text-gray-300">...</span>}
+                        <div key={page} className="flex items-center gap-1.5 md:gap-3">
+                          {showEllipsis && <span className="text-gray-300 text-[8px] md:text-base">...</span>}
                           <button
                             onClick={() => handlePageChange(page)}
-                            className={`h-10 w-10 flex items-center justify-center text-[11px] font-black transition-all rounded-full border ${currentPage === page
+                            className={`h-7 w-7 md:h-10 md:w-10 flex items-center justify-center text-[8px] md:text-[11px] font-black transition-all rounded-full border ${currentPage === page
                               ? "bg-black text-white border-black shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
                               : "bg-white text-[#435C46]/60 border-emerald-100/60 hover:border-[#57AD43] hover:text-[#57AD43]"
                               }`}
@@ -433,9 +434,9 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
                   <button
                     onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
-                    className="h-10 w-10 flex items-center justify-center rounded-full border border-emerald-100/60 text-[#435C46]/60 hover:border-[#57AD43] hover:text-[#57AD43] transition-all disabled:opacity-30 disabled:hover:border-emerald-100/60 disabled:hover:text-[#435C46]/60"
+                    className="h-7 w-7 md:h-10 md:w-10 flex items-center justify-center rounded-full border border-emerald-100/60 text-[#435C46]/60 hover:border-[#57AD43] hover:text-[#57AD43] transition-all disabled:opacity-30 disabled:hover:border-emerald-100/60 disabled:hover:text-[#435C46]/60"
                   >
-                    <ChevronRight size={16} />
+                    <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
                   </button>
                 </div>
               )}

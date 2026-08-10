@@ -168,7 +168,7 @@ html.lenis body {
 
 /* Premium Blog Content Styles (V3) */
 .blog-content-v3 {
-  line-height: 1.8;
+  line-height: 1.5;
   color: #374151;
   font-size: 17px;
 }
@@ -179,8 +179,8 @@ html.lenis body {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.05em;
-  margin-top: 3.5rem;
-  margin-bottom: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
   line-height: 1.1;
 }
 
@@ -193,12 +193,12 @@ html.lenis body {
 }
 
 .blog-content-v3 p {
-  margin-bottom: 1.75rem;
+  margin-bottom: 1rem;
 }
 
 .blog-content-v3 ul,
 .blog-content-v3 ol {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   padding-left: 1.5rem;
 }
 
@@ -280,4 +280,23 @@ p[class*="font-black"] {
 p.font-medium,
 p[class*="font-medium"] {
   font-weight: 400 !important;
+}
+
+@layer components {
+  /* Homepage Typography Standardization (Mobile-first) */
+  .hp-overline {
+    @apply text-[10px] font-black uppercase tracking-[0.4em];
+  }
+  .hp-heading {
+    @apply text-[36px] md:text-[60px] leading-tight font-semibold tracking-tighter;
+  }
+  .hp-badge {
+    @apply text-[7px] md:text-[9px] font-black uppercase tracking-widest px-2 py-1 md:px-4 md:py-1.5 rounded-sm;
+  }
+  .hp-card-title {
+    @apply text-[14px] md:text-2xl font-semibold leading-[1.3];
+  }
+  .hp-link {
+    @apply text-[8px] md:text-[10px] font-black uppercase tracking-widest;
+  }
 }
