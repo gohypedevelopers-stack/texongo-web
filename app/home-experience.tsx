@@ -243,11 +243,11 @@ function BlendStylesSection({ products }: { products?: Fabric[] }) {
 
 function SustainableBlendSection() {
   const baseLogos = [
-    { name: "Banana Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Banana_f7269dad-a9d2-4553-8572-9fb18786d287_360x.webp", href: "https://texongo.com/product-category/sustainable-blends/banana-fabric/" },
-    { name: "Supima", src: "https://texongo.com/wp-content/uploads/2025/12/Supiima_360x-1.webp", href: "https://texongo.com/product-category/blends/supima/" },
-    { name: "Lotus Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Lotus_360x.webp", href: "https://texongo.com/product-category/sustainable-blends/lotus/" },
-    { name: "Hemp", src: "https://texongo.com/wp-content/uploads/2025/12/Hemp_ee5107c1-6add-4868-bc46-6d9111850ba3_360x.webp", href: "https://texongo.com/product-category/sustainable-blends/hemp/" },
-    { name: "BCI Cotton", src: "https://texongo.com/wp-content/uploads/2025/12/BCI_a1b34c70-fc29-4342-9c45-a8f95375fa51_360x.webp", href: "https://texongo.com/product-category/sustainable-blends/organic-cotton/" },
+    { name: "Banana Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Banana_f7269dad-a9d2-4553-8572-9fb18786d287_360x.webp", href: "/fabrics?category=banana" },
+    { name: "Supima", src: "https://texongo.com/wp-content/uploads/2025/12/Supiima_360x-1.webp", href: "/fabrics?category=supima" },
+    { name: "Lotus Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Lotus_360x.webp", href: "/fabrics?category=lotus" },
+    { name: "Hemp", src: "https://texongo.com/wp-content/uploads/2025/12/Hemp_ee5107c1-6add-4868-bc46-6d9111850ba3_360x.webp", href: "/fabrics?category=hemp" },
+    { name: "BCI Cotton", src: "https://texongo.com/wp-content/uploads/2025/12/BCI_a1b34c70-fc29-4342-9c45-a8f95375fa51_360x.webp", href: "/fabrics?category=bci" },
   ];
 
   // Repeat the logos enough times to create a seamless infinite scroll effect
@@ -600,19 +600,19 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
 
 function ProductCatalogSection() {
   const row1 = [
-    { name: "POLY SPANDEX MESH", price: "₹750.00", image: "https://texongo.com/wp-content/uploads/2025/10/12DAB4FF-CC73-4155-AC90-8636067A6951-768x769-1-300x300.jpg", href: "https://texongo.com/product/poly-spandex-mesh/" },
-    { name: "COTTON FLEECE TERRY", price: "₹799.00", image: "https://texongo.com/wp-content/uploads/2025/11/Z2K6I157_3-768x768-1-300x300.jpg", href: "https://texongo.com/product/cotton-fleece-terry/" },
-    { name: "COTTON LINEN SINGLE JERSEY", price: "₹600.00", image: "https://texongo.com/wp-content/uploads/2025/11/image_1a1e365a-2b74-4d96-8165-f7788358c9bd-768x768-1-300x300.jpg", href: "https://texongo.com/product/cotton-linen-single-jersey/" },
-    { name: "COTTON LUREX SINGLE JERSEY", price: "₹1,000.00", image: "https://texongo.com/wp-content/uploads/2025/11/image_98606efd-a57d-44e0-b499-1698a9de6130-768x768-1-300x300.jpg", href: "https://texongo.com/product/cotton-lurex-single-jersey/" },
-    { name: "COTTON 3X1 RIB", price: "₹999.00", image: "https://texongo.com/wp-content/uploads/2025/11/B5K1I131-3-768x768-1-300x300.jpg", href: "https://texongo.com/product/cotton-3x1-rib/" },
+    { name: "Cotton Embroidery Single Jersey", price: "₹1399.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/A8K1S107-2-768x768-1-600x600.jpg?v=1781518241", href: "/fabrics/cotton-embroidery-single-jersey" },
+    { name: "Polyester Popcorn", price: "₹899.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_5e99b030-1137-44a7-89d2-f56a8ad30625-768x748-1-600x584.jpg?v=1781518242", href: "/fabrics/polyester-popcorn-2" },
+    { name: "Polyester Popcorn", price: "₹899.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_4f064ab2-f476-4f3f-9578-175cafe-768x768-1-600x600.png?v=1781518244", href: "/fabrics/polyester-popcorn-3" },
+    { name: "Polyester Popcorn", price: "₹899.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_d5b210fb-877e-4ff7-b04f-7d821ee52b8c-768x768-1-600x600.jpg?v=1781518245", href: "/fabrics/polyester-popcorn-4" },
+    { name: "Nylon Spandex Single Jersey", price: "₹1199.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_6e09a8ea-7e06-47d5-86a7-addb8f6bdcbb-600x600-1.jpg?v=1782987379", href: "/fabrics/nylon-spandex-single-jersey-5" },
   ];
 
   const row2 = [
-    { name: "POLYESTER POPCORN", price: "₹529.00", image: "https://texongo.com/wp-content/uploads/2025/10/A8K1S101-3-768x768-1-300x300.jpg", href: "https://texongo.com/product/polyester-popcorn/" },
-    { name: "COTTON SHIFFLY SINGLE JERSEY", price: "₹1,000.00", image: "https://texongo.com/wp-content/uploads/2025/10/M9K4S107_3-600x600-1-300x300.jpg", href: "https://texongo.com/product/cotton-shiffly-single-jersey/" },
-    { name: "POLY COTTON SINGLE JERSEY", price: "₹600.00", image: "https://texongo.com/wp-content/uploads/2025/10/B6K1S116-3-768x768-1-300x300.jpg", href: "https://texongo.com/product/poly-cotton-single-jersey/" },
-    { name: "POLY SPANDEX SINGLE JERSEY", price: "₹849.00", image: "https://texongo.com/wp-content/uploads/2025/11/B5K4S151-3-768x768-1-300x300.jpg", href: "https://texongo.com/product/poly-spandex-single-jersey/" },
-    { name: "POLY COTTON SPANDEX INTERLOCK", price: "₹650.00", image: "https://texongo.com/wp-content/uploads/2025/10/78_20241105034142pm-600x600-1-300x300.png", href: "https://texongo.com/product/poly-cotton-spandex-interlock/" },
+    { name: "Nylon Spandex Interlock", price: "₹1199.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_2063ed1e-f6d8-454f-9a10-8efa056d0981-600x600-1.jpg?v=1781518249", href: "/fabrics/nylon-spandex-interlock-5" },
+    { name: "Nylon Spandex Interlock", price: "₹1199.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_b5deb08a-d921-4842-bee1-886304d7ce5b-600x600-1.jpg?v=1781518250", href: "/fabrics/nylon-spandex-interlock-7" },
+    { name: "Nylon Spandex Interlock", price: "₹1199.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_28cc6162-b236-4933-bbc2-7a053b9315c1-600x600-1.jpg?v=1781518252", href: "/fabrics/nylon-spandex-interlock-8" },
+    { name: "Nylon Spandex Interlock", price: "₹1199.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_ef10b7c4-1149-4908-9b2d-1c7732890bb1-600x600-1.jpg?v=1781518253", href: "/fabrics/nylon-spandex-interlock-9" },
+    { name: "Nylon Spandex Interlock", price: "₹1199.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_4d7ad1d7-3d16-4d6e-ab69-e359edbebbbb-600x600-1.jpg?v=1781518255", href: "/fabrics/nylon-spandex-interlock-10" },
   ];
 
   return (

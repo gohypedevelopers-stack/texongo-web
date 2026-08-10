@@ -97,7 +97,10 @@ export const PRODUCTS_QUERY = `
             {namespace: "custom", key: "width"},
             {namespace: "custom", key: "composition"},
             {namespace: "custom", key: "knit_style"},
-            {namespace: "custom", key: "usage"}
+            {namespace: "custom", key: "usage"},
+            {namespace: "custom", key: "fabric"},
+            {namespace: "custom", key: "content"},
+            {namespace: "custom", key: "type"}
           ]) {
             namespace
             key

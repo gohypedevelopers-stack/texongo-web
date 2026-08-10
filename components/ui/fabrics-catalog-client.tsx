@@ -142,7 +142,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
               "wool", "supima", "banana", "ecovero", "eco vero", "hemp",
               "linen", "lotus", "modal", "organic", "recycled", "tencel", "bci", "sustainable", "eco"
             ];
-            const searchStr = `${f.composition || ""} ${f.fabric || ""} ${f.name || ""}`.toLowerCase();
+            const searchStr = `${f.composition || ""} ${f.fabric || ""}`.toLowerCase();
             categoryMatch = sustKeywords.some(keyword => searchStr.includes(keyword));
           } else {
             // Helper to normalize and check for containing or being contained (handles singular/plural and partial words)
@@ -188,7 +188,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
               }
             } else if (isBlendCat) {
               // For Blends (e.g., Cotton, Viscose, Poly Cotton):
-              // Check composition, fabric, or title using split OR/AND logic
+              // Check composition, fabric using split OR/AND logic
               const checkBlendMatch = (val: string | undefined | null) => {
                 if (!val || val === 'N/A') return false;
                 const normVal = val.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -207,7 +207,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
                 });
               };
 
-              categoryMatch = checkBlendMatch(f.composition) || checkBlendMatch(f.fabric) || checkBlendMatch(f.name);
+              categoryMatch = checkBlendMatch(f.composition) || checkBlendMatch(f.fabric);
             } else {
               // For Garment / Usage / Wear categories:
               // Check usage, product type, or title using OR logic for parts (e.g. tshirt/tops)

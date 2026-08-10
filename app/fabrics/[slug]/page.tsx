@@ -233,6 +233,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
             {/* Specifications Table */}
             <div className="space-y-1 border-t border-gray-100 pt-6 mb-8">
+              <SpecRow label="FABRIC" value={product.fabric || "N/A"} />
               <SpecRow label="KNIT STYLE" value={product.knit_style || "N/A"} />
               <SpecRow label="CONTENT" value={product.content || product.composition || "N/A"} />
               <SpecRow label="GSM" value={product.gsm === "N/A" ? "N/A" : `${product.gsm} g/m²`} />

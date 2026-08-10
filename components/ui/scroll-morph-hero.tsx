@@ -314,8 +314,8 @@ function findProductForCategory(products: Fabric[] | undefined, label: string, k
         if (!product.id) return;
 
         const primaryFields = kind === "knit"
-            ? [product.knit_style, product.fabric, product.type]
-            : [product.composition, product.content, product.fabric];
+            ? [product.knit_style]
+            : [product.fabric, product.content];
         const secondaryFields = [
             product.name,
             product.description,
@@ -367,17 +367,23 @@ function buildCategoryCards(
     kind: CategoryKind,
     products?: Fabric[]
 ): CategoryCardData[] {
-    return labels.map((name, index) => {
+    const cards: CategoryCardData[] = [];
+    
+    labels.forEach((name, index) => {
         const product = findProductForCategory(products, name, kind);
-        const productImage = product?.image && product.image !== "" ? product.image : undefined;
-
-        return {
-            name,
-            src: productImage || imagesByName[name] || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length],
-            href: product?.id ? `/fabrics/${product.id}` : fabricCategoryHref(name),
-            attachedProductName: product?.name,
-        };
+        
+        // Only keep tiles that have a matching real product
+        if (product && product.id) {
+            cards.push({
+                name, // we keep the category name for the label
+                src: (product.image && product.image !== "") ? product.image : (imagesByName[name] || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]),
+                href: `/fabrics/${product.id}`,
+                attachedProductName: product.name,
+            });
+        }
     });
+    
+    return cards;
 }
 
 export function IntroAnimation({ scrollProgress, products }: { scrollProgress: MotionValue<number>, products?: Fabric[] }) {
