@@ -15,14 +15,14 @@ const FeatureCard = ({ icon: Icon, title, content }: any) => (
 
 export default function ShippingAndReturnPolicy() {
   return (
-    <main className="min-h-screen bg-white pb-32">
+    <main className="min-h-screen bg-white pb-10 lg:pb-32">
       {/* Background Decor */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute top-[15%] -left-[10%] w-[40%] h-[40%] bg-[#57AD43]/5 rounded-full blur-[120px]" />
         <div className="absolute bottom-[15%] -right-[10%] w-[40%] h-[40%] bg-blue-50/40 rounded-full blur-[120px]" />
       </div>
 
-      <div className="max-w-[1240px] mx-auto px-8 lg:px-12 relative z-10 pt-12 text-center">
+      <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-12 relative z-10 pt-24 lg:pt-32 text-center">
         <Link
           href="/"
           className="group inline-flex items-center gap-3 text-[12px] font-black uppercase tracking-[0.3em] text-gray-400 hover:text-black transition-all mb-4"
@@ -32,15 +32,15 @@ export default function ShippingAndReturnPolicy() {
         </Link>
       </div>
 
-      <PageHero subtitle="Store Policies" mainTitle="Shipping &" accentTitle="Returns" />
+      <PageHero subtitle="Store Policies" mainTitle="Shipping &" accentTitle="Returns" className="!pt-8 lg:!pt-16" />
 
-      <div className="max-w-[1240px] mx-auto px-8 lg:px-12 relative z-10">
+      <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-12 relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-          className="mb-24 text-center"
+          className="mb-16 lg:mb-24 text-center"
         >
           <p className="max-w-2xl text-gray-500 text-sm font-medium leading-relaxed italic border-l-4 border-[#57AD43] pl-8 py-2 mx-auto text-center">
             "Delivering premium knitted fabrics worldwide with accuracy, care, and total transparency."
@@ -50,10 +50,10 @@ export default function ShippingAndReturnPolicy() {
 
 
         {/* Detailed Sections */}
-        <div className="space-y-32">
+        <div className="space-y-20 lg:space-y-32 text-center lg:text-left">
           {/* Shipping Rates */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start border-t border-gray-200 pt-16">
-            <div className="lg:col-span-4 sticky top-32">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start border-t border-gray-200 pt-16">
+            <div className="lg:col-span-4 lg:sticky lg:top-32">
               <span className="text-[#57AD43] font-black text-sm tracking-widest uppercase mb-4 block">Section 01</span>
               <h2 className="text-3xl lg:text-4xl font-black uppercase tracking-tighter text-black">
                 Shipping <span className="text-[#57AD43]">Rates</span>
@@ -74,7 +74,7 @@ export default function ShippingAndReturnPolicy() {
                   "Bulky packaging costs absorbed by us",
                   "Transparent carrier selection"
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-4 text-[13px] font-black uppercase tracking-widest text-black/80">
+                  <li key={i} className="flex justify-center lg:justify-start items-start gap-4 text-[13px] font-black uppercase tracking-widest text-black/80">
                     <div className="w-2 h-2 bg-[#57AD43] mt-1" />
                     {item}
                   </li>
@@ -84,16 +84,16 @@ export default function ShippingAndReturnPolicy() {
           </section>
 
           {/* Shipping Time */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start border-t border-gray-200 pt-16">
-            <div className="lg:col-span-4 sticky top-32">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start border-t border-gray-200 pt-16">
+            <div className="lg:col-span-4 lg:sticky lg:top-32">
               <span className="text-[#57AD43] font-black text-sm tracking-widest uppercase mb-4 block">Section 02</span>
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center justify-center lg:justify-start gap-4 mb-4">
                 <Clock className="text-[#57AD43]" size={28} />
                 <h2 className="text-3xl lg:text-4xl font-black uppercase tracking-tighter text-black">Timeline</h2>
               </div>
             </div>
             <div className="lg:col-span-8">
-              <div className="bg-gray-50 border border-gray-100 p-12 space-y-10">
+              <div className="bg-gray-50 border border-gray-100 p-6 lg:p-12 space-y-8 lg:space-y-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
                   <div className="space-y-4">
                     <h4 className="text-[12px] font-black text-[#57AD43] uppercase tracking-[0.3em]">Standard Ground</h4>
@@ -116,27 +116,27 @@ export default function ShippingAndReturnPolicy() {
           </section>
 
           {/* International Shipping */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start border-t border-gray-200 pt-16">
-            <div className="lg:col-span-4 sticky top-32">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start border-t border-gray-200 pt-16">
+            <div className="lg:col-span-4 lg:sticky lg:top-32">
               <span className="text-[#57AD43] font-black text-sm tracking-widest uppercase mb-4 block">Section 03</span>
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center justify-center lg:justify-start gap-4 mb-4">
                 <Globe className="text-[#57AD43]" size={28} />
                 <h2 className="text-3xl lg:text-4xl font-black uppercase tracking-tighter text-black">Exports</h2>
               </div>
             </div>
-            <div className="lg:col-span-8 bg-black text-white p-16 space-y-10 shadow-2xl">
+            <div className="lg:col-span-8 bg-black text-white p-8 lg:p-16 space-y-8 lg:space-y-10 shadow-2xl">
               <h3 className="text-3xl font-black uppercase tracking-tight">International Shipping</h3>
               <p className="text-lg text-gray-400 leading-relaxed">
                 Texongo provides global logistics reach. All international shipments are subject to local customs duties, taxes, and import regulations of the destination country, which are the exclusive responsibility of the recipient.
               </p>
-              <div className="pt-10 border-t border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8">
+              <div className="pt-10 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center sm:items-start gap-8">
                 <div>
                   <p className="text-[12px] font-black uppercase tracking-[0.3em] mb-4 text-white/40">Inquiries</p>
                   <a href="mailto:connect@texongo.com" className="text-[#57AD43] text-xl font-bold border-b-2 border-[#57AD43] pb-1 hover:text-white transition-colors">
                     connect@texongo.com
                   </a>
                 </div>
-                <Link href="/contact-us" className="bg-[#57AD43] text-black text-[12px] font-black tracking-widest uppercase px-10 py-5 rounded-full hover:bg-white transition-all">
+                <Link href="/contact-us" className="bg-[#57AD43] text-white text-[12px] font-black tracking-widest uppercase px-10 py-5 rounded-full hover:bg-[#489936] transition-all">
                   Request Quote
                 </Link>
               </div>
@@ -144,7 +144,7 @@ export default function ShippingAndReturnPolicy() {
           </section>
 
           {/* Undeliverables */}
-          <section className="bg-gray-50 p-16 lg:p-24 text-center space-y-8 border border-gray-100">
+          <section className="bg-gray-50 p-8 lg:p-24 text-center space-y-6 lg:space-y-8 border border-gray-100">
             <h2 className="text-[13px] font-black uppercase tracking-[0.5em] text-red-500">Notice for Returns</h2>
             <p className="max-w-3xl mx-auto text-xl lg:text-2xl font-medium text-black leading-tight italic">
               "Orders returned due to incorrect address details or refusal will be treated as returns. Initial shipping costs and return handling fees will be deducted from your final credit."
@@ -152,7 +152,7 @@ export default function ShippingAndReturnPolicy() {
           </section>
 
           {/* Quick Info Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-32">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 mb-20 lg:mb-32">
             <FeatureCard
               icon={ShieldCheck}
               title="Inspection Ready"
@@ -171,9 +171,9 @@ export default function ShippingAndReturnPolicy() {
           </div>
 
           {/* Support Info */}
-          <section className="pt-32 border-t border-gray-200 text-center pb-24">
+          <section className="pt-20 lg:pt-32 border-t border-gray-200 text-center pb-8 lg:pb-24">
             <p className="text-[13px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-12">Global Assistance</p>
-            <div className="flex flex-col md:flex-row justify-center items-center gap-16 lg:gap-24 font-bold uppercase tracking-[0.2em] text-sm text-black">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-10 md:gap-16 lg:gap-24 font-bold uppercase tracking-[0.2em] text-sm text-black">
               {[
                 { label: "Email", value: "connect@texongo.com" },
                 { label: "Direct", value: "+91 99100 48498" },

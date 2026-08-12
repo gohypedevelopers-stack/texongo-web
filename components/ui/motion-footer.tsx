@@ -6,7 +6,7 @@ import { Mail, Phone, MapPin } from "lucide-react";
 
 export function MotionFooter() {
   return (
-    <footer className="w-full bg-[#111111] text-white pt-16 pb-6 px-6 md:px-12 lg:px-24 flex flex-col font-sans">
+    <footer className="relative z-20 w-full bg-[#111111] text-white pt-16 pb-6 px-6 md:px-12 lg:px-24 flex flex-col font-sans">
 
       {/* Top Section */}
       <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-12 mb-12">
@@ -96,10 +96,7 @@ export function MotionFooter() {
         <p className="text-white/40 text-xs">
           © 2026 Texongo Fabrics. All rights reserved.
         </p>
-        <div className="flex space-x-6 text-xs text-white/40">
-          <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-          <Link href="/terms-and-conditions" className="hover:text-white transition-colors">Terms</Link>
-        </div>
+
       </div>
 
     </footer>

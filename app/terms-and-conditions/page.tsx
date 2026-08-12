@@ -7,14 +7,14 @@ import { PageHero } from "../../components/ui/page-hero";
 
 export default function TermsAndConditions() {
   return (
-    <main className="min-h-screen bg-white pb-32">
+    <main className="min-h-screen bg-white pb-10 lg:pb-32">
       {/* Background Decor */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute -top-[10%] -right-[10%] w-[40%] h-[40%] bg-[#57AD43]/5 rounded-full blur-[120px]" />
         <div className="absolute -bottom-[10%] -left-[10%] w-[40%] h-[40%] bg-gray-100/50 rounded-full blur-[120px]" />
       </div>
 
-      <div className="max-w-[1000px] mx-auto px-6 lg:px-10 relative z-10 pt-12 text-center">
+      <div className="max-w-[1000px] mx-auto px-4 md:px-6 lg:px-10 relative z-10 pt-24 lg:pt-32 text-center">
         <Link
           href="/"
           className="group inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors mb-4"
@@ -24,9 +24,9 @@ export default function TermsAndConditions() {
         </Link>
       </div>
 
-      <PageHero subtitle="Legal Agreement" mainTitle="Terms &" accentTitle="Conditions" />
+      <PageHero subtitle="Legal Agreement" mainTitle="Terms &" accentTitle="Conditions" className="!pt-8 lg:!pt-16" />
 
-      <div className="max-w-[1000px] mx-auto px-6 lg:px-10 relative z-10">
+      <div className="max-w-[1000px] mx-auto px-4 md:px-6 lg:px-10 relative z-10">
         <div className="text-center mb-16">
           <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-gray-400">
             Last Updated: April 2026
@@ -38,7 +38,7 @@ export default function TermsAndConditions() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 1 }}
-          className="space-y-16"
+          className="space-y-10 lg:space-y-16 text-center lg:text-left"
         >
           {/* Section 1: Care Info */}
           <section className="space-y-6">
@@ -57,7 +57,7 @@ export default function TermsAndConditions() {
             <h2 className="text-lg font-bold uppercase tracking-widest text-black border-b border-gray-100 pb-4">
               02. Manufacturing & Quality Tolerances
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
               <div className="space-y-4">
                 <h3 className="text-[11px] font-bold uppercase tracking-widest text-black">GSM Tolerance</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
@@ -79,13 +79,13 @@ export default function TermsAndConditions() {
               03. Disclaimers
             </h2>
             <div className="space-y-8">
-              <div className="p-8 bg-gray-50 border-l-4 border-[#57AD43]">
+              <div className="p-6 lg:p-8 bg-gray-50 border-l-4 border-[#57AD43]">
                 <h3 className="text-[11px] font-bold uppercase tracking-widest text-[#57AD43] mb-4">Color Variation</h3>
                 <p className="text-sm text-gray-600 leading-relaxed italic">
                   Minor variations in color may occur due to dye lots, fabric batches, lighting conditions, and screen or device display differences. Such variations shall not be treated as defects.
                 </p>
               </div>
-              <div className="flex flex-col md:flex-row gap-12">
+              <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
                 <div className="flex-1 space-y-4">
                   <h3 className="text-[11px] font-bold uppercase tracking-widest text-black">Quantity Tolerance</h3>
                   <p className="text-sm text-gray-600">Fabric orders may be delivered with a quantity variance of ±3–5%, which is considered standard for bulk textile supplies.</p>
@@ -124,8 +124,8 @@ export default function TermsAndConditions() {
           </section>
 
           {/* Contact Details Section (Formerly Footer) */}
-          <section className="pt-20 border-t border-gray-100 pb-12">
-            <div className="bg-black text-white p-12 lg:p-16 flex flex-col md:flex-row justify-between items-start gap-12">
+          <section className="pt-10 lg:pt-20 border-t border-gray-100 pb-8 lg:pb-12">
+            <div className="bg-black text-white p-8 lg:p-16 flex flex-col md:flex-row justify-between items-center md:items-start gap-8 lg:gap-12">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#57AD43] mb-6">Sold & Marketed by</p>
                 <div className="space-y-1 text-sm font-bold uppercase tracking-widest">
