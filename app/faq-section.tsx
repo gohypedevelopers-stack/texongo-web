@@ -382,53 +382,71 @@ export function FaqSection() {
   const displayedFaqs = showAll ? faqs : faqs.slice(0, 3);
 
   return (
-    <section className={styles.faqSection}>
-      <div className={styles.faqContainer}>
-        {/* Left Side: Header */}
-        <div className={styles.faqSideHeader}>
-          <span className={styles.eyebrow}>Need Help?</span>
-          <h2>Frequently Asked Questions</h2>
-          <p>Everything you need to know about Texongo textiles, shipping, and our digital studio services.</p>
-        </div>
+    <section className="py-20 md:py-32 bg-[#F9FAFB]">
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
+          
+          {/* Left Side: Header */}
+          <div className="lg:w-1/3 flex flex-col space-y-6 text-center lg:text-left items-center lg:items-start">
+            <span className="hp-overline text-[#57AD43]">Need Help?</span>
+            <h2 className="hp-heading text-[#111111]">Frequently Asked Questions</h2>
+            <p className="text-[#111111]/70 text-lg md:text-xl font-medium leading-relaxed max-w-md">
+              Everything you need to know about Texongo textiles, shipping, and our digital studio services.
+            </p>
+          </div>
 
-        {/* Right Side: Accordion */}
-        <div className={styles.faqList}>
-          {displayedFaqs.map((faq, i) => (
-            <div
-              key={i}
-              className={`${styles.faqItem} ${open === i ? styles.faqItemOpen : ""}`}
-            >
-              <button
-                className={styles.faqQuestion}
-                onClick={() => toggle(i)}
-                aria-expanded={open === i}
-              >
-                <span>{faq.q}</span>
-                <span className={styles.faqIcon}></span>
-              </button>
-
-              <div className={styles.faqAnswer}>
-                <div className={styles.faqAnswerInner}>
-                  {faq.a.split('\n').map((line, lineIdx) => (
-                    <p key={lineIdx} className="mb-2 last:mb-0">
-                      {line}
-                    </p>
-                  ))}
+          {/* Right Side: Accordion */}
+          <div className="lg:w-2/3 flex flex-col space-y-4">
+            {displayedFaqs.map((faq, i) => {
+              const isOpen = open === i;
+              return (
+                <div
+                  key={i}
+                  className={`border border-black/5 bg-white rounded-2xl overflow-hidden transition-shadow duration-500 ${isOpen ? 'shadow-lg shadow-black/5' : 'hover:shadow-md'}`}
+                >
+                  <button
+                    className="w-full text-left px-6 py-5 md:px-8 md:py-6 flex justify-between items-center group"
+                    onClick={() => toggle(i)}
+                    aria-expanded={isOpen}
+                  >
+                    <span className={`text-[16px] md:text-[20px] hp-text-500 pr-8 transition-colors duration-300 ${isOpen ? 'text-[#57AD43]' : 'text-[#111111] group-hover:text-[#57AD43]'}`}>
+                      {faq.q}
+                    </span>
+                    <span className={`flex-shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${isOpen ? 'border-[#57AD43] bg-[#57AD43] text-white rotate-45' : 'border-black/10 text-black/50 group-hover:border-[#57AD43] group-hover:text-[#57AD43]'}`}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                      </svg>
+                    </span>
+                  </button>
+                  
+                  <div 
+                    className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
+                  >
+                    <div className="px-6 pb-6 md:px-8 md:pb-8 text-[#111111]/70 space-y-3">
+                      {faq.a.split('\n').map((line, lineIdx) => (
+                        <p key={lineIdx} className="hp-paragraph">
+                          {line}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              );
+            })}
 
-          {!showAll && faqs.length > 3 && (
-            <div className="mt-12 flex justify-center">
-              <button
-                onClick={() => setShowAll(true)}
-                className="px-8 py-3 bg-black text-white text-xs font-bold uppercase tracking-widest rounded-full hover:bg-[#57AD43] transition-colors duration-300 shadow-xl"
-              >
-                Learn More
-              </button>
-            </div>
-          )}
+            {faqs.length > 3 && (
+              <div className="pt-6 flex justify-center lg:justify-start">
+                <button
+                  onClick={() => setShowAll(!showAll)}
+                  style={{ fontSize: '11px', letterSpacing: '2px' }}
+                  className="px-8 py-4 bg-black text-white font-bold uppercase rounded-full hover:bg-[#57AD43] transition-colors duration-300 shadow-md hover:shadow-lg"
+                >
+                  {showAll ? "View Less" : "View All Questions"}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>

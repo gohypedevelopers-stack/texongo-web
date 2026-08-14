@@ -99,7 +99,7 @@ export function FabricCard({ id, name, gsm, price, image, variantId, catalogMode
               >
                 <button
                   onClick={handleAddToCart}
-                  className="w-full bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] py-3 hover:bg-[#57AD43] transition-colors rounded-sm shadow-xl"
+                  className="w-full bg-black text-white !text-[10px] lg:!text-[10px] xl:!text-[10px] font-black uppercase tracking-[0.2em] py-3 hover:bg-[#57AD43] transition-colors rounded-sm shadow-xl"
                 >
                   Add to cart
                 </button>

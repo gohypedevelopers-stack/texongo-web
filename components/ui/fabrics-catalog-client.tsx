@@ -364,7 +364,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
                 onClick={() => {
                   router.push(pathname);
                 }}
-                className="ml-auto text-[8px] font-bold uppercase tracking-widest text-[#435C46] hover:text-[#57AD43] transition-colors border-b border-transparent hover:border-[#57AD43] pb-0.5"
+                className="ml-auto !text-[10px] font-bold uppercase tracking-widest text-[#435C46] hover:text-[#57AD43] transition-colors border-b border-transparent hover:border-[#57AD43] pb-0.5"
               >
                 Clear Category
               </button>

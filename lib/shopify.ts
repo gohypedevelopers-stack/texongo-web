@@ -303,6 +303,127 @@ export async function getAllShopifyProducts(): Promise<Fabric[]> {
   return allProducts;
 }
 
+export const COLLECTION_BY_HANDLE_QUERY = `
+  query getCollectionByHandle($handle: String!, $first: Int!) {
+    collection(handle: $handle) {
+      id
+      title
+      description
+      seo {
+        title
+        description
+      }
+      products(first: $first) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            id
+            title
+            handle
+            description
+            productType
+            images(first: 5) {
+              edges {
+                node {
+                  url
+                  altText
+                }
+              }
+            }
+            seo {
+              title
+              description
+            }
+            priceRange {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+            }
+            totalInventory
+            variants(first: 1) {
+              nodes {
+                id
+                sku
+                quantityAvailable
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+            metafields(identifiers: [
+              {namespace: "custom", key: "gsm"},
+              {namespace: "custom", key: "shade"},
+              {namespace: "shopify", key: "color"},
+              {namespace: "standard", key: "color"},
+              {namespace: "custom", key: "width"},
+              {namespace: "custom", key: "composition"},
+              {namespace: "custom", key: "knit_style"},
+              {namespace: "custom", key: "usage"},
+              {namespace: "custom", key: "fabric"},
+              {namespace: "custom", key: "content"},
+              {namespace: "custom", key: "type"}
+            ]) {
+              namespace
+              key
+              value
+              reference {
+                ... on Metaobject {
+                  fields {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export interface ShopifyCollection {
+  id: string;
+  title: string;
+  description: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  products: Fabric[];
+}
+
+export async function getShopifyCollection(handle: string, limit: number = 250): Promise<ShopifyCollection | null> {
+  try {
+    const response = await shopifyFetch<any>({
+      query: COLLECTION_BY_HANDLE_QUERY,
+      variables: { handle, first: limit },
+    });
+
+    if (!response.data || !response.data.collection) {
+      return null;
+    }
+
+    const { collection } = response.data;
+    const products = collection.products.edges.map(({ node }: any) => mapShopifyProduct(node));
+
+    return {
+      id: collection.id,
+      title: collection.title,
+      description: collection.description || '',
+      seoTitle: collection.seo?.title || '',
+      seoDescription: collection.seo?.description || '',
+      products
+    };
+  } catch (err) {
+    console.error('Error fetching collection:', err);
+    return null;
+  }
+}
+
 export const PRODUCT_BY_HANDLE_QUERY = `
   query getProductByHandle($handle: String!) {
     product(handle: $handle) {

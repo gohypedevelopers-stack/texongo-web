@@ -63,10 +63,10 @@ const Card: FC<iCardProps> = ({
       </div>
 
       {/* 2. Content Layout (2-Column Editorial Grid) */}
-      <div className="relative w-full h-full max-w-[1440px] px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 xl:gap-16 pt-12 lg:pt-0">
+      <div className="relative w-full h-full max-w-[1440px] px-6 lg:px-8 xl:px-12 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-4 xl:gap-16 pt-12 lg:pt-0">
 
         {/* Media Block (Alternating order on desktop) */}
-        <div className={`relative z-0 w-full lg:w-[45%] h-[30vh] lg:h-[50vh] flex items-center justify-center overflow-hidden bg-white group transition-transform duration-500 ${isEven ? 'lg:order-1' : 'lg:order-2 lg:-translate-x-16'}`}>
+        <div className={`relative z-0 w-full lg:w-[45%] h-[30vh] lg:h-[50vh] flex items-center justify-center overflow-hidden bg-white group transition-transform duration-500 ${isEven ? 'lg:order-1' : 'lg:order-2 xl:-translate-x-16'}`}>
           {videoUrl ? (
             <LazyVideo
               src={videoUrl}
@@ -87,13 +87,13 @@ const Card: FC<iCardProps> = ({
 
         {/* Text Details Block (Alternating order on desktop) */}
         <motion.div
-          className={`relative z-20 w-full lg:w-[40%] flex flex-col items-center lg:items-start text-center lg:text-left py-4 transition-transform duration-500 ${isEven ? 'lg:order-2 lg:mr-auto' : 'lg:order-1 lg:ml-auto lg:translate-x-16'}`}
+          className={`relative z-20 w-full lg:w-[40%] flex flex-col items-center lg:items-start text-center lg:text-left py-4 transition-transform duration-500 ${isEven ? 'lg:order-2 xl:mr-auto' : 'lg:order-1 xl:ml-auto xl:translate-x-16'}`}
         >
           <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-1.5 text-[#57AD43]">
             {tag || "Collection"}
           </span>
 
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-2 md:mb-3 tracking-tight leading-tight text-[#111111]">
+          <h2 className="hp-heading mb-2 md:mb-3 text-[#111111] lg:whitespace-nowrap lg:!text-[36px] xl:!text-[48px]">
             {title}
           </h2>
 
@@ -104,7 +104,7 @@ const Card: FC<iCardProps> = ({
           <Link
             href={link}
             style={{ color: '#ffffff' }}
-            className="inline-flex items-center justify-center h-12 md:h-14 px-8 md:px-12 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.3em] bg-black text-white hover:bg-[#57AD43] rounded-full hover:scale-105 active:scale-95 transition-all duration-300 shadow-md"
+            className="inline-flex items-center justify-center h-12 md:h-14 px-8 md:px-12 text-[8px] md:text-[12px] font-bold uppercase tracking-[0.3em] bg-black text-white hover:bg-[#57AD43] rounded-full hover:scale-105 active:scale-95 transition-all duration-300 shadow-md"
           >
             Explore Collection
           </Link>

@@ -372,15 +372,13 @@ function buildCategoryCards(
     labels.forEach((name, index) => {
         const product = findProductForCategory(products, name, kind);
         
-        // Only keep tiles that have a matching real product
-        if (product && product.id) {
-            cards.push({
-                name, // we keep the category name for the label
-                src: (product.image && product.image !== "") ? product.image : (imagesByName[name] || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]),
-                href: `/fabrics/${product.id}`,
-                attachedProductName: product.name,
-            });
-        }
+        const collectionHandle = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        cards.push({
+            name, // we keep the category name for the label
+            src: (product?.image && product.image !== "") ? product.image : (imagesByName[name] || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]),
+            href: `/collections/${collectionHandle}`,
+            attachedProductName: product?.name || "",
+        });
     });
     
     return cards;

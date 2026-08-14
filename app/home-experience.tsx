@@ -151,8 +151,8 @@ function MarqueeProductCard({
         />
       </div>
       <div className="space-y-1 md:space-y-2 text-center px-2">
-        <h3 className="text-[14px] md:text-[16px] font-semibold leading-[1.3] text-[#111111]/50 uppercase tracking-widest">{name}</h3>
-        <p className="text-sm md:text-lg font-black text-[#111111]">{price}</p>
+        <h3 className="text-[14px] md:text-[12px] xl:text-[16px] font-semibold leading-[1.3] text-[#111111]/50 uppercase tracking-widest">{name}</h3>
+        <p className="text-[14px] md:text-[14px] xl:text-[18px] font-black text-[#111111]">{price}</p>
       </div>
     </a>
   );
@@ -256,7 +256,7 @@ function SustainableBlendSection() {
   return (
     <section className="py-12 md:py-16 bg-white border-b border-black/5 overflow-hidden">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-8 md:mb-16 text-center">
-        <h2 className="text-2xl md:text-5xl font-black tracking-tight text-[#111111]">Sustainable Brand</h2>
+        <h2 className="hp-heading text-[#111111]">Sustainable Brand</h2>
       </div>
 
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
@@ -331,7 +331,7 @@ function TestimonialsSection() {
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-6 lg:px-12 text-center">
         <div className="mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-1.5 text-white">What Our Customers Say</h2>
+          <h2 className="hp-heading mb-1.5 text-white">What Our Customers Say</h2>
 
           <div className="flex items-center justify-center gap-4">
             <div className="h-[1px] w-12 bg-white/30"></div>
@@ -401,7 +401,7 @@ function TestimonialsSection() {
   );
 }
 
-export function HomeExperience({ products }: { products?: Fabric[] }) {
+export function HomeExperience({ products, blogs }: { products?: Fabric[], blogs?: any[] }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -425,7 +425,7 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
         >
           <div className="max-w-4xl mx-auto text-center pt-0 pb-4 px-6">
 
-            <h2 className="text-2xl md:text-4xl font-black mb-1.5 md:mb-2 tracking-tighter">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
+            <h2 className="hp-heading mb-1.5 md:mb-2 text-black">Crafting the <span className="text-[#57AD43]">Future</span> of Fabric</h2>
             <p className="!text-[14px] md:!text-[16px] text-[#475467] font-medium leading-normal md:leading-relaxed max-w-[340px] md:max-w-none mx-auto">
               Texongo combines traditional craftsmanship with cutting-edge 3D visualization. Our digital-first approach allows designers to experience the texture, drape, and movement of high-performance textiles before the first thread is even woven.
             </p>
@@ -445,7 +445,7 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
           <section className="relative bg-white overflow-hidden border-y border-black/5">
             {/* Split Backgrounds extending full width */}
             <div className="absolute inset-y-0 right-0 w-1/2 bg-[#F9FAFB] hidden md:block z-0" />
-            
+
             <div className="relative z-10 flex flex-col md:flex-row w-full max-w-[1440px] mx-auto">
               <div className="w-full md:w-1/2 relative min-h-[250px] md:min-h-[400px] flex items-center justify-center p-8 lg:p-16">
                 <LazyVideo
@@ -507,26 +507,18 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
               <div className="relative mb-10 md:mb-16 w-full">
                 <div className="text-center">
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">New Additions</span>
-                  <h2 className="text-3xl md:text-6xl font-black leading-none tracking-tight">Fabric Collection.</h2>
+                  <h2 className="hp-heading">Fabric Collection.</h2>
                 </div>
 
                 {/* Right-aligned Link on desktop */}
                 <div className="absolute right-0 bottom-0 translate-y-1 hidden md:block">
                   <Link href="/fabrics" className="inline-block">
-                    <p className="text-sm font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
+                    <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-2 cursor-pointer hover:text-[#57AD43] transition-colors">
                       View All Fabrics
                     </p>
                   </Link>
                 </div>
 
-                {/* Centered on mobile */}
-                <div className="text-center mt-6 md:hidden">
-                  <Link href="/fabrics" className="inline-block">
-                    <p className="text-xs font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 cursor-pointer hover:text-[#57AD43] transition-colors">
-                      View All Fabrics
-                    </p>
-                  </Link>
-                </div>
               </div>
 
               <div className={`-mx-6 lg:-mx-10 overflow-hidden ${styles.marqueeViewport}`}>
@@ -546,6 +538,15 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
                   ))}
                 </div>
               </div>
+
+              {/* Centered on mobile */}
+              <div className="text-center mt-8 md:hidden">
+                <Link href="/fabrics" className="inline-block">
+                  <p className="text-[8px] font-bold text-black/40 uppercase tracking-widest border-b-2 border-[#57AD43] pb-1 cursor-pointer hover:text-[#57AD43] transition-colors">
+                    View All Fabrics
+                  </p>
+                </Link>
+              </div>
             </div>
           </section>
         </LazySection>
@@ -559,7 +560,7 @@ export function HomeExperience({ products }: { products?: Fabric[] }) {
         </LazySection>
 
         <LazySection>
-          <BlogSection />
+          <BlogSection blogs={blogs} />
         </LazySection>
       </main>
     </ReactLenis>
@@ -619,7 +620,7 @@ function ProductCatalogSection() {
     <section className="py-12 md:py-16 bg-white border-b border-black/5 overflow-hidden">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12 mb-8 md:mb-16 text-center">
         <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">Collection</span>
-        <h2 className="text-2xl md:text-5xl font-black tracking-tight text-[#111111]">Product Catalog</h2>
+        <h2 className="hp-heading text-[#111111]">Product Catalog</h2>
       </div>
 
       <div className="space-y-20">
@@ -629,7 +630,7 @@ function ProductCatalogSection() {
             <div className="space-y-1">
               <h3 className="hp-heading text-[#111111] uppercase">Womens Wear</h3>
             </div>
-            <Link href="/fabrics?category=womenwear" className="hp-link text-black/40 border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
+            <Link href="/fabrics?category=womenwear" className="hp-link text-black/40 border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors hidden md:block">
               Explore Section
             </Link>
           </div>
@@ -667,6 +668,12 @@ function ProductCatalogSection() {
               </div>
             </div>
           </div>
+
+          <div className="text-center mt-4 md:hidden">
+            <Link href="/fabrics?category=womenwear" className="hp-link text-black/40 border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
+              Explore Section
+            </Link>
+          </div>
         </div>
 
         {/* Row 2 - Men's Wear */}
@@ -675,7 +682,7 @@ function ProductCatalogSection() {
             <div className="space-y-1">
               <h3 className="hp-heading text-[#111111] uppercase">Mens Wear</h3>
             </div>
-            <Link href="/fabrics?category=menwear" className="hp-link text-black/40 border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
+            <Link href="/fabrics?category=menwear" className="hp-link text-black/40 border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors hidden md:block">
               Explore Section
             </Link>
           </div>
@@ -713,6 +720,12 @@ function ProductCatalogSection() {
               </div>
             </div>
           </div>
+
+          <div className="text-center mt-4 md:hidden">
+            <Link href="/fabrics?category=menwear" className="hp-link text-black/40 border-b-2 border-[#57AD43] pb-1 hover:text-[#57AD43] transition-colors">
+              Explore Section
+            </Link>
+          </div>
         </div>
       </div>
     </section>
@@ -720,10 +733,10 @@ function ProductCatalogSection() {
 }
 
 
-function BlogSection() {
-  const blogs = [
+function BlogSection({ blogs: externalBlogs }: { blogs?: any[] }) {
+  const defaultBlogs = [
     {
-      title: "Trump's Trade Policies: Impact on Fashion Imports and Exports",
+      title: "Trump's Trade Policies: Impact on Fashion Imports",
       image: "https://texongo.com/wp-content/uploads/2026/04/trumps-trade-policies-impact-blog1.png",
       category: "Market Insights",
       link: "https://texongo.com/trumps-trade-policies-impact-on-fashion-imports-and-exports/"
@@ -742,6 +755,8 @@ function BlogSection() {
     }
   ];
 
+  const displayBlogs = externalBlogs && externalBlogs.length > 0 ? externalBlogs.slice(0, 3) : defaultBlogs;
+
   return (
     <section className="py-12 md:py-16 bg-[#F9FAFB]">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
@@ -749,15 +764,15 @@ function BlogSection() {
           <span className="hp-overline text-[#57AD43] mb-0.5 block">Latest Insights</span>
           <h2 className="hp-heading text-center text-[#111111]">Our Stories</h2>
         </div>
-        <div className="flex md:grid md:grid-cols-3 overflow-x-auto snap-x snap-mandatory gap-4 md:gap-12 pb-4 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {blogs.map((b, idx) => (
+        <div className="flex xl:grid xl:grid-cols-3 overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 lg:gap-8 xl:gap-12 pb-4 xl:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {displayBlogs.map((b, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0.01, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: idx * 0.05, ease: "easeOut" }}
               viewport={{ once: true, margin: "100px" }}
-              className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-auto group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-black/5 flex flex-col h-full"
+              className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-[45%] lg:w-[35%] xl:w-auto group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-black/5 flex flex-col h-full"
             >
               <div className="aspect-[16/10] overflow-hidden relative">
                 <img src={b.image || undefined} alt={b.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
@@ -766,7 +781,7 @@ function BlogSection() {
                 <span className="hp-badge inline-block bg-[#57AD43] text-white w-fit shadow-md line-clamp-1">
                   {b.category}
                 </span>
-                <h3 className="hp-card-title flex-1 text-[#111111] group-hover:text-[#57AD43] transition-colors duration-300">
+                <h3 className="hp-card-title !text-[16px] xl:!text-[20px] hp-text-500 flex-1 text-[#111111] group-hover:text-[#57AD43] transition-colors duration-300">
                   {b.title}
                 </h3>
                 <Link
