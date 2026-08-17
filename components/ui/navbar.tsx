@@ -116,8 +116,26 @@ export function Navbar() {
 
   const filteredProducts = useMemo(() => {
     if (!searchQuery.trim()) return [];
-    const queryWords = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    
+    const searchStr = searchQuery.toLowerCase().trim();
+    const cleanSearchStr = searchStr.replace(/[^a-z0-9]/g, '');
+    const queryWords = searchStr.split(/\s+/).filter(Boolean);
+
     return allProducts.filter((product) => {
+      // 1. Forgiving SKU Match
+      if (product.sku && product.sku !== 'N/A') {
+        const cleanSku = product.sku.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (cleanSku) {
+          if (cleanSku === cleanSearchStr || cleanSearchStr.includes(cleanSku) || cleanSku.includes(cleanSearchStr)) {
+            return true;
+          }
+          if (queryWords.some(w => cleanSku === w.replace(/[^a-z0-9]/g, ''))) {
+            return true;
+          }
+        }
+      }
+
+      // 2. Standard multi-word match
       return queryWords.every((word) => {
         return (
           product.name?.toLowerCase().includes(word) ||
@@ -677,7 +695,7 @@ export function Navbar() {
                 {searchQuery.trim() !== "" ? (
                   <div className="w-full min-h-[400px]">
                     <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
-                      <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 border-l-2 border-[#57AD43] pl-4">
+                      <h3 className="text-[11px] font-black uppercase tracking-normal text-gray-400 border-l-2 border-[#57AD43] pl-4">
                         {isLoadingProducts ? (
                           <span>Searching Fabrics...</span>
                         ) : (
@@ -760,7 +778,7 @@ export function Navbar() {
                           <Link 
                             href={`/fabrics?search=${encodeURIComponent(searchQuery)}`}
                             onClick={closeSearch}
-                            className="bg-[#121212] hover:bg-[#57AD43] text-white px-8 py-4 rounded-xl text-[11px] font-black uppercase tracking-[0.2em] transition-all"
+                            className="flex items-center justify-center border border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] hover:border-[#57AD43] backdrop-blur-sm px-8 py-4 rounded-xl text-[11px] font-bold uppercase tracking-widest text-gray-400 hover:text-[#57AD43] transition-all"
                           >
                             View All {filteredProducts.length} Results
                           </Link>
@@ -773,7 +791,7 @@ export function Navbar() {
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-24">
                     {/* Left Column: Popular Tags */}
                     <div className="lg:col-span-7">
-                      <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 mb-10 border-l-2 border-[#57AD43] pl-4">Trending Now</h3>
+                      <h3 className="text-[11px] font-black uppercase tracking-normal text-gray-400 mb-10 border-l-2 border-[#57AD43] pl-4">Trending Now</h3>
                       <div className="flex flex-wrap gap-4 md:gap-6">
                         {[
                           { name: "Single Jersey", count: "120+" },

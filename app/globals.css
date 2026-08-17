@@ -321,3 +321,17 @@ p[class*="font-medium"] {
     }
   }
 }
+
+/* Force 12px for checkout and remove buttons */
+#cart-drawer-checkout-btn,
+#cart-drawer-checkout-btn span,
+#cart-page-checkout-btn,
+#cart-page-checkout-btn span,
+#cart-page-items-count,
+#search-color-input,
+[id^="cart-item-remove-btn-"],
+[id^="cart-item-remove-btn-"] span,
+[id^="cart-page-remove-btn-"],
+[id^="cart-page-remove-btn-"] span {
+  font-size: 12px !important;
+}

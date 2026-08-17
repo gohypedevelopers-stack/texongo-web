@@ -98,7 +98,7 @@ export default function CartPage() {
           {/* Left: Items List */}
           <div className="flex-1">
             <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
-              <span className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em]">{getItemCount()} Items In Bag</span>
+              <span id="cart-page-items-count" className="text-[12px] font-bold text-gray-400 uppercase tracking-[0.2em]">{getItemCount()} Items In Bag</span>
             </div>
 
             <div className="space-y-8">
@@ -154,8 +154,9 @@ export default function CartPage() {
                         </div>
 
                         <button
+                          id={`cart-page-remove-btn-${item.id}`}
                           onClick={() => removeItem(item.id)}
-                          className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-red-400 hover:text-red-600 transition-colors"
+                          className="flex items-center gap-2 text-[12px] font-black uppercase tracking-widest text-red-400 hover:text-red-600 transition-colors"
                         >
                           <Trash2 size={14} />
                           Remove
@@ -197,9 +198,10 @@ export default function CartPage() {
               </div>
 
               <button
+                id="cart-page-checkout-btn"
                 onClick={handleCheckout}
                 disabled={isCheckingOut}
-                className="w-full h-16 bg-white flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] hover:text-white transition-all rounded-sm group disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-16 bg-white flex items-center justify-center gap-3 text-[12px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] hover:text-white transition-all rounded-sm group disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span className="text-black group-hover:text-white transition-colors">{isCheckingOut ? "Processing..." : "Checkout Now"}</span>
                 {!isCheckingOut && <ArrowRight size={18} className="text-black group-hover:text-white transition-all group-hover:translate-x-1" />}

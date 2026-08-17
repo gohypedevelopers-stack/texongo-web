@@ -237,19 +237,39 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
         // Text Search Filter Match from URL
         let queryMatch = true;
         if (queryParam) {
-          const queryWords = queryParam.toLowerCase().trim().split(/\s+/).filter(Boolean);
-          queryMatch = queryWords.every((word) => {
-            return (
-              f.name?.toLowerCase().includes(word) ||
-              f.description?.toLowerCase().includes(word) ||
-              f.sku?.toLowerCase().includes(word) ||
-              (f.knit_style && f.knit_style !== 'N/A' && f.knit_style.toLowerCase().includes(word)) ||
-              (f.composition && f.composition !== 'N/A' && f.composition.toLowerCase().includes(word)) ||
-              (f.shade && f.shade !== 'N/A' && f.shade.toLowerCase().includes(word)) ||
-              (f.usage && f.usage !== 'N/A' && f.usage.toLowerCase().includes(word)) ||
-              (f.type && f.type !== 'N/A' && f.type.toLowerCase().includes(word))
-            );
-          });
+          const searchStr = queryParam.toLowerCase().trim();
+          const cleanSearchStr = searchStr.replace(/[^a-z0-9]/g, '');
+          const queryWords = searchStr.split(/\s+/).filter(Boolean);
+          
+          let exactSkuMatch = false;
+          if (f.sku && f.sku !== 'N/A') {
+            const cleanSku = f.sku.toLowerCase().replace(/[^a-z0-9]/g, '');
+            if (cleanSku) {
+              if (cleanSku === cleanSearchStr || cleanSearchStr.includes(cleanSku) || cleanSku.includes(cleanSearchStr)) {
+                exactSkuMatch = true;
+              }
+              if (queryWords.some(w => cleanSku === w.replace(/[^a-z0-9]/g, ''))) {
+                exactSkuMatch = true;
+              }
+            }
+          }
+
+          if (exactSkuMatch) {
+            queryMatch = true;
+          } else {
+            queryMatch = queryWords.every((word) => {
+              return (
+                f.name?.toLowerCase().includes(word) ||
+                f.description?.toLowerCase().includes(word) ||
+                f.sku?.toLowerCase().includes(word) ||
+                (f.knit_style && f.knit_style !== 'N/A' && f.knit_style.toLowerCase().includes(word)) ||
+                (f.composition && f.composition !== 'N/A' && f.composition.toLowerCase().includes(word)) ||
+                (f.shade && f.shade !== 'N/A' && f.shade.toLowerCase().includes(word)) ||
+                (f.usage && f.usage !== 'N/A' && f.usage.toLowerCase().includes(word)) ||
+                (f.type && f.type !== 'N/A' && f.type.toLowerCase().includes(word))
+              );
+            });
+          }
         }
 
         return gsmMatch && colorMatch && categoryMatch && queryMatch;
@@ -597,12 +617,13 @@ function SearchableFilterDropdown({ label, options, onSelect, active }: Searchab
           {/* Search input inside dropdown */}
           <div className="px-4 py-2.5 border-b border-emerald-50" onClick={e => e.stopPropagation()}>
             <input
+              id="search-color-input"
               autoFocus
               type="text"
               placeholder="Search color..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-transparent text-[9px] font-bold uppercase tracking-[0.15em] outline-none text-black placeholder:text-gray-300"
+              className="w-full bg-transparent text-[12px] font-bold uppercase tracking-[0.15em] outline-none text-black placeholder:text-gray-300"
             />
           </div>
           <div className="max-h-[240px] overflow-y-auto overscroll-contain py-1">

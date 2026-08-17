@@ -132,7 +132,7 @@ export function CartDrawer() {
                           <button 
                             id={`cart-item-remove-btn-${item.id}`}
                             onClick={() => removeItem(item.id)} 
-                            className="text-red-500 hover:text-red-600 transition-colors flex items-center gap-1.5 !text-[12px] !font-bold !uppercase !tracking-widest"
+                            className="text-red-500 hover:text-red-600 transition-colors flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-widest"
                           >
                             <Trash2 size={14} />
                             <span>Remove</span>
@@ -185,9 +185,9 @@ export function CartDrawer() {
                     id="cart-drawer-checkout-btn"
                     onClick={handleCheckout}
                     disabled={isCheckingOut}
-                    className="h-14 bg-white border border-black group flex items-center justify-center gap-3 hp-link !text-[12px] !uppercase !tracking-[0.2em] transition-all duration-300 hover:bg-black shadow-lg shadow-black/5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="h-14 bg-white border border-black group flex items-center justify-center gap-3 hp-link text-[12px] uppercase tracking-[0.2em] transition-all duration-300 hover:bg-black shadow-lg shadow-black/5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <span className="text-black group-hover:text-white transition-colors !font-black !text-[12px] !tracking-[0.2em]">{isCheckingOut ? "PROCESSING..." : "CHECKOUT NOW"}</span>
+                    <span className="text-black group-hover:text-white transition-colors font-black text-[12px] tracking-[0.2em]">{isCheckingOut ? "PROCESSING..." : "CHECKOUT NOW"}</span>
                     {!isCheckingOut && <ArrowRight size={14} className="text-black group-hover:text-white transition-colors" />}
                     {isCheckingOut && <Loader2 size={14} className="text-black group-hover:text-white transition-colors animate-spin" />}
                   </button>

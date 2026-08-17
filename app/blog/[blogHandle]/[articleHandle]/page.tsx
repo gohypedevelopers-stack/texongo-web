@@ -5,6 +5,8 @@ import { Metadata } from "next";
 import { getShopifyArticle, getShopifyArticles } from "../../../../lib/shopify";
 import { BlogCard } from "../../../../components/ui/blog-card";
 
+export const revalidate = 60;
+
 export async function generateMetadata({
   params,
 }: {
