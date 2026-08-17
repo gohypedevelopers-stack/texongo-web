@@ -116,7 +116,7 @@ export function Navbar() {
 
   const filteredProducts = useMemo(() => {
     if (!searchQuery.trim()) return [];
-    
+
     const searchStr = searchQuery.toLowerCase().trim();
     const cleanSearchStr = searchStr.replace(/[^a-z0-9]/g, '');
     const queryWords = searchStr.split(/\s+/).filter(Boolean);
@@ -676,7 +676,7 @@ export function Navbar() {
               {/* Search Core */}
               <div className="max-w-5xl mx-auto w-full">
                 <div className="space-y-4 mb-16 md:mb-24">
-                  <span className="text-[10px] font-black uppercase tracking-[0.6em] text-[#57AD43]">Explore Texongo</span>
+
                   <div className="relative flex items-end">
                     <input
                       autoFocus
@@ -684,11 +684,8 @@ export function Navbar() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Start typing..."
-                      className="w-full text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-black placeholder:text-gray-100 focus:outline-none bg-transparent pb-5 md:pb-6 pr-12 md:pr-20 border-b-4 md:border-b-[6px] border-gray-50 focus:border-black transition-all duration-700"
+                      className="w-full text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-black placeholder:text-gray-300 focus:outline-none bg-transparent pb-2 md:pb-3 border-b-4 md:border-b-[6px] border-gray-50 focus:border-black transition-all duration-700"
                     />
-                    <div className="absolute right-0 bottom-7 md:bottom-8">
-                      <Search className="text-gray-200 w-8 h-8 md:w-12 md:h-12" strokeWidth={3} />
-                    </div>
                   </div>
                 </div>
 
@@ -733,57 +730,57 @@ export function Navbar() {
                       <>
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
                           {filteredProducts.slice(0, 12).map((product) => {
-                          const productImg = product.image && product.image !== "" ? product.image : getFallbackImage(product.name, product.id);
-                          return (
-                            <motion.div
-                              key={product.id}
-                              initial={{ opacity: 0, y: 15 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              className="group relative flex flex-col items-center text-center bg-gray-50/50 hover:bg-white p-4 rounded-3xl border border-transparent hover:border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 cursor-pointer"
-                            >
-                              <Link href={`/fabrics/${product.id}`} onClick={closeSearch} className="w-full h-full flex flex-col justify-between">
-                                <div className="relative aspect-[4/5] w-full overflow-hidden bg-gray-100 rounded-2xl mb-4">
-                                  <Image
-                                    src={productImg}
-                                    alt={product.name}
-                                    fill
-                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                  />
-                                  {product.gsm && product.gsm !== "N/A" && (
-                                    <div className="absolute top-3 left-3 bg-[#57AD43] text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-md shadow-md z-10">
-                                      GSM: {product.gsm}
-                                    </div>
-                                  )}
-                                </div>
-                                <div className="flex flex-col items-center gap-1.5 pt-2 flex-grow">
-                                  <span className="text-[9px] font-black uppercase tracking-[0.15em] text-[#57AD43]">
-                                    {product.knit_style || product.type || "Fabric"}
-                                  </span>
-                                  <h4 className="text-xs sm:text-sm font-black uppercase tracking-widest text-gray-900 leading-tight max-w-[200px] line-clamp-2 group-hover:text-[#57AD43] transition-colors duration-300">
-                                    {product.name}
-                                  </h4>
-                                  <p className="text-sm font-black text-gray-900 mt-auto pt-2">
-                                    ₹{parseFloat(product.price).toFixed(2)}
-                                  </p>
-                                </div>
-                              </Link>
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-                      
-                      {filteredProducts.length > 12 && (
-                        <div className="flex justify-center mt-12 mb-8">
-                          <Link 
-                            href={`/fabrics?search=${encodeURIComponent(searchQuery)}`}
-                            onClick={closeSearch}
-                            className="flex items-center justify-center border border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] hover:border-[#57AD43] backdrop-blur-sm px-8 py-4 rounded-xl text-[11px] font-bold uppercase tracking-widest text-gray-400 hover:text-[#57AD43] transition-all"
-                          >
-                            View All {filteredProducts.length} Results
-                          </Link>
+                            const productImg = product.image && product.image !== "" ? product.image : getFallbackImage(product.name, product.id);
+                            return (
+                              <motion.div
+                                key={product.id}
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="group relative flex flex-col items-center text-center bg-gray-50/50 hover:bg-white p-4 rounded-3xl border border-transparent hover:border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 cursor-pointer"
+                              >
+                                <Link href={`/fabrics/${product.id}`} onClick={closeSearch} className="w-full h-full flex flex-col justify-between">
+                                  <div className="relative aspect-[4/5] w-full overflow-hidden bg-gray-100 rounded-2xl mb-4">
+                                    <Image
+                                      src={productImg}
+                                      alt={product.name}
+                                      fill
+                                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                    {product.gsm && product.gsm !== "N/A" && (
+                                      <div className="absolute top-3 left-3 bg-[#57AD43] text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-md shadow-md z-10">
+                                        GSM: {product.gsm}
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="flex flex-col items-center gap-1.5 pt-2 flex-grow">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.15em] text-[#57AD43]">
+                                      {product.knit_style || product.type || "Fabric"}
+                                    </span>
+                                    <h4 className="text-xs sm:text-sm font-black uppercase tracking-widest text-gray-900 leading-tight max-w-[200px] line-clamp-2 group-hover:text-[#57AD43] transition-colors duration-300">
+                                      {product.name}
+                                    </h4>
+                                    <p className="text-sm font-black text-gray-900 mt-auto pt-2">
+                                      ₹{parseFloat(product.price).toFixed(2)}
+                                    </p>
+                                  </div>
+                                </Link>
+                              </motion.div>
+                            );
+                          })}
                         </div>
-                      )}
+
+                        {filteredProducts.length > 12 && (
+                          <div className="flex justify-center mt-12 mb-8">
+                            <Link
+                              href={`/fabrics?search=${encodeURIComponent(searchQuery)}`}
+                              onClick={closeSearch}
+                              className="flex items-center justify-center border border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] hover:border-[#57AD43] backdrop-blur-sm px-8 py-4 rounded-xl text-[11px] font-bold uppercase tracking-widest text-gray-400 hover:text-[#57AD43] transition-all"
+                            >
+                              View All {filteredProducts.length} Results
+                            </Link>
+                          </div>
+                        )}
                       </>
                     )}
                   </div>
