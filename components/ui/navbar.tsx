@@ -68,9 +68,9 @@ export function Navbar() {
   const [isHovered, setIsHovered] = useState(false);
   const [exitTimeout, setExitTimeout] = useState<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
-  const { getItemCount, toggleCart } = useCartStore();
+  const { items, toggleCart } = useCartStore();
   const { isLoggedIn, user, openAuthModal, logout } = useAuthStore();
-  const itemCount = getItemCount();
+  const itemCount = items.length;
   const isHome = pathname === "/";
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -102,6 +102,17 @@ export function Navbar() {
         .finally(() => setIsLoadingProducts(false));
     }
   }, [isSearchOpen, allProducts.length]);
+
+  useEffect(() => {
+    if (isSearchOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isSearchOpen]);
 
   const filteredProducts = useMemo(() => {
     if (!searchQuery.trim()) return [];
@@ -489,7 +500,7 @@ export function Navbar() {
                           }
                         }}
                       />
-                      <button 
+                      <button
                         onClick={() => {
                           setIsMobileMenuOpen(false);
                           setIsSearchOpen(true);
@@ -623,6 +634,7 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-white/98 backdrop-blur-md z-[3000] flex flex-col overflow-y-auto"
+            data-lenis-prevent="true"
           >
             <div className="max-w-[1440px] mx-auto w-full px-6 md:px-12 py-8 md:py-12">
               {/* Header with Logo and Close Button */}
@@ -636,7 +648,7 @@ export function Navbar() {
                   onClick={closeSearch}
                   className="group flex items-center gap-3 text-gray-400 hover:text-black transition-all"
                 >
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em] hidden md:block">Close Escape</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] hidden md:block">Close</span>
                   <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-100 flex items-center justify-center group-hover:rotate-90 transition-transform duration-500">
                     <X size={20} strokeWidth={2.5} />
                   </div>
@@ -674,7 +686,7 @@ export function Navbar() {
                       </h3>
                       <button
                         onClick={() => setSearchQuery("")}
-                        className="text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-700 transition-colors"
+                        className="!text-[11px] font-black uppercase tracking-widest text-red-500 hover:text-red-700 transition-colors"
                       >
                         Clear Search
                       </button>
@@ -700,8 +712,9 @@ export function Navbar() {
                         </p>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-                        {filteredProducts.slice(0, 12).map((product) => {
+                      <>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+                          {filteredProducts.slice(0, 12).map((product) => {
                           const productImg = product.image && product.image !== "" ? product.image : getFallbackImage(product.name, product.id);
                           return (
                             <motion.div
@@ -741,6 +754,19 @@ export function Navbar() {
                           );
                         })}
                       </div>
+                      
+                      {filteredProducts.length > 12 && (
+                        <div className="flex justify-center mt-12 mb-8">
+                          <Link 
+                            href={`/fabrics?search=${encodeURIComponent(searchQuery)}`}
+                            onClick={closeSearch}
+                            className="bg-[#121212] hover:bg-[#57AD43] text-white px-8 py-4 rounded-xl text-[11px] font-black uppercase tracking-[0.2em] transition-all"
+                          >
+                            View All {filteredProducts.length} Results
+                          </Link>
+                        </div>
+                      )}
+                      </>
                     )}
                   </div>
                 ) : (

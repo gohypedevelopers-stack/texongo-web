@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Mail, Phone, MapPin } from "lucide-react";
 
 export function MotionFooter() {
@@ -10,11 +11,16 @@ export function MotionFooter() {
 
       {/* Top Section */}
       <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-12 mb-12">
-        <div className="mb-6 md:mb-0">
-          <h2 className="text-3xl font-black tracking-widest uppercase text-white">
-            Texongo
-          </h2>
-          <p className="text-white/50 text-sm mt-1">
+        <div className="mb-6 md:mb-0 flex flex-col items-start">
+          <Image 
+            src="/logos/logo.png" 
+            alt="Texongo Logo" 
+            width={180} 
+            height={60} 
+            className="h-10 w-auto object-contain"
+            style={{ filter: 'invert(1) hue-rotate(180deg)' }}
+          />
+          <p className="text-white/50 !text-[12px] mt-2 font-medium">
             Premium Fabric & 3D Visualization
           </p>
         </div>

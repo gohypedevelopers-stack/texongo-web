@@ -17,6 +17,17 @@ export function CartDrawer() {
     setIsMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (isCartOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isCartOpen]);
+
   const handleCheckout = async () => {
     if (items.length === 0) return;
     
@@ -80,6 +91,7 @@ export function CartDrawer() {
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed top-0 right-0 h-full w-full max-w-sm bg-[#F5F5F5] shadow-2xl z-[1200] flex flex-col"
+            data-lenis-prevent="true"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 bg-white border-b border-gray-100">
@@ -116,15 +128,18 @@ export function CartDrawer() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start gap-2">
-                          <h3 className="text-[10px] font-black uppercase tracking-tight truncate pr-4">{item.name}</h3>
-                          <button onClick={() => removeItem(item.id)} className="text-orange-500 hover:text-red-500">
-                            <Trash2 size={12} fill="currentColor" />
+                          <h3 className="text-[12px] font-black uppercase tracking-tight truncate pr-4">{item.name}</h3>
+                          <button 
+                            id={`cart-item-remove-btn-${item.id}`}
+                            onClick={() => removeItem(item.id)} 
+                            className="text-red-500 hover:text-red-600 transition-colors flex items-center gap-1.5 !text-[12px] !font-bold !uppercase !tracking-widest"
+                          >
+                            <Trash2 size={14} />
+                            <span>Remove</span>
                           </button>
                         </div>
-                        <div className="flex text-[8px] text-gray-200 gap-0.5 mt-0.5">
-                          {"★".repeat(5)}
-                        </div>
-                        <p className="text-[11px] font-bold mt-2">₹{item.price}.00</p>
+
+                        <p className="text-[12px] font-bold mt-2">₹{item.price}.00</p>
                       </div>
                     </div>
 
@@ -147,7 +162,7 @@ export function CartDrawer() {
                           </button>
                         </div>
                       </div>
-                      <span className="text-[10px] font-black tracking-tight">₹{(item.price * item.quantity).toLocaleString()}.00</span>
+                      <span className="text-[11px] font-black tracking-tight">₹{(item.price * item.quantity).toLocaleString()}.00</span>
                     </div>
                   </div>
                 ))
@@ -167,18 +182,19 @@ export function CartDrawer() {
                 
                 <div className="flex flex-col gap-3">
                   <button 
+                    id="cart-drawer-checkout-btn"
                     onClick={handleCheckout}
                     disabled={isCheckingOut}
-                    className="h-14 bg-black flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-300 hover:bg-[#222222] shadow-lg shadow-black/10 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="h-14 bg-white border border-black group flex items-center justify-center gap-3 hp-link !text-[12px] !uppercase !tracking-[0.2em] transition-all duration-300 hover:bg-black shadow-lg shadow-black/5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <span className="text-white">{isCheckingOut ? "Processing..." : "Checkout Now"}</span>
-                    {!isCheckingOut && <ArrowRight size={14} className="text-white" />}
-                    {isCheckingOut && <Loader2 size={14} className="text-white animate-spin" />}
+                    <span className="text-black group-hover:text-white transition-colors !font-black !text-[12px] !tracking-[0.2em]">{isCheckingOut ? "PROCESSING..." : "CHECKOUT NOW"}</span>
+                    {!isCheckingOut && <ArrowRight size={14} className="text-black group-hover:text-white transition-colors" />}
+                    {isCheckingOut && <Loader2 size={14} className="text-black group-hover:text-white transition-colors animate-spin" />}
                   </button>
                   <Link 
                     href="/cart"
                     onClick={() => toggleCart(false)}
-                    className="h-14 border border-gray-200 text-black flex items-center justify-center text-[11px] font-black uppercase tracking-[0.2em] hover:bg-gray-50 transition-all active:scale-[0.98]"
+                    className="h-14 border border-gray-200 text-black flex items-center justify-center hp-link !text-[12px] hover:bg-gray-50 transition-all active:scale-[0.98]"
                   >
                     <span>View my cart</span>
                   </Link>

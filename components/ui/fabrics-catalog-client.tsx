@@ -23,6 +23,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
   const router = useRouter();
   const pathname = usePathname();
   const categoryParam = searchParams.get("category") || "";
+  const queryParam = searchParams.get("search") || "";
 
   // Use initialFabrics directly for instant load!
   const [fabrics] = useState<Fabric[]>(initialFabrics);
@@ -39,7 +40,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedGsm, gsmInput, selectedColor, sortBy, categoryParam]);
+  }, [selectedGsm, gsmInput, selectedColor, sortBy, categoryParam, queryParam]);
 
   // Whenever the filtered list or page changes, refresh ScrollTrigger to ensure the footer triggers correctly!
   useEffect(() => {
@@ -49,7 +50,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
       }, 150);
       return () => clearTimeout(timer);
     }
-  }, [currentPage, selectedGsm, gsmInput, selectedColor, sortBy, categoryParam]);
+  }, [currentPage, selectedGsm, gsmInput, selectedColor, sortBy, categoryParam, queryParam]);
 
   // Derived Data
   const gsmOptions = ["All GSM", "Light (<200)", "Medium (200-300)", "Heavy (>300)"];
@@ -233,7 +234,25 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
           }
         }
 
-        return gsmMatch && colorMatch && categoryMatch;
+        // Text Search Filter Match from URL
+        let queryMatch = true;
+        if (queryParam) {
+          const queryWords = queryParam.toLowerCase().trim().split(/\s+/).filter(Boolean);
+          queryMatch = queryWords.every((word) => {
+            return (
+              f.name?.toLowerCase().includes(word) ||
+              f.description?.toLowerCase().includes(word) ||
+              f.sku?.toLowerCase().includes(word) ||
+              (f.knit_style && f.knit_style !== 'N/A' && f.knit_style.toLowerCase().includes(word)) ||
+              (f.composition && f.composition !== 'N/A' && f.composition.toLowerCase().includes(word)) ||
+              (f.shade && f.shade !== 'N/A' && f.shade.toLowerCase().includes(word)) ||
+              (f.usage && f.usage !== 'N/A' && f.usage.toLowerCase().includes(word)) ||
+              (f.type && f.type !== 'N/A' && f.type.toLowerCase().includes(word))
+            );
+          });
+        }
+
+        return gsmMatch && colorMatch && categoryMatch && queryMatch;
       })
       .sort((a, b) => {
         if (sortBy === "Price: Low to High") return parseFloat(a.price) - parseFloat(b.price);
@@ -245,7 +264,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
         }
         return 0; // Latest Selection is default order from API
       });
-  }, [fabrics, selectedGsm, gsmInput, selectedColor, sortBy, categoryParam]);
+  }, [fabrics, selectedGsm, gsmInput, selectedColor, sortBy, categoryParam, queryParam]);
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredFabrics.length / ITEMS_PER_PAGE);
@@ -332,41 +351,50 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
               </div>
             </div>
 
-            <div className="pt-4">
-              <button
-                onClick={() => {
-                  setSelectedGsm("");
-                  setGsmInput("");
-                  setSelectedColor("");
-                  setSortBy("Latest Selection");
-                  if (categoryParam) {
-                    router.push(pathname);
-                  }
-                }}
-                className="reset-filters-btn w-full flex items-center justify-center gap-2 border border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] rounded-xl px-5 py-3 !text-[11px] font-medium text-[#435C46] uppercase tracking-wider hover:border-[#57AD43] hover:bg-emerald-50/20 backdrop-blur-sm transition-all cursor-pointer"
-                style={{ fontSize: '11px' }}
-              >
-                Reset Filters
-              </button>
-            </div>
+            {((selectedGsm && selectedGsm !== "All GSM") || (gsmInput && gsmInput.trim() !== "") || (selectedColor && selectedColor !== "All Colors") || (sortBy && sortBy !== "Latest Selection") || categoryParam) ? (
+              <div className="pt-4">
+                <button
+                  onClick={() => {
+                    setSelectedGsm("");
+                    setGsmInput("");
+                    setSelectedColor("");
+                    setSortBy("Latest Selection");
+                    if (categoryParam) {
+                      router.push(pathname);
+                    }
+                  }}
+                  className="reset-filters-btn w-full flex items-center justify-center gap-2 border border-emerald-100/60 bg-white/40 shadow-[0_8px_20px_rgba(87,173,67,0.03)] rounded-xl px-5 py-3 !text-[11px] font-medium text-[#435C46] uppercase tracking-wider hover:border-[#57AD43] hover:bg-emerald-50/20 backdrop-blur-sm transition-all cursor-pointer"
+                  style={{ fontSize: '11px' }}
+                >
+                  Reset Filters
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
 
         {/* Product Grid (Right Column on Desktop, stacked underneath filters on Mobile) */}
         <div className="lg:col-span-3 order-2 lg:order-2">
-          {categoryParam && (
+          {(categoryParam || queryParam) && (
             <div className="mb-8 flex flex-wrap items-center gap-3 bg-emerald-50/20 border border-emerald-100/60 rounded-2xl px-5 py-3 backdrop-blur-sm">
-              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Active Category:</span>
-              <span className="text-[10px] font-black text-[#57AD43] uppercase tracking-widest bg-[#57AD43]/10 px-3 py-1 rounded-full">
-                {formatCategoryName(categoryParam)}
-              </span>
+              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Active Filters:</span>
+              {categoryParam && (
+                <span className="text-[10px] font-black text-[#57AD43] uppercase tracking-widest bg-[#57AD43]/10 px-3 py-1 rounded-full">
+                  Category: {formatCategoryName(categoryParam)}
+                </span>
+              )}
+              {queryParam && (
+                <span className="text-[10px] font-black text-[#57AD43] uppercase tracking-widest bg-[#57AD43]/10 px-3 py-1 rounded-full">
+                  Search: "{queryParam}"
+                </span>
+              )}
               <button
                 onClick={() => {
                   router.push(pathname);
                 }}
                 className="ml-auto !text-[10px] font-bold uppercase tracking-widest text-[#435C46] hover:text-[#57AD43] transition-colors border-b border-transparent hover:border-[#57AD43] pb-0.5"
               >
-                Clear Category
+                Clear All
               </button>
             </div>
           )}
