@@ -424,7 +424,7 @@ function TestimonialsSection() {
   );
 }
 
-export function HomeExperience({ products, blogs }: { products?: Fabric[], blogs?: any[] }) {
+export function HomeExperience({ products, blogs, newArrivals }: { products?: Fabric[], blogs?: any[], newArrivals?: Fabric[] }) {
   const [scrolled, setScrolled] = useState(false);
 
   const uniqueProducts = useMemo(() => {
@@ -542,7 +542,7 @@ export function HomeExperience({ products, blogs }: { products?: Fabric[], blogs
             <div className="mx-auto max-w-[1440px] px-6 lg:px-10">
               <div className="relative mb-10 md:mb-16 w-full">
                 <div className="text-center">
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">New Additions</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#57AD43] mb-2 md:mb-4 block">New Arrivals</span>
                   <h2 className="hp-heading">Fabric Collection.</h2>
                 </div>
 
@@ -559,21 +559,23 @@ export function HomeExperience({ products, blogs }: { products?: Fabric[], blogs
 
               <div className={`-mx-6 lg:-mx-10 overflow-hidden ${styles.marqueeViewport}`}>
                 <div className={styles.productTrack}>
-                  {(uniqueProducts && uniqueProducts.length > 0
-                    ? [...uniqueProducts.slice(0, 12), ...uniqueProducts.slice(0, 12)]
-                    : [...marqueeProducts.slice(0, 12), ...marqueeProducts.slice(0, 12)]
-                  ).map((product, index) => (
-                    <MarqueeProductCard
-                      key={`${product.name}-${index}`}
-                      name={product.name}
-                      price={typeof product.price === 'string' ? (product.price.startsWith('₹') ? product.price : `₹${product.price}`) : `₹${product.price}`}
-                      href={('href' in product && (product as any).href) ? (product as any).href : ('id' in product ? `/fabrics/${(product as any).id}` : '#')}
-                      image={product.image}
-                      index={index}
-                      gsm={'gsm' in product ? (product as any).gsm : undefined}
-                      category={'knit_style' in product ? (product as any).knit_style : ('category' in product ? (product as any).category : undefined)}
-                    />
-                  ))}
+                  {(newArrivals && newArrivals.length > 0
+                    ? [...newArrivals.slice(0, 12), ...newArrivals.slice(0, 12)]
+                    : (uniqueProducts && uniqueProducts.length > 0
+                      ? [...uniqueProducts.slice(0, 12), ...uniqueProducts.slice(0, 12)]
+                      : [...marqueeProducts.slice(0, 12), ...marqueeProducts.slice(0, 12)]))
+                    .map((product, index) => (
+                      <MarqueeProductCard
+                        key={`${product.name}-${index}`}
+                        name={product.name}
+                        price={typeof product.price === 'string' ? (product.price.startsWith('₹') ? product.price : `₹${product.price}`) : `₹${product.price}`}
+                        href={('href' in product && (product as any).href) ? (product as any).href : ('id' in product ? `/fabrics/${(product as any).id}` : '#')}
+                        image={product.image}
+                        index={index}
+                        gsm={'gsm' in product ? (product as any).gsm : undefined}
+                        category={'knit_style' in product ? (product as any).knit_style : ('category' in product ? (product as any).category : undefined)}
+                      />
+                    ))}
                 </div>
               </div>
 

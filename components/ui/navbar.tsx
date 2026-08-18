@@ -798,14 +798,14 @@ export function Navbar() {
                         <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-400 mb-10 border-l-2 border-[#57AD43] pl-4">Quick Navigation</h3>
                         <ul className="space-y-6">
                           {[
-                            { name: "Explore New Arrivals", sub: "Latest fabric drops" },
-                            { name: "Shop Best Sellers", sub: "Most popular choices" },
-                            { name: "Sustainable Collection", sub: "Eco-friendly fabrics" },
-                            { name: "3D Digital Studio", sub: "Interactive visualization" }
+                            { name: "Explore New Arrivals", sub: "Latest fabric drops", href: "/collections/new-arrivals" },
+                            { name: "Shop Best Sellers", sub: "Most popular choices", href: "/collections/best-sellers" },
+                            { name: "Sustainable Collection", sub: "Eco-friendly fabrics", href: "/collections/sustainable-collection" },
+                            { name: "3D Digital Studio", sub: "Interactive visualization", href: "/3d-studio" }
                           ].map((link) => (
                             <li key={link.name}>
                               <Link
-                                href="/fabrics"
+                                href={link.href}
                                 onClick={closeSearch}
                                 className="group flex flex-col gap-1"
                               >
