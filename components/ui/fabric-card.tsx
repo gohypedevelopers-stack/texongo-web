@@ -110,7 +110,7 @@ export function FabricCard({ id, name, gsm, price, image, variantId, catalogMode
 
         {/* Product Info */}
         <div className="w-full flex flex-col items-center gap-1 md:gap-3 py-2">
-          <h3 className="text-[10px] md:text-sm font-black uppercase tracking-widest text-black leading-tight max-w-[240px] group-hover:text-[#57AD43] transition-colors duration-300">
+          <h3 className="text-[10px] md:text-sm font-black uppercase tracking-widest text-black leading-tight max-w-[240px] line-clamp-2 lg:line-clamp-1 w-full group-hover:text-[#57AD43] transition-colors duration-300">
             {name}
           </h3>
           <p className="text-[10px] md:text-lg font-black text-black uppercase tracking-tighter flex items-center gap-1 md:gap-2">

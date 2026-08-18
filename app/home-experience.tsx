@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState, useEffect, useRef, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll } from "framer-motion";
@@ -152,8 +152,8 @@ function MarqueeProductCard({
       className={`${styles.productCard} shrink-0 block group pb-4`}
       style={{ boxShadow: 'none', background: 'transparent', overflow: 'visible' }}
     >
-      <div className="bg-white p-3 md:p-4 rounded-[24px] md:rounded-[32px] border border-gray-100 shadow-sm group-hover:shadow-xl transition-all duration-500 flex flex-col h-full w-full">
-        <div className="aspect-square rounded-[16px] md:rounded-[20px] overflow-hidden mb-4 relative bg-[#F9FAFB]">
+      <div className="bg-white p-3 md:p-4 rounded-2xl border border-gray-100 shadow-sm group-hover:shadow-xl transition-all duration-500 flex flex-col h-full w-full">
+        <div className="aspect-square rounded-xl overflow-hidden mb-4 relative bg-[#F9FAFB]">
           <img
             src={finalImage}
             alt={name}
@@ -169,7 +169,7 @@ function MarqueeProductCard({
           <span className="text-[10px] font-bold uppercase tracking-widest text-[#57AD43] mb-1.5 line-clamp-1">
             {displayCategory}
           </span>
-          <p className="text-[14px] xl:text-[16px] font-black leading-tight text-black mb-1 line-clamp-2">
+          <p className="text-[14px] xl:text-[16px] font-black leading-tight text-black mb-1 line-clamp-2 lg:line-clamp-1 w-full text-center px-2">
             {name}
           </p>
           <p className="text-[14px] xl:text-[16px] font-black text-black mt-1">
@@ -427,6 +427,19 @@ function TestimonialsSection() {
 export function HomeExperience({ products, blogs }: { products?: Fabric[], blogs?: any[] }) {
   const [scrolled, setScrolled] = useState(false);
 
+  const uniqueProducts = useMemo(() => {
+    if (!products) return [];
+    const seenNames = new Set();
+    const result = [];
+    for (const p of products) {
+      if (!seenNames.has(p.name)) {
+        seenNames.add(p.name);
+        result.push(p);
+      }
+    }
+    return result;
+  }, [products]);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll);
@@ -520,7 +533,7 @@ export function HomeExperience({ products, blogs }: { products?: Fabric[], blogs
 
 
         <LazySection>
-          <ProductCatalogSection />
+          <ProductCatalogSection products={uniqueProducts} />
         </LazySection>
 
         {/* ── NEW ARRIVALS ─────────────────────────────────── */}
@@ -546,9 +559,9 @@ export function HomeExperience({ products, blogs }: { products?: Fabric[], blogs
 
               <div className={`-mx-6 lg:-mx-10 overflow-hidden ${styles.marqueeViewport}`}>
                 <div className={styles.productTrack}>
-                  {(products && products.length > 0
-                    ? [...products, ...products].slice(0, 24)
-                    : [...marqueeProducts, ...marqueeProducts].slice(0, 24)
+                  {(uniqueProducts && uniqueProducts.length > 0
+                    ? [...uniqueProducts.slice(0, 12), ...uniqueProducts.slice(0, 12)]
+                    : [...marqueeProducts.slice(0, 12), ...marqueeProducts.slice(0, 12)]
                   ).map((product, index) => (
                     <MarqueeProductCard
                       key={`${product.name}-${index}`}
@@ -624,22 +637,24 @@ export function HomeExperience({ products, blogs }: { products?: Fabric[], blogs
 //           ))}
 //         </div>
 
-function ProductCatalogSection() {
-  const row1 = [
-    { name: "Cotton Embroidery Single Jersey", price: "₹1399.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/A8K1S107-2-768x768-1-600x600.jpg?v=1781518241", href: "/fabrics/cotton-embroidery-single-jersey" },
-    { name: "Polyester Popcorn", price: "₹899.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_5e99b030-1137-44a7-89d2-f56a8ad30625-768x748-1-600x584.jpg?v=1781518242", href: "/fabrics/polyester-popcorn-2" },
-    { name: "Polyester Popcorn", price: "₹899.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_4f064ab2-f476-4f3f-9578-175cafe-768x768-1-600x600.png?v=1781518244", href: "/fabrics/polyester-popcorn-3" },
-    { name: "Polyester Popcorn", price: "₹899.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_d5b210fb-877e-4ff7-b04f-7d821ee52b8c-768x768-1-600x600.jpg?v=1781518245", href: "/fabrics/polyester-popcorn-4" },
-    { name: "Nylon Spandex Single Jersey", price: "₹1199.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_6e09a8ea-7e06-47d5-86a7-addb8f6bdcbb-600x600-1.jpg?v=1782987379", href: "/fabrics/nylon-spandex-single-jersey-5" },
-  ];
+function ProductCatalogSection({ products }: { products: any[] }) {
+  const womensProducts = products.filter(p => {
+    const usage = (p.usage || "").toLowerCase();
+    const name = (p.name || "").toLowerCase();
+    return usage.includes("women") || name.includes("women");
+  });
 
-  const row2 = [
-    { name: "Nylon Spandex Interlock", price: "₹1199.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_2063ed1e-f6d8-454f-9a10-8efa056d0981-600x600-1.jpg?v=1781518249", href: "/fabrics/nylon-spandex-interlock-5" },
-    { name: "Nylon Spandex Interlock", price: "₹1199.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_b5deb08a-d921-4842-bee1-886304d7ce5b-600x600-1.jpg?v=1781518250", href: "/fabrics/nylon-spandex-interlock-7" },
-    { name: "Nylon Spandex Interlock", price: "₹1199.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_28cc6162-b236-4933-bbc2-7a053b9315c1-600x600-1.jpg?v=1781518252", href: "/fabrics/nylon-spandex-interlock-8" },
-    { name: "Nylon Spandex Interlock", price: "₹1199.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_ef10b7c4-1149-4908-9b2d-1c7732890bb1-600x600-1.jpg?v=1781518253", href: "/fabrics/nylon-spandex-interlock-9" },
-    { name: "Nylon Spandex Interlock", price: "₹1199.00", image: "https://cdn.shopify.com/s/files/1/0983/6684/9388/files/image_4d7ad1d7-3d16-4d6e-ab69-e359edbebbbb-600x600-1.jpg?v=1781518255", href: "/fabrics/nylon-spandex-interlock-10" },
-  ];
+  const mensProducts = products.filter(p => {
+    const usage = (p.usage || "").toLowerCase();
+    const name = (p.name || "").toLowerCase();
+    // Prevent "women" from matching "men"
+    const hasMen = (usage.includes("men") && !usage.includes("women")) || (name.includes("men") && !name.includes("women"));
+    const hasCargo = usage.includes("cargo") || name.includes("cargo");
+    return hasMen || hasCargo;
+  });
+
+  const row1 = [...womensProducts, ...products.filter(p => !womensProducts.includes(p))].slice(0, 10);
+  const row2 = [...mensProducts, ...products.filter(p => !mensProducts.includes(p))].slice(0, 10);
 
   return (
     <section className="py-12 md:py-16 bg-white border-b border-black/5 overflow-hidden">
@@ -664,30 +679,15 @@ function ProductCatalogSection() {
             <div className="-mx-6 lg:-mx-12 overflow-hidden">
               <div className={styles.marqueeViewport}>
                 <div className={styles.productTrack} style={{ animationDuration: '40s' }}>
-                  {[...row1, ...row1, ...row1, ...row1].slice(0, 20).map((p, idx) => (
-                    <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
-                      <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
-                        <img
-                          src={p.image || undefined}
-                          alt={p.name}
-                          loading="lazy"
-                          decoding="async"
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                        />
-
-                        {/* Add to Cart Overlay */}
-                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                          <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
-                            Add to cart
-                          </button>
-                        </div>
-                      </div>
-                      <div className="space-y-1 text-center px-2">
-                        <h3 className="text-[14px] md:text-[16px] font-semibold leading-[1.3] text-[#111111]/50 uppercase tracking-widest">{p.name}</h3>
-                        <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
-                      </div>
-                    </Link>
+                  {[...row1, ...row1].map((p, idx) => (
+                    <MarqueeProductCard
+                      key={`${p.name}-${idx}`}
+                      name={p.name}
+                      price={typeof p.price === 'string' ? (p.price.startsWith('₹') ? p.price : `₹${p.price}`) : `₹${p.price}`}
+                      href={('href' in p && (p as any).href) ? (p as any).href : ('id' in p ? `/fabrics/${(p as any).id}` : '#')}
+                      image={p.image || ""}
+                      index={idx}
+                    />
                   ))}
                 </div>
               </div>
@@ -716,30 +716,15 @@ function ProductCatalogSection() {
             <div className="-mx-6 lg:-mx-12 overflow-hidden">
               <div className={styles.marqueeViewport}>
                 <div className={styles.productTrack} style={{ animationDuration: '45s', animationDirection: 'reverse' }}>
-                  {[...row2, ...row2, ...row2, ...row2].slice(0, 20).map((p, idx) => (
-                    <Link key={idx} href={p.href} target="_blank" rel="noopener noreferrer" className={styles.productCard + " group"}>
-                      <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-700 relative">
-                        <img
-                          src={p.image || undefined}
-                          alt={p.name}
-                          loading="lazy"
-                          decoding="async"
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                        />
-
-                        {/* Add to Cart Overlay */}
-                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                          <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 text-[10px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
-                            Add to cart
-                          </button>
-                        </div>
-                      </div>
-                      <div className="space-y-1 text-center px-2">
-                        <h3 className="text-[14px] md:text-[16px] font-semibold leading-[1.3] text-[#111111]/50 uppercase tracking-widest">{p.name}</h3>
-                        <p className="text-base md:text-lg font-black text-[#111111]">{p.price}</p>
-                      </div>
-                    </Link>
+                  {[...row2, ...row2].map((p, idx) => (
+                    <MarqueeProductCard
+                      key={`${p.name}-${idx}`}
+                      name={p.name}
+                      price={typeof p.price === 'string' ? (p.price.startsWith('₹') ? p.price : `₹${p.price}`) : `₹${p.price}`}
+                      href={('href' in p && (p as any).href) ? (p as any).href : ('id' in p ? `/fabrics/${(p as any).id}` : '#')}
+                      image={p.image || ""}
+                      index={idx}
+                    />
                   ))}
                 </div>
               </div>

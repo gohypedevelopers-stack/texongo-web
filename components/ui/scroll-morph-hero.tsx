@@ -131,7 +131,7 @@ const FabricCard = React.memo(({
                 className="block h-full w-full"
             >
                     <motion.div
-                        className="relative h-full w-full rounded-2xl shadow-2xl bg-gray-100 border border-black/5 transform-gpu"
+                        className="relative h-full w-full rounded-[10px] shadow-2xl bg-gray-100 border border-black/5 transform-gpu"
                         style={{ transformStyle: "preserve-3d" }}
                         initial={{ rotateY: 0 }}
                         whileHover={{ scale: 1.05, rotateY: 180 }}
@@ -139,7 +139,7 @@ const FabricCard = React.memo(({
                     >
                         {/* Front Side - Image only */}
                         <div 
-                            className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden" 
+                            className="absolute inset-0 w-full h-full rounded-[10px] overflow-hidden" 
                             style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
                         >
                             <img
@@ -178,7 +178,7 @@ const FabricCard = React.memo(({
 
                         {/* Back Side - Text */}
                         <div 
-                            className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden bg-[#57AD43] flex items-center justify-center border border-black/10 shadow-inner" 
+                            className="absolute inset-0 w-full h-full rounded-[10px] overflow-hidden bg-[#57AD43] flex items-center justify-center border border-black/10 shadow-inner" 
                             style={{ 
                                 backfaceVisibility: "hidden", 
                                 WebkitBackfaceVisibility: "hidden", 
