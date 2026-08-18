@@ -230,7 +230,11 @@ export function mapShopifyProduct(node: any): Fabric {
     images: allImages,
     composition: getMeta('composition'),
     width: getMeta('width'),
-    description: node.description || '',
+    description: (node.description || '')
+      .replace(/â€“/g, '-')
+      .replace(/â€”/g, '-')
+      .replace(/â€"/g, '"')
+      .replace(/â€™/g, "'"),
     fabric: fabricMeta !== 'N/A' ? fabricMeta : (typeMeta !== 'N/A' ? typeMeta : 'N/A'),
     content: getMeta('content'),
     ounce: getMeta('ounce'),
