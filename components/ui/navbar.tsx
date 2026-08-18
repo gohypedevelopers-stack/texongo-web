@@ -765,11 +765,11 @@ export function Navbar() {
                     {/* Left Column: Popular Tags */}
                     <div className="lg:col-span-7">
                       <h3 className="text-[11px] font-black uppercase tracking-normal text-gray-400 mb-10 border-l-2 border-[#57AD43] pl-4">Trending Now</h3>
-                      <div className="flex flex-wrap gap-4 md:gap-6">
+                      <div className="flex flex-nowrap lg:flex-wrap overflow-x-auto gap-4 md:gap-6 pb-4 -mx-4 px-4 lg:mx-0 lg:px-0 lg:pb-0 scrollbar-hide">
                         {[
                           { name: "Single Jersey", count: "120+" },
                           { name: "French Terry", count: "85" },
-                          { name: "Organic Cotton", count: "可持续" },
+                          { name: "Organic Cotton", count: "Sustainable" },
                           { name: "Rib Knits", count: "New" },
                           { name: "Pique", count: "Classic" },
                           { name: "Supima Blends", count: "Luxury" }
@@ -778,7 +778,7 @@ export function Navbar() {
                             key={item.name}
                             href={`/fabrics?category=${item.name.toLowerCase().replace(/ /g, '-')}`}
                             onClick={closeSearch}
-                            className="group relative flex items-center gap-4 bg-gray-50 hover:bg-black p-4 md:p-6 rounded-2xl transition-all duration-500 hover:-translate-y-1 shadow-sm hover:shadow-xl"
+                            className="shrink-0 group relative flex items-center gap-4 bg-gray-50 hover:bg-black p-4 md:p-6 rounded-2xl transition-all duration-500 hover:-translate-y-1 shadow-sm hover:shadow-xl"
                           >
                             <div className="flex flex-col">
                               <span className="text-xs md:text-sm font-black uppercase tracking-widest text-gray-900 group-hover:text-white transition-colors">{item.name}</span>
@@ -801,7 +801,7 @@ export function Navbar() {
                             { name: "Explore New Arrivals", sub: "Latest fabric drops", href: "/collections/new-arrivals" },
                             { name: "Shop Best Sellers", sub: "Most popular choices", href: "/collections/best-sellers" },
                             { name: "Sustainable Collection", sub: "Eco-friendly fabrics", href: "/collections/sustainable-collection" },
-                            { name: "3D Digital Studio", sub: "Interactive visualization", href: "/3d-studio" }
+                            { name: "3D Digital Studio", sub: "Interactive visualization", href: "/3d-studio/digital-drape" }
                           ].map((link) => (
                             <li key={link.name}>
                               <Link
