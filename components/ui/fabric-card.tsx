@@ -88,24 +88,26 @@ export function FabricCard({ id, name, gsm, price, image, variantId, catalogMode
             GSM: {gsm} g/m²
           </div>
 
-          {/* Hover Action Overlay */}
-          <AnimatePresence>
-            {isHovered && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="absolute bottom-4 left-4 right-4 z-20"
-              >
-                <button
-                  onClick={handleAddToCart}
-                  className="w-full bg-black text-white !text-[10px] lg:!text-[10px] xl:!text-[10px] font-black uppercase tracking-[0.2em] py-3 hover:bg-[#57AD43] transition-colors rounded-sm shadow-xl"
+          {/* Hover Action Overlay (Desktop Only) */}
+          <div className="hidden lg:block">
+            <AnimatePresence>
+              {isHovered && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute bottom-4 left-4 right-4 z-20"
                 >
-                  Add to cart
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  <button
+                    onClick={handleAddToCart}
+                    className="w-full bg-black text-white !text-[10px] font-black uppercase tracking-[0.2em] py-3 hover:bg-[#57AD43] transition-colors rounded-sm shadow-xl"
+                  >
+                    Add to cart
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         {/* Product Info */}
@@ -116,6 +118,16 @@ export function FabricCard({ id, name, gsm, price, image, variantId, catalogMode
           <p className="text-[10px] md:text-lg font-black text-black uppercase tracking-tighter flex items-center gap-1 md:gap-2">
             <span className="text-[#57AD43]">₹</span>{parseFloat(price).toFixed(2)}
           </p>
+
+          {/* Static Action Button (Mobile/Tablet Only) - Below Price */}
+          <div className="w-full mt-2 lg:hidden px-2">
+            <button
+              onClick={handleAddToCart}
+              className="w-full bg-black text-white !text-[10px] font-black uppercase tracking-[0.2em] py-2.5 rounded-sm shadow-md active:bg-[#57AD43] transition-colors"
+            >
+              Add to cart
+            </button>
+          </div>
         </div>
       </Link>
     </motion.div>
