@@ -126,33 +126,56 @@ function MarqueeProductCard({
   href,
   image,
   index,
+  gsm,
+  category,
 }: {
   name: string;
   price: string;
   href: string;
   image: string;
   index: number;
+  gsm?: string;
+  category?: string;
 }) {
   const finalImage = image && image !== "" ? image : FALLBACK_PRODUCT_IMAGES[index % FALLBACK_PRODUCT_IMAGES.length];
+
+  // Extract a plausible category from name if not provided
+  const displayCategory = category || (name.toLowerCase().includes("jersey") ? "SINGLE JERSEY" : name.toLowerCase().includes("terry") ? "FRENCH TERRY" : name.toLowerCase().includes("rib") ? "RIB" : "PREMIUM");
+  const displayPrice = price.includes('.') ? price : `${price}.00`;
+  const displayGsm = gsm || "200";
+
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`${styles.productCard} shrink-0 block group`}
+      className={`${styles.productCard} shrink-0 block group pb-4`}
+      style={{ boxShadow: 'none', background: 'transparent', overflow: 'visible' }}
     >
-      <div className="aspect-square bg-[#F9FAFB] border border-black/5 rounded-2xl md:rounded-3xl overflow-hidden mb-4 shadow-sm md:shadow-md group-hover:shadow-2xl transition-all duration-500 relative">
-        <img
-          src={finalImage}
-          alt={name}
-          loading="lazy"
-          decoding="async"
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-        />
-      </div>
-      <div className="space-y-1 md:space-y-2 text-center px-2">
-        <h3 className="text-[14px] md:text-[12px] xl:text-[16px] font-semibold leading-[1.3] text-[#111111]/50 uppercase tracking-widest">{name}</h3>
-        <p className="text-[14px] md:text-[14px] xl:text-[18px] font-black text-[#111111]">{price}</p>
+      <div className="bg-white p-3 md:p-4 rounded-[24px] md:rounded-[32px] border border-gray-100 shadow-sm group-hover:shadow-xl transition-all duration-500 flex flex-col h-full w-full">
+        <div className="aspect-square rounded-[16px] md:rounded-[20px] overflow-hidden mb-4 relative bg-[#F9FAFB]">
+          <img
+            src={finalImage}
+            alt={name}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+          <div className="absolute top-2 left-2 md:top-3 md:left-3 bg-[#57AD43] text-white text-[9px] md:text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md z-10">
+            GSM: {displayGsm}
+          </div>
+        </div>
+        <div className="text-center px-1 flex flex-col items-center flex-1">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-[#57AD43] mb-1.5 line-clamp-1">
+            {displayCategory}
+          </span>
+          <p className="text-[14px] xl:text-[16px] font-black leading-tight text-black mb-1 line-clamp-2">
+            {name}
+          </p>
+          <p className="text-[14px] xl:text-[16px] font-black text-black mt-1">
+            {displayPrice}
+          </p>
+        </div>
       </div>
     </a>
   );
@@ -534,6 +557,8 @@ export function HomeExperience({ products, blogs }: { products?: Fabric[], blogs
                       href={('href' in product && (product as any).href) ? (product as any).href : ('id' in product ? `/fabrics/${(product as any).id}` : '#')}
                       image={product.image}
                       index={index}
+                      gsm={'gsm' in product ? (product as any).gsm : undefined}
+                      category={'knit_style' in product ? (product as any).knit_style : ('category' in product ? (product as any).category : undefined)}
                     />
                   ))}
                 </div>

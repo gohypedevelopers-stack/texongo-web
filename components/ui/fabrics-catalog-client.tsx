@@ -112,7 +112,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
             const knitKeywords = [
               "jersey", "terry", "fleece", "rib", "spandex", "knit", "knits", "pique", "interlock",
               "waffle", "jacquard", "stripe", "stripes", "corduroy", "vellour", "printed", "shiffly",
-              "ponte", "yarn", "neps", "popcorn"
+              "ponte", "yarn dyed", "neps", "popcorn"
             ];
             const searchStr = `${f.knit_style || ""} ${f.composition || ""} ${f.fabric || ""} ${f.name || ""} ${f.type || ""}`.toLowerCase();
             categoryMatch = knitKeywords.some(keyword => searchStr.includes(keyword));
@@ -157,7 +157,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
             const knitStyles = [
               "singlejersey", "frenchterry", "fleece", "rib", "spandexknits",
               "pique", "interlock", "waffle", "jacquard", "stripes",
-              "corduroy", "vellour", "corduroyvellour", "printed", "shiffly", "ponte", "yarn", "neps", "popcorn"
+              "corduroy", "vellour", "corduroyvellour", "printed", "shiffly", "ponte", "yarndyed", "neps", "popcorn"
             ];
 
             const blends = [
@@ -298,7 +298,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
 
   return (
     <div className="max-w-[1680px] mx-auto px-6 lg:px-10 pb-20 relative z-[50]">
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mt-0 md:mt-2">
 
         {/* Filters Sidebar (Left Column on Desktop, stacks on top on Mobile) */}
         <div className="lg:col-span-1 order-1 lg:order-1">

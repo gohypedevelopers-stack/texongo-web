@@ -504,30 +504,6 @@ export function Navbar() {
                   className="fixed top-[70px] left-1/2 -translate-x-1/2 w-[95%] max-w-[500px] bg-white rounded-3xl shadow-2xl z-[90] md:hidden overflow-hidden"
                 >
                   <div className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
-                    {/* Mobile Search */}
-                    <div className="relative mb-8">
-                      <input
-                        type="text"
-                        placeholder="Search fabrics..."
-                        className="w-full h-12 bg-gray-50 border border-gray-100 rounded-2xl px-6 text-sm focus:outline-none"
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            setIsMobileMenuOpen(false);
-                            setIsSearchOpen(true);
-                          }
-                        }}
-                      />
-                      <button
-                        onClick={() => {
-                          setIsMobileMenuOpen(false);
-                          setIsSearchOpen(true);
-                        }}
-                        className="absolute right-2 top-1 h-10 w-10 flex items-center justify-center bg-black text-white rounded-xl"
-                      >
-                        <Search size={16} />
-                      </button>
-                    </div>
 
                     <ul className="space-y-2">
                       {navItems.map((item) => (

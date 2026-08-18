@@ -222,7 +222,7 @@ const KNIT_STYLE_IMAGE_BY_NAME: Record<(typeof KNIT_STYLE_ITEMS)[number], string
     "Printed": "https://texongo.com/wp-content/uploads/2025/10/M9K4S107_3-600x600-1-300x300.jpg",
     "Shiffly": "https://texongo.com/wp-content/uploads/2025/10/M9K4S107_3-600x600-1-300x300.jpg",
     "Ponte": "/category/fabric-pique.png",
-    "Yarn": "/arrivals/prod-slub-melange.png",
+    "Yarn Dyed": "/arrivals/prod-slub-melange.png",
     "Neps": "/arrivals/prod-slub-melange.png",
     "Popcorn": "https://texongo.com/wp-content/uploads/2025/10/A8K1S101-3-768x768-1-300x300.jpg",
 };
@@ -250,7 +250,7 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
     "Corduroy Vellour": ["corduroy vellour", "corduroy", "vellour", "velour"],
     "Printed": ["printed", "print"],
     "Shiffly": ["shiffly", "schiffli", "embroidery"],
-    "Yarn": ["yarn dyed", "yarn"],
+    "Yarn Dyed": ["yarn dyed", "yarn"],
     "Neps": ["neps", "nep"],
     "Cotton Modal": ["cotton modal", "modal cotton", "modal"],
     "Giza/ Egyptian": ["giza", "egyptian"],

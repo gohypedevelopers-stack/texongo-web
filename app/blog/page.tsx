@@ -25,7 +25,7 @@ export default async function BlogListingPage() {
 
 
       {/* Blog Grid Section */}
-      <section className="max-w-[1440px] mx-auto px-6 lg:px-10 py-24">
+      <section className="max-w-[1440px] mx-auto px-6 lg:px-10 pt-10 pb-24 md:pt-12 md:pb-24">
         {blogPosts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
             {blogPosts.map((post, idx) => (

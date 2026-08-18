@@ -13,7 +13,7 @@ export const KNIT_STYLE_ITEMS = [
   "Printed",
   "Shiffly",
   "Ponte",
-  "Yarn",
+  "Yarn Dyed",
   "Neps",
   "Popcorn",
 ] as const;
