@@ -118,8 +118,44 @@ export function Navbar() {
     if (!searchQuery.trim()) return [];
 
     const searchStr = searchQuery.toLowerCase().trim();
+    let expandedSearchStr = " " + searchStr + " ";
+    const shortcuts = [
+      { keys: ["s/j", "sj", "single jersy"], value: "single jersey" },
+      { keys: ["d/j"], value: "double jersey interlock" },
+      { keys: ["pk"], value: "pique" },
+      { keys: ["1x1 rib", "2x2 rib"], value: "rib" },
+      { keys: ["flc", "fl"], value: "fleece" },
+      { keys: ["f/t", "f. terry", "f.terry"], value: "french terry" },
+      { keys: ["d/n", "d.n"], value: "drop needle" },
+      { keys: ["jqd knit", "jqd"], value: "jacquard" },
+      { keys: ["h/comb", "hny"], value: "honeycomb" },
+      { keys: ["d/net", "msh"], value: "mesh" },
+      { keys: ["spx"], value: "spandex" },
+      { keys: ["lycra"], value: "lycra" },
+      { keys: ["ilk"], value: "interlock" },
+      { keys: ["thrm"], value: "thermal" },
+      { keys: ["rib-spx", "rib-lycra"], value: "rib spandex" },
+      { keys: ["p/r", "ponte"], value: "ponte roma" },
+      { keys: ["vlr", "velour"], value: "velour" },
+      { keys: ["jqd-flc"], value: "jacquard fleece" },
+      { keys: ["slub jy", "s/j slub"], value: "slub jersey" },
+      { keys: ["t/k", "terry"], value: "terry" },
+      { keys: ["a/s jy"], value: "auto stripe jersey" },
+      { keys: ["mlj", "mél jy", "mel jy", "m. s/j", "m.s/j"], value: "melange jersey" },
+      { keys: ["coton spandex", "cotton spandex", "cotton lycra"], value: "stretch" },
+      { keys: ["f/b rib"], value: "flat back rib" },
+      { keys: ["rice.k rib"], value: "rice knit" }
+    ];
+
+    for (const { keys, value } of shortcuts) {
+      for (const key of keys) {
+        expandedSearchStr = expandedSearchStr.replace(new RegExp(`(?<=\\s)${key.replace(/[-/\\\\^$*+?.()|[\\]{}]/g, '\\\\$&')}(?=\\s)`, 'g'), ` ${value} `);
+      }
+    }
+    expandedSearchStr = expandedSearchStr.trim().replace(/\\s+/g, ' ');
+
     const cleanSearchStr = searchStr.replace(/[^a-z0-9]/g, '');
-    const queryWords = searchStr.split(/\s+/).filter(Boolean);
+    const queryWords = expandedSearchStr.split(/\\s+/).filter(Boolean);
 
     return allProducts.filter((product) => {
       // 1. Forgiving SKU Match
@@ -660,7 +696,7 @@ export function Navbar() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Start typing..."
-                      className="w-full text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-black placeholder:text-gray-300 focus:outline-none bg-transparent pb-2 md:pb-3 border-b-4 md:border-b-[6px] border-gray-50 focus:border-black transition-all duration-700"
+                      className="w-full text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-black text-black placeholder:text-gray-300 focus:outline-none bg-transparent pb-2 md:pb-3 border-b-4 md:border-b-[6px] border-gray-50 focus:border-black transition-all duration-700"
                     />
                   </div>
                 </div>
