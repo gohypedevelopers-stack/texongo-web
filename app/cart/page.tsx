@@ -79,7 +79,7 @@ export default function CartPage() {
             <p className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-10">Start adding some premium fabrics to your collection.</p>
             <Link
               href="/fabrics"
-              className="inline-flex items-center gap-3 bg-black text-white px-10 py-5 text-[10px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] transition-all rounded-sm"
+              className="inline-flex items-center gap-3 bg-black !text-white px-10 py-5 text-[10px] font-black uppercase tracking-[0.3em] hover:bg-[#57AD43] transition-all rounded-sm"
             >
               Explore Fabrics
             </Link>
