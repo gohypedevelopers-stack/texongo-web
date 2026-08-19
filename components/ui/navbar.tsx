@@ -537,7 +537,7 @@ export function Navbar() {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="fixed top-[70px] left-1/2 -translate-x-1/2 w-[95%] max-w-[500px] bg-white rounded-3xl shadow-2xl z-[90] md:hidden overflow-hidden"
+                  className="fixed top-[70px] left-1/2 -translate-x-1/2 w-[95%] max-w-[500px] bg-white rounded-3xl shadow-2xl z-[90] lg:hidden overflow-hidden"
                 >
                   <div className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
 
