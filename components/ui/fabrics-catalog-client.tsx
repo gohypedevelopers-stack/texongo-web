@@ -272,10 +272,10 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
               expandedSearchStr = expandedSearchStr.replace(new RegExp(`(?<=\\s)${key.replace(/[-/\\\\^$*+?.()|[\\]{}]/g, '\\\\$&')}(?=\\s)`, 'g'), ` ${value} `);
             }
           }
-          expandedSearchStr = expandedSearchStr.trim().replace(/\\s+/g, ' ');
+          expandedSearchStr = expandedSearchStr.trim().replace(/\s+/g, ' ');
 
           const cleanSearchStr = searchStr.replace(/[^a-z0-9]/g, '');
-          const queryWords = expandedSearchStr.split(/\\s+/).filter(Boolean);
+          const queryWords = expandedSearchStr.split(/\s+/).filter(Boolean);
           
           let exactSkuMatch = false;
           if (f.sku && f.sku !== 'N/A') {
