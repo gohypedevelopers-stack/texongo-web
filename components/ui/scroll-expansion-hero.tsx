@@ -13,7 +13,7 @@ interface ScrollExpandMediaProps {
   mediaType?: 'video' | 'image';
   mediaSrc: string;
   posterSrc?: string;
-  bgImageSrc: string;
+  bgImageSrc: string | string[];
   title?: string;
   date?: string;
   scrollToExpand?: string;
@@ -34,6 +34,7 @@ const ScrollExpandMedia = ({
 }: ScrollExpandMediaProps) => {
   const [isMobileState, setIsMobileState] = useState<boolean>(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [bgIndex, setBgIndex] = useState(0);
 
   useEffect(() => {
     const checkIfMobile = () => setIsMobileState(window.innerWidth < 768);
@@ -41,6 +42,15 @@ const ScrollExpandMedia = ({
     window.addEventListener('resize', checkIfMobile);
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
+
+  useEffect(() => {
+    if (Array.isArray(bgImageSrc) && bgImageSrc.length > 1) {
+      const interval = setInterval(() => {
+        setBgIndex((prev) => (prev + 1) % bgImageSrc.length);
+      }, 4000);
+      return () => clearInterval(interval);
+    }
+  }, [bgImageSrc]);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -94,8 +104,21 @@ const ScrollExpandMedia = ({
             className='absolute inset-0 z-0 h-full'
             style={{ opacity: bgOpacity }}
           >
-            <Image src={bgImageSrc} alt='Background' fill className='object-cover' priority />
-            <div className='absolute inset-0 bg-black/10' />
+            {Array.isArray(bgImageSrc) ? (
+              bgImageSrc.map((src, idx) => (
+                <div
+                  key={src}
+                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                    idx === bgIndex ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  <Image src={src} alt='Background' fill className='object-cover' priority={idx === 0} />
+                </div>
+              ))
+            ) : (
+              <Image src={bgImageSrc as string} alt='Background' fill className='object-cover' priority />
+            )}
+            <div className='absolute inset-0 bg-black/10 z-10' />
           </motion.div>
 
           <div className='container mx-auto flex flex-col items-center justify-start relative z-10 h-full'>

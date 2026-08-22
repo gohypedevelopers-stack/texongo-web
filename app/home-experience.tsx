@@ -453,7 +453,13 @@ export function HomeExperience({ products, blogs, newArrivals }: { products?: Fa
         <ScrollExpandMedia
           mediaType="video"
           mediaSrc="/video/new.mp4"
-          bgImageSrc="/knit-fabric-hero.png"
+          bgImageSrc={[
+            "/category/fabric-single-jersey.png",
+            "/category/fabric-french-terry.png",
+            "/category/fabric-rib.png",
+            "/category/fabric-waffle.png",
+            "/category/fabric-pique.png"
+          ]}
           title="Premium Knits"
           date="Collection 2026"
           scrollToExpand="Scroll to Explore"
@@ -776,7 +782,7 @@ function BlogSection({ blogs: externalBlogs }: { blogs?: any[] }) {
           <span className="hp-overline text-[#57AD43] mb-0.5 block">Latest Insights</span>
           <h2 className="hp-heading text-center text-[#111111]">Our Stories</h2>
         </div>
-        <div className="flex xl:grid xl:grid-cols-3 overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 lg:gap-8 xl:gap-12 pb-4 xl:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="flex xl:grid xl:grid-cols-3 overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 lg:gap-8 xl:gap-12 pb-8 md:pb-12 xl:pb-12 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {displayBlogs.map((b, idx) => (
             <motion.div
               key={idx}

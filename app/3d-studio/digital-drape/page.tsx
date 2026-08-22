@@ -7,7 +7,7 @@ import Link from "next/link";
 import { WatermarkOverlay, VideoBadge } from "@/components/ui/watermark";
 import { PageHero } from "@/components/ui/page-hero";
 
-const ITEMS_PER_PAGE = 12;
+const DEFAULT_ITEMS_PER_PAGE = 12;
 
 import { getFabricData } from "@/lib/3d-fabric-mapping";
 
@@ -34,10 +34,11 @@ const DRAPE_NAMES = [
 ];
 const VIDEO_COUNT = DRAPE_NAMES.length;
 
-function DrapeCard({ id }: { id: number }) {
+function DrapeCard({ id, isMobileOrTablet }: { id: number; isMobileOrTablet: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [hasIntersected, setHasIntersected] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -53,19 +54,27 @@ function DrapeCard({ id }: { id: number }) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.unobserve(entry.target);
-        }
+        if (entry.isIntersecting) setHasIntersected(true);
+        setIsInView(entry.isIntersecting);
       },
-      { threshold: 0.05, rootMargin: "200px" }
+      { threshold: 0.05, rootMargin: "100px" }
     );
     if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, [id]);
 
-  const handleMouseEnter = () => { if (videoRef.current && isLoaded) videoRef.current.play().catch(() => { }); };
-  const handleMouseLeave = () => { if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; } };
+  useEffect(() => {
+    if (isMobileOrTablet && isLoaded && videoRef.current) {
+      if (isInView) {
+        videoRef.current.play().catch(() => {});
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isMobileOrTablet, isLoaded, isInView]);
+
+  const handleMouseEnter = () => { if (!isMobileOrTablet && videoRef.current && isLoaded) videoRef.current.play().catch(() => { }); };
+  const handleMouseLeave = () => { if (!isMobileOrTablet && videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; } };
 
   const handleError = () => {
     const idPath = `/digital-drape-fixed/${id}.mp4`;
@@ -107,7 +116,7 @@ function DrapeCard({ id }: { id: number }) {
           </div>
         )}
 
-        {isInView && (
+        {hasIntersected && (
           <video
             ref={videoRef}
             src={videoSrc}
@@ -157,6 +166,20 @@ function DrapeCard({ id }: { id: number }) {
 
 export default function DigitalDrapePage() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 1024;
+      setIsMobileOrTablet(isMobile);
+      setItemsPerPage(isMobile ? 6 : 12);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const [selectedVideo, setSelectedVideo] = useState<{
     src: string;
     name: string;
@@ -164,11 +187,17 @@ export default function DigitalDrapePage() {
     sku?: string;
   } | null>(null);
 
-  const totalPages = Math.ceil(VIDEO_COUNT / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(VIDEO_COUNT / itemsPerPage);
 
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [totalPages, currentPage]);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
   const currentIds = Array.from(
-    { length: Math.min(ITEMS_PER_PAGE, VIDEO_COUNT - startIndex) },
+    { length: Math.min(itemsPerPage, VIDEO_COUNT - startIndex) },
     (_, i) => startIndex + i + 1
   );
 
@@ -215,6 +244,7 @@ export default function DigitalDrapePage() {
               <DrapeCard
                 key={`${currentPage}-${id}`}
                 id={id}
+                isMobileOrTablet={isMobileOrTablet}
               />
             ))}
           </AnimatePresence>

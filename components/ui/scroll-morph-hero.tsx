@@ -68,7 +68,7 @@ const FabricCard = React.memo(({
         let tx = Math.cos(rad) * radius;
         let ty = Math.sin(rad) * radius;
         let tr = angle + 90;
-        let ts = isMobile ? 0.55 : (isTablet ? 0.75 : 0.9);
+        let ts = (isMobile ? 0.55 : (isTablet ? 0.75 : 0.9)) / 3;
 
         if (lineProgress > 0) {
             const endSlideOffset = isMobile ? containerSize.w * 0.1 : (isTablet ? containerSize.w * 0.2 : containerSize.w * 0.35);
@@ -80,14 +80,14 @@ const FabricCard = React.memo(({
             ty = ty * (1 - lineProgress) + (shiftY * lineProgress);
             tr = tr * (1 - lineProgress);
             const maxCardH = isMobile ? 220 : 380;
-            const safeTs = containerSize.h < maxCardH ? (containerSize.h / 140) * 0.8 : (isMobile ? 1.4 : (isTablet ? 2.0 : 2.7));
+            const safeTs = (containerSize.h < maxCardH ? (containerSize.h / 140) * 0.8 : (isMobile ? 1.4 : (isTablet ? 2.0 : 2.7))) / 3;
             ts = ts * (1 - lineProgress) + safeTs * lineProgress;
         }
 
         const finalX = scatterPos.x * (1 - morph) + tx * morph;
         const finalY = scatterPos.y * (1 - morph) + ty * morph;
         const finalR = scatterPos.r * (1 - morph) + tr * morph;
-        const finalS = 0.4 * (1 - morph) + ts * morph;
+        const finalS = (0.4 / 3) * (1 - morph) + ts * morph;
 
         return `translate3d(${finalX.toFixed(2)}px, ${finalY.toFixed(2)}px, 0) rotate(${finalR.toFixed(2)}deg) scale(${finalS.toFixed(3)})`;
     });
@@ -115,8 +115,8 @@ const FabricCard = React.memo(({
                 transform,
                 opacity,
                 position: "absolute",
-                width: 100,
-                height: 140,
+                width: 300,
+                height: 420,
                 willChange: "transform",
                 zIndex: 2,
                 transformStyle: "preserve-3d",
@@ -131,16 +131,13 @@ const FabricCard = React.memo(({
                 className="block h-full w-full"
             >
                     <motion.div
-                        className="relative h-full w-full rounded-[10px] shadow-2xl bg-gray-100 border border-black/5 transform-gpu"
-                        style={{ transformStyle: "preserve-3d" }}
-                        initial={{ rotateY: 0 }}
-                        whileHover={{ scale: 1.05, rotateY: 180 }}
+                        className="relative h-full w-full rounded-[30px] shadow-2xl bg-gray-100 border border-black/5 transform-gpu"
+                        whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300, damping: 25 }}
                     >
                         {/* Front Side - Image only */}
                         <div 
-                            className="absolute inset-0 w-full h-full rounded-[10px] overflow-hidden" 
-                            style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
+                            className="absolute inset-0 w-full h-full rounded-[30px] overflow-hidden" 
                         >
                             <img
                                 src={src || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]}
@@ -155,46 +152,19 @@ const FabricCard = React.memo(({
                                 initial={{ opacity: 1 }}
                                 whileHover={{ opacity: 0 }}
                             />
-                            {/* Mobile Label Overlay */}
-                            {isMobile && (
-                                <motion.div
-                                    style={{
-                                        position: "absolute",
-                                        inset: 0,
-                                        transform: labelTransform,
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "flex-end",
-                                        paddingBottom: "6px",
-                                        pointerEvents: "none"
-                                    }}
-                                >
-                                    <span className="text-[7px] font-bold uppercase text-white bg-black/60 px-1.5 py-0.5 rounded tracking-widest leading-tight text-center shadow-sm max-w-[90%]">
-                                        {label}
-                                    </span>
-                                </motion.div>
-                            )}
-                        </div>
-
-                        {/* Back Side - Text */}
-                        <div 
-                            className="absolute inset-0 w-full h-full rounded-[10px] overflow-hidden bg-[#57AD43] flex items-center justify-center border border-black/10 shadow-inner" 
-                            style={{ 
-                                backfaceVisibility: "hidden", 
-                                WebkitBackfaceVisibility: "hidden", 
-                                transform: "rotateY(180deg)" 
-                            }}
-                        >
                             <motion.div
                                 style={{
+                                    position: "absolute",
+                                    inset: 0,
                                     transform: labelTransform,
-                                    width: "100%",
                                     display: "flex",
                                     justifyContent: "center",
-                                    alignItems: "center"
+                                    alignItems: "flex-end",
+                                    paddingBottom: "24px",
+                                    pointerEvents: "none"
                                 }}
                             >
-                                <span className="text-[9px] md:text-[10px] font-bold uppercase text-white tracking-widest leading-[1.3] text-center px-2 drop-shadow-sm break-words whitespace-pre-wrap">
+                                <span className="text-[20px] font-extrabold uppercase text-white bg-black/30 backdrop-blur-md border border-white/30 px-6 py-2.5 rounded-lg tracking-[0.2em] leading-tight text-center shadow-xl max-w-[90%]">
                                     {label}
                                 </span>
                             </motion.div>
