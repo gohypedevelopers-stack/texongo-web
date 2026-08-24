@@ -288,11 +288,13 @@ p[class*="font-medium"] {
 
   /* Homepage Typography Standardization (Mobile-first) */
   .hp-overline {
-    @apply text-[10px] font-black uppercase tracking-[0.4em];
+    @apply font-black uppercase tracking-[0.4em];
+    font-size: clamp(10px, 1.2vw, 14px);
   }
 
   .hp-heading {
-    @apply leading-tight font-semibold tracking-tighter text-[24px] md:text-[36px] xl:text-[48px];
+    @apply leading-tight font-semibold tracking-tighter;
+    font-size: clamp(24px, 4vw, 48px);
   }
 
   .hp-badge {
@@ -300,11 +302,13 @@ p[class*="font-medium"] {
   }
 
   .hp-card-title {
-    @apply text-[14px] md:text-2xl font-semibold leading-[1.3];
+    @apply font-semibold leading-[1.3];
+    font-size: clamp(14px, 2vw, 24px);
   }
 
   .hp-link {
-    @apply text-[8px] md:text-[10px] font-black uppercase tracking-widest;
+    @apply font-black uppercase tracking-widest;
+    font-size: clamp(8px, 1vw, 12px);
   }
 
   .hp-text-500 {

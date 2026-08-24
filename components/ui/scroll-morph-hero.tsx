@@ -451,7 +451,7 @@ export function IntroAnimation({ scrollProgress, products, collections }: { scro
                 {/* Horizontal Phase Header */}
                 <motion.div 
                     style={{ opacity: horizontalTitleOpacity, y: horizontalTitleY }} 
-                    className="absolute top-20 md:top-28 w-full flex justify-center items-center z-50 pointer-events-none px-6"
+                    className="absolute top-[clamp(6rem,10vh,10rem)] w-full flex justify-center items-center z-50 pointer-events-none px-6"
                 >
                     <h2 className="hp-heading text-black text-center uppercase">Our Premium Knit Collection</h2>
                 </motion.div>
@@ -540,7 +540,7 @@ export function BlendAnimation({ scrollProgress, products, collections }: { scro
                 {/* Horizontal Phase Header */}
                 <motion.div 
                     style={{ opacity: horizontalTitleOpacity, y: horizontalTitleY }} 
-                    className="absolute top-20 md:top-28 w-full flex justify-center items-center z-50 pointer-events-none px-6"
+                    className="absolute top-[clamp(6rem,10vh,10rem)] w-full flex justify-center items-center z-50 pointer-events-none px-6"
                 >
                     <h2 className="hp-heading text-black text-center uppercase">Our Premium Blend Collection</h2>
                 </motion.div>
