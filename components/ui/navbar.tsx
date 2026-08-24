@@ -32,33 +32,7 @@ const navItems = [
   { name: "Contact Us", href: "/contact-us" },
 ];
 
-const FALLBACK_PRODUCT_IMAGES = [
-  "/arrivals/prod-cotton-spandex-interlock.png",
-  "/arrivals/prod-cotton-indigo-terry.png",
-  "/arrivals/prod-poly-viscose-spandex.png",
-  "/arrivals/prod-nylon-spandex.png",
-  "/arrivals/prod-slub-melange.png",
-  "/category/fabric-french-terry.png",
-  "/category/fabric-pique.png",
-  "/category/fabric-rib.png",
-  "/category/fabric-single-jersey.png",
-  "/category/fabric-waffle.png",
-  "/placeholders/cotton.png",
-  "/placeholders/viscose.png",
-  "/placeholders/linen.png",
-  "/placeholders/wool.png",
-  "/placeholders/silk.png"
-];
 
-function getFallbackImage(name: string, id: string) {
-  const str = name + id;
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const index = Math.abs(hash) % FALLBACK_PRODUCT_IMAGES.length;
-  return FALLBACK_PRODUCT_IMAGES[index];
-}
 
 export function Navbar() {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -742,7 +716,7 @@ export function Navbar() {
                       <>
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
                           {filteredProducts.slice(0, 12).map((product) => {
-                            const productImg = product.image && product.image !== "" ? product.image : getFallbackImage(product.name, product.id);
+                            const productImg = product.image && product.image !== "" ? product.image : "";
                             return (
                               <motion.div
                                 key={product.id}
@@ -752,13 +726,19 @@ export function Navbar() {
                               >
                                 <Link href={`/fabrics/${product.id}`} onClick={closeSearch} className="w-full h-full flex flex-col justify-between">
                                   <div className="relative aspect-[4/5] w-full overflow-hidden bg-gray-100 rounded-2xl mb-4">
-                                    <Image
-                                      src={productImg}
-                                      alt={product.name}
-                                      fill
-                                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                    />
+                                    {productImg ? (
+                                      <Image
+                                        src={productImg}
+                                        alt={product.name}
+                                        fill
+                                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                      />
+                                    ) : (
+                                      <div className="flex items-center justify-center h-full w-full bg-gray-200 text-gray-500 font-bold text-sm uppercase">
+                                          No Image
+                                      </div>
+                                    )}
                                     {product.gsm && product.gsm !== "N/A" && (
                                       <div className="absolute top-3 left-3 bg-[#57AD43] text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-md shadow-md z-10">
                                         GSM: {product.gsm}
@@ -773,7 +753,7 @@ export function Navbar() {
                                       {product.name}
                                     </h4>
                                     <p className="text-sm font-black text-gray-900 mt-auto pt-2">
-                                      ₹{parseFloat(product.price).toFixed(2)}
+                                      ₹{parseFloat(product.price).toFixed(2)} <span className="text-[10px] text-gray-500 font-bold normal-case tracking-normal">/ kg</span>
                                     </p>
                                   </div>
                                 </Link>

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import { motion, useTransform, useSpring, MotionValue } from "framer-motion";
-import type { Fabric } from "../../lib/shopify";
+import type { Fabric, ShopifyCollectionListItem } from "../../lib/shopify";
 import { BLEND_ITEMS, KNIT_STYLE_ITEMS, fabricCategoryHref } from "../../lib/fabric-navigation";
 
 // --- Types ---
@@ -139,14 +139,20 @@ const FabricCard = React.memo(({
                         <div 
                             className="absolute inset-0 w-full h-full rounded-[30px] overflow-hidden" 
                         >
-                            <img
-                                src={src || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]}
-                                alt={label}
-                                className="h-full w-full object-cover"
-                                loading="eager"
-                                {...{ fetchPriority: "high" }}
-                                decoding="async"
-                            />
+                            {src ? (
+                                <img
+                                    src={src}
+                                    alt={label}
+                                    className="h-full w-full object-cover"
+                                    loading="eager"
+                                    {...{ fetchPriority: "high" }}
+                                    decoding="async"
+                                />
+                            ) : (
+                                <div className="flex items-center justify-center h-full w-full bg-gray-200 text-gray-500 font-bold text-sm uppercase">
+                                    No Image
+                                </div>
+                            )}
                             <motion.div
                                 className="absolute inset-0 bg-black/5 pointer-events-none"
                                 initial={{ opacity: 1 }}
@@ -284,8 +290,8 @@ function findProductForCategory(products: Fabric[] | undefined, label: string, k
         if (!product.id) return;
 
         const primaryFields = kind === "knit"
-            ? [product.knit_style]
-            : [product.fabric, product.content];
+            ? [product.knit_style, product.type, product.name]
+            : [product.fabric, product.content, product.type, product.name];
         const secondaryFields = [
             product.name,
             product.description,
@@ -335,17 +341,26 @@ function buildCategoryCards(
     labels: readonly string[],
     imagesByName: Record<string, string>,
     kind: CategoryKind,
-    products?: Fabric[]
+    products?: Fabric[],
+    collections?: ShopifyCollectionListItem[]
 ): CategoryCardData[] {
     const cards: CategoryCardData[] = [];
     
     labels.forEach((name, index) => {
         const product = findProductForCategory(products, name, kind);
         
-        const collectionHandle = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const collection = collections?.find(c => 
+            c.title.toLowerCase() === name.toLowerCase() || 
+            c.handle === name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+        );
+        
+        const collectionHandle = collection ? collection.handle : name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        
+        const imgSrc = (collection?.image && collection.image !== "") ? collection.image : ((product?.image && product.image !== "") ? product.image : "");
+
         cards.push({
             name, // we keep the category name for the label
-            src: (product?.image && product.image !== "") ? product.image : (imagesByName[name] || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]),
+            src: imgSrc,
             href: `/collections/${collectionHandle}`,
             attachedProductName: product?.name || "",
         });
@@ -354,7 +369,7 @@ function buildCategoryCards(
     return cards;
 }
 
-export function IntroAnimation({ scrollProgress, products }: { scrollProgress: MotionValue<number>, products?: Fabric[] }) {
+export function IntroAnimation({ scrollProgress, products, collections }: { scrollProgress: MotionValue<number>, products?: Fabric[], collections?: ShopifyCollectionListItem[] }) {
     const [isMobile, setIsMobile] = useState(false);
     const [containerSize, setContainerSize] = useState({ w: 1200, h: 800 });
     const containerRef = useRef<HTMLDivElement>(null);
@@ -382,9 +397,9 @@ export function IntroAnimation({ scrollProgress, products }: { scrollProgress: M
     });
 
     const cards = useMemo(() => {
-        const allCards = buildCategoryCards(KNIT_STYLE_ITEMS, KNIT_STYLE_IMAGE_BY_NAME, "knit", products);
+        const allCards = buildCategoryCards(KNIT_STYLE_ITEMS, KNIT_STYLE_IMAGE_BY_NAME, "knit", products, collections);
         return isMobile ? allCards.slice(0, 10) : allCards;
-    }, [products, isMobile]);
+    }, [products, collections, isMobile]);
 
     const scatterPositions = useMemo(() => {
         return Array.from({ length: cards.length }, (_, index) => getScatterPosition(index, 7));
@@ -445,7 +460,7 @@ export function IntroAnimation({ scrollProgress, products }: { scrollProgress: M
     );
 }
 
-export function BlendAnimation({ scrollProgress, products }: { scrollProgress: MotionValue<number>, products?: Fabric[] }) {
+export function BlendAnimation({ scrollProgress, products, collections }: { scrollProgress: MotionValue<number>, products?: Fabric[], collections?: ShopifyCollectionListItem[] }) {
     const [isMobile, setIsMobile] = useState(false);
     const [containerSize, setContainerSize] = useState({ w: 1200, h: 800 });
     const containerRef = useRef<HTMLDivElement>(null);
@@ -473,9 +488,9 @@ export function BlendAnimation({ scrollProgress, products }: { scrollProgress: M
     });
 
     const cards = useMemo(() => {
-        const allCards = buildCategoryCards(BLEND_ITEMS, BLEND_IMAGE_BY_NAME, "blend", products);
+        const allCards = buildCategoryCards(BLEND_ITEMS, BLEND_IMAGE_BY_NAME, "blend", products, collections);
         return isMobile ? allCards.slice(0, 8) : allCards;
-    }, [products, isMobile]);
+    }, [products, collections, isMobile]);
 
     const scatterPositions = useMemo(() => {
         return Array.from({ length: cards.length }, (_, index) => getScatterPosition(index, 31));

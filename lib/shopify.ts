@@ -428,6 +428,54 @@ export async function getShopifyCollection(handle: string, limit: number = 250):
   }
 }
 
+export const COLLECTIONS_QUERY = `
+  query getCollections($first: Int!) {
+    collections(first: $first) {
+      edges {
+        node {
+          id
+          title
+          handle
+          image {
+            url
+            altText
+          }
+        }
+      }
+    }
+  }
+`;
+
+export interface ShopifyCollectionListItem {
+  id: string;
+  title: string;
+  handle: string;
+  image: string;
+}
+
+export async function getShopifyCollections(limit: number = 250): Promise<ShopifyCollectionListItem[]> {
+  try {
+    const response = await shopifyFetch<any>({
+      query: COLLECTIONS_QUERY,
+      variables: { first: limit },
+    });
+
+    if (!response.data || !response.data.collections) {
+      return [];
+    }
+
+    return response.data.collections.edges.map(({ node }: any) => ({
+      id: node.id,
+      title: node.title,
+      handle: node.handle,
+      image: node.image?.url || '',
+    }));
+  } catch (err) {
+    console.error('Error fetching collections:', err);
+    return [];
+  }
+}
+
 export const PRODUCT_BY_HANDLE_QUERY = `
   query getProductByHandle($handle: String!) {
     product(handle: $handle) {

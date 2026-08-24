@@ -195,7 +195,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
             </div>
 
             <div className="mb-8 p-6 bg-gray-50/50 border-y border-gray-100 flex items-baseline gap-2">
-              <span className="text-2xl font-black tracking-tighter">₹{parseFloat(product.price || '0').toFixed(2)}</span>
+              <div className="flex items-end gap-2">
+                <span className="text-2xl font-black tracking-tighter">₹{parseFloat(product.price || '0').toFixed(2)}</span>
+                <span className="text-sm text-gray-500 font-bold mb-1">/ kg</span>
+              </div>
             </div>
 
             <Link href="/shipping-and-return-policy" className="text-[11px] font-medium text-[#57AD43] underline underline-offset-4 mb-6 block hover:text-black transition-colors">
@@ -311,7 +314,7 @@ Minor GSM, width, and color variations may occur—acceptable as per industry st
                   <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[8px] font-black px-2 py-0.5 z-10">GSM: {fabric.gsm} g/m²</div>
                 </div>
                 <h3 className="!text-[10px] lg:!text-[14px] font-bold uppercase tracking-widest text-center group-hover:text-[#57AD43] transition-colors">{fabric.name}</h3>
-                <p className="!text-[10px] lg:!text-[14px] font-bold text-gray-400 text-center mt-1">₹{fabric.price}.00</p>
+                <p className="!text-[10px] lg:!text-[14px] font-bold text-gray-400 text-center mt-1">₹{fabric.price}.00 <span className="text-[10px] text-gray-400 font-medium normal-case tracking-normal">/ kg</span></p>
               </Link>
             ))}
           </div>

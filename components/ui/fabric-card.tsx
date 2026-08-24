@@ -17,33 +17,7 @@ interface FabricCardProps {
   catalogMode?: boolean;
 }
 
-const FALLBACK_PRODUCT_IMAGES = [
-  "/arrivals/prod-cotton-spandex-interlock.png",
-  "/arrivals/prod-cotton-indigo-terry.png",
-  "/arrivals/prod-poly-viscose-spandex.png",
-  "/arrivals/prod-nylon-spandex.png",
-  "/arrivals/prod-slub-melange.png",
-  "/category/fabric-french-terry.png",
-  "/category/fabric-pique.png",
-  "/category/fabric-rib.png",
-  "/category/fabric-single-jersey.png",
-  "/category/fabric-waffle.png",
-  "/placeholders/cotton.png",
-  "/placeholders/viscose.png",
-  "/placeholders/linen.png",
-  "/placeholders/wool.png",
-  "/placeholders/silk.png"
-];
 
-function getFallbackImage(name: string, id: string) {
-  const str = name + id;
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const index = Math.abs(hash) % FALLBACK_PRODUCT_IMAGES.length;
-  return FALLBACK_PRODUCT_IMAGES[index];
-}
 
 export function FabricCard({ id, name, gsm, price, image, variantId, catalogMode }: FabricCardProps) {
   const [isHovered, setIsHovered] = useState(false);
@@ -58,11 +32,11 @@ export function FabricCard({ id, name, gsm, price, image, variantId, catalogMode
       name,
       price: parseInt(price),
       gsm,
-      image: image && image !== "" ? image : getFallbackImage(name, id)
+      image: image && image !== "" ? image : ""
     });
   };
 
-  const finalImage = image && image !== "" ? image : getFallbackImage(name, id);
+  const finalImage = image && image !== "" ? image : "";
 
   return (
     <motion.div
@@ -76,12 +50,18 @@ export function FabricCard({ id, name, gsm, price, image, variantId, catalogMode
       <Link href={`/fabrics/${id}`} className="w-full">
         {/* Product Image Container */}
         <div className={`relative ${catalogMode ? 'aspect-[4/5]' : 'aspect-square md:aspect-[4/5]'} w-full overflow-hidden bg-gray-50 mb-2 md:mb-6 border border-gray-100 md:border-none`}>
-          <Image
-            src={finalImage}
-            alt={name}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-          />
+          {finalImage ? (
+            <Image
+              src={finalImage}
+              alt={name}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full w-full bg-gray-200 text-gray-500 font-bold text-sm uppercase">
+                No Image
+            </div>
+          )}
 
           {/* GSM Badge */}
           <div className="absolute top-0 left-0 bg-[#57AD43] text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 z-10">
@@ -116,7 +96,7 @@ export function FabricCard({ id, name, gsm, price, image, variantId, catalogMode
             {name}
           </h3>
           <p className="text-[10px] md:text-lg font-black text-black uppercase tracking-tighter flex items-center gap-1 md:gap-2">
-            <span className="text-[#57AD43]">₹</span>{parseFloat(price).toFixed(2)}
+            <span className="text-[#57AD43]">₹</span>{parseFloat(price).toFixed(2)} <span className="text-[8px] md:text-[12px] text-gray-500 font-bold normal-case tracking-normal">/ kg</span>
           </p>
 
           {/* Static Action Button (Mobile/Tablet Only) - Below Price */}

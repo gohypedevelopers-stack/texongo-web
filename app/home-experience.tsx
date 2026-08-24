@@ -10,7 +10,7 @@ import styles from "./page.module.css";
 import { LazyVideo } from "./lazy-video";
 import ScrollExpandMedia from "../components/ui/scroll-expansion-hero";
 import { LazySection } from "../components/ui/lazy-section";
-import type { Fabric } from "../lib/shopify";
+import type { Fabric, ShopifyCollectionListItem } from "../lib/shopify";
 
 // Dynamic imports for performance (Separate files)
 const CategorySlider = dynamic(() => import("./category-slider").then(mod => mod.CategorySlider), { ssr: false });
@@ -102,23 +102,7 @@ const storyProducts = [
   },
 ];
 
-const FALLBACK_PRODUCT_IMAGES = [
-  "/arrivals/prod-cotton-spandex-interlock.png",
-  "/arrivals/prod-cotton-indigo-terry.png",
-  "/arrivals/prod-poly-viscose-spandex.png",
-  "/arrivals/prod-nylon-spandex.png",
-  "/arrivals/prod-slub-melange.png",
-  "/category/fabric-french-terry.png",
-  "/category/fabric-pique.png",
-  "/category/fabric-rib.png",
-  "/category/fabric-single-jersey.png",
-  "/category/fabric-waffle.png",
-  "/placeholders/cotton.png",
-  "/placeholders/viscose.png",
-  "/placeholders/linen.png",
-  "/placeholders/wool.png",
-  "/placeholders/silk.png"
-];
+
 
 function MarqueeProductCard({
   name,
@@ -137,7 +121,7 @@ function MarqueeProductCard({
   gsm?: string;
   category?: string;
 }) {
-  const finalImage = image && image !== "" ? image : FALLBACK_PRODUCT_IMAGES[index % FALLBACK_PRODUCT_IMAGES.length];
+  const finalImage = image && image !== "" ? image : "";
 
   // Extract a plausible category from name if not provided
   const displayCategory = category || (name.toLowerCase().includes("jersey") ? "SINGLE JERSEY" : name.toLowerCase().includes("terry") ? "FRENCH TERRY" : name.toLowerCase().includes("rib") ? "RIB" : "PREMIUM");
@@ -154,13 +138,19 @@ function MarqueeProductCard({
     >
       <div className="bg-white p-3 md:p-4 rounded-2xl border border-gray-100 shadow-sm group-hover:shadow-xl transition-all duration-500 flex flex-col h-full w-full">
         <div className="aspect-square rounded-xl overflow-hidden mb-4 relative bg-[#F9FAFB]">
-          <img
-            src={finalImage}
-            alt={name}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-          />
+          {finalImage ? (
+            <img
+              src={finalImage}
+              alt={name}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full w-full bg-gray-200 text-gray-500 font-bold text-sm uppercase">
+                No Image
+            </div>
+          )}
           <div className="absolute top-2 left-2 md:top-3 md:left-3 bg-[#57AD43] text-white text-[9px] md:text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md z-10">
             GSM: {displayGsm}
           </div>
@@ -173,7 +163,7 @@ function MarqueeProductCard({
             {name}
           </p>
           <p className="text-[14px] xl:text-[16px] font-black text-black mt-1">
-            {displayPrice}
+            {displayPrice} <span className="text-[10px] text-gray-500 font-bold normal-case tracking-normal">/ kg</span>
           </p>
         </div>
       </div>
@@ -231,7 +221,7 @@ function StoryProductCard({
   );
 }
 
-function KnitStylesSection({ products }: { products?: Fabric[] }) {
+function KnitStylesSection({ products, collections }: { products?: Fabric[], collections?: ShopifyCollectionListItem[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -241,13 +231,13 @@ function KnitStylesSection({ products }: { products?: Fabric[] }) {
   return (
     <section ref={containerRef} className="relative h-[600vh] bg-white">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        <IntroAnimation scrollProgress={scrollYProgress} products={products} />
+        <IntroAnimation scrollProgress={scrollYProgress} products={products} collections={collections} />
       </div>
     </section>
   );
 }
 
-function BlendStylesSection({ products }: { products?: Fabric[] }) {
+function BlendStylesSection({ products, collections }: { products?: Fabric[], collections?: ShopifyCollectionListItem[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -257,7 +247,7 @@ function BlendStylesSection({ products }: { products?: Fabric[] }) {
   return (
     <section ref={containerRef} className="relative h-[600vh] bg-white">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        <BlendAnimation scrollProgress={scrollYProgress} products={products} />
+        <BlendAnimation scrollProgress={scrollYProgress} products={products} collections={collections} />
       </div>
     </section>
   );
@@ -424,7 +414,7 @@ function TestimonialsSection() {
   );
 }
 
-export function HomeExperience({ products, blogs, newArrivals }: { products?: Fabric[], blogs?: any[], newArrivals?: Fabric[] }) {
+export function HomeExperience({ products, blogs, newArrivals, collections }: { products?: Fabric[], blogs?: any[], newArrivals?: Fabric[], collections?: ShopifyCollectionListItem[] }) {
   const [scrolled, setScrolled] = useState(false);
 
   const uniqueProducts = useMemo(() => {
@@ -440,6 +430,39 @@ export function HomeExperience({ products, blogs, newArrivals }: { products?: Fa
     return result;
   }, [products]);
 
+  const heroImages = useMemo(() => {
+    const heroCategories = ["Single Jersey", "French Terry", "Rib", "Waffle", "Pique"];
+    const images = heroCategories.map(name => {
+      const collectionHandle = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      const collection = collections?.find(c => 
+          c.title.toLowerCase() === name.toLowerCase() || 
+          c.handle === collectionHandle
+      );
+      
+      if (collection?.image && collection.image !== "") return collection.image;
+      
+      const product = products?.find(p => 
+         p.knit_style?.toLowerCase() === name.toLowerCase() || 
+         p.type?.toLowerCase() === name.toLowerCase() || 
+         p.name?.toLowerCase().includes(name.toLowerCase())
+      );
+      if (product?.image && product.image !== "") return product.image;
+      return "";
+    }).filter(img => img !== "");
+    
+    // Ensure we have at least some images to prevent empty carousel breaking
+    if (images.length === 0) {
+      return [
+        "/category/fabric-single-jersey.png",
+        "/category/fabric-french-terry.png",
+        "/category/fabric-rib.png",
+        "/category/fabric-waffle.png",
+        "/category/fabric-pique.png"
+      ];
+    }
+    return images;
+  }, [collections, products]);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll);
@@ -453,13 +476,7 @@ export function HomeExperience({ products, blogs, newArrivals }: { products?: Fa
         <ScrollExpandMedia
           mediaType="video"
           mediaSrc="/video/new.mp4"
-          bgImageSrc={[
-            "/category/fabric-single-jersey.png",
-            "/category/fabric-french-terry.png",
-            "/category/fabric-rib.png",
-            "/category/fabric-waffle.png",
-            "/category/fabric-pique.png"
-          ]}
+          bgImageSrc={heroImages}
           title="Premium Knits"
           date="Collection 2026"
           scrollToExpand="Scroll to Explore"
@@ -525,11 +542,11 @@ export function HomeExperience({ products, blogs, newArrivals }: { products?: Fa
         </LazySection> */}
 
         <LazySection y={0}>
-          <KnitStylesSection products={products} />
+          <KnitStylesSection products={products} collections={collections} />
         </LazySection>
 
         <LazySection y={0}>
-          <BlendStylesSection products={products} />
+          <BlendStylesSection products={products} collections={collections} />
         </LazySection>
 
         <LazySection>

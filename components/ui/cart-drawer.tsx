@@ -139,7 +139,7 @@ export function CartDrawer() {
                           </button>
                         </div>
 
-                        <p className="text-[12px] font-bold mt-2">₹{item.price}.00</p>
+                        <p className="text-[12px] font-bold mt-2">₹{item.price}.00 <span className="text-[10px] text-gray-500 font-medium normal-case tracking-normal">/ kg</span></p>
                       </div>
                     </div>
 

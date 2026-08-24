@@ -1,5 +1,5 @@
 import { HomeExperience } from "./home-experience";
-import { getShopifyProducts, getShopifyArticles, getShopifyCollection } from "../lib/shopify";
+import { getShopifyProducts, getShopifyArticles, getShopifyCollection, getShopifyCollections } from "../lib/shopify";
 
 export const revalidate = 60; // Enable ISR so Shopify changes show up on Vercel
 
@@ -15,5 +15,7 @@ export default async function HomePage() {
     link: `/blog/${article.blogHandle}/${article.handle}`
   }));
 
-  return <HomeExperience products={products} blogs={blogs} newArrivals={newArrivalsCollection?.products} />;
+  const collections = await getShopifyCollections(50);
+
+  return <HomeExperience products={products} blogs={blogs} newArrivals={newArrivalsCollection?.products} collections={collections} />;
 }
