@@ -61,11 +61,25 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
         const relatedRes = await fetch('/api/shopify/products');
         const relatedData = await relatedRes.json();
         if (relatedData.data?.products?.edges) {
-          const mapped = relatedData.data.products.edges
+          let mapped = relatedData.data.products.edges
             .map(({ node }: any) => mapShopifyProduct(node))
-            .filter((p: Fabric) => p.id !== slug)
-            .slice(0, 4);
-          setRelatedProducts(mapped);
+            .filter((p: Fabric) => p.id !== slug);
+
+          const currentKnitStyle = productData.knit_style?.toLowerCase() || '';
+          if (currentKnitStyle && currentKnitStyle !== 'n/a') {
+            const keywords = currentKnitStyle.split(' ').filter((k: string) => k.length > 2);
+            if (keywords.length > 0) {
+              const matchedProducts = mapped.filter((p: Fabric) => {
+                const pKnitStyle = (p.knit_style || '').toLowerCase();
+                return keywords.some((kw: string) => pKnitStyle.includes(kw));
+              });
+              const matchIds = new Set(matchedProducts.map((p: Fabric) => p.id));
+              const otherProducts = mapped.filter((p: Fabric) => !matchIds.has(p.id));
+              mapped = [...matchedProducts, ...otherProducts];
+            }
+          }
+
+          setRelatedProducts(mapped.slice(0, 4));
         }
       } catch (err) {
         setError(true);
@@ -123,8 +137,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               }}
             >
               {(activeImage || product.image) ? (
-                <Image
-                  src={((activeImage || product.image).includes('?') ? `${activeImage || product.image}&width=2048` : `${activeImage || product.image}?width=2048`)}
+                <LoadingImage
+                  src={activeImage || product.image}
                   alt={product.name}
                   fill
                   priority
@@ -155,8 +169,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   onClick={() => setActiveImage(imgUrl)}
                   className={`aspect-square relative bg-gray-50 cursor-pointer border transition-all ${activeImage === imgUrl ? 'border-[#57AD43] ring-1 ring-[#57AD43]' : 'border-gray-100 hover:border-gray-300'}`}
                 >
-                  <Image
-                    src={imgUrl.includes('?') ? `${imgUrl}&width=1000` : `${imgUrl}?width=1000`}
+                  <LoadingImage
+                    src={imgUrl}
                     alt={`${product.name} view ${i + 1}`}
                     fill
                     className="object-cover"
@@ -325,10 +339,18 @@ Minor GSM, width, and color variations may occur—acceptable as per industry st
 }
 
 function SpecRow({ label, value }: { label: string, value: string }) {
+  const cleanedValue = value
+    ? value
+        .replace(/-/g, ' ')
+        .replace(/\s+/g, ' ')
+        .replace(/\s*,\s*/g, ', ')
+        .trim()
+    : value;
+
   return (
     <div className="flex items-baseline gap-4 text-[11px] lg:text-[12px] leading-relaxed py-1.5 border-b border-gray-50 last:border-0">
       <span className="font-bold text-black min-w-[100px] uppercase tracking-wider shrink-0">{label}:</span>
-      <span className="text-gray-600 font-medium">{value}</span>
+      <span className="text-gray-600 font-medium">{cleanedValue}</span>
     </div>
   );
 }
@@ -357,5 +379,27 @@ function AccordionItem({ title, content, defaultOpen = false }: { title: string,
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function LoadingImage({ src, alt, className, ...props }: any) {
+  const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
+
+  return (
+    <>
+      {(status === 'loading' || status === 'error') && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-50 z-0">
+          <Loader2 className="animate-spin text-gray-400" size={24} />
+        </div>
+      )}
+      <Image
+        src={src}
+        alt={alt}
+        onLoad={() => setStatus('loaded')}
+        onError={() => setStatus('error')}
+        className={`transition-opacity duration-300 ${status === 'loaded' ? 'opacity-100' : 'opacity-0'} ${className || ''}`}
+        {...props}
+      />
+    </>
   );
 }
