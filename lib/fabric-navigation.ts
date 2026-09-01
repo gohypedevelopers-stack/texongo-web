@@ -27,7 +27,7 @@ export const BLEND_ITEMS = [
   "Nylon",
   "Poly Cotton",
   "Polyester",
-  "Slubs",
+  "Slub",
   "Spandex Blends",
   "Australian",
 ] as const;

@@ -256,11 +256,11 @@ function BlendStylesSection({ products, collections }: { products?: Fabric[], co
 
 function SustainableBlendSection() {
   const baseLogos = [
-    { name: "Banana Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Banana_f7269dad-a9d2-4553-8572-9fb18786d287_360x.webp", href: "/fabrics?category=banana" },
-    { name: "Supima", src: "https://texongo.com/wp-content/uploads/2025/12/Supiima_360x-1.webp", href: "/fabrics?category=supima" },
-    { name: "Lotus Fiber", src: "https://texongo.com/wp-content/uploads/2025/12/Lotus_360x.webp", href: "/fabrics?category=lotus" },
-    { name: "Hemp", src: "https://texongo.com/wp-content/uploads/2025/12/Hemp_ee5107c1-6add-4868-bc46-6d9111850ba3_360x.webp", href: "/fabrics?category=hemp" },
-    { name: "BCI Cotton", src: "https://texongo.com/wp-content/uploads/2025/12/BCI_a1b34c70-fc29-4342-9c45-a8f95375fa51_360x.webp", href: "/fabrics?category=bci" },
+    { name: "Banana Fiber", src: "/sustainable%20blends/Bana%20Fiber.png", href: "/fabrics?category=banana" },
+    { name: "Supima", src: "/sustainable%20blends/Supima.jfif", href: "/fabrics?category=supima" },
+    { name: "Lotus Fiber", src: "/sustainable%20blends/lotus%20fiber.jpg", href: "/fabrics?category=lotus" },
+    { name: "Hemp", src: "/sustainable%20blends/Hemp.jfif", href: "/fabrics?category=hemp" },
+    { name: "BCI Cotton", src: "/sustainable%20blends/BCI.png", href: "/fabrics?category=bci" },
   ];
 
   // Repeat the logos enough times to create a seamless infinite scroll effect
@@ -292,6 +292,9 @@ function SustainableBlendSection() {
                       decoding="async"
                       className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-1000"
                     />
+                  </div>
+                  <div className="text-center mt-2 pb-4">
+                    <span className="text-sm font-bold uppercase tracking-wider text-black">{logo.name}</span>
                   </div>
                 </Link>
               ))}

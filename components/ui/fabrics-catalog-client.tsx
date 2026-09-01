@@ -145,6 +145,9 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
             ];
             const searchStr = `${f.composition || ""} ${f.fabric || ""}`.toLowerCase();
             categoryMatch = sustKeywords.some(keyword => searchStr.includes(keyword));
+          } else if (normParam === "printed") {
+            const searchStr = `${f.name || ""}`.toLowerCase();
+            categoryMatch = searchStr.includes("printed") || searchStr.includes("print");
           } else {
             // Helper to normalize and check for containing or being contained (handles singular/plural and partial words)
             const checkMatch = (val: string | undefined | null) => {
@@ -162,7 +165,7 @@ export function FabricsCatalogClient({ initialFabrics }: FabricsCatalogClientPro
 
             const blends = [
               "cotton", "viscose", "cottonmodal", "giza", "egyptian", "gizagyptian", "melange",
-              "nylon", "polycotton", "polyester", "slubs", "spandexblends", "australian",
+              "nylon", "polycotton", "polyester", "slub", "spandexblends", "australian",
               "wool", "supima", "bananafabric", "ecovero", "hemp",
               "linen", "lotus", "modal", "organiccotton", "recycledcotton", "tencel", "bci"
             ];

@@ -212,7 +212,7 @@ const BLEND_IMAGE_BY_NAME: Record<(typeof BLEND_ITEMS)[number], string> = {
     "Nylon": "/arrivals/prod-nylon-spandex.png",
     "Poly Cotton": "https://texongo.com/wp-content/uploads/2025/08/Poly-Cotton_20241215064036pm.png",
     "Polyester": "https://texongo.com/wp-content/uploads/2025/12/Polyester_20241215064037pm.png",
-    "Slubs": "/arrivals/prod-slub-melange.png",
+    "Slub": "/arrivals/prod-slub-melange.png",
     "Spandex Blends": "https://texongo.com/wp-content/uploads/2025/12/Cotton-Spandex_20241215064033pm.png",
     "Australian": "/placeholders/wool.png",
 };
@@ -232,7 +232,7 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
     "Giza/ Egyptian": ["giza", "egyptian"],
     "Polyester": ["polyester", "poly"],
     "Poly Cotton": ["poly cotton", "poly-cotton", "polyester cotton"],
-    "Slubs": ["slub", "slubs"],
+    "Slub": ["slub", "slubs"],
     "Spandex Blends": ["spandex", "elastane", "lycra"],
 };
 
