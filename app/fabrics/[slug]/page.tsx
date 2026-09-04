@@ -126,6 +126,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
           <div className="lg:sticky lg:top-36 h-fit space-y-4 lg:space-y-6">
             <div
               className="relative aspect-square w-[550px] max-w-full mx-auto bg-gray-50/30 overflow-hidden border border-gray-100 group cursor-crosshair"
+              onContextMenu={(e) => e.preventDefault()}
+              onDragStart={(e) => e.preventDefault()}
               onMouseMove={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
                 const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -151,10 +153,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   <span className="text-xs font-black uppercase tracking-widest text-gray-400">No Image Available</span>
                 </div>
               )}
-              <div className="absolute top-6 left-6 z-10">
+              <div className="absolute top-6 left-6 z-10 pointer-events-none">
                 <div className="bg-white px-3 py-1.5 rounded-full shadow-xl border border-black/5 flex items-center justify-center">
                   <img
-                    src="https://texongo.com/wp-content/uploads/2025/09/Untitled-design-2-1-e1758707290987.png"
+                    src="/logos/logo.png"
                     alt="Texongo"
                     className="h-4 w-auto object-contain mix-blend-multiply"
                   />
@@ -398,6 +400,8 @@ function LoadingImage({ src, alt, className, ...props }: any) {
         onLoad={() => setStatus('loaded')}
         onError={() => setStatus('error')}
         className={`transition-opacity duration-300 ${status === 'loaded' ? 'opacity-100' : 'opacity-0'} ${className || ''}`}
+        onContextMenu={(e) => e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
         {...props}
       />
     </>
